@@ -41,6 +41,7 @@ phpunit.xml
 bin/*
 !bin/console
 !bin/dist
+!bin/composer.sh
 /public/uploads/behat
 /.web-server-pid
 /.vagrant
