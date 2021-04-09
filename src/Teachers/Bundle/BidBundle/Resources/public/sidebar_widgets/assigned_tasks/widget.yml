@@ -1,0 +1,9 @@
+title: teachers.bid.assigned_bids_widget.title
+iconClass: "fa-bids"
+dialogIcon: "bundles/teachersbid/sidebar_widgets/assigned_bids/img/icon-bid.png"
+module:    "oro/sidebar/widget/assigned_bids"
+placement: "both"
+cssClass:  "sidebar-widget-assigned-bids"
+description: teachers.bid.assigned_bids_widget.description
+settings:
+    perPage: 5

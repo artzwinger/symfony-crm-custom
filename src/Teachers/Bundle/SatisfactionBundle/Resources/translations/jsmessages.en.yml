@@ -1,0 +1,8 @@
+"Satisfaction created successfully": Satisfaction created successfully
+"Create satisfaction": Create satisfaction
+teachers:
+  satisfaction:
+    assigned_satisfactions_widget:
+      settings: Satisfaction Widget Settings
+      number_of_satisfactions: Number of satisfactions to show
+      description: "This widget allows you to see satisfactions assigned to you"

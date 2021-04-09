@@ -1,0 +1,25 @@
+{% if value %}
+    {% import 'OroUIBundle::macros.html.twig' as UI %}
+
+    {% set satisfactionId = record.getValue('id') %}
+    {{ UI.clientLink({
+        'dataUrl': path('teachers_satisfaction_widget_info', {id : satisfactionId}),
+        'aCss': 'no-hash',
+        'label' : value,
+        'widget' : {
+            'type' : 'dialog',
+            'multiple' : false,
+            'options' : {
+                'alias': 'satisfaction_info_widget_' ~ satisfactionId,
+                'dialogOptions' : {
+                    'title' : value,
+                    'allowMaximize': true,
+                    'allowMinimize': true,
+                    'dblclick': 'maximize',
+                    'maximizedHeightDecreaseBy': 'minimize-bar',
+                    'width': 600
+                }
+            }
+        },
+    }) }}
+{% endif %}

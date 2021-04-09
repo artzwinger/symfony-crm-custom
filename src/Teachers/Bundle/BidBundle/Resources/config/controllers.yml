@@ -1,0 +1,8 @@
+services:
+  _defaults:
+    public: true
+  Teachers\Bundle\BidBundle\Controller\BidCrudController:
+    calls:
+      - [ setContainer, [ '@Psr\Container\ContainerInterface' ] ]
+    tags:
+      - { name: container.service_subscriber }

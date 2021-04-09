@@ -1,0 +1,3 @@
+teachers_users_teacher_group_api:
+    resource: "@TeachersUsersBundle/Controller/Api/Rest/TeacherGroupController.php"
+    type: rest

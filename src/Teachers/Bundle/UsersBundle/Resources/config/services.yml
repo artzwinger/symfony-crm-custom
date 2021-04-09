@@ -1,0 +1,31 @@
+services:
+    teachers_usersembedded_form:
+        class: Teachers\Bundle\UsersBundle\Form\Type\TeacherGroupType
+        public: true
+        tags:
+            - { name: oro_embedded_form, type: Teachers\Bundle\UsersBundle\Form\Type\TeacherGroupType, label: teachers.users.teacher_group.entity_label }
+            - { name: form.type, alias: teachers_group_request }
+
+    teachers_users.teacher_group.form:
+        class: Symfony\Component\Form\Form
+        factory: [ '@form.factory', createNamed ]
+        arguments:
+            - "teachers_group_request"
+            - Teachers\Bundle\UsersBundle\Form\Type\TeacherGroupType
+            - null
+
+    teachers_users.teacher_group.form.handler:
+        class: Teachers\Bundle\UsersBundle\Form\Handler\TeacherGroupHandler
+        public: true
+        arguments:
+            - "@teachers_users.teacher_group.form"
+            - "@request_stack"
+            - "@doctrine"
+
+    teachers_users.teacher_group.manager.api:
+        class: Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
+        public: true
+        parent: oro_soap.manager.entity_manager.abstract
+        arguments:
+            - 'Teachers\Bundle\UsersBundle\Entity\TeacherGroup'
+            - "@doctrine.orm.entity_manager"

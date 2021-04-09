@@ -1,0 +1,4 @@
+teachers_bid_bundle:
+  resource: "@TeachersBidBundle/Controller"
+  type: annotation
+  prefix: /bid

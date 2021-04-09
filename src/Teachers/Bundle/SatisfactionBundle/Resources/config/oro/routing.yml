@@ -1,0 +1,4 @@
+teachers_satisfaction_bundle:
+  resource: "@TeachersSatisfactionBundle/Controller"
+  type: annotation
+  prefix: /satisfaction

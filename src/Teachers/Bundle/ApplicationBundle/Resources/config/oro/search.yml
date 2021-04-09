@@ -1,0 +1,16 @@
+search:
+    Teachers\Bundle\ApplicationBundle\Entity\Application:
+        alias: teachers_application
+        title_fields: [ subject ]
+        route:
+            name: teachers_application_view
+            parameters:
+                id: id
+        search_template: TeachersApplicationBundle:Search:result.html.twig
+        fields:
+            -   name: subject
+                target_type: text
+                target_fields: [ subject ]
+            -   name: description
+                target_type: text
+                target_fields: [ description ]

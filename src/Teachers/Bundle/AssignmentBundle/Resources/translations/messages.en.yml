@@ -1,0 +1,39 @@
+teachers:
+    assignment:
+        assignment:
+            entity_label: Assignment
+            entity_plural_label: Assignments
+            entity_grid_all_view_label: All %entity_plural_label%
+            id.label: ID
+            subject.label: Subject
+            description.label: Description
+            studentLoginInfo.label: Student login info
+            price.label: Price
+            status.label: Status
+            feedback.label: Feedback
+            opportunity.label: Opportunity
+            lead.label: Lead
+            calls.label: Calls
+            emails.label: Emails
+            organization_name.label: Organization name
+            owner.label: Organization
+
+            datagrid:
+                update: Update
+                delete: Delete
+                view: View
+
+            method:
+                email: Email
+                phone: Phone
+                both: Both phone & email
+
+            widget:
+                info:
+                    title: Assignment Details
+            entity:
+                saved: Assignment has been saved successfully
+        block:
+            general: General
+            additional: Additional
+            assignment_information: Request Information

@@ -1,0 +1,21 @@
+navigation:
+    menu_config:
+        items:
+            teachers_application_application:
+                label: 'teachers.application.application.entity_plural_label'
+                route: 'teachers_application_index'
+                position: 30
+                extras:
+                    routes: [ 'teachers_application_*' ]
+                display: true
+        tree:
+            application_menu:
+                children:
+                    activities_tab:
+                        children:
+                            teachers_application_application: ~
+    titles:
+        teachers_application_index: ~
+        teachers_application_view: '%application.subject%'
+        teachers_application_create: 'Create application'
+        teachers_application_update: '%application.subject% - Edit'

@@ -1,0 +1,8 @@
+{% import 'OroUIBundle::macros.html.twig' as UI %}
+
+{{ UI.button({
+    'path': path('teachers_satisfaction_index'),
+    'iCss': 'fa-satisfactions',
+    'title': 'teachers.satisfaction.entity_plural_label'|trans,
+    'label': 'teachers.satisfaction.entity_plural_label'|trans
+}) }}

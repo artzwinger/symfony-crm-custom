@@ -1,0 +1,9 @@
+title: teachers.satisfaction.assigned_satisfactions_widget.title
+iconClass: "fa-satisfactions"
+dialogIcon: "bundles/teacherssatisfaction/sidebar_widgets/assigned_satisfactions/img/icon-satisfaction.png"
+module:    "oro/sidebar/widget/assigned_satisfactions"
+placement: "both"
+cssClass:  "sidebar-widget-assigned-satisfactions"
+description: teachers.satisfaction.assigned_satisfactions_widget.description
+settings:
+    perPage: 5

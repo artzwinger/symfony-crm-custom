@@ -1,0 +1,88 @@
+datagrids:
+    teachers-applications-grid:
+        extended_entity_name: 'Teachers\Bundle\ApplicationBundle\Entity\Application'
+        acl_resource: teachers_application_view
+        source:
+            type: orm
+            query:
+                select:
+                    - application.id
+                    - application.subject
+                    - applicationstatus.id as status
+                    - applicationstatus.name as statusLabel
+                    - application.createdAt
+                from:
+                    - { table: 'Teachers\Bundle\ApplicationBundle\Entity\Application', alias: application }
+                join:
+                    left:
+                        - { join: application.status, alias: applicationstatus }
+        columns:
+            subject:
+                label: teachers.application.application.subject.label
+            status:
+                label: oro.task.status.label
+                choices: "@oro_entity_extend.enum_value_provider->getEnumChoicesByCode('application_status')"
+                inline_editing:
+                    enable: true
+            createdAt:
+                frontend_type: datetime
+                label: oro.ui.created_at
+        sorters:
+            columns:
+                subject:
+                    data_name: application.subject
+                status:
+                    data_name: applicationstatus.priority
+                createdAt:
+                    data_name: application.createdAt
+            default:
+                createdAt: DESC
+        filters:
+            columns:
+                subject:
+                    type: string
+                    data_name: application.subject
+                status:
+                    type: enum
+                    data_name: status
+                    enum_code: application_status
+                createdAt:
+                    type: datetime
+                    data_name: application.createdAt
+        properties:
+            id: ~
+            view_link:
+                type: url
+                route: teachers_application_view
+                params: [ id ]
+            update_link:
+                type: url
+                route: teachers_application_update
+                params: [ id ]
+            delete_link:
+                type: url
+                route: teachers_application_delete
+                params: [ id ]
+        actions:
+            view:
+                acl_resource: teachers_application_view
+                type: navigate
+                label: oro.grid.action.view
+                icon: eye
+                link: view_link
+                rowAction: true
+            update:
+                acl_resource: teachers_application_edit
+                type: navigate
+                label: oro.grid.action.update
+                icon: edit
+                link: update_link
+            delete:
+                acl_resource: teachers_application_delete
+                type: delete
+                label: oro.grid.action.delete
+                icon: trash
+                link: delete_link
+        options:
+            entityHint: teachers.application.application.entity_plural_label
+            entity_pagination: true

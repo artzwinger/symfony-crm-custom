@@ -1,0 +1,27 @@
+{% import 'OroUIBundle::macros.html.twig' as UI %}
+
+{{ UI.clientLink({
+    'dataUrl': path('teachers_satisfaction_create', oro_action_params(entity, constant('Teachers\\Bundle\\SatisfactionBundle\\EventListener\\FormAssignActivityEventListener::ACTION_ACTIVITY'))),
+    'aCss': 'dropdown-item no-hash',
+    'iCss': 'fa-satisfactions',
+    'dataId': entity.id,
+    'label': 'teachers.satisfaction.add_entity'|trans,
+    'title': 'teachers.satisfaction.add_entity.title'|trans,
+    'widget' : {
+        'type' : 'dialog',
+        'multiple' : true,
+        'reload-grid-name': 'user-satisfactions-grid',
+        'refresh-widget-alias': 'activity-list-widget',
+        'options' : {
+            'alias': 'satisfaction-dialog',
+            'dialogOptions' : {
+                'title' : 'teachers.satisfaction.add_entity'|trans,
+                'allowMaximize': true,
+                'allowMinimize': true,
+                'dblclick': 'maximize',
+                'maximizedHeightDecreaseBy': 'minimize-bar',
+                'width': 1000
+            }
+        }
+    }
+}) }}

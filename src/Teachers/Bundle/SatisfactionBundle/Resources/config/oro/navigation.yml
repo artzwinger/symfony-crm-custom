@@ -1,0 +1,29 @@
+navigation:
+  menu_config:
+    items:
+      satisfaction_list:
+        label: 'teachers.satisfaction.entity_plural_label'
+        route: 'teachers_satisfaction_index'
+        position: 10
+        extras:
+          routes: [ 'teachers_satisfaction_update', 'teachers_satisfaction_create', 'teachers_satisfaction_view' ]
+          description: 'teachers.satisfaction.menu.satisfaction_list.description'
+      teachers_satisfaction_my_satisfactions:
+        label: 'teachers.satisfaction.menu.my_satisfactions'
+        route: 'teachers_satisfaction_my_satisfactions'
+        position: 15
+    tree:
+      application_menu:
+        children:
+          activities_tab:
+            children:
+              satisfaction_list: ~
+      usermenu:
+        children:
+          teachers_satisfaction_my_satisfactions: ~
+  titles:
+    teachers_satisfaction_index: ~
+    teachers_satisfaction_view: '%entity.id%'
+    teachers_satisfaction_create: oro.ui.create_entity
+    teachers_satisfaction_update: '%entity.id% - Edit'
+    teachers_satisfaction_my_satisfactions: "My Satisfactions - %username%"

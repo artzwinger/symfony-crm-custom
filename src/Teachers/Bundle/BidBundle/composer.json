@@ -1,0 +1,28 @@
+{
+  "name": "teachers/bid-bundle",
+  "type": "symfony-bundle",
+  "description": "Teachers bid bundle",
+  "keywords": [
+    "Oro",
+    "OroPlatform",
+    "OroCRM",
+    "Teachers",
+    "Tutors",
+    "ExtendBid"
+  ],
+  "authors": [
+    {
+      "name": "Art Zwinger"
+    }
+  ],
+  "require": {
+    "oro/platform": "4.1.*"
+  },
+  "autoload": {
+    "psr-4": {
+      "Teachers\\Bundle\\BidBundle\\": ""
+    }
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true
+}

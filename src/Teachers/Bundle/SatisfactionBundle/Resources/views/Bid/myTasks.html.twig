@@ -1,0 +1,16 @@
+{% extends 'OroUIBundle:actions:index.html.twig' %}
+
+{% set name = app.user|oro_format_name|default('N/A'|trans) %}
+{% oro_title_set({params : {"%username%": name }}) %}
+
+{% set pageTitle = 'teachers.satisfaction.entity_plural_label'|trans %}
+{% set gridName = 'user-satisfactions-grid' %}
+{# grid params #}
+{% set params = {'userId': app.user.id} %}
+
+{% block breadcrumb %}
+    {% set breadcrumbs = [
+        {'label': 'teachers.satisfaction.menu.my_satisfactions'|trans }
+    ] %}
+    {% include 'OroNavigationBundle:Menu:breadcrumbs.html.twig' %}
+{% endblock breadcrumb %}

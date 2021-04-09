@@ -1,0 +1,4 @@
+Teachers\Bundle\UsersBundle\Entity\TeacherGroup:
+  properties:
+    status:
+      - NotBlank: ~

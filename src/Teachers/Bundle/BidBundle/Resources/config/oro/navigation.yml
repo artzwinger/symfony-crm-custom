@@ -1,0 +1,29 @@
+navigation:
+  menu_config:
+    items:
+      bid_list:
+        label: 'teachers.bid.entity_plural_label'
+        route: 'teachers_bid_index'
+        position: 10
+        extras:
+          routes: [ 'teachers_bid_update', 'teachers_bid_create', 'teachers_bid_view' ]
+          description: 'teachers.bid.menu.bid_list.description'
+      teachers_bid_my_bids:
+        label: 'teachers.bid.menu.my_bids'
+        route: 'teachers_bid_my_bids'
+        position: 15
+    tree:
+      application_menu:
+        children:
+          activities_tab:
+            children:
+              bid_list: ~
+      usermenu:
+        children:
+          teachers_bid_my_bids: ~
+  titles:
+    teachers_bid_index: ~
+    teachers_bid_view: '%entity.id%'
+    teachers_bid_create: oro.ui.create_entity
+    teachers_bid_update: '%entity.id% - Edit'
+    teachers_bid_my_bids: "My Bids - %username%"

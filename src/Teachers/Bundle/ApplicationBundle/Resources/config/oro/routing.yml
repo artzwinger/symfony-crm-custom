@@ -1,0 +1,14 @@
+teachers_application:
+    resource: "@TeachersApplicationBundle/Controller/ApplicationController.php"
+    type: annotation
+    prefix: /application
+
+teachers_application_api:
+    resource: "@TeachersApplicationBundle/Resources/config/oro/routing_api.yml"
+    type: rest
+    prefix: api/rest/{version}
+    requirements:
+        version: latest|v1
+        _format: json
+    defaults:
+        version: latest

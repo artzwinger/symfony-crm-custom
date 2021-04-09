@@ -1,0 +1,31 @@
+services:
+    teachers_assignment.embedded_form:
+        class: Teachers\Bundle\AssignmentBundle\Form\Type\AssignmentType
+        public: true
+        tags:
+            - { name: oro_embedded_form, type: Teachers\Bundle\AssignmentBundle\Form\Type\AssignmentType, label: teachers.assignment.assignment.entity_label }
+            - { name: form.type, alias: teachers_assignment_request }
+
+    teachers_assignment.assignment.form:
+        class: Symfony\Component\Form\Form
+        factory: [ '@form.factory', createNamed ]
+        arguments:
+            - "teachers_assignment_request"
+            - Teachers\Bundle\AssignmentBundle\Form\Type\AssignmentType
+            - null
+
+    teachers_assignment.assignment.form.handler:
+        class: Teachers\Bundle\AssignmentBundle\Form\Handler\AssignmentHandler
+        public: true
+        arguments:
+            - "@teachers_assignment.assignment.form"
+            - "@request_stack"
+            - "@doctrine"
+
+    teachers_assignment.assignment.manager.api:
+        class: Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
+        public: true
+        parent: oro_soap.manager.entity_manager.abstract
+        arguments:
+            - 'Teachers\Bundle\AssignmentBundle\Entity\Assignment'
+            - "@doctrine.orm.entity_manager"

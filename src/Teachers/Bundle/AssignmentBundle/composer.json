@@ -1,0 +1,28 @@
+{
+  "name": "teachers/assignment-bundle",
+  "type": "symfony-bundle",
+  "description": "Teachers assignment bundle",
+  "keywords": [
+    "Oro",
+    "OroPlatform",
+    "OroCRM",
+    "Teachers",
+    "Tutors",
+    "ExtendAssignment"
+  ],
+  "authors": [
+    {
+      "name": "Art Zwinger"
+    }
+  ],
+  "require": {
+    "oro/platform": "4.1.*"
+  },
+  "autoload": {
+    "psr-4": {
+      "Teachers\\Bundle\\AssignmentBundle\\": ""
+    }
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true
+}

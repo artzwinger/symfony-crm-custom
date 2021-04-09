@@ -1,0 +1,4 @@
+Teachers\Bundle\ApplicationBundle\Entity\Application:
+  properties:
+    status:
+      - NotBlank: ~

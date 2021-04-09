@@ -1,0 +1,28 @@
+{
+  "name": "teachers/users-bundle",
+  "type": "symfony-bundle",
+  "description": "Teachers users bundle",
+  "keywords": [
+    "Oro",
+    "OroPlatform",
+    "OroCRM",
+    "Teachers",
+    "Tutors",
+    "Users"
+  ],
+  "authors": [
+    {
+      "name": "Art Zwinger"
+    }
+  ],
+  "require": {
+    "oro/platform": "4.1.*"
+  },
+  "autoload": {
+    "psr-4": {
+      "Teachers\\Bundle\\UsersBundle\\": ""
+    }
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true
+}

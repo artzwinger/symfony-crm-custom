@@ -1,0 +1,28 @@
+{
+  "name": "teachers/satisfaction-bundle",
+  "type": "symfony-bundle",
+  "description": "Teachers satisfaction bundle",
+  "keywords": [
+    "Oro",
+    "OroPlatform",
+    "OroCRM",
+    "Teachers",
+    "Tutors",
+    "ExtendSatisfaction"
+  ],
+  "authors": [
+    {
+      "name": "Art Zwinger"
+    }
+  ],
+  "require": {
+    "oro/platform": "4.1.*"
+  },
+  "autoload": {
+    "psr-4": {
+      "Teachers\\Bundle\\SatisfactionBundle\\": ""
+    }
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true
+}

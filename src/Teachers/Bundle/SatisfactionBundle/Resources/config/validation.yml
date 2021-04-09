@@ -1,0 +1,6 @@
+Teachers\Bundle\SatisfactionBundle\Entity\Satisfaction:
+  properties:
+    status:
+      - NotBlank: ~
+    reminders:
+      - Valid: ~

@@ -1,0 +1,24 @@
+services:
+  teachers_satisfaction.widget_provider.actions.assign_satisfaction:
+    parent: oro_ui.widget_provider.action_button.abstract
+    arguments:
+      - teachers_assign_satisfaction_button
+      - teachers_assign_satisfaction_link
+    tags:
+      - { name: oro_ui.view_action_provider, group: activity }
+  teachers_satisfaction.activity_list.provider:
+    class: Teachers\Bundle\SatisfactionBundle\Provider\SatisfactionActivityListProvider
+    arguments:
+      - "@oro_entity.doctrine_helper"
+      - "@oro_security.owner.entity_owner_accessor.link"
+      - "@oro_activity.association_helper"
+      - "@oro_comment.association_helper"
+    tags:
+      - { name: oro_activity_list.provider, class: Teachers\Bundle\SatisfactionBundle\Entity\Satisfaction, priority: 20 }
+  teachers_satisfaction.form.form_template_data_provider.satisfaction:
+    class: Teachers\Bundle\SatisfactionBundle\Form\SatisfactionFormTemplateDataProvider
+    public: false
+    arguments:
+      - '@router'
+    tags:
+      - { name: oro_form.form_template_data_provider, alias: teachers_satisfaction_update }

@@ -1,0 +1,24 @@
+services:
+  teachers_bid.widget_provider.actions.assign_bid:
+    parent: oro_ui.widget_provider.action_button.abstract
+    arguments:
+      - teachers_assign_bid_button
+      - teachers_assign_bid_link
+    tags:
+      - { name: oro_ui.view_action_provider, group: activity }
+  teachers_bid.activity_list.provider:
+    class: Teachers\Bundle\BidBundle\Provider\BidActivityListProvider
+    arguments:
+      - "@oro_entity.doctrine_helper"
+      - "@oro_security.owner.entity_owner_accessor.link"
+      - "@oro_activity.association_helper"
+      - "@oro_comment.association_helper"
+    tags:
+      - { name: oro_activity_list.provider, class: Teachers\Bundle\BidBundle\Entity\Bid, priority: 20 }
+  teachers_bid.form.form_template_data_provider.bid:
+    class: Teachers\Bundle\BidBundle\Form\BidFormTemplateDataProvider
+    public: false
+    arguments:
+      - '@router'
+    tags:
+      - { name: oro_form.form_template_data_provider, alias: teachers_bid_update }

@@ -1,0 +1,14 @@
+teachers_group:
+    resource: "@TeachersUsersBundle/Controller/TeacherGroupController.php"
+    type: annotation
+    prefix: /teacher-group
+
+teachers_group_api:
+    resource: "@TeachersUsersBundle/Resources/config/oro/routing_api.yml"
+    type: rest
+    prefix: api/rest/{version}
+    requirements:
+        version: latest|v1
+        _format: json
+    defaults:
+        version: latest

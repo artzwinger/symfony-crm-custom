@@ -1,0 +1,15 @@
+{% extends 'OroUIBundle:actions:index.html.twig' %}
+{% import 'OroUIBundle::macros.html.twig' as UI %}
+{% set gridName = 'satisfactions-grid' %}
+{% set pageTitle = 'teachers.satisfaction.entity_plural_label'|trans %}
+
+{% block navButtons %}
+    {% import 'OroUIBundle::macros.html.twig' as UI %}
+
+    {% if is_granted('teachers_satisfaction_create') %}
+        {{ UI.addButton({
+            'path' : path('teachers_satisfaction_create'),
+            'entity_label': 'teachers.satisfaction.entity_label'|trans
+        }) }}
+    {% endif %}
+{% endblock %}

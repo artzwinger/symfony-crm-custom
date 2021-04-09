@@ -1,0 +1,88 @@
+datagrids:
+    teachers-assignments-grid:
+        extended_entity_name: 'Teachers\Bundle\AssignmentBundle\Entity\Assignment'
+        acl_resource: teachers_assignment_view
+        source:
+            type: orm
+            query:
+                select:
+                    - assignment.id
+                    - assignment.subject
+                    - assignmentstatus.id as status
+                    - assignmentstatus.name as statusLabel
+                    - assignment.createdAt
+                from:
+                    - { table: 'Teachers\Bundle\AssignmentBundle\Entity\Assignment', alias: assignment }
+                join:
+                    left:
+                        - { join: assignment.status, alias: assignmentstatus }
+        columns:
+            subject:
+                label: teachers.assignment.assignment.subject.label
+            status:
+                label: oro.task.status.label
+                choices: "@oro_entity_extend.enum_value_provider->getEnumChoicesByCode('assignment_status')"
+                inline_editing:
+                    enable: true
+            createdAt:
+                frontend_type: datetime
+                label: oro.ui.created_at
+        sorters:
+            columns:
+                subject:
+                    data_name: assignment.subject
+                status:
+                    data_name: assignmentstatus.priority
+                createdAt:
+                    data_name: assignment.createdAt
+            default:
+                createdAt: DESC
+        filters:
+            columns:
+                subject:
+                    type: string
+                    data_name: assignment.subject
+                status:
+                    type: enum
+                    data_name: status
+                    enum_code: assignment_status
+                createdAt:
+                    type: datetime
+                    data_name: assignment.createdAt
+        properties:
+            id: ~
+            view_link:
+                type: url
+                route: teachers_assignment_view
+                params: [ id ]
+            update_link:
+                type: url
+                route: teachers_assignment_update
+                params: [ id ]
+            delete_link:
+                type: url
+                route: teachers_assignment_delete
+                params: [ id ]
+        actions:
+            view:
+                acl_resource: teachers_assignment_view
+                type: navigate
+                label: oro.grid.action.view
+                icon: eye
+                link: view_link
+                rowAction: true
+            update:
+                acl_resource: teachers_assignment_edit
+                type: navigate
+                label: oro.grid.action.update
+                icon: edit
+                link: update_link
+            delete:
+                acl_resource: teachers_assignment_delete
+                type: delete
+                label: oro.grid.action.delete
+                icon: trash
+                link: delete_link
+        options:
+            entityHint: teachers.assignment.assignment.entity_plural_label
+            entity_pagination: true

@@ -1,0 +1,7 @@
+<script type="text/html" class="reminder_templates" data-identifier="bid_template">
+<% if (url != '') { %>
+    <span><a class="hash-navigation-link" href="<%= url %>"><%= id %></a> is due on <%= expireAt %></span>
+<% } else { %>
+    <span><%= id %> is due on <%= expireAt %></span>
+<% } %>
+</script>

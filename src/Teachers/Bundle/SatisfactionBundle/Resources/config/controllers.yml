@@ -1,0 +1,8 @@
+services:
+  _defaults:
+    public: true
+  Teachers\Bundle\SatisfactionBundle\Controller\SatisfactionCrudController:
+    calls:
+      - [ setContainer, [ '@Psr\Container\ContainerInterface' ] ]
+    tags:
+      - { name: container.service_subscriber }

@@ -1,0 +1,27 @@
+{% import 'OroUIBundle::macros.html.twig' as UI %}
+
+{{ UI.clientButton({
+    'dataUrl': path('teachers_bid_create', oro_action_params(entity, constant('Teachers\\Bundle\\BidBundle\\EventListener\\FormAssignActivityEventListener::ACTION_ACTIVITY'))),
+    'aCss': 'no-hash',
+    'iCss': 'fa-bids',
+    'dataId': entity.id,
+    'label': 'teachers.bid.add_entity'|trans,
+    'title': 'teachers.bid.add_entity.title'|trans,
+    'widget' : {
+        'type' : 'dialog',
+        'multiple' : true,
+        'reload-grid-name': 'user-bids-grid',
+        'refresh-widget-alias': 'activity-list-widget',
+        'options' : {
+            'alias': 'bid-dialog',
+            'dialogOptions' : {
+                'title' : 'teachers.bid.add_entity'|trans,
+                'allowMaximize': true,
+                'allowMinimize': true,
+                'dblclick': 'maximize',
+                'maximizedHeightDecreaseBy': 'minimize-bar',
+                'width': 1000
+            }
+        }
+    }
+}) }}

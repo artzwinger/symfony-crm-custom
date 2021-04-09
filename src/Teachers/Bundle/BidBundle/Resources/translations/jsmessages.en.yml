@@ -1,0 +1,8 @@
+"Bid created successfully": Bid created successfully
+"Create bid": Create bid
+teachers:
+  bid:
+    assigned_bids_widget:
+      settings: Bid Widget Settings
+      number_of_bids: Number of bids to show
+      description: "This widget allows you to see bids assigned to you"

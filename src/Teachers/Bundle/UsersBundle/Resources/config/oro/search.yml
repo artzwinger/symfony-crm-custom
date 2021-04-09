@@ -1,0 +1,16 @@
+search:
+    Teachers\Bundle\UsersBundle\Entity\TeacherGroup:
+        alias: teachers_group
+        title_fields: [ subject ]
+        route:
+            name: teachers_group_view
+            parameters:
+                id: id
+        search_template: TeachersUsersBundle:Search:result.html.twig
+        fields:
+            -   name: title
+                target_type: text
+                target_fields: [ title ]
+            -   name: description
+                target_type: text
+                target_fields: [ description ]

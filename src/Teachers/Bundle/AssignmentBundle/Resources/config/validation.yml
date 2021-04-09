@@ -1,0 +1,4 @@
+Teachers\Bundle\AssignmentBundle\Entity\Assignment:
+  properties:
+    status:
+      - NotBlank: ~

@@ -1,0 +1,218 @@
+datagrids:
+  bids-grid:
+    extended_entity_name: 'Teachers\Bundle\BidBundle\Entity\Bid'
+    acl_resource: teachers_bid_view
+    source:
+      type: orm
+      query:
+        select:
+          - bid.id
+          - bid.subject
+          - bid.description
+          - bid.dueDate
+          - CONCAT_WS(' ', own.firstName, own.lastName) as ownerName
+          - own.id as owner
+          - bid.createdAt
+          - bid.updatedAt
+        from:
+          - { table: 'Teachers\Bundle\BidBundle\Entity\Bid', alias: bid }
+        join:
+          inner:
+            - { join: bid.owner, alias: own }
+    inline_editing:
+      enable: true
+    columns:
+      subject:
+        label: teachers.bid.subject.label
+      ownerName:
+        label: teachers.bid.owner.label
+        inline_editing:
+          enable: true
+          editor:
+            view: oroform/js/app/views/editor/related-id-relation-editor-view
+            view_options:
+              value_field_name: owner
+          autocomplete_api_accessor:
+            class: orouser/js/tools/acl-users-search-api-accessor
+            permission_check_entity_name: Teachers_Bundle_BidBundle_Entity_Bid
+      createdAt:
+        label: oro.ui.created_at
+        frontend_type: datetime
+      updatedAt:
+        label: oro.ui.updated_at
+        frontend_type: datetime
+      tags: [ ]
+      contexts: [ ]
+
+    sorters:
+      columns:
+        subject:
+          data_name: bid.subject
+        ownerName:
+          data_name: ownerName
+        createdAt:
+          data_name: bid.createdAt
+        updatedAt:
+          data_name: bid.updatedAt
+      default:
+        dueDate: ASC
+    filters:
+      columns:
+        subject:
+          type: string
+          data_name: bid.subject
+        owner:
+          type: choice-tree
+          label: teachers.bid.owner.label
+          data_name: bid.owner
+          autocomplete_alias: assigned_to_organization_users
+          renderedPropertyName: 'fullName'
+          className: 'Oro\Bundle\UserBundle\Entity\User'
+        businessUnitId:
+          label: oro.business_unit.label
+          type: choice-business-unit
+          data_name: bid.owner
+          className: 'Oro\Bundle\OrganizationBundle\Entity\BusinessUnit'
+        createdAt:
+          type: datetime
+          data_name: bid.createdAt
+        updatedAt:
+          type: datetime
+          data_name: bid.updatedAt
+    properties:
+      id: ~
+      owner: ~
+      view_link:
+        type: url
+        route: teachers_bid_view
+        params: [ id ]
+      update_link:
+        type: url
+        route: teachers_bid_update
+        params: [ id ]
+    actions:
+      view:
+        type: navigate
+        acl_resource: teachers_bid_view
+        label: oro.grid.action.view
+        icon: eye
+        link: view_link
+        rowAction: true
+      update:
+        type: navigate
+        acl_resource: teachers_bid_update
+        label: oro.grid.action.update
+        icon: edit
+        link: update_link
+    options:
+      entity_pagination: true
+      contexts:
+        enabled: true
+
+  widget-base-bids-grid:
+    acl_resource: teachers_bid_view
+    source:
+      type: orm
+      query:
+        select:
+          - bid.id
+          - bid.subject
+          - CONCAT_WS(' ', owner.firstName, owner.lastName) as ownerName
+          - owner.id as ownerId
+        from:
+          - { table: 'Teachers\Bundle\BidBundle\Entity\Bid', alias: bid }
+        join:
+          left:
+            - { join: bid.owner, alias: owner }
+    columns:
+      subject:
+        label: teachers.bid.subject.label
+        type: twig
+        template: TeachersBidBundle:Bid:Datagrid/Property/subject.html.twig
+        frontend_type: html
+      ownerName:
+        type: twig
+        label: teachers.bid.owner.label
+        frontend_type: html
+        template: TeachersBidBundle:Bid:Datagrid/Property/owner.html.twig
+    sorters:
+      columns:
+        subject:
+          data_name: bid.subject
+        ownerName:
+          data_name: ownerName
+      default:
+        dueDate: ASC
+    filters:
+      columns:
+        subject:
+          type: string
+          data_name: bid.subject
+        ownerName:
+          type: string
+          data_name: ownerName
+    properties:
+      id: ~
+
+  activity-bids-grid:
+    extends: widget-base-bids-grid
+
+  user-bids-grid:
+    extends: bids-grid
+    options:
+      entity_pagination: false
+
+  bid-for-context-grid:
+    extended_entity_name: 'Teachers\Bundle\BidBundle\Entity\Bid'
+    acl_resource: teachers_bid_view
+    options:
+      entityHint: teachers.bid.entity_plural_label
+      entity_pagination: true
+      toolbarOptions:
+        pageSize:
+          default_per_page: 10
+      routerEnabled: false
+
+    source:
+      type: orm
+      query:
+        select:
+          - bid.id
+          - bid.subject
+          - bid.description
+          - CONCAT_WS(' ', own.firstName, own.lastName) as ownerName
+          - own.id as owner
+        from:
+          - { table: 'Teachers\Bundle\BidBundle\Entity\Bid', alias: bid }
+        join:
+          left:
+            - { join: bid.owner, alias: own }
+      hints:
+        - HINT_TRANSLATABLE
+    columns:
+      id:
+        label: teachers.bid.id.label
+      subject:
+        label: teachers.bid.subject.label
+      ownerName:
+        label: teachers.bid.owner.label
+    sorters:
+      columns:
+        subject:
+          data_name: bid.subject
+        ownerName:
+          data_name: ownerName
+      default:
+        dueDate: ASC
+    filters:
+      columns:
+        subject:
+          type: string
+          data_name: bid.subject
+        owner:
+          type: choice-tree
+          label: teachers.bid.owner.label
+          data_name: bid.owner
+          options:
+            lazy: "@oro_user.provider.filter.user_choice_tree->shouldBeLazy"
+            data: "@?oro_user.provider.filter.user_choice_tree->getList"

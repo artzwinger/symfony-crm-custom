@@ -1,0 +1,11 @@
+{% if satisfactions|length > 0 %}
+    {% for satisfaction in satisfactions %}
+        <div class="satisfaction-widget-row {{ satisfaction.dueDateExpired ? 'satisfaction-expired' : '' }} {{ loop.first ? 'first' : '' }} {{ loop.last ? 'last' : '' }}"
+            data-url="{{ path("teachers_satisfaction_view", {'id':satisfaction.id}) }}">
+        </div>
+    {% endfor %}
+{% else %}
+    <p class="no_satisfactions">
+        {{ "teachers.satisfaction.assigned_satisfactions_widget.no_satisfaction_exist"|trans }}
+    </p>
+{% endif %}

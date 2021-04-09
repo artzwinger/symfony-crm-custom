@@ -1,0 +1,6 @@
+Teachers\Bundle\BidBundle\Entity\Bid:
+  properties:
+    status:
+      - NotBlank: ~
+    reminders:
+      - Valid: ~

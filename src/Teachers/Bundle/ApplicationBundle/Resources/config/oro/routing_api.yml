@@ -1,0 +1,3 @@
+teachers_application_application_api:
+    resource: "@TeachersApplicationBundle/Controller/Api/Rest/ApplicationController.php"
+    type: rest

@@ -1,0 +1,21 @@
+navigation:
+    menu_config:
+        items:
+            teachers_group_assignment:
+                label: 'teachers.users.teacher_group.entity_plural_label'
+                route: 'teachers_group_index'
+                position: 30
+                extras:
+                    routes: [ 'teachers_group_*' ]
+                display: true
+        tree:
+            assignment_menu:
+                children:
+                    activities_tab:
+                        children:
+                            teachers_group_assignment: ~
+    titles:
+        teachers_group_index: ~
+        teachers_group_view: '%teacher_group.title%'
+        teachers_group_create: 'Create teacher group'
+        teachers_group_update: '%teacher_group.title% - Edit'

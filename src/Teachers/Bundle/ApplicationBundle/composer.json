@@ -1,0 +1,28 @@
+{
+  "name": "teachers/application-bundle",
+  "type": "symfony-bundle",
+  "description": "Teachers application bundle",
+  "keywords": [
+    "Oro",
+    "OroPlatform",
+    "OroCRM",
+    "Teachers",
+    "Tutors",
+    "Application"
+  ],
+  "authors": [
+    {
+      "name": "Art Zwinger"
+    }
+  ],
+  "require": {
+    "oro/platform": "4.1.*"
+  },
+  "autoload": {
+    "psr-4": {
+      "Teachers\\Bundle\\ApplicationBundle\\": ""
+    }
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true
+}

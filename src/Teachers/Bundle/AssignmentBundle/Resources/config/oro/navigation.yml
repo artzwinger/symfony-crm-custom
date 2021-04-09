@@ -1,0 +1,21 @@
+navigation:
+    menu_config:
+        items:
+            teachers_assignment_assignment:
+                label: 'teachers.assignment.assignment.entity_plural_label'
+                route: 'teachers_assignment_index'
+                position: 30
+                extras:
+                    routes: [ 'teachers_assignment_*' ]
+                display: true
+        tree:
+            assignment_menu:
+                children:
+                    activities_tab:
+                        children:
+                            teachers_assignment_assignment: ~
+    titles:
+        teachers_assignment_index: ~
+        teachers_assignment_view: '%assignment.subject%'
+        teachers_assignment_create: 'Create assignment'
+        teachers_assignment_update: '%assignment.subject% - Edit'

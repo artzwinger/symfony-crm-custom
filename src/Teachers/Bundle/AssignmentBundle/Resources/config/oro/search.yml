@@ -1,0 +1,16 @@
+search:
+    Teachers\Bundle\AssignmentBundle\Entity\Assignment:
+        alias: teachers_assignment
+        title_fields: [ subject ]
+        route:
+            name: teachers_assignment_view
+            parameters:
+                id: id
+        search_template: TeachersAssignmentBundle:Search:result.html.twig
+        fields:
+            -   name: subject
+                target_type: text
+                target_fields: [ subject ]
+            -   name: description
+                target_type: text
+                target_fields: [ description ]
