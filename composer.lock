@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "42093ec3330615c71499a58f241b248b",
+    "content-hash": "dc3891d9944f934dd8bfc4c78fb40e5d",
     "packages": [
         {
             "name": "akeneo/batch-bundle",
@@ -13371,6 +13371,7 @@
             ],
             "description": "FinderFacade is a convenience wrapper for Symfony's Finder component.",
             "homepage": "https://github.com/sebastianbergmann/finder-facade",
+            "abandoned": true,
             "time": "2020-01-16T08:08:45+00:00"
         },
         {

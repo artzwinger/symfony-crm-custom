@@ -20,6 +20,36 @@
         "composer": {
             "type": "composer",
             "url": "https://packagist.orocrm.com"
+        },
+        "teachers-assignment-bundle": {
+            "type": "vcs",
+            "url": "git@bitbucket.org:artzwinger/teachers-assignment-bundle.git",
+            "branch": "master"
+        },
+        "teachers-invoices-bundle": {
+            "type": "vcs",
+            "url": "git@bitbucket.org:artzwinger/teachers-invoices-bundle.git",
+            "branch": "master"
+        },
+        "teachers-messaging-bundle": {
+            "type": "vcs",
+            "url": "git@bitbucket.org:artzwinger/teachers-messaging-bundle.git",
+            "branch": "master"
+        },
+        "teachers-payments-bundle": {
+            "type": "vcs",
+            "url": "git@bitbucket.org:artzwinger/teachers-payments-bundle.git",
+            "branch": "master"
+        },
+        "teachers-reports-bundle": {
+            "type": "vcs",
+            "url": "git@bitbucket.org:artzwinger/teachers-reports-bundle.git",
+            "branch": "master"
+        },
+        "teachers-users-bundle": {
+            "type": "vcs",
+            "url": "git@bitbucket.org:artzwinger/teachers-users-bundle.git",
+            "branch": "master"
         }
     },
     "require": {
