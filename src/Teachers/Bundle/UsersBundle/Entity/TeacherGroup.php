@@ -88,4 +88,84 @@ class TeacherGroup extends ExtendTeacherGroup
      * @ORM\JoinColumn(name="owner_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $owner;
+
+    /**
+     * @return int
+     */
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param int $id
+     */
+    public function setId(int $id): void
+    {
+        $this->id = $id;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getTitle(): ?string
+    {
+        return $this->title;
+    }
+
+    /**
+     * @param string|null $title
+     */
+    public function setTitle(?string $title): void
+    {
+        $this->title = $title;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    /**
+     * @param string|null $description
+     */
+    public function setDescription(?string $description): void
+    {
+        $this->description = $description;
+    }
+
+    /**
+     * @return \Doctrine\Common\Collections\Collection|\Oro\Bundle\UserBundle\Entity\User[]
+     */
+    public function getTutors()
+    {
+        return $this->tutors;
+    }
+
+    /**
+     * @param \Doctrine\Common\Collections\Collection|\Oro\Bundle\UserBundle\Entity\User[] $tutors
+     */
+    public function setTutors($tutors): void
+    {
+        $this->tutors = $tutors;
+    }
+
+    /**
+     * @return \Oro\Bundle\OrganizationBundle\Entity\Organization
+     */
+    public function getOwner(): Organization
+    {
+        return $this->owner;
+    }
+
+    /**
+     * @param \Oro\Bundle\OrganizationBundle\Entity\Organization $owner
+     */
+    public function setOwner(Organization $owner): void
+    {
+        $this->owner = $owner;
+    }
 }

@@ -70,7 +70,7 @@ class AssignmentActivityListProvider implements
     public function getSubject($entity)
     {
         /** @var $entity Assignment */
-        return $entity->getId();
+        return $entity->getSubject();
     }
 
     /**
@@ -88,7 +88,7 @@ class AssignmentActivityListProvider implements
     public function getOwner($entity)
     {
         /** @var $entity Assignment */
-        return $entity->getOwner();
+        return $entity->getCourseManager();
     }
 
     /**

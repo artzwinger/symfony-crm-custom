@@ -1,7 +1,7 @@
 navigation:
     menu_config:
         items:
-            teachers_group_assignment:
+            teachers_group:
                 label: 'teachers.users.teacher_group.entity_plural_label'
                 route: 'teachers_group_index'
                 position: 30
@@ -9,11 +9,11 @@ navigation:
                     routes: [ 'teachers_group_*' ]
                 display: true
         tree:
-            assignment_menu:
+            application_menu:
                 children:
                     activities_tab:
                         children:
-                            teachers_group_assignment: ~
+                            teachers_group: ~
     titles:
         teachers_group_index: ~
         teachers_group_view: '%teacher_group.title%'

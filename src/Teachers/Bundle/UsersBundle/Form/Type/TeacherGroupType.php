@@ -2,14 +2,11 @@
 
 namespace Teachers\Bundle\UsersBundle\Form\Type;
 
-use Oro\Bundle\EntityExtendBundle\Form\Type\EnumSelectType;
-use Oro\Bundle\FormBundle\Form\Type\OroMoneyType;
 use Oro\Bundle\FormBundle\Form\Type\OroResizeableRichTextType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Validator\Constraints as Assert;
 use Teachers\Bundle\UsersBundle\Entity\TeacherGroup;
 
 /**

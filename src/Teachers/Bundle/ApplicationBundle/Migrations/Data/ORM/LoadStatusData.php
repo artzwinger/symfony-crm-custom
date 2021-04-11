@@ -8,9 +8,10 @@ use Oro\Bundle\EntityExtendBundle\Entity\Repository\EnumValueRepository;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Teachers\Bundle\ApplicationBundle\Entity\Application;
 
-class LoadApplicationStatusData extends AbstractFixture
+class LoadStatusData extends AbstractFixture
 {
     const STATUS_ENUM_CLASS = 'application_status';
+
     /**
      * @param ObjectManager $manager
      */
@@ -20,8 +21,8 @@ class LoadApplicationStatusData extends AbstractFixture
         /** @var EnumValueRepository $enumRepo */
         $enumRepo = $manager->getRepository($className);
         $priority = 1;
-        foreach (Application::getAvailableStatuses() as $name => $isDefault) {
-            $enumOption = $enumRepo->createEnumValue($name, $priority++, $isDefault);
+        foreach (Application::getAvailableStatuses() as $id => $data) {
+            $enumOption = $enumRepo->createEnumValue($data['name'], $priority++, $data['is_default'], $id);
             $manager->persist($enumOption);
         }
         $manager->flush();

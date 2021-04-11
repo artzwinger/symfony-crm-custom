@@ -1,5 +1,5 @@
 services:
-    teachers_usersembedded_form:
+    teachers_users.embedded_form:
         class: Teachers\Bundle\UsersBundle\Form\Type\TeacherGroupType
         public: true
         tags:
@@ -21,6 +21,12 @@ services:
             - "@teachers_users.teacher_group.form"
             - "@request_stack"
             - "@doctrine"
+
+    teachers_users.helper.role:
+        class: Teachers\Bundle\UsersBundle\Helper\Role
+        public: true
+        arguments:
+            - "@doctrine.orm.entity_manager"
 
     teachers_users.teacher_group.manager.api:
         class: Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager

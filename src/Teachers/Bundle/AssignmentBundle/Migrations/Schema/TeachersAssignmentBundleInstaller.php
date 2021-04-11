@@ -64,13 +64,13 @@ class TeachersAssignmentBundleInstaller implements Installation, ActivityExtensi
         $table = $schema->createTable('teachers_assignment');
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
         $table->addColumn('teacher_id', 'integer', ['notnull' => false]);
-        $table->addColumn('student_id', 'integer', ['notnull' => true]);
-        $table->addColumn('name', 'string', ['length' => 255, 'notnull' => true]);
+        $table->addColumn('student_id', 'integer', ['notnull' => false]);
+        $table->addColumn('subject', 'string', ['length' => 255, 'notnull' => true]);
         $table->addColumn('description', 'text', ['notnull' => true]);
         $table->addColumn('created_at', 'datetime', ['notnull' => true]);
         $table->addColumn('updated_at', 'datetime', ['notnull' => false]);
         $table->addColumn('organization_id', 'integer', ['notnull' => false]);
-        $table->addColumn('owner_id', 'integer', ['notnull' => false]);
+        $table->addColumn('course_manager_id', 'integer', ['notnull' => false]);
         $table->setPrimaryKey(['id']);
         $this->activityExtension->addActivityAssociation($schema, 'teachers_assignment', 'oro_user');
 

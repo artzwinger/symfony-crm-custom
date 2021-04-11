@@ -16,7 +16,9 @@ teachers:
             calls.label: Calls
             emails.label: Emails
             organization_name.label: Organization name
-            owner.label: Organization
+            course_manager.label: Course manager
+            student.label: Student
+            teacher.label: Teacher
 
             datagrid:
                 update: Update
@@ -36,4 +38,4 @@ teachers:
         block:
             general: General
             additional: Additional
-            assignment_information: Request Information
+            assignment_information: Assignment Information

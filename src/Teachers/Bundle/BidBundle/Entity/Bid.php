@@ -7,8 +7,8 @@ use Oro\Bundle\EntityBundle\EntityProperty\DatesAwareInterface;
 use Oro\Bundle\EntityBundle\EntityProperty\DatesAwareTrait;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
+use Oro\Bundle\UserBundle\Entity\User;
 use Teachers\Bundle\BidBundle\Model\ExtendBid;
-use Teachers\Bundle\UsersBundle\Entity\Teacher;
 
 /**
  * @ORM\Entity(repositoryClass="Teachers\Bundle\BidBundle\Entity\Repository\BidRepository")
@@ -69,13 +69,6 @@ class Bid extends ExtendBid implements DatesAwareInterface
      */
     protected $id;
     /**
-     * @var Teacher $teacher
-     *
-     * @ORM\ManyToOne(targetEntity="Teachers\Bundle\UsersBundle\Entity\Teacher")
-     * @ORM\JoinColumn(name="teacher_id", referencedColumnName="id", nullable=true, onDelete="SET NULL")
-     */
-    protected $teacher;
-    /**
      * @var Bid $bid
      *
      * @ORM\ManyToOne(targetEntity="Teachers\Bundle\BidBundle\Entity\Bid")
@@ -88,4 +81,18 @@ class Bid extends ExtendBid implements DatesAwareInterface
      * @ORM\Column(name="amount", type="money", nullable=false)
      */
     protected $price;
+    /**
+     * @var User Teacher
+     *
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\UserBundle\Entity\User")
+     * @ORM\JoinColumn(name="owner_id", referencedColumnName="id", onDelete="SET NULL")
+     * @ConfigField(
+     *      defaultValues={
+     *          "dataaudit"={
+     *              "auditable"=true
+     *          }
+     *      }
+     * )
+     */
+    protected $owner;
 }

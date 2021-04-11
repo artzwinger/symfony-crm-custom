@@ -102,9 +102,18 @@ class Application extends ExtendApplication implements DatesAwareInterface
     public static function getAvailableStatuses(): array
     {
         return [
-            self::STATUS_NEW => true,
-            self::STATUS_WORKING => false,
-            self::STATUS_COMPLETE => false
+            self::STATUS_NEW => [
+                'name' => 'New',
+                'is_default' => true
+            ],
+            self::STATUS_WORKING => [
+                'name' => 'Working',
+                'is_default' => false
+            ],
+            self::STATUS_COMPLETE => [
+                'name' => 'Complete',
+                'is_default' => false
+            ],
         ];
     }
 

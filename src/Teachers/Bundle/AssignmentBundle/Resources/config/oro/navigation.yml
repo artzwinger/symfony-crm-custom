@@ -9,7 +9,7 @@ navigation:
                     routes: [ 'teachers_assignment_*' ]
                 display: true
         tree:
-            assignment_menu:
+            application_menu:
                 children:
                     activities_tab:
                         children:
