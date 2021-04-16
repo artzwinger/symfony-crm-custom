@@ -1,0 +1,15 @@
+imports:
+    - { resource: 'bid_flow/steps.yml' }
+    - { resource: 'bid_flow/attributes.yml' }
+    - { resource: 'bid_flow/transitions.yml' }
+    - { resource: 'bid_flow/transition_definitions.yml' }
+    - { resource: 'bid_flow/entity_restrictions.yml' }
+
+workflows:
+    bid_flow:
+        entity: Teachers\Bundle\BidBundle\Entity\Bid
+        entity_attribute: bid
+        start_step: pending
+
+        defaults:
+            active: true

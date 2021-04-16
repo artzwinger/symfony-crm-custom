@@ -8,22 +8,12 @@ datagrids:
                 select:
                     - assignment.id
                     - assignment.subject
-                    - assignmentstatus.id as status
-                    - assignmentstatus.name as statusLabel
                     - assignment.createdAt
                 from:
                     - { table: 'Teachers\Bundle\AssignmentBundle\Entity\Assignment', alias: assignment }
-                join:
-                    left:
-                        - { join: assignment.status, alias: assignmentstatus }
         columns:
             subject:
                 label: teachers.assignment.subject.label
-            status:
-                label: oro.task.status.label
-                choices: "@oro_entity_extend.enum_value_provider->getEnumChoicesByCode('assignment_status')"
-                inline_editing:
-                    enable: true
             createdAt:
                 frontend_type: datetime
                 label: oro.ui.created_at
@@ -31,8 +21,6 @@ datagrids:
             columns:
                 subject:
                     data_name: assignment.subject
-                status:
-                    data_name: assignmentstatus.priority
                 createdAt:
                     data_name: assignment.createdAt
             default:
@@ -42,10 +30,6 @@ datagrids:
                 subject:
                     type: string
                     data_name: assignment.subject
-                status:
-                    type: enum
-                    data_name: status
-                    enum_code: assignment_status
                 createdAt:
                     type: datetime
                     data_name: assignment.createdAt

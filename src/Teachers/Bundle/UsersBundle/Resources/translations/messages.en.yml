@@ -36,6 +36,7 @@ teachers:
             choose_course_manager: Choose course manager
             choose_student: Choose student
             choose_teacher: Choose teacher
+            choose_teacher_groups: Choose teacher groups
         block:
             general: General
             additional: Additional

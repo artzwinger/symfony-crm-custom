@@ -47,9 +47,7 @@
 
     {% set action %}
         {# Add button for add context in the activity list item #}
-        <% if (editable) { %>
         {{ AC.activity_context_link() }}
-        <% } %>
     {% endset %}
     {% set actions = [action] %}
 

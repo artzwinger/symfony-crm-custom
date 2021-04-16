@@ -37,15 +37,11 @@ teachers:
         studentLoginInfo.label: Student login info
         price.label: Price
         status.label: Status
-        feedback.label: Feedback
-        opportunity.label: Opportunity
-        lead.label: Lead
-        calls.label: Calls
-        emails.label: Emails
         organization_name.label: Organization name
         course_manager.label: Course manager
         student.label: Student
         teacher.label: Teacher
+        teacherGroups.label: Teacher groups
 
         datagrid:
             update: Update

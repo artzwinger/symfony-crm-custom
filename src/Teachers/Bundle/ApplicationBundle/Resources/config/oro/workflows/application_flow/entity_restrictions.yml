@@ -7,6 +7,7 @@ workflows:
                 mode: disallow
                 values:
                     - 'working'
+                    - 'complete'
             application_status_new:
                 attribute: application
                 field: status

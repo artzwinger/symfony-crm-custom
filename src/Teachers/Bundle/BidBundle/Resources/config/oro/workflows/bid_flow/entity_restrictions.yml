@@ -1,0 +1,17 @@
+workflows:
+    bid_flow:
+        entity_restrictions:
+            bid_status_creation:
+                attribute: bid
+                field: status
+                mode: disallow
+                values:
+                    - 'winning'
+            bid_status_pending:
+                attribute: bid
+                field: status
+                step: pending
+            bid_status_winning:
+                attribute: bid
+                field: status
+                step: winning

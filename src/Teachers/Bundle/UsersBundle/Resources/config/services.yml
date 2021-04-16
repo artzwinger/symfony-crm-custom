@@ -35,6 +35,13 @@ services:
         arguments:
             - 'Teachers\Bundle\UsersBundle\Entity\TeacherGroup'
             - "@doctrine.orm.entity_manager"
+
+    teachers_users.form.type.teacher_group_multiselect:
+        class: Teachers\Bundle\UsersBundle\Form\Type\TeacherGroupsMultiSelectType
+        arguments:
+            - '@doctrine.orm.entity_manager'
+        tags:
+            - { name: form.type, alias: teacher_group_multi_select }
     #
     #    teachers.form.autocomplete.teacher_group.search_handler:
     #        class: Teachers\Bundle\UsersBundle\Autocomplete\TeacherGroupSearchHandler

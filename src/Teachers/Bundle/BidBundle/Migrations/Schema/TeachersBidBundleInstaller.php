@@ -5,13 +5,21 @@ namespace Teachers\Bundle\BidBundle\Migrations\Schema;
 use Doctrine\DBAL\Schema\Schema;
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtension;
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtensionAwareInterface;
+use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtension;
+use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtensionAwareInterface;
+use Oro\Bundle\EntityExtendBundle\Migration\OroOptions;
 use Oro\Bundle\MigrationBundle\Migration\Installation;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
+use Teachers\Bundle\BidBundle\Entity\Bid;
 
-class TeachersBidBundleInstaller implements Installation, ActivityExtensionAwareInterface
+class TeachersBidBundleInstaller implements Installation, ActivityExtensionAwareInterface, ExtendExtensionAwareInterface
 {
     /** @var ActivityExtension */
     protected $activityExtension;
+    /**
+     * @var ExtendExtension
+     */
+    protected $extendExtension;
 
     /**
      * {@inheritdoc}
@@ -19,6 +27,14 @@ class TeachersBidBundleInstaller implements Installation, ActivityExtensionAware
     public function setActivityExtension(ActivityExtension $activityExtension)
     {
         $this->activityExtension = $activityExtension;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setExtendExtension(ExtendExtension $extendExtension)
+    {
+        $this->extendExtension = $extendExtension;
     }
 
     /**
@@ -65,5 +81,15 @@ class TeachersBidBundleInstaller implements Installation, ActivityExtensionAware
             ['id'],
             ['onDelete' => 'CASCADE', 'onUpdate' => null]
         );
+
+        $enumTable = $this->extendExtension->addEnumField(
+            $schema,
+            'teachers_bid',
+            'status',
+            'bid_status'
+        );
+
+        $options = new OroOptions();
+        $options->set('enum', 'immutable_codes', Bid::getAvailableStatuses());
     }
 }

@@ -6,7 +6,8 @@ workflows:
                 field: status
                 mode: disallow
                 values:
-                    - 'working'
+                    - 'assigned'
+                    - 'complete'
             assignment_status_new:
                 attribute: assignment
                 field: status

@@ -1,0 +1,21 @@
+workflows:
+    bid_flow:
+        transition_definitions:
+            __start___definition:
+                actions:
+                    -   '@request_enum_entity':
+                            enum_code: bid_status
+                            identifier: pending
+                            attribute: $bid.status
+            make_winning_definition:
+                actions:
+                    -   '@request_enum_entity':
+                            enum_code: bid_status
+                            identifier: winning
+                            attribute: $bid.status
+            reopen_definition:
+                actions:
+                    -   '@request_enum_entity':
+                            enum_code: bid_status
+                            identifier: pending
+                            attribute: $bid.status

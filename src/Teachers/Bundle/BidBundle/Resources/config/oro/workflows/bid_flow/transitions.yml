@@ -1,0 +1,15 @@
+workflows:
+    bid_flow:
+        transitions:
+            make_winning:
+                step_to: winning
+                #is_unavailable_hidden: true
+                frontend_options:
+                    icon: 'fa-check'
+                transition_definition: make_winning_definition
+            reopen:
+                step_to: pending
+                #is_unavailable_hidden: true
+                frontend_options:
+                    icon: 'fa-pencil-square-o'
+                transition_definition: reopen_definition

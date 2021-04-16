@@ -106,6 +106,23 @@ class Bid extends ExtendBid implements DatesAwareInterface
      */
     protected $organization;
 
+    const STATUS_PENDING = 'pending';
+    const STATUS_WINNING = 'winning';
+
+    public static function getAvailableStatuses(): array
+    {
+        return [
+            self::STATUS_PENDING => [
+                'name' => 'Pending',
+                'is_default' => true
+            ],
+            self::STATUS_WINNING => [
+                'name' => 'Winning',
+                'is_default' => false
+            ],
+        ];
+    }
+
     /**
      * @return int|null
      */

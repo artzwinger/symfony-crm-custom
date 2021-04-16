@@ -1,0 +1,3 @@
+workflows:
+    bid_flow:
+        attributes: ~

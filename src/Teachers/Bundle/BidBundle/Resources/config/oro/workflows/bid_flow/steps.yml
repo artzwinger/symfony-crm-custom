@@ -1,0 +1,11 @@
+workflows:
+    bid_flow:
+        steps:
+            pending:
+                order: 10
+                allowed_transitions:
+                    - make_winning
+            winning:
+                order: 20
+                allowed_transitions:
+                    - reopen

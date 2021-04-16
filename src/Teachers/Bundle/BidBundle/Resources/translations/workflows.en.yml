@@ -1,0 +1,16 @@
+oro:
+    workflow:
+        bid_flow:
+            step:
+                pending:
+                    label: Pending
+                winning:
+                    label: Winning
+            transition:
+                make_winning:
+                    label: Winning
+                    warning_message: ''
+                reopen:
+                    label: Reopen
+                    warning_message: ''
+            label: Bid Flow
