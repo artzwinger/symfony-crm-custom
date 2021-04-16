@@ -1,23 +1,7 @@
 workflows:
-    application_flow:
+    assignment_flow:
         attributes:
-            assignment_subject:
-                type: string
-            assignment_description:
-                type: string
-            assignment_courseManager:
+            teacher:
                 type: entity
                 options:
                     class: Oro\Bundle\UserBundle\Entity\User
-            assignment_teacher:
-                type: entity
-                options:
-                    class: Oro\Bundle\UserBundle\Entity\User
-            assignment_student:
-                type: entity
-                options:
-                    class: Oro\Bundle\UserBundle\Entity\User
-            assignment_teacher_groups:
-                type: entity
-                options:
-                    class: Teachers\Bundle\UsersBundle\Entity\TeacherGroup

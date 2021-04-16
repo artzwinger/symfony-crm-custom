@@ -1,21 +1,25 @@
 workflows:
-    application_flow:
+    assignment_flow:
         entity_restrictions:
-            application_status_creation:
-                attribute: application
+            assignment_status_creation:
+                attribute: assignment
                 field: status
                 mode: disallow
                 values:
                     - 'working'
-            application_status_new:
-                attribute: application
+            assignment_status_new:
+                attribute: assignment
                 field: status
                 step: new
-            application_status_working:
-                attribute: application
+            assignment_status_up_for_bid:
+                attribute: assignment
                 field: status
-                step: working
-            application_status_complete:
-                attribute: application
+                step: up_for_bid
+            assignment_status_assigned:
+                attribute: assignment
+                field: status
+                step: assigned
+            assignment_status_complete:
+                attribute: assignment
                 field: status
                 step: complete

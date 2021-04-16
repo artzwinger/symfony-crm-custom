@@ -1,0 +1,32 @@
+oro:
+    workflow:
+        assignment_flow:
+            step:
+                new:
+                    label: New
+                up_for_bid:
+                    label: Up for bid
+                assigned:
+                    label: Assigned
+                complete:
+                    label: Complete
+            attribute:
+                teacher:
+                    label: Teacher
+            transition:
+                start_accepting_bids:
+                    label: Start accepting bids
+                    warning_message: ''
+                stop_accepting_bids:
+                    label: Stop accepting bids
+                    warning_message: ''
+                assign:
+                    label: Assign
+                    warning_message: ''
+                complete:
+                    label: Complete
+                    warning_message: ''
+                reopen:
+                    label: Reopen
+                    warning_message: ''
+            label: Assignment Flow

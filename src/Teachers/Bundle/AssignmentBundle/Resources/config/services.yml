@@ -9,7 +9,7 @@ services:
         class: Teachers\Bundle\AssignmentBundle\Form\Type\AssignmentPrivateNoteType
         public: true
         tags:
-            - { name: oro_embedded_form, type: Teachers\Bundle\AssignmentBundle\Form\Type\AssignmentPrivateNoteType, label: teachers.assignment.private_note.entity_label }
+            - { name: oro_embedded_form, type: Teachers\Bundle\AssignmentBundle\Form\Type\AssignmentPrivateNoteType, label: teachers.assignment.assignmentprivatenote.entity_label }
             - { name: form.type, alias: teachers_assignment_private_note_request }
     teachers_assignment.activity_list.provider:
         class: Teachers\Bundle\AssignmentBundle\Provider\AssignmentActivityListProvider

@@ -1,5 +1,5 @@
 workflows:
-    application_flow:
+    assignment_flow:
         transitions:
             start_accepting_bids:
                 step_to: up_for_bid
@@ -29,12 +29,13 @@ workflows:
                 step_to: assigned
                 is_start: true
                 is_unavailable_hidden: true
+                acl_resource: teachers_assignment_update
                 frontend_options:
-                    icon: 'fa-tutor'
-                transition_definition: resolve_definition
+                    icon: 'fa-address-card'
+                transition_definition: assign_definition
                 form_options:
                     attribute_fields:
-                        feedback:
-                            form_type: Symfony\Component\Form\Extension\Core\Type\TextareaType
+                        teacher:
+                            form_type: Teachers\Bundle\UsersBundle\Form\Type\TeacherSelectType
                             options:
-                                required: false
+                                required: true

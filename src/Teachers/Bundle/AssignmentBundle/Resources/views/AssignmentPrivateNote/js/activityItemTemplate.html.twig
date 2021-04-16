@@ -1,14 +1,14 @@
 {% extends 'OroActivityListBundle:ActivityList/js:activityItemTemplate.html.twig' %}
 {% import 'OroActivityBundle::macros.html.twig' as AC %}
 
-{% set entityClass = 'Teachers\\Bundle\\AssignmentBundle\\Entity\\Assignment' %}
+{% set entityClass = 'Teachers\\Bundle\\AssignmentBundle\\Entity\\AssignmentPrivateNote' %}
 {% set entityName = oro_entity_config_value(entityClass, 'label')|trans %}
 
 {% block activityDetails %}
     {{ entityName }}
     <% var template = (verb == 'create')
-    ? {{ 'teachers.assignment.activity_item.created_by'|trans|json_encode|raw }}
-    : {{ 'teachers.assignment.activity_item.updated_by'|trans|json_encode|raw }};
+    ? {{ 'teachers.assignment.assignmentprivatenote.activity_item.created_by'|trans|json_encode|raw }}
+    : {{ 'teachers.assignment.assignmentprivatenote.activity_item.updated_by'|trans|json_encode|raw }};
     %>
     <%= _.template(template, { interpolate: /\{\{(.+?)\}\}/g })({
     user: owner_url ? '<a class="user" href="' + owner_url + '">' + _.escape(owner) + '</a>' :  '<span class="user">' + _.escape(owner) + '</span>',
@@ -56,11 +56,11 @@
     {% set action %}
         <% if (editable) { %>
         <a href="#" class="dropdown-item action item-edit-button"
-           title="{{ 'teachers.assignment.update_assignment'|trans({'{{ entity }}': entityName}) }}"
+           title="{{ 'teachers.assignment.assignmentprivatenote.update'|trans({'{{ entity }}': entityName}) }}"
            data-action-extra-options="{{ {dialogOptions: {width: 1000}}|json_encode }}">
             <span class="fa-pencil-square-o hide-text"
-                  aria-hidden="true">{{ 'teachers.assignment.update_assignment'|trans({'{{ entity }}': entityName}) }}</span>
-            {{ 'teachers.assignment.update_assignment'|trans({'{{ entity }}': entityName}) }}
+                  aria-hidden="true">{{ 'teachers.assignment.assignmentprivatenote.update'|trans({'{{ entity }}': entityName}) }}</span>
+            {{ 'teachers.assignment.assignmentprivatenote.update'|trans({'{{ entity }}': entityName}) }}
         </a>
         <% } %>
     {% endset %}
@@ -69,10 +69,10 @@
     {% set action %}
         <% if (removable) { %>
         <a href="#" class="dropdown-item action item-remove-button"
-           title="{{ 'teachers.assignment.delete_assignment'|trans({'{{ entity }}': entityName}) }}">
+           title="{{ 'teachers.assignment.assignmentprivatenote.delete'|trans({'{{ entity }}': entityName}) }}">
             <span class="fa-trash-o hide-text"
-                  aria-hidden="true">{{ 'teachers.assignment.delete_assignment'|trans({'{{ entity }}': entityName}) }}</span>
-            {{ 'teachers.assignment.delete_assignment'|trans({'{{ entity }}': entityName}) }}
+                  aria-hidden="true">{{ 'teachers.assignment.assignmentprivatenote.delete'|trans({'{{ entity }}': entityName}) }}</span>
+            {{ 'teachers.assignment.assignmentprivatenote.delete'|trans({'{{ entity }}': entityName}) }}
         </a>
         <% } %>
     {% endset %}

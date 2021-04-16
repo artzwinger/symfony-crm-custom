@@ -141,7 +141,7 @@ class Assignment extends ExtendAssignment implements DatesAwareInterface
     protected $organization;
 
     const STATUS_NEW = 'new';
-    const STATUS_UP_FOR_BID = 'up_for_assignment';
+    const STATUS_UP_FOR_BID = 'up_for_bid';
     const STATUS_ASSIGNED = 'assigned';
     const STATUS_COMPLETE = 'complete';
 

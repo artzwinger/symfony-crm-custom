@@ -11,12 +11,12 @@ teachers:
         add_entity: Create assignment
         add_entity.title: Create assignment
 
-        private_note:
+        assignmentprivatenote:
             activity_item:
                 created_by: Created by
                 updated_by: Updated by
-            update_assignment: Update private note
-            delete_assignment: Delete private note
+            update: Update private note
+            delete: Delete private note
             add_entity: Add private note
             add_entity.title: Add private note
             message.label: Message

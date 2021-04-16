@@ -18,7 +18,7 @@ class AssignmentPrivateNoteType extends AbstractType
             'message',
             TextareaType::class,
             [
-                'label' => 'teachers.assignment.private_note.message.label'
+                'label' => 'teachers.assignment.assignmentprivatenote.message.label'
             ]
         );
     }
