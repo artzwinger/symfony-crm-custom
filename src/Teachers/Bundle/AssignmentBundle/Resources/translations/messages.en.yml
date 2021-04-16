@@ -1,40 +1,67 @@
 teachers:
     assignment:
-        assignment:
-            entity_label: Assignment
-            entity_plural_label: Assignments
+        # activity
+        activity_item:
+            created_by: Created by
+            updated_by: Updated by
+        view_assignment: View assignment
+        update_assignment: Update assignment
+        delete_assignment: Delete assignment
+        winning_assignment: Winning assignment
+        add_entity: Create assignment
+        add_entity.title: Create assignment
+
+        private_note:
+            activity_item:
+                created_by: Created by
+                updated_by: Updated by
+            update_assignment: Update private note
+            delete_assignment: Delete private note
+            add_entity: Add private note
+            add_entity.title: Add private note
+            message.label: Message
+            entity_label: Private note
+            entity_plural_label: Private notes
             entity_grid_all_view_label: All %entity_plural_label%
-            id.label: ID
-            subject.label: Subject
-            description.label: Description
-            studentLoginInfo.label: Student login info
-            price.label: Price
-            status.label: Status
-            feedback.label: Feedback
-            opportunity.label: Opportunity
-            lead.label: Lead
-            calls.label: Calls
-            emails.label: Emails
-            organization_name.label: Organization name
-            course_manager.label: Course manager
-            student.label: Student
-            teacher.label: Teacher
+            block:
+                general: General
+                additional: Additional
+                note_information: Note Information
 
-            datagrid:
-                update: Update
-                delete: Delete
-                view: View
+        entity_label: Assignment
+        entity_plural_label: Assignments
+        entity_grid_all_view_label: All %entity_plural_label%
+        id.label: ID
+        subject.label: Subject
+        description.label: Description
+        studentLoginInfo.label: Student login info
+        price.label: Price
+        status.label: Status
+        feedback.label: Feedback
+        opportunity.label: Opportunity
+        lead.label: Lead
+        calls.label: Calls
+        emails.label: Emails
+        organization_name.label: Organization name
+        course_manager.label: Course manager
+        student.label: Student
+        teacher.label: Teacher
 
-            method:
-                email: Email
-                phone: Phone
-                both: Both phone & email
+        datagrid:
+            update: Update
+            delete: Delete
+            view: View
 
-            widget:
-                info:
-                    title: Assignment Details
-            entity:
-                saved: Assignment has been saved successfully
+        method:
+            email: Email
+            phone: Phone
+            both: Both phone & email
+
+        widget:
+            info:
+                title: Assignment Details
+        entity:
+            saved: Assignment has been saved successfully
         block:
             general: General
             additional: Additional

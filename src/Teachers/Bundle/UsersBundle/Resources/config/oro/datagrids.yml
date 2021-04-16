@@ -61,35 +61,3 @@ datagrids:
         options:
             entityHint: teachers.users.teacher_group.entity_plural_label
             entity_pagination: true
-
-    teachers-role-user-select-grid:
-        extends: users-select-grid
-        source:
-            query:
-                join:
-                    left:
-                        - { join: u.roles, alias: r }
-
-    course-manager-select-grid:
-        extends: teachers-role-user-select-grid
-        source:
-            query:
-                where:
-                    and:
-                        - r.id = @teachers_users.helper.role->getCourseManagerRoleId
-
-    teacher-select-grid:
-        extends: teachers-role-user-select-grid
-        source:
-            query:
-                where:
-                    and:
-                        - r.id = @teachers_users.helper.role->getTeacherRoleId
-
-    student-select-grid:
-        extends: teachers-role-user-select-grid
-        source:
-            query:
-                where:
-                    and:
-                        - r.id = @teachers_users.helper.role->getStudentRoleId

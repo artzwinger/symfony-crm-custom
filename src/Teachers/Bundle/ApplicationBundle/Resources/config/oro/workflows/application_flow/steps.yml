@@ -1,0 +1,17 @@
+workflows:
+    application_flow:
+        steps:
+            new:
+                order: 10
+                allowed_transitions:
+                    - start_working
+                    - complete
+            working:
+                order: 20
+                allowed_transitions:
+                    - stop_working
+                    - complete
+            complete:
+                order: 30
+                allowed_transitions:
+                    - reopen

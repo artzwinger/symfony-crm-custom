@@ -35,3 +35,22 @@ services:
         arguments:
             - 'Teachers\Bundle\UsersBundle\Entity\TeacherGroup'
             - "@doctrine.orm.entity_manager"
+    #
+    #    teachers.form.autocomplete.teacher_group.search_handler:
+    #        class: Teachers\Bundle\UsersBundle\Autocomplete\TeacherGroupSearchHandler
+    #        lazy: true
+    #        arguments:
+    #            - '@oro_entity.doctrine_helper'
+    #            - '@property_accessor'
+    #        tags:
+    #            - { name: oro_form.autocomplete.search_handler, alias: teachers_groups, acl_resource: teacher_group_view }
+
+
+    teachers.form.autocomplete.teacher_group.search_handler:
+        parent: oro_channel.autocomplete.channel_limitation_handler
+        arguments:
+            - 'Teachers\Bundle\UsersBundle\Entity\TeacherGroup'
+            - [ "title" ]
+        tags:
+            - { name: oro_form.autocomplete.search_handler, alias: teachers_groups, acl_resource: teachers_group_view }
+        lazy: true

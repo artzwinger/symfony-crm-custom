@@ -5,9 +5,8 @@ teachers:
             entity_plural_label: Teacher Groups
             entity_grid_all_view_label: All %entity_plural_label%
             id.label: ID
-            subject.label: Subject
+            title.label: Title
             description.label: Description
-            studentLoginInfo.label: Student login info
             price.label: Price
             status.label: Status
             feedback.label: Feedback
@@ -40,4 +39,4 @@ teachers:
         block:
             general: General
             additional: Additional
-            information: Teacher group information
+            teacher_group_information: Teacher group information

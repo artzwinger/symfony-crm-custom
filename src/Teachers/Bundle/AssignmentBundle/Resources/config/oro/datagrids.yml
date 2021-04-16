@@ -18,7 +18,7 @@ datagrids:
                         - { join: assignment.status, alias: assignmentstatus }
         columns:
             subject:
-                label: teachers.assignment.assignment.subject.label
+                label: teachers.assignment.subject.label
             status:
                 label: oro.task.status.label
                 choices: "@oro_entity_extend.enum_value_provider->getEnumChoicesByCode('assignment_status')"
@@ -84,5 +84,6 @@ datagrids:
                 icon: trash
                 link: delete_link
         options:
-            entityHint: teachers.assignment.assignment.entity_plural_label
+            entityHint: teachers.assignment.entity_plural_label
             entity_pagination: true
+

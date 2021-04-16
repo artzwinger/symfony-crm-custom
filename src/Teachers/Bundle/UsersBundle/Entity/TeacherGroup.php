@@ -92,7 +92,7 @@ class TeacherGroup extends ExtendTeacherGroup
     /**
      * @return int
      */
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -156,7 +156,7 @@ class TeacherGroup extends ExtendTeacherGroup
     /**
      * @return \Oro\Bundle\OrganizationBundle\Entity\Organization
      */
-    public function getOwner(): Organization
+    public function getOwner(): ?Organization
     {
         return $this->owner;
     }

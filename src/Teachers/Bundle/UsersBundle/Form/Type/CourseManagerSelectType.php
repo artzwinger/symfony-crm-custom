@@ -2,7 +2,7 @@
 
 namespace Teachers\Bundle\UsersBundle\Form\Type;
 
-use Oro\Bundle\UserBundle\Form\Type\UserAclSelectType;
+use Oro\Bundle\UserBundle\Form\Type\UserSelectType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -18,6 +18,7 @@ class CourseManagerSelectType extends AbstractType
                 'configs' => [
                     'placeholder' => 'teachers.users.form.choose_course_manager',
                 ],
+                'create_form_route' => 'teachers_course_manager_create',
                 'grid_name' => 'course-manager-select-grid',
             ]
         );
@@ -28,7 +29,7 @@ class CourseManagerSelectType extends AbstractType
      */
     public function getParent(): ?string
     {
-        return UserAclSelectType::class;
+        return UserSelectType::class;
     }
 
     public function getName(): string

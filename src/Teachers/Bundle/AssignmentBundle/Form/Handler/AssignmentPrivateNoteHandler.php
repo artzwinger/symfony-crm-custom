@@ -1,14 +1,14 @@
 <?php
 
-namespace Teachers\Bundle\UsersBundle\Form\Handler;
+namespace Teachers\Bundle\AssignmentBundle\Form\Handler;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Oro\Bundle\FormBundle\Form\Handler\RequestHandlerTrait;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Teachers\Bundle\UsersBundle\Entity\TeacherGroup;
+use Teachers\Bundle\AssignmentBundle\Entity\Assignment;
 
-class TeacherGroupHandler
+class AssignmentPrivateNoteHandler
 {
     use RequestHandlerTrait;
 
@@ -34,17 +34,17 @@ class TeacherGroupHandler
     }
 
     /**
-     * @param TeacherGroup $entity
+     * @param Assignment $entity
      * @return bool
      */
-    public function process(TeacherGroup $entity): bool
+    public function process(Assignment $entity): bool
     {
         $this->getForm()->setData($entity);
         $request = $this->requestStack->getCurrentRequest();
         if (in_array($request->getMethod(), ['POST', 'PUT'], true)) {
             $this->submitPostPutRequest($this->form, $request);
             if ($this->getForm()->isValid()) {
-                $manager = $this->registry->getManagerForClass(TeacherGroup::class);
+                $manager = $this->registry->getManagerForClass(Assignment::class);
                 $manager->persist($entity);
                 $manager->flush();
                 return true;

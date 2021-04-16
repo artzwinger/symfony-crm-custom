@@ -1,0 +1,21 @@
+workflows:
+    application_flow:
+        entity_restrictions:
+            application_status_creation:
+                attribute: application
+                field: status
+                mode: disallow
+                values:
+                    - 'working'
+            application_status_new:
+                attribute: application
+                field: status
+                step: new
+            application_status_working:
+                attribute: application
+                field: status
+                step: working
+            application_status_complete:
+                attribute: application
+                field: status
+                step: complete

@@ -1,0 +1,2 @@
+imports:
+    - { resource: 'workflows/application_flow.yml' }

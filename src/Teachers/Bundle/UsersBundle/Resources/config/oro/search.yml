@@ -1,7 +1,7 @@
 search:
     Teachers\Bundle\UsersBundle\Entity\TeacherGroup:
         alias: teachers_group
-        title_fields: [ subject ]
+        title_fields: [ title ]
         route:
             name: teachers_group_view
             parameters:

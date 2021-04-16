@@ -1,0 +1,30 @@
+services:
+    teachers_bid.activity_list.provider:
+        class: Teachers\Bundle\BidBundle\Provider\BidActivityListProvider
+        arguments:
+            - "@oro_entity.doctrine_helper"
+            - "@oro_security.owner.entity_owner_accessor.link"
+            - "@oro_activity.association_helper"
+            - "@oro_comment.association_helper"
+        tags:
+            - { name: oro_activity_list.provider, class: Teachers\Bundle\BidBundle\Entity\Bid, priority: 20 }
+    teachers_bid.embedded_form:
+        class: Teachers\Bundle\BidBundle\Form\Type\BidType
+        public: true
+        tags:
+            - { name: oro_embedded_form, type: Teachers\Bundle\BidBundle\Form\Type\BidType, label: teachers.bid.entity_label }
+            - { name: form.type, alias: teachers_bid_request }
+    teachers_bid.bid.form:
+        class: Symfony\Component\Form\Form
+        factory: [ '@form.factory', createNamed ]
+        arguments:
+            - "teachers_bid_request"
+            - Teachers\Bundle\BidBundle\Form\Type\BidType
+            - null
+    teachers_bid.bid.form.handler:
+        class: Teachers\Bundle\BidBundle\Form\Handler\BidHandler
+        public: true
+        arguments:
+            - "@teachers_bid.bid.form"
+            - "@request_stack"
+            - "@doctrine"

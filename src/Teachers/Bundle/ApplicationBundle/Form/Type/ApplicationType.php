@@ -25,22 +25,22 @@ class ApplicationType extends AbstractType
         $builder
             ->add('subject', TextType::class, [
                 'required' => true,
-                'label' => 'teachers.application.application.subject.label'
+                'label' => 'teachers.application.subject.label'
             ])
             ->add('description', OroResizeableRichTextType::class, [
                 'required' => false,
-                'label' => 'teachers.application.application.description.label'
+                'label' => 'teachers.application.description.label'
             ])
             ->add('studentLoginInfo', OroResizeableRichTextType::class, [
                 'required' => false,
-                'label' => 'teachers.application.application.studentLoginInfo.label'
+                'label' => 'teachers.application.studentLoginInfo.label'
             ])
             ->add('price', OroMoneyType::class, [
                 'required' => false,
-                'label' => 'teachers.application.application.price.label'
+                'label' => 'teachers.application.price.label'
             ])
             ->add('status', EnumSelectType::class, [
-                'label' => 'teachers.application.application.status.label',
+                'label' => 'teachers.application.status.label',
                 'enum_code' => 'application_status',
                 'required' => true,
                 'constraints' => [new Assert\NotNull()]

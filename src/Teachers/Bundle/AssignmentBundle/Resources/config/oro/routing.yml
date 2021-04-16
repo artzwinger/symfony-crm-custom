@@ -3,6 +3,11 @@ teachers_assignment:
     type: annotation
     prefix: /assignment
 
+teachers_assignment_private_note:
+    resource: "@TeachersAssignmentBundle/Controller/AssignmentPrivateNoteController.php"
+    type: annotation
+    prefix: /assignment_private_note
+
 teachers_assignment_api:
     resource: "@TeachersAssignmentBundle/Resources/config/oro/routing_api.yml"
     type: rest

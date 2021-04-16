@@ -59,7 +59,7 @@ class AppKernel extends OroKernel
      */
     public function getCacheDir()
     {
-        return '/tmp/symfony/cache/'.$this->environment;
+        return dirname(__DIR__).'/var/cache/'.$this->environment;
     }
 
     /**

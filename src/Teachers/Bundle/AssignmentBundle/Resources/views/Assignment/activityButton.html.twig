@@ -1,0 +1,27 @@
+{% import 'OroUIBundle::macros.html.twig' as UI %}
+
+{{ UI.clientButton({
+    'dataUrl': path('teachers_assignment_create', oro_action_params(entity, 'activity')),
+    'aCss': 'no-hash',
+    'iCss': 'fa-clipboard',
+    'dataId': entity.id,
+    'label': 'teachers.assignment.add_entity'|trans,
+    'title': 'teachers.assignment.add_entity.title'|trans,
+    'widget' : {
+        'type' : 'dialog',
+        'multiple' : true,
+        'reload-grid-name': 'user-assignments-grid',
+        'refresh-widget-alias': 'activity-list-widget',
+        'options' : {
+            'alias': 'assignment-dialog',
+            'dialogOptions' : {
+                'title' : 'teachers.assignment.add_entity'|trans,
+                'allowMaximize': true,
+                'allowMinimize': true,
+                'dblclick': 'maximize',
+                'maximizedHeightDecreaseBy': 'minimize-bar',
+                'width': 1000
+            }
+        }
+    }
+}) }}

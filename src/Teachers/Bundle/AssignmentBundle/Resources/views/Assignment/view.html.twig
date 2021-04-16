@@ -7,7 +7,7 @@
     {% set breadcrumbs = {
         'entity': entity,
         'indexPath': path('teachers_assignment_index'),
-        'indexLabel': 'teachers.assignment.assignment.entity_plural_label'|trans,
+        'indexLabel': 'teachers.assignment.entity_plural_label'|trans,
         'entityTitle': subject
     } %}
     {{ parent() }}
@@ -23,7 +23,7 @@
             'aCss': 'no-hash remove-button',
             'id': 'btn-remove-assignment-form',
             'dataId': entity.id,
-            'entity_label': 'teachers.assignment.assignment.entity_label'|trans,
+            'entity_label': 'teachers.assignment.entity_label'|trans,
         }) }}
         {{ UI.buttonSeparator() }}
     {% endif %}
@@ -31,7 +31,7 @@
     {% if is_granted('teachers_assignment_edit') %}
         {{ UI.editButton({
             'path': path('teachers_assignment_update', {'id': entity.id}),
-            'entity_label': 'teachers.assignment.assignment.entity_label'|trans,
+            'entity_label': 'teachers.assignment.entity_label'|trans,
         }) }}
     {% endif %}
 {% endblock %}
@@ -41,7 +41,7 @@
         {{ oro_widget_render({
             'widgetType': 'block',
             'url': path('teachers_assignment_info', {id: entity.id}),
-            'title': 'teachers.assignment.block.request_information'|trans
+            'title': 'teachers.assignment.block.assignment_information'|trans
         }) }}
     {% endset %}
 

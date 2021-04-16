@@ -1,0 +1,21 @@
+workflows:
+    application_flow:
+        steps:
+            new:
+                order: 10
+                allowed_transitions:
+                    - start_working
+                    - convert_to_assignment
+                    - complete
+            working:
+                order: 20
+                allowed_transitions:
+                    - stop_working
+                    - convert_to_assignment
+                    - complete
+            complete:
+                order: 30
+                allowed_transitions:
+                    - reopen
+            converted_to_assignment:
+                order: 10

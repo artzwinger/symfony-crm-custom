@@ -1,0 +1,40 @@
+workflows:
+    application_flow:
+        transitions:
+            start_accepting_bids:
+                step_to: up_for_bid
+                #is_unavailable_hidden: true
+                frontend_options:
+                    icon: 'fa-play'
+                transition_definition: start_accepting_bids_definition
+            stop_accepting_bids:
+                step_to: new
+                #is_unavailable_hidden: true
+                frontend_options:
+                    icon: 'fa-stop'
+                transition_definition: stop_accepting_bids_definition
+            complete:
+                step_to: complete
+                #is_unavailable_hidden: true
+                frontend_options:
+                    icon: 'fa-check'
+                transition_definition: complete_definition
+            reopen:
+                step_to: new
+                #is_unavailable_hidden: true
+                frontend_options:
+                    icon: 'fa-pencil-square-o'
+                transition_definition: reopen_definition
+            assign:
+                step_to: assigned
+                is_start: true
+                is_unavailable_hidden: true
+                frontend_options:
+                    icon: 'fa-tutor'
+                transition_definition: resolve_definition
+                form_options:
+                    attribute_fields:
+                        feedback:
+                            form_type: Symfony\Component\Form\Extension\Core\Type\TextareaType
+                            options:
+                                required: false

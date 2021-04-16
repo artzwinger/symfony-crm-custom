@@ -1,0 +1,15 @@
+imports:
+    - { resource: 'application_flow/steps.yml' }
+    - { resource: 'application_flow/attributes.yml' }
+    - { resource: 'application_flow/transitions.yml' }
+    - { resource: 'application_flow/transition_definitions.yml' }
+    - { resource: 'application_flow/entity_restrictions.yml' }
+
+workflows:
+    application_flow:
+        entity: Teachers\Bundle\ApplicationBundle\Entity\Application
+        entity_attribute: application
+        start_step: new
+
+        defaults:
+            active: true

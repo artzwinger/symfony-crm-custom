@@ -5,6 +5,7 @@ namespace Teachers\Bundle\AssignmentBundle\Controller;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
+use Symfony\Component\Form\FormInterface;
 use Teachers\Bundle\AssignmentBundle\Entity\Assignment;
 use Oro\Bundle\SecurityBundle\Annotation\CsrfProtection;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -23,7 +24,7 @@ class AssignmentController extends AbstractController
      *
      * @return array
      *
-     * @Route("/view/{id}", name="teachers_assignment_view", requirements={"id"="\d+"})
+     * @Route("/view/{id}", name="teachers_assignment_view", requirements={"id"="\d+"}, options={"expose"=true})
      * @Template
      * @Acl(
      *      id="teachers_assignment_view",
@@ -52,7 +53,7 @@ class AssignmentController extends AbstractController
     }
 
     /**
-     * @Route("/info/{id}", name="teachers_assignment_info", requirements={"id"="\d+"})
+     * @Route("/info/{id}", name="teachers_assignment_info", requirements={"id"="\d+"}, options={"expose"=true})
      * @Template("@TeachersAssignment/Assignment/widget/info.html.twig")
      * @AclAncestor("teachers_assignment_view")
      * @param Assignment $assignment
@@ -66,7 +67,7 @@ class AssignmentController extends AbstractController
     }
 
     /**
-     * @Route("/update/{id}", name="teachers_assignment_update", requirements={"id"="\d+"})
+     * @Route("/update/{id}", name="teachers_assignment_update", requirements={"id"="\d+"}, options={"expose"=true})
      * @Template("@TeachersAssignment/Assignment/update.html.twig")
      * @Acl(
      *      id="teachers_assignment_edit",
@@ -79,11 +80,11 @@ class AssignmentController extends AbstractController
      */
     public function updateAction(Assignment $assignment)
     {
-        return $this->update($assignment);
+        return $this->update($assignment, 'teachers_assignment_update');
     }
 
     /**
-     * @Route("/create", name="teachers_assignment_create")
+     * @Route("/create", name="teachers_assignment_create", options={"expose"=true})
      * @Template("@TeachersAssignment/Assignment/update.html.twig")
      * @Acl(
      *      id="teachers_assignment_create",
@@ -94,11 +95,17 @@ class AssignmentController extends AbstractController
      */
     public function createAction()
     {
-        return $this->update(new Assignment());
+        return $this->update(new Assignment(), 'teachers_assignment_create');
     }
 
     /**
-     * @Route("/delete/{id}", name="teachers_assignment_delete", requirements={"id"="\d+"}, methods={"DELETE"})
+     * @Route(
+     *     "/delete/{id}",
+     *     name="teachers_assignment_delete",
+     *     requirements={"id"="\d+"},
+     *     methods={"DELETE"},
+     *     options={"expose"=true}
+     * )
      * @Acl(
      *      id="teachers_assignment_delete",
      *      type="entity",
@@ -123,25 +130,32 @@ class AssignmentController extends AbstractController
     }
 
     /**
-     * @param Assignment $assignment
-     * @return array|RedirectResponse
+     * @param \Teachers\Bundle\AssignmentBundle\Entity\Assignment $entity
+     * @param $action
+     * @return RedirectResponse|array
      */
-    protected function update(Assignment $assignment)
+    private function update(Assignment $entity, $action)
     {
-        $handler = $this->get('teachers_assignment.assignment.form.handler');
+        /** @var \Oro\Bundle\FormBundle\Model\UpdateHandlerFacade $handler */
+        $handler = $this->get('oro_form.update_handler');
+        $form = $this->getForm($action);
+        return $handler->update(
+            $entity,
+            $form,
+            $this->get('translator')->trans('teachers.assignment.controller.assignment.saved.message')
+        );
+    }
 
-        if ($handler->process($assignment)) {
-            $this->get('session')->getFlashBag()->add(
-                'success',
-                $this->get('translator')->trans('teachers.assignment.assignment.entity.saved')
-            );
+    private function getForm($action): FormInterface
+    {
+        /** @var \Symfony\Component\Form\FormFactory $factory */
+        $factory = $this->get('form.factory');
+        $builder = $factory->createNamedBuilder(
+            'teachers_assignment_form',
+            'Teachers\Bundle\AssignmentBundle\Form\Type\AssignmentType'
+        );
+        $builder->setAction($action);
 
-            return $this->get('oro_ui.router')->redirect($assignment);
-        }
-
-        return [
-            'entity' => $assignment,
-            'form' => $handler->getForm()->createView()
-        ];
+        return $builder->getForm();
     }
 }

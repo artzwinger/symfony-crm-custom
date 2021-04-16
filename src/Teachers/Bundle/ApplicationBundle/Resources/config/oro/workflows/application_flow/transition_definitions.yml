@@ -1,0 +1,33 @@
+workflows:
+    application_flow:
+        transition_definitions:
+            __start___definition:
+              actions:
+                  - '@request_enum_entity':
+                      enum_code: application_status
+                      identifier: new
+                      attribute: $application.status
+            start_working_definition:
+              actions:
+                  - '@request_enum_entity':
+                      enum_code: application_status
+                      identifier: working
+                      attribute: $application.status
+            stop_working_definition:
+              actions:
+                  - '@request_enum_entity':
+                      enum_code: application_status
+                      identifier: new
+                      attribute: $application.status
+            complete_definition:
+              actions:
+                  - '@request_enum_entity':
+                      enum_code: application_status
+                      identifier: complete
+                      attribute: $application.status
+            reopen_definition:
+              actions:
+                  - '@request_enum_entity':
+                      enum_code: application_status
+                      identifier: new
+                      attribute: $application.status

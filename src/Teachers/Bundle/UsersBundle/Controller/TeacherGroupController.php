@@ -5,6 +5,7 @@ namespace Teachers\Bundle\UsersBundle\Controller;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
+use Symfony\Component\Form\FormInterface;
 use Teachers\Bundle\UsersBundle\Entity\TeacherGroup;
 use Oro\Bundle\SecurityBundle\Annotation\CsrfProtection;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -79,11 +80,11 @@ class TeacherGroupController extends AbstractController
      */
     public function updateAction(TeacherGroup $teacherGroup)
     {
-        return $this->update($teacherGroup);
+        return $this->update($teacherGroup, 'teachers_group_update');
     }
 
     /**
-     * @Route("/create", name="teachers_group_create")
+     * @Route("/create", name="teachers_group_create", options={"expose": true})
      * @Template("@TeachersUsers/TeacherGroup/update.html.twig")
      * @Acl(
      *      id="teachers_group_create",
@@ -94,7 +95,7 @@ class TeacherGroupController extends AbstractController
      */
     public function createAction()
     {
-        return $this->update(new TeacherGroup());
+        return $this->update(new TeacherGroup(), 'teachers_group_create');
     }
 
     /**
@@ -124,24 +125,31 @@ class TeacherGroupController extends AbstractController
 
     /**
      * @param TeacherGroup $teacherGroup
+     * @param $action
      * @return array|RedirectResponse
      */
-    protected function update(TeacherGroup $teacherGroup)
+    protected function update(TeacherGroup $teacherGroup, $action)
     {
-        $handler = $this->get('teachers_users.teacher_group.form.handler');
+        /** @var \Oro\Bundle\FormBundle\Model\UpdateHandlerFacade $handler */
+        $handler = $this->get('oro_form.update_handler');
+        $form = $this->getForm($action);
+        return $handler->update(
+            $teacherGroup,
+            $form,
+            $this->get('translator')->trans('teachers.users.teacher_group.entity.saved')
+        );
+    }
 
-        if ($handler->process($teacherGroup)) {
-            $this->get('session')->getFlashBag()->add(
-                'success',
-                $this->get('translator')->trans('teachers.users.teacher_group.entity.saved')
-            );
+    private function getForm($action): FormInterface
+    {
+        /** @var \Symfony\Component\Form\FormFactory $factory */
+        $factory = $this->get('form.factory');
+        $builder = $factory->createNamedBuilder(
+            'teachers_teacher_group_form',
+            'Teachers\Bundle\UsersBundle\Form\Type\TeacherGroupType'
+        );
+        $builder->setAction($action);
 
-            return $this->get('oro_ui.router')->redirect($teacherGroup);
-        }
-
-        return [
-            'entity' => $teacherGroup,
-            'form' => $handler->getForm()->createView()
-        ];
+        return $builder->getForm();
     }
 }

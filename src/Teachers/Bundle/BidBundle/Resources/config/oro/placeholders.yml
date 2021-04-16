@@ -1,0 +1,9 @@
+placeholders:
+    items:
+        teachers_bid_button:
+            template: TeachersBidBundle:Bid:activityButton.html.twig
+            acl: teachers_bid_create
+
+        teachers_bid_link:
+            template: TeachersBidBundle:Bid:activityLink.html.twig
+            acl: teachers_bid_create

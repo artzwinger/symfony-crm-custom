@@ -2,7 +2,7 @@ navigation:
     menu_config:
         items:
             teachers_application_application:
-                label: 'teachers.application.application.entity_plural_label'
+                label: 'teachers.application.entity_plural_label'
                 route: 'teachers_application_index'
                 position: 30
                 extras:

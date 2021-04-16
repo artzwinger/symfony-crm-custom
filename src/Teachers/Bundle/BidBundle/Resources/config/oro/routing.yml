@@ -1,0 +1,14 @@
+teachers_bid:
+    resource: "@TeachersBidBundle/Controller/BidController.php"
+    type: annotation
+    prefix: /bid
+
+teachers_bid_api:
+    resource: "@TeachersBidBundle/Resources/config/oro/routing_api.yml"
+    type: rest
+    prefix: api/rest/{version}
+    requirements:
+        version: latest|v1
+        _format: json
+    defaults:
+        version: latest

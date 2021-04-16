@@ -8,22 +8,12 @@ datagrids:
                 select:
                     - application.id
                     - application.subject
-                    - applicationstatus.id as status
-                    - applicationstatus.name as statusLabel
                     - application.createdAt
                 from:
                     - { table: 'Teachers\Bundle\ApplicationBundle\Entity\Application', alias: application }
-                join:
-                    left:
-                        - { join: application.status, alias: applicationstatus }
         columns:
             subject:
-                label: teachers.application.application.subject.label
-            status:
-                label: oro.task.status.label
-                choices: "@oro_entity_extend.enum_value_provider->getEnumChoicesByCode('application_status')"
-                inline_editing:
-                    enable: true
+                label: teachers.application.subject.label
             createdAt:
                 frontend_type: datetime
                 label: oro.ui.created_at
@@ -31,8 +21,6 @@ datagrids:
             columns:
                 subject:
                     data_name: application.subject
-                status:
-                    data_name: applicationstatus.priority
                 createdAt:
                     data_name: application.createdAt
             default:
@@ -42,10 +30,6 @@ datagrids:
                 subject:
                     type: string
                     data_name: application.subject
-                status:
-                    type: enum
-                    data_name: status
-                    enum_code: application_status
                 createdAt:
                     type: datetime
                     data_name: application.createdAt
@@ -84,5 +68,5 @@ datagrids:
                 icon: trash
                 link: delete_link
         options:
-            entityHint: teachers.application.application.entity_plural_label
+            entityHint: teachers.application.entity_plural_label
             entity_pagination: true

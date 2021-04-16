@@ -3,6 +3,11 @@ teachers_group:
     type: annotation
     prefix: /teacher-group
 
+teachers_users:
+    resource: "@TeachersUsersBundle/Controller/UserController.php"
+    type: annotation
+    prefix: /teacher-users
+
 teachers_group_api:
     resource: "@TeachersUsersBundle/Resources/config/oro/routing_api.yml"
     type: rest

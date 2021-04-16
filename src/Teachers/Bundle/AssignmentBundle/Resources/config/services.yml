@@ -3,9 +3,32 @@ services:
         class: Teachers\Bundle\AssignmentBundle\Form\Type\AssignmentType
         public: true
         tags:
-            - { name: oro_embedded_form, type: Teachers\Bundle\AssignmentBundle\Form\Type\AssignmentType, label: teachers.assignment.assignment.entity_label }
+            - { name: oro_embedded_form, type: Teachers\Bundle\AssignmentBundle\Form\Type\AssignmentType, label: teachers.assignment.entity_label }
             - { name: form.type, alias: teachers_assignment_request }
-
+    teachers_assignment_private_note.embedded_form:
+        class: Teachers\Bundle\AssignmentBundle\Form\Type\AssignmentPrivateNoteType
+        public: true
+        tags:
+            - { name: oro_embedded_form, type: Teachers\Bundle\AssignmentBundle\Form\Type\AssignmentPrivateNoteType, label: teachers.assignment.private_note.entity_label }
+            - { name: form.type, alias: teachers_assignment_private_note_request }
+    teachers_assignment.activity_list.provider:
+        class: Teachers\Bundle\AssignmentBundle\Provider\AssignmentActivityListProvider
+        arguments:
+            - "@oro_entity.doctrine_helper"
+            - "@oro_security.owner.entity_owner_accessor.link"
+            - "@oro_activity.association_helper"
+            - "@oro_comment.association_helper"
+        tags:
+            - { name: oro_activity_list.provider, class: Teachers\Bundle\AssignmentBundle\Entity\Assignment, priority: 20 }
+    teachers_assignment_private_note.activity_list.provider:
+        class: Teachers\Bundle\AssignmentBundle\Provider\AssignmentPrivateNoteActivityListProvider
+        arguments:
+            - "@oro_entity.doctrine_helper"
+            - "@oro_security.owner.entity_owner_accessor.link"
+            - "@oro_activity.association_helper"
+            - "@oro_comment.association_helper"
+        tags:
+            - { name: oro_activity_list.provider, class: Teachers\Bundle\AssignmentBundle\Entity\AssignmentPrivateNote, priority: 20 }
     teachers_assignment.assignment.form:
         class: Symfony\Component\Form\Form
         factory: [ '@form.factory', createNamed ]
@@ -13,7 +36,13 @@ services:
             - "teachers_assignment_request"
             - Teachers\Bundle\AssignmentBundle\Form\Type\AssignmentType
             - null
-
+    teachers_assignment.assignment_private_note.form:
+        class: Symfony\Component\Form\Form
+        factory: [ '@form.factory', createNamed ]
+        arguments:
+            - "teachers_assignment_private_note_request"
+            - Teachers\Bundle\AssignmentBundle\Form\Type\AssignmentPrivateNoteType
+            - null
     teachers_assignment.assignment.form.handler:
         class: Teachers\Bundle\AssignmentBundle\Form\Handler\AssignmentHandler
         public: true
@@ -21,7 +50,13 @@ services:
             - "@teachers_assignment.assignment.form"
             - "@request_stack"
             - "@doctrine"
-
+    teachers_assignment.assignment_private_note.form.handler:
+        class: Teachers\Bundle\AssignmentBundle\Form\Handler\AssignmentPrivateNoteHandler
+        public: true
+        arguments:
+            - "@teachers_assignment.assignment_private_note.form"
+            - "@request_stack"
+            - "@doctrine"
     teachers_assignment.assignment.manager.api:
         class: Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
         public: true

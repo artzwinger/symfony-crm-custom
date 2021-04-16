@@ -200,10 +200,10 @@ class ApplicationActivityListProvider implements
     /**
      * {@inheritdoc}
      */
-    public function getActivityOwners($entity, ActivityList $activityList)
+    public function getActivityOwners($bid, ActivityList $activityList)
     {
-        $organization = $this->getOrganization($entity);
-        $owner = $this->entityOwnerAccessorLink->getService()->getOwner($entity);
+        $organization = $this->getOrganization($bid);
+        $owner = $this->entityOwnerAccessorLink->getService()->getOwner($bid);
 
         if (!$organization || !$owner) {
             return [];

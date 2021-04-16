@@ -3,7 +3,6 @@
 namespace Teachers\Bundle\AssignmentBundle\Migrations\Schema;
 
 use Doctrine\DBAL\Schema\Schema;
-use Doctrine\DBAL\Schema\SchemaException;
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtension;
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtensionAwareInterface;
 use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtension;
@@ -46,18 +45,17 @@ class TeachersAssignmentBundleInstaller implements Installation, ActivityExtensi
 
     /**
      * {@inheritdoc}
-     * @throws SchemaException
      */
     public function up(Schema $schema, QueryBag $queries)
     {
         /** Tables generation **/
+        $this->createAssignmentCommentTable($schema);
         $this->createAssignmentTable($schema);
         $this->createAssignmentToTeacherGroupTable($schema);
     }
 
     /**
      * @param Schema $schema
-     * @throws SchemaException
      */
     protected function createAssignmentTable(Schema $schema)
     {
@@ -73,6 +71,9 @@ class TeachersAssignmentBundleInstaller implements Installation, ActivityExtensi
         $table->addColumn('course_manager_id', 'integer', ['notnull' => false]);
         $table->setPrimaryKey(['id']);
         $this->activityExtension->addActivityAssociation($schema, 'teachers_assignment', 'oro_user');
+        $this->activityExtension->addActivityAssociation($schema, 'oro_note', 'teachers_assignment');
+        $this->activityExtension->addActivityAssociation($schema, 'teachers_assignment_priv_note', 'teachers_assignment');
+        $this->activityExtension->addActivityAssociation($schema, 'teachers_assignment', 'teachers_application');
 
         $enumTable = $this->extendExtension->addEnumField(
             $schema,
@@ -98,5 +99,26 @@ class TeachersAssignmentBundleInstaller implements Installation, ActivityExtensi
         $table->setPrimaryKey(['assignment_id', 'teacher_group_id']);
         $table->addIndex(['assignment_id'], 'teachers_as_to_tg_assignment_id_idx', []);
         $table->addIndex(['teacher_group_id'], 'teachers_as_to_tg_group_id_idx', []);
+    }
+
+    /**
+     * Create orocrm_case_comment table
+     *
+     * @param Schema $schema
+     */
+    protected static function createAssignmentCommentTable(Schema $schema)
+    {
+        $table = $schema->createTable('teachers_assignment_priv_note');
+        $table->addColumn('id', 'integer', ['autoincrement' => true]);
+        $table->addColumn('updated_by_id', 'integer', ['notnull' => false]);
+        $table->addColumn('owner_id', 'integer', ['notnull' => false]);
+        $table->addColumn('organization_id', 'integer', ['notnull' => false]);
+        $table->addColumn('message', 'text', []);
+        $table->addColumn('createdAt', 'datetime', []);
+        $table->addColumn('updatedAt', 'datetime', []);
+        $table->setPrimaryKey(['id']);
+        $table->addIndex(['updated_by_id'], 'trs_asg_cmt_upd_by_idx', []);
+        $table->addIndex(['owner_id'], 'trs_asg_cmt_owner_idx', []);
+        $table->addIndex(['organization_id'], 'trs_asg_cmt_org_idx', []);
     }
 }

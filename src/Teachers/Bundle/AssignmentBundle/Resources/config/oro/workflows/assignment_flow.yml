@@ -1,0 +1,15 @@
+imports:
+    - { resource: 'assignment_flow/steps.yml' }
+    - { resource: 'assignment_flow/attributes.yml' }
+    - { resource: 'assignment_flow/transitions.yml' }
+    - { resource: 'assignment_flow/transition_definitions.yml' }
+    - { resource: 'assignment_flow/entity_restrictions.yml' }
+
+workflows:
+    assignment_flow:
+        entity: Teachers\Bundle\AssignmentBundle\Entity\Assignment
+        entity_attribute: assignment
+        start_step: new
+
+        defaults:
+            active: true

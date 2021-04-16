@@ -31,6 +31,7 @@ class TeachersBidBundleInstaller implements Installation, ActivityExtensionAware
 
     /**
      * {@inheritdoc}
+     * @throws \Doctrine\DBAL\Schema\SchemaException
      */
     public function up(Schema $schema, QueryBag $queries)
     {
@@ -46,27 +47,21 @@ class TeachersBidBundleInstaller implements Installation, ActivityExtensionAware
     {
         $table = $schema->createTable('teachers_bid');
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
+        $table->addColumn('subject', 'string', ['length' => 255, 'notnull' => true]);
         $table->addColumn('assignment_id', 'integer', ['notnull' => false]);
         $table->addColumn('teacher_id', 'integer', ['notnull' => false]);
         $table->addColumn('price', 'money', ['precision' => 0, 'comment' => '(DC2Type:money)', 'notnull' => true]);
         $table->addColumn('created_at', 'datetime');
         $table->addColumn('updated_at', 'datetime', ['notnull' => false]);
         $table->addColumn('organization_id', 'integer', ['notnull' => false]);
-        $table->addColumn('owner_id', 'integer', ['notnull' => false]);
         $table->setPrimaryKey(['id']);
         $table->addIndex(['organization_id'], 'teachers_bid_org_id_idx', []);
-        $table->addIndex(['owner_id'], 'teachers_bid_owner_id_idx', []);
-        $this->activityExtension->addActivityAssociation($schema, 'teachers_bid', 'teachers_teacher');
-        $this->activityExtension->addActivityAssociation($schema, 'teachers_bid', 'teachers_course_manager');
+        $table->addIndex(['teacher_id'], 'teachers_bid_teacher_id_idx', []);
+        $this->activityExtension->addActivityAssociation($schema, 'teachers_bid', 'teachers_assignment');
+        $this->activityExtension->addActivityAssociation($schema, 'teachers_bid', 'oro_user');
         $table->addForeignKeyConstraint(
             $schema->getTable('teachers_assignment'),
             ['assignment_id'],
-            ['id'],
-            ['onDelete' => 'CASCADE', 'onUpdate' => null]
-        );
-        $table->addForeignKeyConstraint(
-            $schema->getTable('teachers_teacher'),
-            ['teacher_id'],
             ['id'],
             ['onDelete' => 'CASCADE', 'onUpdate' => null]
         );

@@ -133,7 +133,7 @@ class ApplicationController extends AbstractController
         if ($handler->process($application)) {
             $this->get('session')->getFlashBag()->add(
                 'success',
-                $this->get('translator')->trans('teachers.application.application.entity.saved')
+                $this->get('translator')->trans('teachers.application.entity.saved')
             );
 
             return $this->get('oro_ui.router')->redirect($application);

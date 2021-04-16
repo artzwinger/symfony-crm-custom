@@ -1,2 +1,2 @@
-#bundles:
-#  - { name: Teachers\Bundle\BidBundle\TeachersBidBundle, priority: 240 }
+bundles:
+  - { name: Teachers\Bundle\BidBundle\TeachersBidBundle, priority: 240 }

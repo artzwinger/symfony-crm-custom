@@ -1,0 +1,3 @@
+teachers_assignment_assignment_api:
+    resource: "@TeachersAssignmentBundle/Controller/Api/Rest/AssignmentController.php"
+    type: rest

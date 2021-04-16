@@ -10,7 +10,6 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints as Assert;
 use Teachers\Bundle\AssignmentBundle\Entity\Assignment;
-use Teachers\Bundle\UsersBundle\Form\Type\CourseManagerSelectType;
 use Teachers\Bundle\UsersBundle\Form\Type\StudentSelectType;
 use Teachers\Bundle\UsersBundle\Form\Type\TeacherSelectType;
 
@@ -27,29 +26,29 @@ class AssignmentType extends AbstractType
         $builder
             ->add('subject', TextType::class, [
                 'required' => true,
-                'label' => 'teachers.assignment.assignment.subject.label'
+                'label' => 'teachers.assignment.subject.label'
             ])
             ->add('description', OroResizeableRichTextType::class, [
-                'required' => false,
-                'label' => 'teachers.assignment.assignment.description.label'
+                'required' => true,
+                'label' => 'teachers.assignment.description.label'
             ])
             ->add('status', EnumSelectType::class, [
-                'label' => 'teachers.assignment.assignment.status.label',
+                'label' => 'teachers.assignment.status.label',
                 'enum_code' => 'assignment_status',
                 'required' => true,
                 'constraints' => [new Assert\NotNull()]
             ])
 //            ->add('courseManager', CourseManagerSelectType::class, [
-//                'label' => 'teachers.assignment.assignment.course_manager.label',
+//                'label' => 'teachers.assignment.course_manager.label',
 //                'required' => true
 //            ])
             ->add('teacher', TeacherSelectType::class, [
-                'label' => 'teachers.assignment.assignment.teacher.label',
-                'required' => true
+                'label' => 'teachers.assignment.teacher.label',
+                'required' => false
             ])
             ->add('student', StudentSelectType::class, [
-                'label' => 'teachers.assignment.assignment.student.label',
-                'required' => true
+                'label' => 'teachers.assignment.student.label',
+                'required' => false
             ]);
     }
 

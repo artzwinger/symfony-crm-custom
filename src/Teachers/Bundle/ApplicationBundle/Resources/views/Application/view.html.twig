@@ -7,7 +7,7 @@
     {% set breadcrumbs = {
         'entity': entity,
         'indexPath': path('teachers_application_index'),
-        'indexLabel': 'teachers.application.application.entity_plural_label'|trans,
+        'indexLabel': 'teachers.application.entity_plural_label'|trans,
         'entityTitle': subject
     } %}
     {{ parent() }}
@@ -23,7 +23,7 @@
             'aCss': 'no-hash remove-button',
             'id': 'btn-remove-application-form',
             'dataId': entity.id,
-            'entity_label': 'teachers.application.application.entity_label'|trans,
+            'entity_label': 'teachers.application.entity_label'|trans,
         }) }}
         {{ UI.buttonSeparator() }}
     {% endif %}
@@ -31,7 +31,7 @@
     {% if is_granted('teachers_application_edit') %}
         {{ UI.editButton({
             'path': path('teachers_application_update', {'id': entity.id}),
-            'entity_label': 'teachers.application.application.entity_label'|trans,
+            'entity_label': 'teachers.application.entity_label'|trans,
         }) }}
     {% endif %}
 {% endblock %}

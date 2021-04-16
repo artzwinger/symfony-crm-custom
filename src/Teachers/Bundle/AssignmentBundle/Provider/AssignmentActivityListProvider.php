@@ -2,6 +2,7 @@
 
 namespace Teachers\Bundle\AssignmentBundle\Provider;
 
+use DateTime;
 use Oro\Bundle\ActivityBundle\Tools\ActivityAssociationHelper;
 use Oro\Bundle\ActivityListBundle\Entity\ActivityList;
 use Oro\Bundle\ActivityListBundle\Entity\ActivityOwner;
@@ -10,6 +11,8 @@ use Oro\Bundle\ActivityListBundle\Model\ActivityListProviderInterface;
 use Oro\Bundle\CommentBundle\Model\CommentProviderInterface;
 use Oro\Bundle\CommentBundle\Tools\CommentAssociationHelper;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
+use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Component\DependencyInjection\ServiceLink;
 use Teachers\Bundle\AssignmentBundle\Entity\Assignment;
 
@@ -55,7 +58,7 @@ class AssignmentActivityListProvider implements
     /**
      * {@inheritdoc}
      */
-    public function isApplicableTarget($entityClass, $accessible = true)
+    public function isApplicableTarget($entityClass, $accessible = true): bool
     {
         return $this->activityAssociationHelper->isActivityAssociationEnabled(
             $entityClass,
@@ -67,7 +70,7 @@ class AssignmentActivityListProvider implements
     /**
      * {@inheritdoc}
      */
-    public function getSubject($entity)
+    public function getSubject($entity): ?string
     {
         /** @var $entity Assignment */
         return $entity->getSubject();
@@ -76,16 +79,24 @@ class AssignmentActivityListProvider implements
     /**
      * {@inheritdoc}
      */
-    public function getDescription($entity)
+    public function getDescription($entity): ?string
     {
         /** @var $entity Assignment */
-        return trim(strip_tags($entity->getDescription()));
+        return $entity->getDescription();
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getOwner($entity)
+    public function getData(ActivityList $activityListEntity): array
+    {
+        return [];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getOwner($entity): ?User
     {
         /** @var $entity Assignment */
         return $entity->getCourseManager();
@@ -94,7 +105,7 @@ class AssignmentActivityListProvider implements
     /**
      * {@inheritdoc}
      */
-    public function getCreatedAt($entity)
+    public function getCreatedAt($entity): ?DateTime
     {
         /** @var $entity Assignment */
         return $entity->getCreatedAt();
@@ -103,7 +114,7 @@ class AssignmentActivityListProvider implements
     /**
      * {@inheritdoc}
      */
-    public function getUpdatedAt($entity)
+    public function getUpdatedAt($entity): ?DateTime
     {
         /** @var $entity Assignment */
         return $entity->getUpdatedAt();
@@ -112,31 +123,7 @@ class AssignmentActivityListProvider implements
     /**
      * {@inheritdoc}
      */
-    public function getData(ActivityList $activityListEntity)
-    {
-        /** @var Assignment $assignment */
-        $assignment = $this->doctrineHelper
-            ->getEntityManager($activityListEntity->getRelatedActivityClass())
-            ->getRepository($activityListEntity->getRelatedActivityClass())
-            ->find($activityListEntity->getRelatedActivityId());
-
-        if (!$assignment->getStatus()) {
-            return [
-                'statusId' => null,
-                'statusName' => null,
-            ];
-        }
-
-        return [
-            'statusId' => $assignment->getStatus()->getId(),
-            'statusName' => $assignment->getStatus()->getName(),
-        ];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getOrganization($activityEntity)
+    public function getOrganization($activityEntity): ?Organization
     {
         /** @var $activityEntity Assignment */
         return $activityEntity->getOrganization();
@@ -145,7 +132,7 @@ class AssignmentActivityListProvider implements
     /**
      * {@inheritdoc
      */
-    public function getTemplate()
+    public function getTemplate(): string
     {
         return 'TeachersAssignmentBundle:Assignment:js/activityItemTemplate.html.twig';
     }
@@ -153,11 +140,12 @@ class AssignmentActivityListProvider implements
     /**
      * {@inheritdoc}
      */
-    public function getRoutes($activityEntity)
+    public function getRoutes($activityEntity): array
     {
         return [
-            'itemView' => 'teachers_assignment_widget_info',
-            'itemEdit' => 'teachers_assignment_update'
+            'itemView' => 'teachers_assignment_info',
+            'itemEdit' => 'teachers_assignment_update',
+            'itemDelete' => 'teachers_assignment_delete'
         ];
     }
 
@@ -172,7 +160,7 @@ class AssignmentActivityListProvider implements
     /**
      * {@inheritdoc}
      */
-    public function isApplicable($entity)
+    public function isApplicable($entity): bool
     {
         if (\is_object($entity)) {
             return $entity instanceof Assignment;
@@ -192,7 +180,7 @@ class AssignmentActivityListProvider implements
     /**
      * {@inheritdoc}
      */
-    public function isCommentsEnabled($entityClass)
+    public function isCommentsEnabled($entityClass): bool
     {
         return $this->commentAssociationHelper->isCommentAssociationEnabled($entityClass);
     }
@@ -200,18 +188,18 @@ class AssignmentActivityListProvider implements
     /**
      * {@inheritdoc}
      */
-    public function getActivityOwners($entity, ActivityList $activityList)
+    public function getActivityOwners($entity, ActivityList $activityList): array
     {
-        $organization = $this->getOrganization($entity);
+        $org = $this->getOrganization($entity);
         $owner = $this->entityOwnerAccessorLink->getService()->getOwner($entity);
 
-        if (!$organization || !$owner) {
+        if (!$org || !$owner) {
             return [];
         }
 
         $activityOwner = new ActivityOwner();
         $activityOwner->setActivity($activityList);
-        $activityOwner->setOrganization($organization);
+        $activityOwner->setOrganization($org);
         $activityOwner->setUser($owner);
         return [$activityOwner];
     }

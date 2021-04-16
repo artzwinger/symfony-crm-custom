@@ -1,0 +1,37 @@
+oro:
+    workflow:
+        application_flow:
+            step:
+                new:
+                    label: New
+                working:
+                    label: Working
+                complete:
+                    label: Complete
+            attribute:
+                assignment_course_manager:
+                    label: Course manager
+                assignment_teacher:
+                    label: Teacher
+                assignment_student:
+                    label: Student
+                assignment_subject:
+                    label: Subject
+                assignment_description:
+                    label: Description
+                assignment_teacher_groups:
+                    label: Teacher group
+            transition:
+                start_working:
+                    label: Start working
+                    warning_message: ''
+                stop_working:
+                    label: Stop working
+                    warning_message: ''
+                complete:
+                    label: Complete
+                    warning_message: ''
+                reopen:
+                    label: Reopen
+                    warning_message: ''
+            label: Application Flow

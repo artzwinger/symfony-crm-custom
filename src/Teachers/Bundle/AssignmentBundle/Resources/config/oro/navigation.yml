@@ -2,7 +2,7 @@ navigation:
     menu_config:
         items:
             teachers_assignment_assignment:
-                label: 'teachers.assignment.assignment.entity_plural_label'
+                label: 'teachers.assignment.entity_plural_label'
                 route: 'teachers_assignment_index'
                 position: 30
                 extras:

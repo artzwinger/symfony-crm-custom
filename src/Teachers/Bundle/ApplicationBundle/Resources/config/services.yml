@@ -3,7 +3,7 @@ services:
         class: Teachers\Bundle\ApplicationBundle\Form\Type\ApplicationType
         public: true
         tags:
-            - { name: oro_embedded_form, type: Teachers\Bundle\ApplicationBundle\Form\Type\ApplicationType, label: teachers.application.application.entity_label }
+            - { name: oro_embedded_form, type: Teachers\Bundle\ApplicationBundle\Form\Type\ApplicationType, label: teachers.application.entity_label }
             - { name: form.type, alias: teachers_application_request }
 
     teachers_application.application.form:
