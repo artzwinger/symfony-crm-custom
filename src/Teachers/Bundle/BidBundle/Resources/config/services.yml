@@ -28,3 +28,8 @@ services:
             - "@teachers_bid.bid.form"
             - "@request_stack"
             - "@doctrine"
+    teachers_bid.placeholder.filter:
+        class: Teachers\Bundle\BidBundle\Placeholder\PlaceholderFilter
+        arguments:
+            - '@oro_workflow.manager'
+        public: true

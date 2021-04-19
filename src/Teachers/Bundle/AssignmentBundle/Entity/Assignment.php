@@ -145,6 +145,21 @@ class Assignment extends ExtendAssignment implements DatesAwareInterface
     const STATUS_ASSIGNED = 'assigned';
     const STATUS_COMPLETE = 'complete';
 
+    const WORKFLOW_STEP_NEW = 'new';
+    const WORKFLOW_STEP_UP_FOR_BID = 'up_for_bid';
+    const WORKFLOW_STEP_ASSIGNED = 'assigned';
+    const WORKFLOW_STEP_COMPLETE = 'complete';
+
+    public static function getAvailableWorkflowSteps(): array
+    {
+        return [
+            self::WORKFLOW_STEP_NEW,
+            self::WORKFLOW_STEP_UP_FOR_BID,
+            self::WORKFLOW_STEP_ASSIGNED,
+            self::WORKFLOW_STEP_COMPLETE
+        ];
+    }
+
     public static function getAvailableStatuses(): array
     {
         return [

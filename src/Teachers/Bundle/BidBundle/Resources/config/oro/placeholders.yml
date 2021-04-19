@@ -2,8 +2,9 @@ placeholders:
     items:
         teachers_bid_button:
             template: TeachersBidBundle:Bid:activityButton.html.twig
+            applicable: '@teachers_bid.placeholder.filter->isAssignmentUpForBid($entity$)'
             acl: teachers_bid_create
-
         teachers_bid_link:
             template: TeachersBidBundle:Bid:activityLink.html.twig
+            applicable: '@teachers_bid.placeholder.filter->isAssignmentUpForBid($entity$)'
             acl: teachers_bid_create
