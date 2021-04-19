@@ -35,7 +35,7 @@ class TeacherSelectType extends AbstractType
                 'create_form_route' => 'teachers_teacher_create',
                 'grid_name' => 'users-by-role-select-grid',
                 'grid_parameters' => [
-                    'role_id' => $this->roleHelper->getStudentRoleId()
+                    'role_id' => $this->roleHelper->getTeacherRoleId()
                 ]
             ]
         );

@@ -34,7 +34,7 @@ class CourseManagerSelectType extends AbstractType
                 'create_form_route' => 'teachers_course_manager_create',
                 'grid_name' => 'users-by-role-select-grid',
                 'grid_parameters' => [
-                    'role_id' => $this->roleHelper->getStudentRoleId()
+                    'role_id' => $this->roleHelper->getCourseManagerRoleId()
                 ]
             ]
         );
