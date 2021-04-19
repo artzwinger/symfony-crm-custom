@@ -64,3 +64,8 @@ services:
         arguments:
             - 'Teachers\Bundle\AssignmentBundle\Entity\Assignment'
             - "@doctrine.orm.entity_manager"
+    teachers_assignment.placeholder.filter:
+        class: Teachers\Bundle\AssignmentBundle\Placeholder\PlaceholderFilter
+        arguments:
+            - '@oro_workflow.manager'
+        public: true

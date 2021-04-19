@@ -2,10 +2,12 @@ placeholders:
     items:
         teachers_assignment_button:
             template: TeachersAssignmentBundle:Assignment:activityButton.html.twig
+            applicable: '@teachers_assignment.placeholder.filter->isApplicationInWorking($entity$)'
             acl: teachers_assignment_create
 
         teachers_assignment_link:
             template: TeachersAssignmentBundle:Assignment:activityLink.html.twig
+            applicable: '@teachers_assignment.placeholder.filter->isApplicationInWorking($entity$)'
             acl: teachers_assignment_create
 
         teachers_assignment_private_note_button:

@@ -99,6 +99,19 @@ class Application extends ExtendApplication implements DatesAwareInterface
     const STATUS_WORKING = 'working';
     const STATUS_COMPLETE = 'complete';
 
+    const WORKFLOW_STEP_NEW = 'new';
+    const WORKFLOW_STEP_WORKING = 'working';
+    const WORKFLOW_STEP_COMPLETE = 'complete';
+
+    public static function getAvailableWorkflowSteps(): array
+    {
+        return [
+            self::WORKFLOW_STEP_NEW,
+            self::WORKFLOW_STEP_WORKING,
+            self::WORKFLOW_STEP_COMPLETE
+        ];
+    }
+
     public static function getAvailableStatuses(): array
     {
         return [
