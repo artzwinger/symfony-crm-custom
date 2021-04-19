@@ -4,7 +4,7 @@
 {% set fullname = form.vars.value|oro_format_name|default('N/A') %}
 {% oro_title_set({params : {"%username%": fullname, "%entityName%": 'oro.user.entity_label'|trans }}) %}
 
-{% set formAction = form.vars.value.id ? path('oro_user_update', { id: form.vars.value.id}) : path('oro_user_create') %}
+{% set formAction = form.vars.value.id ? path('oro_user_update', { id: form.vars.value.id}) : path('teachers_student_create') %}
 
 {% block navButtons %}
     {% import 'OroUIBundle::macros.html.twig' as UI %}

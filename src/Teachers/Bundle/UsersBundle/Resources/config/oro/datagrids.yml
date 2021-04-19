@@ -61,3 +61,17 @@ datagrids:
         options:
             entityHint: teachers.users.teacher_group.entity_plural_label
             entity_pagination: true
+
+    users-by-role-select-grid:
+        extends: users-select-grid
+        source:
+            query:
+                join:
+                    left:
+                        - { join: u.roles, alias: r }
+                where:
+                    and:
+                        - r.id = :role_id
+            bind_parameters:
+                -   name: role_id
+                    default: null

@@ -1,0 +1,24 @@
+services:
+    teachers.form.autocomplete.user.only_students_handler:
+        class: Teachers\Bundle\UsersBundle\Autocomplete\UsersOnlyStudentsHandler
+        parent: oro_user.autocomplete.user.search_handler
+        tags:
+            - { name: oro_form.autocomplete.search_handler, alias: users_only_students, acl_resource: oro_user_user_view }
+    teachers.form.autocomplete.user.only_teachers_handler:
+        class: Teachers\Bundle\UsersBundle\Autocomplete\UsersOnlyTeachersHandler
+        parent: oro_user.autocomplete.user.search_handler
+        tags:
+            - { name: oro_form.autocomplete.search_handler, alias: users_only_teachers, acl_resource: oro_user_user_view }
+    teachers.form.autocomplete.user.only_course_managers_handler:
+        class: Teachers\Bundle\UsersBundle\Autocomplete\UsersOnlyCourseManagersHandler
+        parent: oro_user.autocomplete.user.search_handler
+        tags:
+            - { name: oro_form.autocomplete.search_handler, alias: users_only_course_managers, acl_resource: oro_user_user_view }
+    teachers.form.autocomplete.teacher_group.search_handler:
+        parent: oro_channel.autocomplete.channel_limitation_handler
+        arguments:
+            - 'Teachers\Bundle\UsersBundle\Entity\TeacherGroup'
+            - [ "title" ]
+        tags:
+            - { name: oro_form.autocomplete.search_handler, alias: teachers_groups, acl_resource: teachers_group_view }
+        lazy: true

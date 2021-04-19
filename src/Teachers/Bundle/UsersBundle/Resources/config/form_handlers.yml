@@ -1,0 +1,17 @@
+services:
+    teachers_users.teacher_group.form.handler:
+        class: Teachers\Bundle\UsersBundle\Form\Handler\TeacherGroupHandler
+        public: true
+        arguments:
+            - "@teachers_users.teacher_group.form"
+            - "@request_stack"
+            - "@doctrine"
+    teachers_users.form.handler.user:
+        class: Teachers\Bundle\UsersBundle\Form\Handler\UserHandler
+        public: true
+        arguments:
+            - '@oro_form.event.event_dispatcher'
+            - '@oro_user.manager'
+            - '@oro_config.user'
+        tags:
+            - { name: oro_form.form.handler, alias: teachers_users.form.handler.user }

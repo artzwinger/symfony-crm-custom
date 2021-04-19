@@ -1,33 +1,9 @@
 services:
-    teachers_users.embedded_form:
-        class: Teachers\Bundle\UsersBundle\Form\Type\TeacherGroupType
-        public: true
-        tags:
-            - { name: oro_embedded_form, type: Teachers\Bundle\UsersBundle\Form\Type\TeacherGroupType, label: teachers.users.teacher_group.entity_label }
-            - { name: form.type, alias: teachers_group_request }
-
-    teachers_users.teacher_group.form:
-        class: Symfony\Component\Form\Form
-        factory: [ '@form.factory', createNamed ]
-        arguments:
-            - "teachers_group_request"
-            - Teachers\Bundle\UsersBundle\Form\Type\TeacherGroupType
-            - null
-
-    teachers_users.teacher_group.form.handler:
-        class: Teachers\Bundle\UsersBundle\Form\Handler\TeacherGroupHandler
-        public: true
-        arguments:
-            - "@teachers_users.teacher_group.form"
-            - "@request_stack"
-            - "@doctrine"
-
     teachers_users.helper.role:
         class: Teachers\Bundle\UsersBundle\Helper\Role
         public: true
         arguments:
             - "@doctrine.orm.entity_manager"
-
     teachers_users.teacher_group.manager.api:
         class: Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
         public: true
@@ -36,28 +12,4 @@ services:
             - 'Teachers\Bundle\UsersBundle\Entity\TeacherGroup'
             - "@doctrine.orm.entity_manager"
 
-    teachers_users.form.type.teacher_group_multiselect:
-        class: Teachers\Bundle\UsersBundle\Form\Type\TeacherGroupsMultiSelectType
-        arguments:
-            - '@doctrine.orm.entity_manager'
-        tags:
-            - { name: form.type, alias: teacher_group_multi_select }
-    #
-    #    teachers.form.autocomplete.teacher_group.search_handler:
-    #        class: Teachers\Bundle\UsersBundle\Autocomplete\TeacherGroupSearchHandler
-    #        lazy: true
-    #        arguments:
-    #            - '@oro_entity.doctrine_helper'
-    #            - '@property_accessor'
-    #        tags:
-    #            - { name: oro_form.autocomplete.search_handler, alias: teachers_groups, acl_resource: teacher_group_view }
 
-
-    teachers.form.autocomplete.teacher_group.search_handler:
-        parent: oro_channel.autocomplete.channel_limitation_handler
-        arguments:
-            - 'Teachers\Bundle\UsersBundle\Entity\TeacherGroup'
-            - [ "title" ]
-        tags:
-            - { name: oro_form.autocomplete.search_handler, alias: teachers_groups, acl_resource: teachers_group_view }
-        lazy: true

@@ -19,8 +19,10 @@ class TeachersUsersExtension extends Extension
     {
         $loader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.yml');
-//        $loader->load('form.yml');
-//        $loader->load('old_rest_api.yml');
+        $loader->load('forms.yml');
+        $loader->load('form_handlers.yml');
+        $loader->load('form_types.yml');
+        $loader->load('search_handlers.yml');
         $loader->load('controllers.yml');
     }
 }

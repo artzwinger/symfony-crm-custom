@@ -1,0 +1,25 @@
+services:
+    teachers_users.form.type.teacher_group_multiselect:
+        class: Teachers\Bundle\UsersBundle\Form\Type\TeacherGroupsMultiSelectType
+        arguments:
+            - '@doctrine.orm.entity_manager'
+        tags:
+            - { name: form.type, alias: teacher_group_multi_select }
+    teachers_users.form.type.student_select:
+        class: Teachers\Bundle\UsersBundle\Form\Type\StudentSelectType
+        arguments:
+            - '@teachers_users.helper.role'
+        tags:
+            - { name: form.type, alias: student_select }
+    teachers_users.form.type.course_manager_select:
+        class: Teachers\Bundle\UsersBundle\Form\Type\CourseManagerSelectType
+        arguments:
+            - '@teachers_users.helper.role'
+        tags:
+            - { name: form.type, alias: course_manager_select }
+    teachers_users.form.type.teacher_select:
+        class: Teachers\Bundle\UsersBundle\Form\Type\TeacherSelectType
+        arguments:
+            - '@teachers_users.helper.role'
+        tags:
+            - { name: form.type, alias: teacher_select }
