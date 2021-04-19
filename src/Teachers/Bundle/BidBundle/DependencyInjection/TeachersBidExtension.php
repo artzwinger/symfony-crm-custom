@@ -19,8 +19,7 @@ class TeachersBidExtension extends Extension
     {
         $loader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.yml');
-//        $loader->load('form.yml');
-//        $loader->load('old_rest_api.yml');
+        $loader->load('event_listeners.yml');
         $loader->load('controllers.yml');
     }
 }

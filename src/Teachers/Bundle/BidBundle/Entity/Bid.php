@@ -76,12 +76,6 @@ class Bid extends ExtendBid implements DatesAwareInterface
      */
     protected $subject;
     /**
-     * @var Assignment|null $assignment
-     * @ORM\ManyToOne(targetEntity="Teachers\Bundle\AssignmentBundle\Entity\Assignment")
-     * @ORM\JoinColumn(name="assignment_id", referencedColumnName="id", nullable=true, onDelete="SET NULL")
-     */
-    protected $assignment;
-    /**
      * @var float|null $price
      * @ORM\Column(name="price", type="money", nullable=false)
      */
@@ -160,15 +154,12 @@ class Bid extends ExtendBid implements DatesAwareInterface
      */
     public function getAssignment(): ?Assignment
     {
-        return $this->assignment;
-    }
-
-    /**
-     * @param \Teachers\Bundle\BidBundle\Entity\Bid $assignment
-     */
-    public function setAssignment(Bid $assignment): void
-    {
-        $this->assignment = $assignment;
+        foreach ($this->getActivityTargets() as $target) {
+            if ($target instanceof Assignment) {
+                return $target;
+            }
+        }
+        return null;
     }
 
     /**

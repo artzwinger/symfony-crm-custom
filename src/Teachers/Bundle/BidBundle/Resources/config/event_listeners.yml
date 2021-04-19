@@ -1,0 +1,7 @@
+services:
+    teachers_bid.event_listener.orm.bid_postupdate:
+        class: Teachers\Bundle\BidBundle\EventListener\ORM\BidPostUpdate
+        arguments:
+            - '@oro_workflow.manager'
+        tags:
+            - { name: doctrine.event_listener, event: postUpdate, connection: default, entity: 'Teachers\Bundle\BidBundle\Entity\Bid' }
