@@ -2,11 +2,44 @@
 
 namespace Teachers\Bundle\UsersBundle\Autocomplete;
 
+use Oro\Bundle\SearchBundle\Engine\Indexer;
+use Oro\Bundle\SearchBundle\Query\Criteria\Criteria;
+use Oro\Bundle\SearchBundle\Query\Query;
 use Oro\Bundle\UserBundle\Autocomplete\UserSearchHandler;
 use Teachers\Bundle\UsersBundle\Helper\Role;
 
 class UsersOnlyStudentsHandler extends UserSearchHandler
 {
+    /**
+     * {@inheritdoc}
+     */
+    protected function searchIds($search, $firstResult, $maxResults): array
+    {
+        $queryObj = $this->indexer->select()
+            ->from($this->entitySearchAlias);
+        $queryObj->getCriteria()
+            ->setMaxResults((int)$maxResults)
+            ->setFirstResult((int)$firstResult);
+
+        if ($search) {
+            $field = Criteria::implodeFieldTypeName(Query::TYPE_TEXT, Indexer::TEXT_ALL_DATA_FIELD);
+            $queryObj->getCriteria()->andWhere(Criteria::expr()->contains($field, $search));
+        }
+
+        $field = Criteria::implodeFieldTypeName(Query::TYPE_TEXT, Role::SEARCH_FIELD_NAME);
+        $queryObj->getCriteria()->andWhere(Criteria::expr()->contains($field, Role::ROLE_STUDENT));
+
+        $ids = [];
+        $result = $this->indexer->query($queryObj);
+        $elements = $result->getElements();
+
+        foreach ($elements as $element) {
+            $ids[] = $element->getRecordId();
+        }
+
+        return $ids;
+    }
+
     /**
      * {@inheritdoc}
      */

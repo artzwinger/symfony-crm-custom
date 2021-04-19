@@ -11,6 +11,8 @@ use Oro\Bundle\UserBundle\Entity\Role as EntityRole;
  */
 class Role
 {
+    const SEARCH_FIELD_NAME = 'assigned_role';
+
     const ROLE_TEACHER = 'ROLE_TEACHER';
     const ROLE_STUDENT = 'ROLE_STUDENT';
     const ROLE_COURSE_MANAGER = 'ROLE_COURSE_MANAGER';

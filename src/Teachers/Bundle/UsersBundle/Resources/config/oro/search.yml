@@ -14,3 +14,12 @@ search:
             -   name: description
                 target_type: text
                 target_fields: [ description ]
+
+    Oro\Bundle\UserBundle\Entity\User:
+        fields:
+            -   name: roles
+                relation_type: many-to-many
+                relation_fields:
+                    -   name: role
+                        target_type: text
+                        target_fields: [ assigned_role ]
