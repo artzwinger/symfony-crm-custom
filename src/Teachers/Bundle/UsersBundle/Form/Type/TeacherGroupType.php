@@ -27,6 +27,10 @@ class TeacherGroupType extends AbstractType
             ->add('description', OroResizeableRichTextType::class, [
                 'required' => false,
                 'label' => 'teachers.users.teacher_group.description.label'
+            ])
+            ->add('teachers', TeacherMultiSelectType::class, [
+                'label' => 'teachers.users.teacher_group.teachers.label',
+                'required' => false
             ]);
     }
 

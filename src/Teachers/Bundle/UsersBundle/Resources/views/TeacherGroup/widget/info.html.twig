@@ -4,9 +4,22 @@
 <div class="widget-content">
     <div class="row-fluid form-horizontal">
         <div class="responsive-block">
-            {{ ui.renderProperty('teachers.users.teacher_group.title.label'|trans, entity.subject) }}
+            {{ ui.renderProperty('teachers.users.teacher_group.title.label'|trans, entity.title) }}
             {{ ui.renderProperty('teachers.users.teacher_group.description.label'|trans, entity.description) }}
-
+            {% if entity.teachers %}
+                <div class="attribute-item">
+                    <label class="attribute-item__term">{{ 'teachers.users.teacher_group.teachers.label'|trans }}</label>
+                    <div class="attribute-item__description"><i class="fas fa-arrow-down"></i></div>
+                </div>
+                {% for teacher in entity.teachers %}
+                <div class="attribute-item">
+                    <label class="attribute-item__term">&nbsp;</label>
+                    <div class="attribute-item__description">
+                    {{ teacher.firstName }} {{ teacher.middleName }} {{ teacher.lastName }} {{ teacher.email }}
+                    </div>
+                </div>
+                {% endfor %}
+            {% endif %}
             {{ entityConfig.renderDynamicFields(entity) }}
         </div>
     </div>

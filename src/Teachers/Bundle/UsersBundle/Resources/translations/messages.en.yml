@@ -1,5 +1,6 @@
 teachers:
     users:
+        teacherGroups.label: Teacher groups
         teacher_group:
             entity_label: Teacher group
             entity_plural_label: Teacher Groups
@@ -7,13 +8,7 @@ teachers:
             id.label: ID
             title.label: Title
             description.label: Description
-            price.label: Price
-            status.label: Status
-            feedback.label: Feedback
-            opportunity.label: Opportunity
-            lead.label: Lead
-            calls.label: Calls
-            emails.label: Emails
+            teachers.label: Teachers
             organization_name.label: Organization name
             owner.label: Organization
 
@@ -36,6 +31,7 @@ teachers:
             choose_course_manager: Choose course manager
             choose_student: Choose student
             choose_teacher: Choose teacher
+            choose_teachers: Choose teachers
             choose_teacher_groups: Choose teacher groups
         block:
             general: General

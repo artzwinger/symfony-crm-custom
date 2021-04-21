@@ -2,6 +2,7 @@
 
 namespace Teachers\Bundle\UsersBundle\Form\Handler;
 
+use Doctrine\ORM\EntityManager;
 use Oro\Bundle\ConfigBundle\Config\ConfigManager;
 use Oro\Bundle\FormBundle\Event\FormHandler\Events;
 use Oro\Bundle\FormBundle\Event\FormHandler\FormProcessEvent;
@@ -12,6 +13,8 @@ use Oro\Bundle\UserBundle\Entity\UserManager;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Teachers\Bundle\UsersBundle\Entity\TeacherGroup;
+use Teachers\Bundle\UsersBundle\Entity\TeacherGroupToUser;
 
 /**
  * @package Teachers\Bundle\UsersBundle\Form\Handler
@@ -32,20 +35,27 @@ class UserHandler implements FormHandlerInterface
      * @var ConfigManager
      */
     protected $userConfigManager;
+    /**
+     * @var \Doctrine\ORM\EntityManager
+     */
+    protected $entityManager;
 
     /**
      * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher
      * @param UserManager $manager
      * @param \Oro\Bundle\ConfigBundle\Config\ConfigManager|null $userConfigManager
+     * @param \Doctrine\ORM\EntityManager $entityManager
      */
     public function __construct(
         EventDispatcherInterface $eventDispatcher,
         UserManager $manager,
+        EntityManager $entityManager,
         ConfigManager $userConfigManager = null
     )
     {
         $this->eventDispatcher = $eventDispatcher;
         $this->manager = $manager;
+        $this->entityManager = $entityManager;
         $this->userConfigManager = $userConfigManager;
     }
 
@@ -74,7 +84,7 @@ class UserHandler implements FormHandlerInterface
             $this->submitPostPutRequest($form, $request);
 
             if ($form->isValid()) {
-                $this->onSuccess($data, $form);
+                $this->onSuccess($data, $form, $request);
                 return true;
             }
         }
@@ -82,7 +92,11 @@ class UserHandler implements FormHandlerInterface
         return false;
     }
 
-    protected function onSuccess(User $user, FormInterface $form)
+    /**
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\ORMException
+     */
+    protected function onSuccess(User $user, FormInterface $form, Request $request)
     {
         if (null === $user->getAuthStatus()) {
             $this->manager->setAuthStatus($user, UserManager::STATUS_ACTIVE);
@@ -93,10 +107,34 @@ class UserHandler implements FormHandlerInterface
         }
 
         $this->manager->updateUser($user);
+        $requestData = $form->getName()
+            ? $request->request->get($form->getName(), [])
+            : $request->request->all();
+        $teacherGroupIds = $requestData['teacherGroups'];
+        if ($teacherGroupIds) {
+            $teacherGroupIds = explode(',', $teacherGroupIds);
+            foreach ($teacherGroupIds as $teacherGroupId) {
+                $this->assignTeacherGroupToUser($user, $teacherGroupId);
+            }
+        }
+    }
+
+    /**
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\ORMException
+     */
+    protected function assignTeacherGroupToUser(User $user, $teacherGroupId)
+    {
+        $record = new TeacherGroupToUser();
+        $record->setUser($user);
+        $record->setTeacherGroup((int)$teacherGroupId);
+        $this->entityManager->persist($record);
+        $this->entityManager->flush($record);
     }
 
     /**
      * @param User $user
+     * @param \Symfony\Component\Form\FormInterface $form
      */
     protected function handleNewUser(User $user, FormInterface $form): void
     {

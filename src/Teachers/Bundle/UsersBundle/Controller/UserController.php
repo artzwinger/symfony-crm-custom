@@ -6,6 +6,7 @@ use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\UserBundle\Entity\User;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use Teachers\Bundle\UsersBundle\Helper\Role as RoleHelper;
@@ -32,7 +33,7 @@ class UserController extends AbstractController
             $this->getRoleHelper()->getTeacherRole()
         ]);
 
-        return $this->update($user);
+        return $this->update($user, $this->get('teachers_users.form.teacher'));
     }
 
     /**
@@ -56,7 +57,7 @@ class UserController extends AbstractController
             $this->getRoleHelper()->getStudentRole()
         ]);
 
-        return $this->update($user);
+        return $this->update($user, $this->get('oro_user.form.user'));
     }
 
     /**
@@ -79,7 +80,7 @@ class UserController extends AbstractController
             $this->getRoleHelper()->getCourseManagerRole()
         ]);
 
-        return $this->update($user);
+        return $this->update($user, $this->get('oro_user.form.user'));
     }
 
     private function getRoleHelper(): ?RoleHelper
@@ -89,14 +90,13 @@ class UserController extends AbstractController
 
     /**
      * @param User $entity
+     * @param \Symfony\Component\Form\FormInterface $form
      * @return RedirectResponse|array
      */
-    private function update(User $entity)
+    private function update(User $entity, FormInterface $form)
     {
         /** @var \Oro\Bundle\FormBundle\Model\UpdateHandlerFacade $handler */
         $handler = $this->get('oro_form.update_handler');
-        /** @var \Symfony\Component\Form\FormInterface $form */
-        $form = $this->get('oro_user.form.user');
         return $handler->update(
             $entity,
             $form,

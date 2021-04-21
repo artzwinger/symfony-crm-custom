@@ -30,6 +30,9 @@ class PlaceholderFilter
             return false;
         }
         $workflowItem = $this->workflowManager->getWorkflowItem($assignment, 'assignment_flow');
+        if (!$workflowItem) {
+            return false;
+        }
         $currentStepName = $workflowItem->getCurrentStep()->getName();
         if ($currentStepName === Assignment::WORKFLOW_STEP_UP_FOR_BID) {
             return true;

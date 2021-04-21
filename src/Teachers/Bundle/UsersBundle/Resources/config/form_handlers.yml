@@ -12,6 +12,7 @@ services:
         arguments:
             - '@oro_form.event.event_dispatcher'
             - '@oro_user.manager'
+            - '@doctrine.orm.entity_manager'
             - '@oro_config.user'
         tags:
             - { name: oro_form.form.handler, alias: teachers_users.form.handler.user }

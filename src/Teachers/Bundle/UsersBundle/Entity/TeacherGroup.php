@@ -71,7 +71,7 @@ class TeacherGroup extends ExtendTeacherGroup
     protected $description;
 
     /**
-     * @var Collection|User[] $tutors
+     * @var Collection|User[] $teachers
      *
      * @ORM\ManyToMany(targetEntity="Oro\Bundle\UserBundle\Entity\User")
      * @ORM\JoinTable(name="teachers_tg_to_usr",
@@ -79,7 +79,7 @@ class TeacherGroup extends ExtendTeacherGroup
      *      inverseJoinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")}
      * )
      */
-    protected $tutors;
+    protected $teachers;
 
     /**
      * @var Organization
@@ -140,17 +140,17 @@ class TeacherGroup extends ExtendTeacherGroup
     /**
      * @return \Doctrine\Common\Collections\Collection|\Oro\Bundle\UserBundle\Entity\User[]
      */
-    public function getTutors()
+    public function getTeachers()
     {
-        return $this->tutors;
+        return $this->teachers;
     }
 
     /**
-     * @param \Doctrine\Common\Collections\Collection|\Oro\Bundle\UserBundle\Entity\User[] $tutors
+     * @param \Doctrine\Common\Collections\Collection|\Oro\Bundle\UserBundle\Entity\User[] $teachers
      */
-    public function setTutors($tutors): void
+    public function setTeachers($teachers): void
     {
-        $this->tutors = $tutors;
+        $this->teachers = $teachers;
     }
 
     /**

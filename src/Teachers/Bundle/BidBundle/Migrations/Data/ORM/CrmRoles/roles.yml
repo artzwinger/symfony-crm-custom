@@ -1,0 +1,6 @@
+ROLE_COURSE_MANAGER:
+    permissions:
+        entity|Teachers\Bundle\BidBundle\Entity\Bid: [ VIEW_SYSTEM, EDIT_SYSTEM ]
+ROLE_TEACHER:
+    permissions:
+        entity|Teachers\Bundle\BidBundle\Entity\Bid: [ CREATE_SYSTEM, VIEW_SYSTEM, EDIT_SYSTEM, DELETE_SYSTEM ]

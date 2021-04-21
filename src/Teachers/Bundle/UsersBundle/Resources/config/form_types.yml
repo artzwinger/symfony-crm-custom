@@ -23,3 +23,10 @@ services:
             - '@teachers_users.helper.role'
         tags:
             - { name: form.type, alias: teacher_select }
+    teachers_users.form.type.teacher_multiselect:
+        class: Teachers\Bundle\UsersBundle\Form\Type\TeacherMultiSelectType
+        arguments:
+            - '@doctrine.orm.entity_manager'
+            - '@teachers_users.helper.role'
+        tags:
+            - { name: form.type, alias: teacher_select }

@@ -1,7 +1,7 @@
 {% extends 'OroUIBundle:actions:view.html.twig' %}
 {% import 'OroUIBundle::macros.html.twig' as ui %}
 {% set subject = entity|oro_format_name|default('N/A'|trans) %}
-{% oro_title_set({ params : {"%assignment.subject%": subject} }) %}
+{% oro_title_set({ params : {"%teacher_group.title%": subject} }) %}
 
 {% block pageHeader %}
     {% set breadcrumbs = {
@@ -21,7 +21,7 @@
             'dataUrl': path('teachers_group_delete', {'id': entity.id}),
             'dataRedirect': path('teachers_group_index'),
             'aCss': 'no-hash remove-button',
-            'id': 'btn-remove-assignment-form',
+            'id': 'btn-remove-teacherGroup-form',
             'dataId': entity.id,
             'entity_label': 'teachers.users.teacher_group.entity_label'|trans,
         }) }}
@@ -37,7 +37,7 @@
 {% endblock %}
 
 {% block content_data %}
-    {% set assignmentInformationWidget %}
+    {% set teacherGroupInformationWidget %}
         {{ oro_widget_render({
             'widgetType': 'block',
             'url': path('teachers_group_info', {id: entity.id}),
@@ -49,12 +49,12 @@
         {
             'title': 'General'|trans,
             'subblocks': [
-                {'data': [assignmentInformationWidget]}
+                {'data': [teacherGroupInformationWidget]}
             ]
         }
     ] %}
 
-    {% set id = 'assignmentView' %}
+    {% set id = 'teacherGroupView' %}
     {% set data = {'dataBlocks': dataBlocks} %}
     {{ parent() }}
 {% endblock %}

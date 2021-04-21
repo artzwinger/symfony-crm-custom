@@ -12,3 +12,8 @@ services:
             - "teachers_group_request"
             - Teachers\Bundle\UsersBundle\Form\Type\TeacherGroupType
             - null
+    teachers_users.form.teacher:
+        class: Symfony\Component\Form\Form
+        public: true
+        factory: [ '@form.factory', createNamed ]
+        arguments: [ "oro_user_user_form", Teachers\Bundle\UsersBundle\Form\Type\TeacherType, null ]

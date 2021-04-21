@@ -31,6 +31,9 @@ class PlaceholderFilter
             return false;
         }
         $workflowItem = $this->workflowManager->getWorkflowItem($application, 'application_flow');
+        if (!$workflowItem) {
+            return false;
+        }
         $currentStepName = $workflowItem->getCurrentStep()->getName();
         if ($currentStepName === Application::WORKFLOW_STEP_WORKING) {
             return true;
