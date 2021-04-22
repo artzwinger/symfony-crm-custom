@@ -2,9 +2,10 @@ ROLE_COURSE_MANAGER:
     permissions:
         entity|Teachers\Bundle\AssignmentBundle\Entity\Assignment: [CREATE_SYSTEM, VIEW_SYSTEM, EDIT_SYSTEM, DELETE_SYSTEM]
         entity|Teachers\Bundle\AssignmentBundle\Entity\AssignmentPrivateNote: [ VIEW_LOCAL, CREATE_LOCAL, EDIT_LOCAL, DELETE_LOCAL ]
+        workflow|assignment_flow: [ VIEW_WORKFLOW_SYSTEM, PERFORM_TRANSITIONS_SYSTEM ]
 ROLE_TEACHER:
     permissions:
-        entity|Teachers\Bundle\AssignmentBundle\Entity\Assignment: [ VIEW_SYSTEM, EDIT_SYSTEM ]
+        entity|Teachers\Bundle\AssignmentBundle\Entity\Assignment: [ VIEW_SYSTEM, EDIT_SYSTEM, VIEW_TEACHERS_QUEUE ]
         entity|Teachers\Bundle\AssignmentBundle\Entity\AssignmentPrivateNote: [ VIEW_LOCAL, CREATE_LOCAL, EDIT_LOCAL, DELETE_LOCAL ]
 ROLE_STUDENT:
     permissions:

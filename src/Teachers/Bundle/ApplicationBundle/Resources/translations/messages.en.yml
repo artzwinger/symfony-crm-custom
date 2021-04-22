@@ -9,6 +9,7 @@ teachers:
         studentLoginInfo.label: Student login info
         price.label: Price
         status.label: Status
+        term.label: Term
         feedback.label: Feedback
         opportunity.label: Opportunity
         lead.label: Lead
@@ -16,6 +17,8 @@ teachers:
         emails.label: Emails
         organization_name.label: Organization name
         owner.label: Organization
+
+        course_managers_queue: Course managers queue
 
         datagrid:
             update: Update

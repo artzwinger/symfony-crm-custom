@@ -1,3 +1,4 @@
 ROLE_COURSE_MANAGER:
     permissions:
         entity|Teachers\Bundle\ApplicationBundle\Entity\Application: [CREATE_SYSTEM, VIEW_SYSTEM, EDIT_SYSTEM, DELETE_SYSTEM]
+        workflow|application_flow: [ VIEW_WORKFLOW_SYSTEM, PERFORM_TRANSITIONS_SYSTEM ]

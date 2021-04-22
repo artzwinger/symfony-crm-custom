@@ -1,5 +1,7 @@
 teachers:
     users:
+        teachergroup:
+            entity_label: Teacher group
         teacherGroups.label: Teacher groups
         teacher_group:
             entity_label: Teacher group

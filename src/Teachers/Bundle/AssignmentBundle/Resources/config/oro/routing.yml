@@ -3,6 +3,11 @@ teachers_assignment:
     type: annotation
     prefix: /assignment
 
+teachers_assignment_teacher:
+    resource: "@TeachersAssignmentBundle/Controller/AssignmentTeacherController.php"
+    type: annotation
+    prefix: /assignment_teacher
+
 teachers_assignment_private_note:
     resource: "@TeachersAssignmentBundle/Controller/AssignmentPrivateNoteController.php"
     type: annotation

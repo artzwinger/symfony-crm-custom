@@ -99,6 +99,9 @@ class Application extends ExtendApplication implements DatesAwareInterface
     const STATUS_WORKING = 'working';
     const STATUS_COMPLETE = 'complete';
 
+    const TERM_SHORT = 'short';
+    const TERM_LONG = 'long';
+
     const WORKFLOW_STEP_NEW = 'new';
     const WORKFLOW_STEP_WORKING = 'working';
     const WORKFLOW_STEP_COMPLETE = 'complete';
@@ -125,6 +128,20 @@ class Application extends ExtendApplication implements DatesAwareInterface
             ],
             self::STATUS_COMPLETE => [
                 'name' => 'Complete',
+                'is_default' => false
+            ],
+        ];
+    }
+
+    public static function getAvailableTerms(): array
+    {
+        return [
+            self::TERM_SHORT => [
+                'name' => 'Short-term',
+                'is_default' => true
+            ],
+            self::TERM_LONG => [
+                'name' => 'Long-term',
                 'is_default' => false
             ],
         ];

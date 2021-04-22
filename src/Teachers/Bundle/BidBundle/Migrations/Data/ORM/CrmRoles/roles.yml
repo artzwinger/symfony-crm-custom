@@ -1,6 +1,7 @@
 ROLE_COURSE_MANAGER:
     permissions:
         entity|Teachers\Bundle\BidBundle\Entity\Bid: [ VIEW_SYSTEM, EDIT_SYSTEM ]
+        workflow|bid_flow: [ VIEW_WORKFLOW_SYSTEM, PERFORM_TRANSITIONS_SYSTEM ]
 ROLE_TEACHER:
     permissions:
         entity|Teachers\Bundle\BidBundle\Entity\Bid: [ CREATE_SYSTEM, VIEW_SYSTEM, EDIT_SYSTEM, DELETE_SYSTEM ]

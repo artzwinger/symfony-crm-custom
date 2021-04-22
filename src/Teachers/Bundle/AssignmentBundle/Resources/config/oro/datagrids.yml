@@ -9,11 +9,17 @@ datagrids:
                     - assignment.id
                     - assignment.subject
                     - assignment.createdAt
+                    - CONCAT(course_manager.firstName, course_manager.lastName) as courseManagerFullName
                 from:
                     - { table: 'Teachers\Bundle\AssignmentBundle\Entity\Assignment', alias: assignment }
+                join:
+                    inner:
+                        - { join: assignment.courseManager, alias: course_manager }
         columns:
             subject:
                 label: teachers.assignment.subject.label
+            courseManagerFullName:
+                label: teachers.assignment.course_manager_name.label
             createdAt:
                 frontend_type: datetime
                 label: oro.ui.created_at
@@ -71,3 +77,21 @@ datagrids:
             entityHint: teachers.assignment.entity_plural_label
             entity_pagination: true
 
+    teachers-assignments-teacher-grid:
+        extends: teachers-assignments-grid
+        source:
+            type: orm
+            query:
+                select:
+                    - tg.title as tgtitle
+                join:
+                    inner:
+                        - { join: assignment.teacherGroups, alias: tg }
+                        - { join: Teachers\Bundle\UsersBundle\Entity\TeacherGroupToUser, alias: tg_to_usr, conditionType: WITH, condition: "tg_to_usr.teacherGroup = tg.id" }
+                        - { join: tg_to_usr.user, alias: tg_user }
+                where:
+                    and:
+                        - tg_user.id = @oro_security.token_accessor->getUserId
+        columns:
+            tgtitle:
+                label: teachers.assignment.teacher_group.label

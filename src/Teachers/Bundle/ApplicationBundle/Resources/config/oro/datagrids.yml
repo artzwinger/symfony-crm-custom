@@ -8,21 +8,30 @@ datagrids:
                 select:
                     - application.id
                     - application.subject
+                    - applicationterm.name as termName
+                    - applicationterm.id as termId
                     - application.createdAt
                 from:
                     - { table: 'Teachers\Bundle\ApplicationBundle\Entity\Application', alias: application }
+                join:
+                    left:
+                        - { join: application.term, alias: applicationterm }
         columns:
             subject:
                 label: teachers.application.subject.label
             createdAt:
                 frontend_type: datetime
                 label: oro.ui.created_at
+            termName:
+                label: teachers.application.term.label
         sorters:
             columns:
                 subject:
                     data_name: application.subject
                 createdAt:
                     data_name: application.createdAt
+                termName:
+                    data_name: termName
             default:
                 createdAt: DESC
         filters:
@@ -33,6 +42,10 @@ datagrids:
                 createdAt:
                     type: datetime
                     data_name: application.createdAt
+                termName:
+                    type: enum
+                    enum_code: application_term
+                    data_name: termId
         properties:
             id: ~
             view_link:

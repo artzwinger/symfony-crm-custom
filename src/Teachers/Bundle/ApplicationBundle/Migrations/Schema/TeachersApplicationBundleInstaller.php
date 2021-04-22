@@ -40,6 +40,7 @@ class TeachersApplicationBundleInstaller implements Installation, ExtendExtensio
     {
         $this->createApplicationTable($schema);
         $this->addStatusesEnum($schema);
+        $this->addTermEnum($schema);
     }
 
     /**
@@ -56,6 +57,25 @@ class TeachersApplicationBundleInstaller implements Installation, ExtendExtensio
 
         $options = new OroOptions();
         $options->set('enum', 'immutable_codes', array_keys(Application::getAvailableStatuses()));
+        $options->set('extend', 'owner', ExtendScope::OWNER_SYSTEM);
+
+        $enumTable->addOption(OroOptions::KEY, $options);
+    }
+
+    /**
+     * @param Schema $schema
+     */
+    protected function addTermEnum(Schema $schema)
+    {
+        $enumTable = $this->extendExtension->addEnumField(
+            $schema,
+            'teachers_application',
+            'term',
+            'application_term'
+        );
+
+        $options = new OroOptions();
+        $options->set('enum', 'immutable_codes', array_keys(Application::getAvailableTerms()));
         $options->set('extend', 'owner', ExtendScope::OWNER_SYSTEM);
 
         $enumTable->addOption(OroOptions::KEY, $options);

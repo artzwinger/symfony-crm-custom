@@ -8,12 +8,20 @@ navigation:
                 extras:
                     routes: [ 'teachers_assignment_*' ]
                 display: true
+            teachers_assignment_assignment_teacher:
+                label: 'teachers.assignment.teachers_queue_label'
+                route: 'teachers_assignment_teacher_index'
+                position: 30
+                extras:
+                    routes: [ 'teachers_assignment_*' ]
+                display: true
         tree:
             application_menu:
                 children:
                     activities_tab:
                         children:
                             teachers_assignment_assignment: ~
+                            teachers_assignment_assignment_teacher: ~
     titles:
         teachers_assignment_index: ~
         teachers_assignment_view: '%assignment.subject%'

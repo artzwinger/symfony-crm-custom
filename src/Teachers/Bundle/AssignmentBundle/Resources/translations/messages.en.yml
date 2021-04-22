@@ -1,6 +1,8 @@
 teachers:
     assignment:
         # activity
+        teacher_group.label: Tutors group
+        course_manager_name.label: Course manager
         activity_item:
             created_by: Created by
             updated_by: Updated by
@@ -10,6 +12,10 @@ teachers:
         winning_assignment: Winning assignment
         add_entity: Create assignment
         add_entity.title: Create assignment
+        permission:
+            view_teachers_queue:
+                label: View tutors queue
+        teachers_queue_label: Tutors queue
 
         assignmentprivatenote:
             activity_item:

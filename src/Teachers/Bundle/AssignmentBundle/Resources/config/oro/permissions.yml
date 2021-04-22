@@ -1,0 +1,7 @@
+oro_permissions:
+    VIEW_TEACHERS_QUEUE:
+        label: teachers.assignment.permission.view_teachers_queue.label
+        group_names: ""
+        apply_to_all: false
+        apply_to_entities:
+            - 'Teachers\Bundle\AssignmentBundle\Entity\Assignment'

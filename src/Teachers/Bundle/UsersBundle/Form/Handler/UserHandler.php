@@ -8,6 +8,7 @@ use Oro\Bundle\FormBundle\Event\FormHandler\Events;
 use Oro\Bundle\FormBundle\Event\FormHandler\FormProcessEvent;
 use Oro\Bundle\FormBundle\Form\Handler\FormHandlerInterface;
 use Oro\Bundle\FormBundle\Form\Handler\RequestHandlerTrait;
+use Oro\Bundle\SecurityBundle\Authentication\TokenAccessorInterface;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\UserBundle\Entity\UserManager;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -39,17 +40,23 @@ class UserHandler implements FormHandlerInterface
      * @var \Doctrine\ORM\EntityManager
      */
     protected $entityManager;
+    /**
+     * @var \Oro\Bundle\SecurityBundle\Authentication\TokenAccessorInterface
+     */
+    private $tokenAccessor;
 
     /**
      * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher
      * @param UserManager $manager
-     * @param \Oro\Bundle\ConfigBundle\Config\ConfigManager|null $userConfigManager
      * @param \Doctrine\ORM\EntityManager $entityManager
+     * @param \Oro\Bundle\SecurityBundle\Authentication\TokenAccessorInterface $tokenAccessor
+     * @param \Oro\Bundle\ConfigBundle\Config\ConfigManager|null $userConfigManager
      */
     public function __construct(
         EventDispatcherInterface $eventDispatcher,
         UserManager $manager,
         EntityManager $entityManager,
+        TokenAccessorInterface $tokenAccessor,
         ConfigManager $userConfigManager = null
     )
     {
@@ -57,6 +64,7 @@ class UserHandler implements FormHandlerInterface
         $this->manager = $manager;
         $this->entityManager = $entityManager;
         $this->userConfigManager = $userConfigManager;
+        $this->tokenAccessor = $tokenAccessor;
     }
 
     /**
@@ -140,13 +148,12 @@ class UserHandler implements FormHandlerInterface
     {
         $sendPasswordInEmail = $this->userConfigManager &&
             $this->userConfigManager->get('oro_user.send_password_in_invitation_email');
-
         if (!$sendPasswordInEmail && !$user->getConfirmationToken()) {
             $user->setConfirmationToken($user->generateToken());
         }
-
         if ($form->has('passwordGenerate') && $form->get('passwordGenerate')->getData()) {
             $user->setPlainPassword($this->manager->generatePassword(10));
         }
+        $user->setOrganization($this->tokenAccessor->getOrganization());
     }
 }

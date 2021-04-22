@@ -43,7 +43,7 @@ class AssignmentController extends AbstractController
     /**
      * @Route(name="teachers_assignment_index")
      * @Template("@TeachersAssignment/Assignment/index.html.twig")
-     * @AclAncestor("teachers_assignment_view")
+     * @AclAncestor("teachers_assignment_create")
      */
     public function indexAction(): array
     {
