@@ -20,7 +20,7 @@ teachers:
         price.label: Price
         organization_name.label: Organization name
         student.label: Student
-        teacher.label: Teacher
+        teacher.label: Tutor
         controller:
             bid:
                 saved:

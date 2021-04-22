@@ -46,8 +46,8 @@ teachers:
         organization_name.label: Organization name
         course_manager.label: Course manager
         student.label: Student
-        teacher.label: Teacher
-        teacherGroups.label: Teacher groups
+        teacher.label: Tutor
+        teacherGroups.label: Tutor groups
 
         datagrid:
             update: Update
