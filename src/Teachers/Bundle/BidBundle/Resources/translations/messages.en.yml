@@ -2,8 +2,8 @@ teachers:
     bid:
         #activity
         activity_item:
-            created_by: Created by
-            updated_by: Updated by
+            created_by: created by {{ user }}
+            updated_by: updated by {{ user }}
         view_bid: View bid
         update_bid: Update bid
         delete_bid: Delete bid

@@ -1,12 +1,14 @@
 {% import 'OroUIBundle::macros.html.twig' as ui %}
+{% import 'OroActivityBundle::macros.html.twig' as AC %}
 {% import 'OroEntityConfigBundle::macros.html.twig' as entityConfig %}
 
 <div class="widget-content">
     <div class="row-fluid form-horizontal">
         <div class="responsive-block">
-            {{ ui.renderProperty('teachers.assignment.subject.label'|trans, entity.subject) }}
-            {{ ui.renderProperty('teachers.assignment.description.label'|trans, entity.description) }}
-
+            <div class="activity-context-activity-list">
+                {{ AC.activity_contexts(entity, target, true, 'oronote/js/app/components/note-context-component') }}
+            </div>
+            {{ ui.renderProperty('teachers.assignment.assignmentprivatenote.message.label'|trans, entity.message) }}
             {{ entityConfig.renderDynamicFields(entity) }}
         </div>
     </div>

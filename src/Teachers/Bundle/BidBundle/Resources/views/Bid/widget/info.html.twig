@@ -1,9 +1,13 @@
 {% import 'OroUIBundle::macros.html.twig' as ui %}
+{% import 'OroActivityBundle::macros.html.twig' as AC %}
 {% import 'OroEntityConfigBundle::macros.html.twig' as entityConfig %}
 
 <div class="widget-content">
     <div class="row-fluid form-horizontal">
         <div class="responsive-block">
+            <div class="activity-context-activity-list">
+                {{ AC.activity_contexts(entity, target, true, 'oronote/js/app/components/note-context-component') }}
+            </div>
             {{ ui.renderProperty('teachers.bid.subject.label'|trans, entity.subject) }}
             {{ ui.renderProperty('teachers.bid.price.label'|trans, entity.price) }}
             {{ ui.renderProperty('teachers.bid.teacher.label'|trans, entity.teacher) }}

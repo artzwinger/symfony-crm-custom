@@ -21,12 +21,12 @@
 {% block activityShortMessage %}
     <% if (!_.isUndefined(data.statusId) && data.statusId) { %>
     <div class="activity-short-message">
-        <% if (data.statusId === 'closed') { %>
+        <% if (data.statusId === 'winning') { %>
         <div class="badge badge-pill badge-disabled status-disabled"><span class="icon-status-disabled fa-circle"
                                                                            aria-hidden="true"></span>
             <%- data.statusName %>
         </div>
-        <% } else if (data.statusId === 'in_progress') { %>
+        <% } else if (data.statusId === 'pending') { %>
         <div class="badge badge-pill badge-tentatively status-tentatively"><span
                     class="icon-status-tentatively fa-circle" aria-hidden="true"></span>
             <%- data.statusName %>

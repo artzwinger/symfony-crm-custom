@@ -90,7 +90,23 @@ class BidActivityListProvider implements
      */
     public function getData(ActivityList $activityListEntity): array
     {
-        return [];
+        /** @var Bid $bid */
+        $bid = $this->doctrineHelper
+            ->getEntityManager($activityListEntity->getRelatedActivityClass())
+            ->getRepository($activityListEntity->getRelatedActivityClass())
+            ->find($activityListEntity->getRelatedActivityId());
+
+        if (!$bid->getStatus()) {
+            return [
+                'statusId' => null,
+                'statusName' => null,
+            ];
+        }
+
+        return [
+            'statusId' => $bid->getStatus()->getId(),
+            'statusName' => $bid->getStatus()->getName(),
+        ];
     }
 
     /**

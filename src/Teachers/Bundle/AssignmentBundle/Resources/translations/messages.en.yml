@@ -4,8 +4,8 @@ teachers:
         teacher_group.label: Tutors group
         course_manager_name.label: Course manager
         activity_item:
-            created_by: Created by
-            updated_by: Updated by
+            created_by: created by {{ user }}
+            updated_by: updated by {{ user }}
         view_assignment: View assignment
         update_assignment: Update assignment
         delete_assignment: Delete assignment
@@ -19,8 +19,8 @@ teachers:
 
         assignmentprivatenote:
             activity_item:
-                created_by: Created by
-                updated_by: Updated by
+                created_by: created by {{ user }}
+                updated_by: updated by {{ user }}
             update: Update private note
             delete: Delete private note
             add_entity: Add private note
