@@ -31,7 +31,7 @@ class AssignmentPrivateNoteController extends AbstractController
      *      id="teachers_assignment_private_note_view",
      *      type="entity",
      *      permission="VIEW",
-     *      class="TeachersAssignmentBundle:Assignment"
+     *      class="TeachersAssignmentBundle:AssignmentPrivateNote"
      * )
      */
     public function viewAction(AssignmentPrivateNote $assignmentPrivateNote): array
@@ -71,10 +71,10 @@ class AssignmentPrivateNoteController extends AbstractController
      * @Route("/update/{id}", name="teachers_assignment_private_note_update", requirements={"id"="\d+"}, options={"expose"=true})
      * @Template("@TeachersAssignment/AssignmentPrivateNote/update.html.twig")
      * @Acl(
-     *      id="teachers_assignment_edit",
+     *      id="teachers_assignment_private_note_edit",
      *      type="entity",
      *      permission="EDIT",
-     *      class="TeachersAssignmentBundle:Assignment"
+     *      class="TeachersAssignmentBundle:AssignmentPrivateNote"
      * )
      * @param \Teachers\Bundle\AssignmentBundle\Entity\AssignmentPrivateNote $assignmentPrivateNote
      * @return array|RedirectResponse
@@ -91,7 +91,7 @@ class AssignmentPrivateNoteController extends AbstractController
      *      id="teachers_assignment_private_note_create",
      *      type="entity",
      *      permission="CREATE",
-     *      class="TeachersAssignmentBundle:Assignment"
+     *      class="TeachersAssignmentBundle:AssignmentPrivateNote"
      * )
      */
     public function createAction()
@@ -111,7 +111,7 @@ class AssignmentPrivateNoteController extends AbstractController
      *      id="teachers_assignment_private_note_delete",
      *      type="entity",
      *      permission="DELETE",
-     *      class="TeachersAssignmentBundle:Assignment"
+     *      class="TeachersAssignmentBundle:AssignmentPrivateNote"
      * )
      * @CsrfProtection()
      * @param \Teachers\Bundle\AssignmentBundle\Entity\AssignmentPrivateNote $assignment
