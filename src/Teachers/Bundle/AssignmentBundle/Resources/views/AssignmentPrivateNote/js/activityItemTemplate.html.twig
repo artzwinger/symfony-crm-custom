@@ -6,40 +6,6 @@
 
 {% block activityDetails %}
     {{ entityName }}
-    <% var template = (verb == 'create')
-    ? {{ 'teachers.assignment.assignmentprivatenote.activity_item.created_by'|trans|json_encode|raw }}
-    : {{ 'teachers.assignment.assignmentprivatenote.activity_item.updated_by'|trans|json_encode|raw }};
-    %>
-    <%= _.template(template, { interpolate: /\{\{(.+?)\}\}/g })({
-    user: owner_url ? '<a class="user" href="' + owner_url + '">' + _.escape(owner) + '</a>' :  '<span class="user">' + _.escape(owner) + '</span>',
-    date: '<i class="date">' + createdAt + '</i>',
-    editor: editor_url ? '<a class="user" href="' + editor_url + '">' + _.escape(editor) + '</a>' : _.escape(editor),
-    editor_date: '<i class="date">' + updatedAt + '</i>'
-    }) %>
-{% endblock %}
-
-{% block activityShortMessage %}
-    <% if (!_.isUndefined(data.statusId) && data.statusId) { %>
-    <div class="activity-short-message">
-        <% if (data.statusId === 'closed') { %>
-        <div class="badge badge-pill badge-disabled status-disabled"><span class="icon-status-disabled fa-circle"
-                                                                           aria-hidden="true"></span>
-            <%- data.statusName %>
-        </div>
-        <% } else if (data.statusId === 'in_progress') { %>
-        <div class="badge badge-pill badge-tentatively status-tentatively"><span
-                    class="icon-status-tentatively fa-circle" aria-hidden="true"></span>
-            <%- data.statusName %>
-        </div>
-        <% } else { %>
-        <div class="badge badge-pill badge-enabled status-enabled"><span class="icon-status-enabled fa-circle"
-                                                                         aria-hidden="true"></span>
-            <%- data.statusName %>
-        </div>
-        <% } %>
-    </div>
-    <% } %>
-    {{ parent() }}
 {% endblock %}
 
 {% block activityActions %}
@@ -56,11 +22,11 @@
     {% set action %}
         <% if (editable) { %>
         <a href="#" class="dropdown-item action item-edit-button"
-           title="{{ 'teachers.assignment.assignmentprivatenote.update'|trans({'{{ entity }}': entityName}) }}"
+           title="{{ 'teachers.assignment.private_note.update'|trans({'{{ entity }}': entityName}) }}"
            data-action-extra-options="{{ {dialogOptions: {width: 1000}}|json_encode }}">
             <span class="fa-pencil-square-o hide-text"
-                  aria-hidden="true">{{ 'teachers.assignment.assignmentprivatenote.update'|trans({'{{ entity }}': entityName}) }}</span>
-            {{ 'teachers.assignment.assignmentprivatenote.update'|trans({'{{ entity }}': entityName}) }}
+                  aria-hidden="true">{{ 'teachers.assignment.private_note.update'|trans({'{{ entity }}': entityName}) }}</span>
+            {{ 'teachers.assignment.private_note.update'|trans({'{{ entity }}': entityName}) }}
         </a>
         <% } %>
     {% endset %}
@@ -69,10 +35,10 @@
     {% set action %}
         <% if (removable) { %>
         <a href="#" class="dropdown-item action item-remove-button"
-           title="{{ 'teachers.assignment.assignmentprivatenote.delete'|trans({'{{ entity }}': entityName}) }}">
+           title="{{ 'teachers.assignment.private_note.delete'|trans({'{{ entity }}': entityName}) }}">
             <span class="fa-trash-o hide-text"
-                  aria-hidden="true">{{ 'teachers.assignment.assignmentprivatenote.delete'|trans({'{{ entity }}': entityName}) }}</span>
-            {{ 'teachers.assignment.assignmentprivatenote.delete'|trans({'{{ entity }}': entityName}) }}
+                  aria-hidden="true">{{ 'teachers.assignment.private_note.delete'|trans({'{{ entity }}': entityName}) }}</span>
+            {{ 'teachers.assignment.private_note.delete'|trans({'{{ entity }}': entityName}) }}
         </a>
         <% } %>
     {% endset %}

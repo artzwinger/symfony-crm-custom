@@ -11,6 +11,7 @@ use Oro\Bundle\EntityExtendBundle\Migration\OroOptions;
 use Oro\Bundle\MigrationBundle\Migration\Installation;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 use Teachers\Bundle\AssignmentBundle\Entity\Assignment;
+use Teachers\Bundle\AssignmentBundle\Entity\AssignmentMessage;
 
 class TeachersAssignmentBundleInstaller implements Installation, ActivityExtensionAwareInterface, ExtendExtensionAwareInterface
 {
@@ -49,7 +50,8 @@ class TeachersAssignmentBundleInstaller implements Installation, ActivityExtensi
     public function up(Schema $schema, QueryBag $queries)
     {
         /** Tables generation **/
-        $this->createAssignmentCommentTable($schema);
+        $this->createAssignmentPrivateNoteTable($schema);
+        $this->createAssignmentMessageTable($schema);
         $this->createAssignmentTable($schema);
         $this->createAssignmentToTeacherGroupTable($schema);
     }
@@ -70,10 +72,13 @@ class TeachersAssignmentBundleInstaller implements Installation, ActivityExtensi
         $table->addColumn('organization_id', 'integer', ['notnull' => false]);
         $table->addColumn('course_manager_id', 'integer', ['notnull' => false]);
         $table->setPrimaryKey(['id']);
+
         $this->activityExtension->addActivityAssociation($schema, 'teachers_assignment', 'oro_user');
+        $this->activityExtension->addActivityAssociation($schema, 'teachers_assignment', 'teachers_application');
+
         $this->activityExtension->addActivityAssociation($schema, 'oro_note', 'teachers_assignment');
         $this->activityExtension->addActivityAssociation($schema, 'teachers_assignment_priv_note', 'teachers_assignment');
-        $this->activityExtension->addActivityAssociation($schema, 'teachers_assignment', 'teachers_application');
+        $this->activityExtension->addActivityAssociation($schema, 'teachers_assignment_message', 'teachers_assignment');
 
         $enumTable = $this->extendExtension->addEnumField(
             $schema,
@@ -106,7 +111,7 @@ class TeachersAssignmentBundleInstaller implements Installation, ActivityExtensi
      *
      * @param Schema $schema
      */
-    protected static function createAssignmentCommentTable(Schema $schema)
+    protected function createAssignmentPrivateNoteTable(Schema $schema)
     {
         $table = $schema->createTable('teachers_assignment_priv_note');
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
@@ -120,5 +125,38 @@ class TeachersAssignmentBundleInstaller implements Installation, ActivityExtensi
         $table->addIndex(['updated_by_id'], 'trs_asg_cmt_upd_by_idx', []);
         $table->addIndex(['owner_id'], 'trs_asg_cmt_owner_idx', []);
         $table->addIndex(['organization_id'], 'trs_asg_cmt_org_idx', []);
+    }
+
+    /**
+     * Create orocrm_case_comment table
+     *
+     * @param Schema $schema
+     */
+    protected function createAssignmentMessageTable(Schema $schema)
+    {
+        $table = $schema->createTable('teachers_assignment_message');
+        $table->addColumn('id', 'integer', ['autoincrement' => true]);
+        $table->addColumn('updated_by_id', 'integer', ['notnull' => false]);
+        $table->addColumn('owner_id', 'integer', ['notnull' => false]);
+        $table->addColumn('organization_id', 'integer', ['notnull' => false]);
+        $table->addColumn('message', 'text', []);
+        $table->addColumn('createdAt', 'datetime', []);
+        $table->addColumn('updatedAt', 'datetime', []);
+        $table->setPrimaryKey(['id']);
+        $table->addIndex(['updated_by_id'], 'trs_asg_cmt_upd_by_idx', []);
+        $table->addIndex(['owner_id'], 'trs_asg_cmt_owner_idx', []);
+        $table->addIndex(['organization_id'], 'trs_asg_cmt_org_idx', []);
+
+        $enumTable = $this->extendExtension->addEnumField(
+            $schema,
+            'teachers_assignment_message',
+            'status',
+            'assignment_msg_status'
+        );
+
+        $options = new OroOptions();
+        $options->set('enum', 'immutable_codes', AssignmentMessage::getAvailableStatuses());
+
+        $enumTable->addOption(OroOptions::KEY, $options);
     }
 }

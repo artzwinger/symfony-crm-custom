@@ -30,3 +30,20 @@ oro:
                     label: Reopen
                     warning_message: ''
             label: Assignment Flow
+        assignment_message_flow:
+            step:
+                pending:
+                    label: Pending
+                approved:
+                    label: Approved
+                not_approved:
+                    label: Not approved
+            attribute: ~
+            transition:
+                approve:
+                    label: Approve
+                    warning_message: ''
+                unapprove:
+                    label: Mark as dangerous
+                    warning_message: ''
+            label: Assignment message flow

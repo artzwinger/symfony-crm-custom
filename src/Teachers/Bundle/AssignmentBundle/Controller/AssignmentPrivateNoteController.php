@@ -143,7 +143,7 @@ class AssignmentPrivateNoteController extends AbstractController
         return $handler->update(
             $entity,
             $form,
-            $this->get('translator')->trans('teachers.assignment.assignmentprivatenote.controller.assignment.saved.message')
+            $this->get('translator')->trans('teachers.assignment.private_note.controller.assignment.saved.message')
         );
     }
 

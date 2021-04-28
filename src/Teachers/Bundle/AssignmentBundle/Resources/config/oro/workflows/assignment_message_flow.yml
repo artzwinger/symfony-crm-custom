@@ -1,0 +1,15 @@
+imports:
+    - { resource: 'assignment_message_flow/steps.yml' }
+    - { resource: 'assignment_message_flow/attributes.yml' }
+    - { resource: 'assignment_message_flow/transitions.yml' }
+    - { resource: 'assignment_message_flow/transition_definitions.yml' }
+    - { resource: 'assignment_message_flow/entity_restrictions.yml' }
+
+workflows:
+    assignment_message_flow:
+        entity: Teachers\Bundle\AssignmentBundle\Entity\AssignmentMessage
+        entity_attribute: assignment_message
+        start_step: pending
+
+        defaults:
+            active: true

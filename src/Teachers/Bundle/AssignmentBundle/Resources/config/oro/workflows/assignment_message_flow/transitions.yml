@@ -1,0 +1,13 @@
+workflows:
+    assignment_message_flow:
+        transitions:
+            approve:
+                step_to: approved
+                frontend_options:
+                    icon: 'fa-thumbs-up'
+                transition_definition: approve_definition
+            unapprove:
+                step_to: not_approved
+                frontend_options:
+                    icon: 'fa-thumbs-down'
+                transition_definition: unapprove_definition

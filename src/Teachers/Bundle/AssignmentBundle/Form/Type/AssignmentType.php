@@ -12,7 +12,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Teachers\Bundle\AssignmentBundle\Entity\Assignment;
 use Teachers\Bundle\UsersBundle\Form\Type\StudentSelectType;
 use Teachers\Bundle\UsersBundle\Form\Type\TeacherGroupsMultiSelectType;
-use Teachers\Bundle\UsersBundle\Form\Type\TeacherSelectType;
 
 /**
  * Form type for Assignment entity

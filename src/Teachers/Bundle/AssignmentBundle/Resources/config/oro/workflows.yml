@@ -1,2 +1,3 @@
 imports:
     - { resource: 'workflows/assignment_flow.yml' }
+    - { resource: 'workflows/assignment_message_flow.yml' }

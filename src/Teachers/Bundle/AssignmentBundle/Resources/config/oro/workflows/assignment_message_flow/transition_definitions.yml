@@ -1,0 +1,21 @@
+workflows:
+    assignment_message_flow:
+        transition_definitions:
+            __start___definition:
+                actions:
+                    -   '@request_enum_entity':
+                            enum_code: assignment_msg_status
+                            identifier: pending
+                            attribute: $assignment_message.status
+            approve_definition:
+                actions:
+                    -   '@request_enum_entity':
+                            enum_code: assignment_msg_status
+                            identifier: approved
+                            attribute: $assignment_message.status
+            unapprove_definition:
+                actions:
+                    -   '@request_enum_entity':
+                            enum_code: assignment_msg_status
+                            identifier: not_approved
+                            attribute: $assignment_message.status

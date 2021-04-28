@@ -14,12 +14,14 @@ use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Component\DependencyInjection\ServiceLink;
-use Teachers\Bundle\AssignmentBundle\Entity\AssignmentPrivateNote;
+use Symfony\Contracts\Translation\TranslatorInterface;
+use Teachers\Bundle\AssignmentBundle\Entity\AssignmentMessage;
+use Teachers\Bundle\UsersBundle\Helper\Role;
 
 /**
  * Provides a way to use Assignment entity in an activity list.
  */
-class AssignmentPrivateNoteActivityListProvider implements
+class AssignmentMessageActivityListProvider implements
     ActivityListProviderInterface,
     CommentProviderInterface,
     ActivityListDateProviderInterface
@@ -35,24 +37,38 @@ class AssignmentPrivateNoteActivityListProvider implements
 
     /** @var CommentAssociationHelper */
     protected $commentAssociationHelper;
+    /**
+     * @var TranslatorInterface
+     */
+    protected $translator;
+    /**
+     * @var Role
+     */
+    protected $roleHelper;
 
     /**
      * @param DoctrineHelper $doctrineHelper
      * @param ServiceLink $entityOwnerAccessorLink
      * @param ActivityAssociationHelper $activityAssociationHelper
      * @param CommentAssociationHelper $commentAssociationHelper
+     * @param TranslatorInterface $translator
+     * @param Role $roleHelper
      */
     public function __construct(
         DoctrineHelper $doctrineHelper,
         ServiceLink $entityOwnerAccessorLink,
         ActivityAssociationHelper $activityAssociationHelper,
-        CommentAssociationHelper $commentAssociationHelper
+        CommentAssociationHelper $commentAssociationHelper,
+        TranslatorInterface $translator,
+        Role $roleHelper
     )
     {
         $this->doctrineHelper = $doctrineHelper;
         $this->entityOwnerAccessorLink = $entityOwnerAccessorLink;
         $this->activityAssociationHelper = $activityAssociationHelper;
         $this->commentAssociationHelper = $commentAssociationHelper;
+        $this->translator = $translator;
+        $this->roleHelper = $roleHelper;
     }
 
     /**
@@ -62,7 +78,7 @@ class AssignmentPrivateNoteActivityListProvider implements
     {
         return $this->activityAssociationHelper->isActivityAssociationEnabled(
             $entityClass,
-            AssignmentPrivateNote::class,
+            AssignmentMessage::class,
             $accessible
         );
     }
@@ -72,7 +88,7 @@ class AssignmentPrivateNoteActivityListProvider implements
      */
     public function getSubject($entity): ?string
     {
-        return '';
+        return null;
     }
 
     /**
@@ -80,8 +96,7 @@ class AssignmentPrivateNoteActivityListProvider implements
      */
     public function getDescription($entity): ?string
     {
-        /** @var $entity AssignmentPrivateNote */
-        return $entity->getMessage();
+        return null;
     }
 
     /**
@@ -89,7 +104,36 @@ class AssignmentPrivateNoteActivityListProvider implements
      */
     public function getData(ActivityList $activityListEntity): array
     {
-        return [];
+        /** @var AssignmentMessage $message */
+        $message = $this->doctrineHelper
+            ->getEntityManager($activityListEntity->getRelatedActivityClass())
+            ->getRepository($activityListEntity->getRelatedActivityClass())
+            ->find($activityListEntity->getRelatedActivityId());
+
+        $data = [
+            'statusId' => null,
+            'statusName' => null
+        ];
+
+        if ($message->getStatus()) {
+            $data['statusId'] = $message->getStatus()->getId();
+            $data['statusName'] = $message->getStatus()->getName();
+        }
+
+        if ($this->canViewUnapprovedMessages($message)) {
+            $data['message'] = $message->getMessage();
+            return $data;
+        }
+
+        if ($message->isApproved()) {
+            $data['message'] = $message->getMessage();
+        } else {
+            $data['message'] = $message->isNotApproved()
+                ? $this->translator->trans('teachers.assignment.message.not_approved_message')
+                : $this->translator->trans('teachers.assignment.message.approval_pending_message');
+        }
+
+        return $data;
     }
 
     /**
@@ -97,7 +141,7 @@ class AssignmentPrivateNoteActivityListProvider implements
      */
     public function getOwner($entity): ?User
     {
-        /** @var $entity AssignmentPrivateNote */
+        /** @var $entity AssignmentMessage */
         return $entity->getOwner();
     }
 
@@ -106,7 +150,7 @@ class AssignmentPrivateNoteActivityListProvider implements
      */
     public function getCreatedAt($entity): ?DateTime
     {
-        /** @var $entity AssignmentPrivateNote */
+        /** @var $entity AssignmentMessage */
         return $entity->getCreatedAt();
     }
 
@@ -115,7 +159,7 @@ class AssignmentPrivateNoteActivityListProvider implements
      */
     public function getUpdatedAt($entity): ?DateTime
     {
-        /** @var $entity AssignmentPrivateNote */
+        /** @var $entity AssignmentMessage */
         return $entity->getUpdatedAt();
     }
 
@@ -124,7 +168,7 @@ class AssignmentPrivateNoteActivityListProvider implements
      */
     public function getOrganization($activityEntity): ?Organization
     {
-        /** @var $activityEntity AssignmentPrivateNote */
+        /** @var $activityEntity AssignmentMessage */
         return $activityEntity->getOrganization();
     }
 
@@ -133,7 +177,7 @@ class AssignmentPrivateNoteActivityListProvider implements
      */
     public function getTemplate(): string
     {
-        return 'TeachersAssignmentBundle:AssignmentPrivateNote:js/activityItemTemplate.html.twig';
+        return 'TeachersAssignmentBundle:AssignmentMessage:js/activityItemTemplate.html.twig';
     }
 
     /**
@@ -142,9 +186,9 @@ class AssignmentPrivateNoteActivityListProvider implements
     public function getRoutes($activityEntity): array
     {
         return [
-            'itemView' => 'teachers_assignment_private_note_info',
-            'itemEdit' => 'teachers_assignment_private_note_update',
-            'itemDelete' => 'teachers_assignment_private_note_delete'
+            'itemView' => 'teachers_assignment_message_info',
+            'itemEdit' => 'teachers_assignment_message_update',
+            'itemDelete' => 'teachers_assignment_message_delete'
         ];
     }
 
@@ -162,18 +206,18 @@ class AssignmentPrivateNoteActivityListProvider implements
     public function isApplicable($entity): bool
     {
         if (\is_object($entity)) {
-            return $entity instanceof AssignmentPrivateNote;
+            return $entity instanceof AssignmentMessage;
         }
 
-        return $entity === AssignmentPrivateNote::class;
+        return $entity === AssignmentMessage::class;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getTargetEntities($entity)
+    public function getTargetEntities($entity): ?array
     {
-        /** @var $entity AssignmentPrivateNote */
+        /** @var $entity AssignmentMessage */
         return $entity->getActivityTargets();
     }
 
@@ -202,5 +246,16 @@ class AssignmentPrivateNoteActivityListProvider implements
         $activityOwner->setOrganization($org);
         $activityOwner->setUser($owner);
         return [$activityOwner];
+    }
+
+    /**
+     * @param AssignmentMessage $msg
+     *
+     * @return bool
+     */
+    protected function canViewUnapprovedMessages(AssignmentMessage $msg): bool
+    {
+        return $this->roleHelper->isCurrentUserCourseManager()
+            || $this->roleHelper->getCurrentUserId() == $msg->getOwner()->getId();
     }
 }

@@ -8,10 +8,20 @@ teachers_assignment_teacher:
     type: annotation
     prefix: /assignment_teacher
 
+teachers_assignment_my_courses:
+    resource: "@TeachersAssignmentBundle/Controller/MyCoursesController.php"
+    type: annotation
+    prefix: /my_courses
+
 teachers_assignment_private_note:
     resource: "@TeachersAssignmentBundle/Controller/AssignmentPrivateNoteController.php"
     type: annotation
     prefix: /assignment_private_note
+
+teachers_assignment_message:
+    resource: "@TeachersAssignmentBundle/Controller/AssignmentMessageController.php"
+    type: annotation
+    prefix: /assignment_message
 
 teachers_assignment_api:
     resource: "@TeachersAssignmentBundle/Resources/config/oro/routing_api.yml"

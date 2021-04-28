@@ -9,16 +9,16 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\UserBundle\Entity\User;
-use Teachers\Bundle\AssignmentBundle\Model\ExtendAssignmentPrivateNote;
+use Teachers\Bundle\AssignmentBundle\Model\ExtendAssignmentMessage;
 
 /**
  * @ORM\Entity()
- * @ORM\Table(name="teachers_assignment_priv_note")
+ * @ORM\Table(name="teachers_assignment_message")
  * @ORM\HasLifecycleCallbacks()
  * @Config(
  *      defaultValues={
  *          "entity"={
- *              "icon"="fa-comment"
+ *              "icon"="fa-envelope"
  *          },
  *          "ownership"={
  *              "owner_type"="USER",
@@ -36,18 +36,18 @@ use Teachers\Bundle\AssignmentBundle\Model\ExtendAssignmentPrivateNote;
  *              "groups"={"activity"}
  *          },
  *          "activity"={
- *              "route"="teachers_assignment_private_note_activity_view",
- *              "acl"="teachers_assignment_private_note_view",
- *              "action_button_widget"="teachers_assignment_private_note_button",
- *              "action_link_widget"="teachers_assignment_private_note_link"
+ *              "route"="teachers_assignment_message_activity_view",
+ *              "acl"="teachers_assignment_message_view",
+ *              "action_button_widget"="teachers_assignment_message_button",
+ *              "action_link_widget"="teachers_assignment_message_link"
  *          },
  *          "grid"={
- *              "default"="assignment-private-notes-grid"
+ *              "default"="assignment-messages-grid"
  *          }
  *      }
  * )
  */
-class AssignmentPrivateNote extends ExtendAssignmentPrivateNote
+class AssignmentMessage extends ExtendAssignmentMessage
 {
     /**
      * @var integer
@@ -117,12 +117,47 @@ class AssignmentPrivateNote extends ExtendAssignmentPrivateNote
      */
     protected $updatedAt;
 
+    const STATUS_PENDING = 'pending';
+    const STATUS_APPROVED = 'approved';
+    const STATUS_NOT_APPROVED = 'not_approved';
+
+    const WORKFLOW_NAME = 'assignment_message_flow';
+
+    const WORKFLOW_PENDING = 'pending';
+    const WORKFLOW_APPROVED = 'approved';
+
+    public static function getAvailableWorkflowSteps(): array
+    {
+        return [
+            self::WORKFLOW_PENDING,
+            self::WORKFLOW_APPROVED,
+        ];
+    }
+
+    public static function getAvailableStatuses(): array
+    {
+        return [
+            self::STATUS_PENDING => [
+                'name' => 'Pending',
+                'is_default' => true
+            ],
+            self::STATUS_APPROVED => [
+                'name' => 'Approved',
+                'is_default' => false
+            ],
+            self::STATUS_NOT_APPROVED => [
+                'name' => 'Not approved',
+                'is_default' => false
+            ],
+        ];
+    }
+
     /**
      * Get id
      *
      * @return int
      */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -132,7 +167,7 @@ class AssignmentPrivateNote extends ExtendAssignmentPrivateNote
      *
      * @return string
      */
-    public function getMessage()
+    public function getMessage(): ?string
     {
         return $this->message;
     }
@@ -144,7 +179,7 @@ class AssignmentPrivateNote extends ExtendAssignmentPrivateNote
      *
      * @return self
      */
-    public function setMessage($message)
+    public function setMessage(string $message): AssignmentMessage
     {
         $this->message = $message;
 
@@ -156,7 +191,7 @@ class AssignmentPrivateNote extends ExtendAssignmentPrivateNote
      *
      * @return User
      */
-    public function getUpdatedBy()
+    public function getUpdatedBy(): ?User
     {
         return $this->updatedBy;
     }
@@ -168,7 +203,7 @@ class AssignmentPrivateNote extends ExtendAssignmentPrivateNote
      *
      * @return self
      */
-    public function setUpdatedBy(User $updatedBy)
+    public function setUpdatedBy(User $updatedBy): AssignmentMessage
     {
         $this->updatedBy = $updatedBy;
 
@@ -180,7 +215,7 @@ class AssignmentPrivateNote extends ExtendAssignmentPrivateNote
      *
      * @return User
      */
-    public function getOwner()
+    public function getOwner(): ?User
     {
         return $this->owner;
     }
@@ -192,7 +227,7 @@ class AssignmentPrivateNote extends ExtendAssignmentPrivateNote
      *
      * @return self
      */
-    public function setOwner($owner = null): AssignmentPrivateNote
+    public function setOwner($owner = null): AssignmentMessage
     {
         $this->owner = $owner;
 
@@ -216,7 +251,7 @@ class AssignmentPrivateNote extends ExtendAssignmentPrivateNote
      *
      * @return self
      */
-    public function setOrganization(Organization $organization = null): AssignmentPrivateNote
+    public function setOrganization(Organization $organization = null): AssignmentMessage
     {
         $this->organization = $organization;
 
@@ -240,7 +275,7 @@ class AssignmentPrivateNote extends ExtendAssignmentPrivateNote
      *
      * @return self
      */
-    public function setCreatedAt(DateTime $createdAt = null): AssignmentPrivateNote
+    public function setCreatedAt(DateTime $createdAt = null): AssignmentMessage
     {
         $this->createdAt = $createdAt;
 
@@ -264,7 +299,7 @@ class AssignmentPrivateNote extends ExtendAssignmentPrivateNote
      *
      * @return self
      */
-    public function setUpdatedAt(DateTime $updatedAt = null): AssignmentPrivateNote
+    public function setUpdatedAt(DateTime $updatedAt = null): AssignmentMessage
     {
         $this->updatedAt = $updatedAt;
 
@@ -279,7 +314,7 @@ class AssignmentPrivateNote extends ExtendAssignmentPrivateNote
      */
     public function prePersist()
     {
-        $this->createdAt = $this->createdAt ? $this->createdAt : new DateTime('now', new DateTimeZone('UTC'));
+        $this->createdAt = $this->createdAt ?: new DateTime('now', new DateTimeZone('UTC'));
         $this->updatedAt = clone $this->createdAt;
     }
 
@@ -292,5 +327,15 @@ class AssignmentPrivateNote extends ExtendAssignmentPrivateNote
     public function preUpdate()
     {
         $this->updatedAt = new DateTime('now', new DateTimeZone('UTC'));
+    }
+
+    public function isApproved(): bool
+    {
+        return $this->getStatus() && $this->getStatus()->getId() === self::STATUS_APPROVED;
+    }
+
+    public function isNotApproved(): bool
+    {
+        return $this->getStatus() && $this->getStatus()->getId() === self::STATUS_NOT_APPROVED;
     }
 }

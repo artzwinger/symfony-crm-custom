@@ -4,6 +4,7 @@ services:
         public: true
         arguments:
             - "@doctrine.orm.entity_manager"
+            - '@security.token_storage'
     teachers_users.teacher_group.manager.api:
         class: Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
         public: true

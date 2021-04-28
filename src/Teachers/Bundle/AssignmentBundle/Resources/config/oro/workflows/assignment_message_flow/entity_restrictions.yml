@@ -1,0 +1,22 @@
+workflows:
+    assignment_message_flow:
+        entity_restrictions:
+            assignment_message_status_creation:
+                attribute: assignment_message
+                field: status
+                mode: disallow
+                values:
+                    - 'approved'
+                    - 'not_approved'
+            assignment_message_status_pending:
+                attribute: assignment_message
+                field: status
+                step: pending
+            assignment_message_status_approved:
+                attribute: assignment_message
+                field: status
+                step: approved
+            assignment_message_status_notapproved:
+                attribute: assignment_message
+                field: status
+                step: not_approved

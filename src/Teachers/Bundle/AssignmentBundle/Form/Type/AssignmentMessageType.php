@@ -7,7 +7,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class AssignmentPrivateNoteType extends AbstractType
+class AssignmentMessageType extends AbstractType
 {
     /**
      * {@inheritdoc}
@@ -18,7 +18,7 @@ class AssignmentPrivateNoteType extends AbstractType
             'message',
             OroRichTextType::class,
             [
-                'label' => 'teachers.assignment.private_note.message.label'
+                'label' => 'teachers.assignment.message.message.label'
             ]
         );
     }
@@ -30,8 +30,8 @@ class AssignmentPrivateNoteType extends AbstractType
     {
         $resolver->setDefaults(
             [
-                'data_class' => 'Teachers\\Bundle\\AssignmentBundle\\Entity\\AssignmentPrivateNote',
-                'csrf_token_id' => 'teachers_assignment_private_note',
+                'data_class' => 'Teachers\\Bundle\\AssignmentBundle\\Entity\\AssignmentMessage',
+                'csrf_token_id' => 'teachers_assignment_message',
                 'ownership_disabled' => true,
             ]
         );
@@ -47,6 +47,6 @@ class AssignmentPrivateNoteType extends AbstractType
      */
     public function getBlockPrefix(): string
     {
-        return 'teachers_assignment_private_note';
+        return 'teachers_assignment_message';
     }
 }

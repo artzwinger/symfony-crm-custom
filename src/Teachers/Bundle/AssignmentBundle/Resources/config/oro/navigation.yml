@@ -4,14 +4,18 @@ navigation:
             teachers_assignment_assignment:
                 label: 'teachers.assignment.entity_plural_label'
                 route: 'teachers_assignment_index'
-                position: 30
                 extras:
                     routes: [ 'teachers_assignment_*' ]
                 display: true
             teachers_assignment_assignment_teacher:
                 label: 'teachers.assignment.teachers_queue_label'
                 route: 'teachers_assignment_teacher_index'
-                position: 30
+                extras:
+                    routes: [ 'teachers_assignment_*' ]
+                display: true
+            teachers_assignment_assignment_my:
+                label: 'teachers.assignment.my_courses_label'
+                route: 'teachers_assignment_my_courses'
                 extras:
                     routes: [ 'teachers_assignment_*' ]
                 display: true
@@ -22,6 +26,7 @@ navigation:
                         children:
                             teachers_assignment_assignment: ~
                             teachers_assignment_assignment_teacher: ~
+                            teachers_assignment_assignment_my: ~
     titles:
         teachers_assignment_index: ~
         teachers_assignment_view: '%assignment.subject%'

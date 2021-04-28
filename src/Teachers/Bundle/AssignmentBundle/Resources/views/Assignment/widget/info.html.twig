@@ -9,7 +9,7 @@
                 {{ AC.activity_contexts(entity, target, true, 'oronote/js/app/components/note-context-component') }}
             </div>
             {{ ui.renderProperty('teachers.assignment.subject.label'|trans, entity.subject) }}
-            {{ ui.renderProperty('teachers.assignment.description.label'|trans, entity.description) }}
+            {{ ui.renderProperty('teachers.assignment.description.label'|trans, entity.description|raw) }}
 
             {{ entityConfig.renderDynamicFields(entity) }}
         </div>

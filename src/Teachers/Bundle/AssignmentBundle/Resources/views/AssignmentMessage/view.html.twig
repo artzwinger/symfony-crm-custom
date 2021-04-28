@@ -1,0 +1,60 @@
+{% extends 'OroUIBundle:actions:view.html.twig' %}
+{% import 'OroUIBundle::macros.html.twig' as ui %}
+{% set subject = entity|oro_format_name|default('N/A'|trans) %}
+{% oro_title_set({ params : {"%assignment.subject%": subject} }) %}
+
+{% block pageHeader %}
+    {% set breadcrumbs = {
+        'entity': entity,
+        'indexPath': path('teachers_assignment_index'),
+        'indexLabel': 'teachers.assignment.entity_plural_label'|trans,
+        'entityTitle': subject
+    } %}
+    {{ parent() }}
+{% endblock pageHeader %}
+
+{% block navButtons %}
+    {% import 'OroUIBundle::macros.html.twig' as UI %}
+
+    {% if is_granted('teachers_assignment_delete') %}
+        {{ UI.deleteButton({
+            'dataUrl': path('teachers_assignment_delete', {'id': entity.id}),
+            'dataRedirect': path('teachers_assignment_index'),
+            'aCss': 'no-hash remove-button',
+            'id': 'btn-remove-assignment-form',
+            'dataId': entity.id,
+            'entity_label': 'teachers.assignment.entity_label'|trans,
+        }) }}
+        {{ UI.buttonSeparator() }}
+    {% endif %}
+
+    {% if is_granted('teachers_assignment_edit') %}
+        {{ UI.editButton({
+            'path': path('teachers_assignment_update', {'id': entity.id}),
+            'entity_label': 'teachers.assignment.entity_label'|trans,
+        }) }}
+    {% endif %}
+{% endblock %}
+
+{% block content_data %}
+    {% set assignmentInformationWidget %}
+        {{ oro_widget_render({
+            'widgetType': 'block',
+            'url': path('teachers_assignment_info', {id: entity.id}),
+            'title': 'teachers.assignment.block.note_information'|trans
+        }) }}
+    {% endset %}
+
+    {% set dataBlocks = [
+        {
+            'title': 'General'|trans,
+            'subblocks': [
+                {'data': [assignmentInformationWidget]}
+            ]
+        }
+    ] %}
+
+    {% set id = 'assignmentView' %}
+    {% set data = {'dataBlocks': dataBlocks} %}
+    {{ parent() }}
+{% endblock %}

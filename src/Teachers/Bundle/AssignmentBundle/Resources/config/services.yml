@@ -9,7 +9,7 @@ services:
         class: Teachers\Bundle\AssignmentBundle\Form\Type\AssignmentPrivateNoteType
         public: true
         tags:
-            - { name: oro_embedded_form, type: Teachers\Bundle\AssignmentBundle\Form\Type\AssignmentPrivateNoteType, label: teachers.assignment.assignmentprivatenote.entity_label }
+            - { name: oro_embedded_form, type: Teachers\Bundle\AssignmentBundle\Form\Type\AssignmentPrivateNoteType, label: teachers.assignment.private_note.entity_label }
             - { name: form.type, alias: teachers_assignment_private_note_request }
     teachers_assignment.activity_list.provider:
         class: Teachers\Bundle\AssignmentBundle\Provider\AssignmentActivityListProvider
@@ -29,6 +29,17 @@ services:
             - "@oro_comment.association_helper"
         tags:
             - { name: oro_activity_list.provider, class: Teachers\Bundle\AssignmentBundle\Entity\AssignmentPrivateNote, priority: 20 }
+    teachers_assignment_message.activity_list.provider:
+        class: Teachers\Bundle\AssignmentBundle\Provider\AssignmentMessageActivityListProvider
+        arguments:
+            - "@oro_entity.doctrine_helper"
+            - "@oro_security.owner.entity_owner_accessor.link"
+            - "@oro_activity.association_helper"
+            - "@oro_comment.association_helper"
+            - '@translator'
+            - '@teachers_users.helper.role'
+        tags:
+            - { name: oro_activity_list.provider, class: Teachers\Bundle\AssignmentBundle\Entity\AssignmentMessage, priority: 20 }
     teachers_assignment.assignment.form:
         class: Symfony\Component\Form\Form
         factory: [ '@form.factory', createNamed ]

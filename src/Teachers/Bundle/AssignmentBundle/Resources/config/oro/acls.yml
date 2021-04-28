@@ -1,0 +1,11 @@
+acls:
+    teachers_assignment_teacher_index:
+        type: entity
+        class: TeachersAssignmentBundle:Assignment
+        permission: VIEW_TEACHERS_QUEUE
+        group_name: ""
+    teachers_assignment_my_courses:
+        type: entity
+        class: TeachersAssignmentBundle:Assignment
+        permission: VIEW_MY_COURSES
+        group_name: ""

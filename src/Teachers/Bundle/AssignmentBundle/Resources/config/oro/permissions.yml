@@ -5,3 +5,9 @@ oro_permissions:
         apply_to_all: false
         apply_to_entities:
             - 'Teachers\Bundle\AssignmentBundle\Entity\Assignment'
+    VIEW_MY_COURSES:
+        label: teachers.assignment.permission.view_my_courses.label
+        group_names: ""
+        apply_to_all: false
+        apply_to_entities:
+            - 'Teachers\Bundle\AssignmentBundle\Entity\Assignment'

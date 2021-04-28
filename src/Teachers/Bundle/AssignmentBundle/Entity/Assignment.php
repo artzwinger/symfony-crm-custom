@@ -34,7 +34,7 @@ use Teachers\Bundle\UsersBundle\Entity\TeacherGroup;
  *          },
  *          "security"={
  *              "type"="ACL",
- *              "group_name"="",
+ *              "group_name"="assignment",
  *              "category"="assignment"
  *          },
  *          "grouping"={
@@ -169,15 +169,15 @@ class Assignment extends ExtendAssignment implements DatesAwareInterface
             ],
             self::STATUS_UP_FOR_BID => [
                 'name' => 'Up for bid',
-                'is_default' => true
+                'is_default' => false
             ],
             self::STATUS_ASSIGNED => [
                 'name' => 'Assigned',
-                'is_default' => true
+                'is_default' => false
             ],
             self::STATUS_COMPLETE => [
                 'name' => 'Complete',
-                'is_default' => true
+                'is_default' => false
             ],
         ];
     }

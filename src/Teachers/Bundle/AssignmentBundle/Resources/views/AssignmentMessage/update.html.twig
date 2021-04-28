@@ -1,36 +1,36 @@
 {% extends 'OroUIBundle:actions:update.html.twig' %}
 
-{% set formAction = form.vars.value.id ? path('teachers_assignment_private_note_update', { 'id': form.vars.value.id }) : path('teachers_assignment_private_note_create') %}
+{% set formAction = form.vars.value.id ? path('teachers_assignment_message_update', { 'id': form.vars.value.id }) : path('teachers_assignment_message_create') %}
 {% set subject = form.vars.value|oro_format_name|default('N/A'|trans) %}
 {% oro_title_set({ params : {"%assignment.subject%": subject} }) %}
 
 {% block navButtons %}
     {% import 'OroUIBundle::macros.html.twig' as UI %}
 
-    {% if form.vars.value.id and is_granted('teachers_assignment_private_note_delete') %}
+    {% if form.vars.value.id and is_granted('teachers_assignment_message_delete') %}
         {{ UI.deleteButton({
-            'dataUrl': path('teachers_assignment_private_note_delete', {'id': form.vars.value.id}),
-            'dataRedirect': path('teachers_assignment_private_note_index'),
+            'dataUrl': path('teachers_assignment_message_delete', {'id': form.vars.value.id}),
+            'dataRedirect': path('teachers_assignment_message_index'),
             'aCss': 'no-hash remove-button',
             'id': 'btn-remove-assignment-form',
             'dataId': form.vars.value.id,
-            'entity_label': 'teachers.assignment.private_note.entity_label'|trans,
+            'entity_label': 'teachers.assignment.message.entity_label'|trans,
         }) }}
         {{ UI.buttonSeparator() }}
     {% endif %}
-    {{ UI.button({'path' : path('teachers_assignment_private_note_index'), 'title' : 'Cancel'|trans, 'label' : 'Cancel'|trans}) }}
+    {{ UI.button({'path' : path('teachers_assignment_message_index'), 'title' : 'Cancel'|trans, 'label' : 'Cancel'|trans}) }}
     {% set html = UI.saveAndCloseButton({
         'route': 'teachers_assignment_view',
         'params': {'id': '$id'}
     }) %}
-    {% if is_granted('teachers_assignment_private_note_create') %}
+    {% if is_granted('teachers_assignment_message_create') %}
         {% set html = html ~ UI.saveAndNewButton({
-            'route': 'teachers_assignment_private_note_create'
+            'route': 'teachers_assignment_message_create'
         }) %}
     {% endif %}
     {% if is_granted('teachers_assignment_edit') %}
         {% set html = html ~ UI.saveAndStayButton({
-            'route': 'teachers_assignment_private_note_update',
+            'route': 'teachers_assignment_message_update',
             'params': {'id': '$id'}
         }) %}
     {% endif %}
@@ -41,13 +41,13 @@
     {% if form.vars.value.id %}
         {% set breadcrumbs = {
             'entity':      form.vars.value,
-            'indexPath':   path('teachers_assignment_private_note_index'),
-            'indexLabel': 'teachers.assignment.private_note.entity_plural_label'|trans,
+            'indexPath':   path('teachers_assignment_message_index'),
+            'indexLabel': 'teachers.assignment.message.entity_plural_label'|trans,
             'entityTitle': subject
         } %}
         {{ parent() }}
     {% else %}
-        {% set title = 'oro.ui.create_entity'|trans({'%entityName%': 'teachers.assignment.private_note.entity_label'|trans}) %}
+        {% set title = 'oro.ui.create_entity'|trans({'%entityName%': 'teachers.assignment.message.entity_label'|trans}) %}
         {% include 'OroUIBundle::page_title_block.html.twig' with { title: title } %}
     {% endif %}
 {% endblock pageHeader %}
@@ -56,10 +56,10 @@
     {% set id = 'assignment-form' %}
 
     {% set dataBlocks = [{
-        'title': 'teachers.assignment.private_note.block.general'|trans,
+        'title': 'teachers.assignment.message.block.general'|trans,
         'subblocks': [
             {
-                'title': 'teachers.assignment.private_note.block.note_information'|trans,
+                'title': 'teachers.assignment.message.block.message_information'|trans,
                 'data': [
                     form_row(form.message)
                 ]
@@ -67,7 +67,7 @@
         ]
     }] %}
 
-    {% set dataBlocks = dataBlocks|merge(oro_form_additional_data(form, 'teachers.assignment.private_note.block.additional'|trans)) %}
+    {% set dataBlocks = dataBlocks|merge(oro_form_additional_data(form, 'teachers.assignment.message.block.additional'|trans)) %}
 
     {% set data = {
         'formErrors': form_errors(form)? form_errors(form) : null,
