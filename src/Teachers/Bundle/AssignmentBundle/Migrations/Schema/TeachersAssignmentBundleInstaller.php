@@ -2,10 +2,15 @@
 
 namespace Teachers\Bundle\AssignmentBundle\Migrations\Schema;
 
+use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\Schema\Schema;
+use Doctrine\DBAL\Schema\SchemaException;
 use Doctrine\DBAL\Types\Types;
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtension;
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtensionAwareInterface;
+use Oro\Bundle\AttachmentBundle\Migration\Extension\AttachmentExtensionAwareTrait;
+use Oro\Bundle\CommentBundle\Migration\Extension\CommentExtension;
+use Oro\Bundle\CommentBundle\Migration\Extension\CommentExtensionAwareInterface;
 use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtension;
 use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtensionAwareInterface;
 use Oro\Bundle\EntityExtendBundle\Migration\OroOptions;
@@ -14,12 +19,26 @@ use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 use Teachers\Bundle\AssignmentBundle\Entity\Assignment;
 use Teachers\Bundle\AssignmentBundle\Entity\AssignmentMessage;
 
-class TeachersAssignmentBundleInstaller implements Installation, ActivityExtensionAwareInterface, ExtendExtensionAwareInterface
+class TeachersAssignmentBundleInstaller implements Installation,
+    ActivityExtensionAwareInterface,
+    ExtendExtensionAwareInterface,
+    CommentExtensionAwareInterface
 {
     /** @var ActivityExtension */
     protected $activityExtension;
     /** @var ExtendExtension */
     protected $extendExtension;
+
+    /** @var CommentExtension */
+    protected $commentExtension;
+
+    /**
+     * @param CommentExtension $commentExtension
+     */
+    public function setCommentExtension(CommentExtension $commentExtension)
+    {
+        $this->commentExtension = $commentExtension;
+    }
 
     /**
      * @inheritdoc
@@ -47,6 +66,8 @@ class TeachersAssignmentBundleInstaller implements Installation, ActivityExtensi
 
     /**
      * {@inheritdoc}
+     * @throws SchemaException
+     * @throws DBALException
      */
     public function up(Schema $schema, QueryBag $queries)
     {
@@ -55,6 +76,7 @@ class TeachersAssignmentBundleInstaller implements Installation, ActivityExtensi
         $this->createAssignmentMessageTable($schema);
         $this->createAssignmentTable($schema);
         $this->createAssignmentToTeacherGroupTable($schema);
+        $this->addCommentToMessages($schema, $this->commentExtension);
     }
 
     /**
@@ -159,5 +181,14 @@ class TeachersAssignmentBundleInstaller implements Installation, ActivityExtensi
         $options->set('enum', 'immutable_codes', AssignmentMessage::getAvailableStatuses());
 
         $enumTable->addOption(OroOptions::KEY, $options);
+    }
+
+    /**
+     * @throws SchemaException
+     * @throws DBALException
+     */
+    public static function addCommentToMessages(Schema $schema, CommentExtension $commentExtension)
+    {
+        $commentExtension->addCommentAssociation($schema, 'teachers_assignment_message');
     }
 }
