@@ -1,0 +1,11 @@
+Teachers\Bundle\UsersBundle\Entity\TeacherGroup:
+    constraints:
+        -   Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity: title
+    properties:
+        title:
+            -   NotBlank: ~
+            -   Length:
+                    min: 1
+                    max: 255
+        description:
+            -   NotBlank: ~
