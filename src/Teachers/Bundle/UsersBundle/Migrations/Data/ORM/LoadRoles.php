@@ -30,7 +30,7 @@ class LoadRoles extends AbstractFixture implements DependentFixtureInterface
         $student->setLabel('Student');
 
         $courseManager = new Role(RoleHelper::ROLE_COURSE_MANAGER);
-        $courseManager->setLabel('Course manager');
+        $courseManager->setLabel('Course Manager');
 
         $manager->persist($tutor);
         $manager->persist($student);

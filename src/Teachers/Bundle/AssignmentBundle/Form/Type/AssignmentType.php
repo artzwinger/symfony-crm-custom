@@ -10,6 +10,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints as Assert;
 use Teachers\Bundle\AssignmentBundle\Entity\Assignment;
+use Teachers\Bundle\UsersBundle\Form\Type\CourseManagerSelectType;
 use Teachers\Bundle\UsersBundle\Form\Type\StudentSelectType;
 use Teachers\Bundle\UsersBundle\Form\Type\TeacherGroupsMultiSelectType;
 
@@ -42,10 +43,10 @@ class AssignmentType extends AbstractType
                 'label' => 'teachers.assignment.teacherGroups.label',
                 'required' => true
             ])
-//            ->add('courseManager', CourseManagerSelectType::class, [
-//                'label' => 'teachers.assignment.course_manager.label',
-//                'required' => true
-//            ])
+            ->add('courseManager', CourseManagerSelectType::class, [
+                'label' => 'teachers.assignment.course_manager.label',
+                'required' => true
+            ])
 //            ->add('teacher', TeacherSelectType::class, [
 //                'label' => 'teachers.assignment.teacher.label',
 //                'required' => false

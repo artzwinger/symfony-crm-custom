@@ -10,7 +10,7 @@ oro:
                     label: Complete
             attribute:
                 assignment_course_manager:
-                    label: Course manager
+                    label: Course Manager
                 assignment_teacher:
                     label: Tutor
                 assignment_student:
@@ -20,7 +20,7 @@ oro:
                 assignment_description:
                     label: Description
                 assignment_teacher_groups:
-                    label: Tutor group
+                    label: Tutor Group
             transition:
                 start_working:
                     label: Start working

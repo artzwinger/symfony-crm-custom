@@ -2,7 +2,7 @@ teachers:
     assignment:
         # activity
         teacher_group.label: Tutors group
-        course_manager_name.label: Course manager
+        course_manager_name.label: Course Manager
         activity_item:
             created_by: created by {{ user }}
             updated_by: updated by {{ user }}
@@ -17,8 +17,8 @@ teachers:
                 label: View tutors queue
             view_my_courses:
                 label: View my courses
-        teachers_queue_label: Tutors queue
-        my_courses_label: My courses
+        teachers_queue_label: Tutors Queue
+        my_courses_label: My Courses
 
         #private note activity
         assignmentprivatenote.entity_label: Private note
@@ -73,10 +73,10 @@ teachers:
         price.label: Price
         status.label: Status
         organization_name.label: Organization name
-        course_manager.label: Course manager
+        course_manager.label: Course Manager
         student.label: Student
         teacher.label: Tutor
-        teacherGroups.label: Tutor groups
+        teacherGroups.label: Tutor Groups
 
         datagrid:
             update: Update

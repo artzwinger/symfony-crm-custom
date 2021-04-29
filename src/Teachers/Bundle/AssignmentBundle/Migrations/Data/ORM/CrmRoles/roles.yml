@@ -7,11 +7,13 @@ ROLE_COURSE_MANAGER:
         workflow|assignment_message_flow: [ VIEW_WORKFLOW_SYSTEM, PERFORM_TRANSITIONS_SYSTEM ]
 ROLE_TEACHER:
     permissions:
-        entity|Teachers\Bundle\AssignmentBundle\Entity\Assignment: [ VIEW_SYSTEM, ASSIGN_SYSTEM, VIEW_TEACHERS_QUEUE, VIEW_MY_COURSES ]
+        entity|Teachers\Bundle\AssignmentBundle\Entity\Assignment: [ VIEW_SYSTEM, ASSIGN_SYSTEM, VIEW_TEACHERS_QUEUE_SYSTEM, VIEW_MY_COURSES_SYSTEM ]
         entity|Teachers\Bundle\AssignmentBundle\Entity\AssignmentPrivateNote: [ VIEW_LOCAL, CREATE_LOCAL, EDIT_LOCAL, ASSIGN_LOCAL, DELETE_LOCAL ]
         entity|Teachers\Bundle\AssignmentBundle\Entity\AssignmentMessage: [ VIEW_SYSTEM, CREATE_SYSTEM, EDIT_LOCAL, ASSIGN_SYSTEM, DELETE_LOCAL ]
+        workflow|assignment_message_flow: [ VIEW_WORKFLOW_SYSTEM, PERFORM_TRANSITIONS_BASIC ]
 ROLE_STUDENT:
     permissions:
-        entity|Teachers\Bundle\AssignmentBundle\Entity\Assignment: [ VIEW_SYSTEM, VIEW_MY_COURSES ]
+        entity|Teachers\Bundle\AssignmentBundle\Entity\Assignment: [ VIEW_SYSTEM, VIEW_MY_COURSES_SYSTEM ]
         entity|Teachers\Bundle\AssignmentBundle\Entity\AssignmentPrivateNote: [ VIEW_LOCAL, CREATE_LOCAL, EDIT_LOCAL, ASSIGN_LOCAL, DELETE_LOCAL ]
         entity|Teachers\Bundle\AssignmentBundle\Entity\AssignmentMessage: [ VIEW_SYSTEM, CREATE_SYSTEM, EDIT_LOCAL, ASSIGN_SYSTEM, DELETE_LOCAL ]
+        workflow|assignment_message_flow: [ VIEW_WORKFLOW_SYSTEM, PERFORM_TRANSITIONS_BASIC ]
