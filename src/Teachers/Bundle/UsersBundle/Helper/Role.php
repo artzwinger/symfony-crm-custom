@@ -4,6 +4,7 @@ namespace Teachers\Bundle\UsersBundle\Helper;
 
 use Doctrine\ORM\EntityManager;
 use Oro\Bundle\UserBundle\Entity\Repository\RoleRepository;
+use Oro\Bundle\UserBundle\Entity\Repository\UserRepository;
 use Oro\Bundle\UserBundle\Entity\Role as EntityRole;
 use Oro\Bundle\UserBundle\Entity\User;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
@@ -35,6 +36,25 @@ class Role
     {
         $this->em = $em;
         $this->tokenStorage = $tokenStorage;
+    }
+
+    public function hasThisUserIdThisRole(int $userId, string $role): bool
+    {
+        $user = $this->getUserRepository()->find($userId);
+        $role = $this->getRoleRepository()->findOneBy([
+            'role' => $role
+        ]);
+        if (!$user || !$role) {
+            return false;
+        }
+        $roleId = $role->getId();
+        foreach ($user->getRoles() as $role) {
+            /** @var EntityRole $role */
+            if ($role->getId() == $roleId) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public function isCurrentUserCourseManager(): bool
@@ -88,6 +108,11 @@ class Role
     protected function getRoleRepository(): RoleRepository
     {
         return $this->em->getRepository('OroUserBundle:Role');
+    }
+
+    protected function getUserRepository(): UserRepository
+    {
+        return $this->em->getRepository('OroUserBundle:User');
     }
 
     protected function hasCurrentUserRole(int $roleId): bool

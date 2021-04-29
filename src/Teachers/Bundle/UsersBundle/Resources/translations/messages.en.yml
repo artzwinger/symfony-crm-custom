@@ -1,11 +1,11 @@
 teachers:
     users:
         teachergroup:
-            entity_label: Tutor group
-        teacherGroups.label: Tutor groups
+            entity_label: Tutor Group
+        teacherGroups.label: Tutor Groups
         teacher_group:
-            entity_label: Tutor group
-            entity_plural_label: Tutor groups
+            entity_label: Tutor Group
+            entity_plural_label: Tutor Groups
             entity_grid_all_view_label: All %entity_plural_label%
             id.label: ID
             title.label: Title
@@ -26,9 +26,9 @@ teachers:
 
             widget:
                 info:
-                    title: Tutor group details
+                    title: Tutor Group details
             entity:
-                saved: Tutor group has been saved successfully
+                saved: Tutor Group has been saved successfully
         form:
             choose_course_manager: Choose course manager
             choose_student: Choose student
@@ -38,4 +38,4 @@ teachers:
         block:
             general: General
             additional: Additional
-            teacher_group_information: Tutor group information
+            teacher_group_information: Tutor Group information

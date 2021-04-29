@@ -5,6 +5,7 @@ namespace Teachers\Bundle\AssignmentBundle\Entity;
 use DateTime;
 use DateTimeZone;
 use Doctrine\ORM\Mapping as ORM;
+use Exception;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
@@ -90,7 +91,7 @@ class AssignmentMessage extends ExtendAssignmentMessage
     protected $organization;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(type="datetime")
      * @ConfigField(
@@ -104,7 +105,7 @@ class AssignmentMessage extends ExtendAssignmentMessage
     protected $createdAt;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(type="datetime")
      * @ConfigField(
@@ -247,7 +248,7 @@ class AssignmentMessage extends ExtendAssignmentMessage
     /**
      * Sets organization
      *
-     * @param \Oro\Bundle\OrganizationBundle\Entity\Organization|null $organization
+     * @param Organization|null $organization
      *
      * @return self
      */
@@ -261,7 +262,7 @@ class AssignmentMessage extends ExtendAssignmentMessage
     /**
      * Gets creation date
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getCreatedAt(): DateTime
     {
@@ -271,7 +272,7 @@ class AssignmentMessage extends ExtendAssignmentMessage
     /**
      * Sets creation date
      *
-     * @param \DateTime|null $createdAt
+     * @param DateTime|null $createdAt
      *
      * @return self
      */
@@ -285,7 +286,7 @@ class AssignmentMessage extends ExtendAssignmentMessage
     /**
      * Gets modification date
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getUpdatedAt(): DateTime
     {
@@ -295,7 +296,7 @@ class AssignmentMessage extends ExtendAssignmentMessage
     /**
      * Sets a date update
      *
-     * @param \DateTime|null $updatedAt
+     * @param DateTime|null $updatedAt
      *
      * @return self
      */
@@ -310,7 +311,7 @@ class AssignmentMessage extends ExtendAssignmentMessage
      * Sets the date on which the comment is created
      *
      * @ORM\PrePersist
-     * @throws \Exception
+     * @throws Exception
      */
     public function prePersist()
     {
@@ -322,7 +323,7 @@ class AssignmentMessage extends ExtendAssignmentMessage
      * Update the updatedAt when the updated comment
      *
      * @ORM\PreUpdate
-     * @throws \Exception
+     * @throws Exception
      */
     public function preUpdate()
     {
@@ -337,5 +338,11 @@ class AssignmentMessage extends ExtendAssignmentMessage
     public function isNotApproved(): bool
     {
         return $this->getStatus() && $this->getStatus()->getId() === self::STATUS_NOT_APPROVED;
+    }
+
+    public function getAssignment(): ?Assignment
+    {
+        $targets = $this->getActivityTargets(Assignment::class);
+        return $targets ? $targets[0] : null;
     }
 }

@@ -18,7 +18,7 @@ teachers:
         organization_name.label: Organization name
         owner.label: Organization
 
-        course_managers_queue: Course managers queue
+        course_managers_queue: Approval Queue
 
         datagrid:
             update: Update
