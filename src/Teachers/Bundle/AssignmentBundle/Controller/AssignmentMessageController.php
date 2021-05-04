@@ -7,6 +7,8 @@ use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Oro\Bundle\CommentBundle\Entity\Comment;
 use Oro\Bundle\CommentBundle\Entity\Manager\CommentApiManager;
+use Oro\Bundle\EntityExtendBundle\Entity\AbstractEnumValue;
+use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\FormBundle\Model\UpdateHandlerFacade;
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
@@ -24,6 +26,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Teachers\Bundle\AssignmentBundle\Entity\AssignmentMessage;
+use Teachers\Bundle\UsersBundle\Helper\Role;
 
 class AssignmentMessageController extends AbstractController
 {
@@ -104,10 +107,21 @@ class AssignmentMessageController extends AbstractController
      * )
      * @param AssignmentMessage $assignmentMessage
      * @return array|RedirectResponse
+     * @throws ForbiddenTransitionException
+     * @throws InvalidTransitionException
+     * @throws WorkflowException
      */
     public function updateAction(AssignmentMessage $assignmentMessage)
     {
-        return $this->update($assignmentMessage, 'teachers_assignment_message_update');
+        $result = $this->update($assignmentMessage, 'teachers_assignment_message_update');
+        $isPost = $this->get('request_stack')->getCurrentRequest()->isMethod('POST');
+        if ($isPost && $assignmentMessage->getStatus()->getId() !== AssignmentMessage::STATUS_PENDING) {
+            /** @var WorkflowManager $wfm */
+            $wfm = $this->get('oro_workflow.manager');
+            $item = $wfm->getWorkflowItem($assignmentMessage, AssignmentMessage::WORKFLOW_NAME);
+            $wfm->transit($item, AssignmentMessage::WORKFLOW_TRANSITION_REFRESH);
+        }
+        return $result;
     }
 
     /**
@@ -119,10 +133,31 @@ class AssignmentMessageController extends AbstractController
      *      permission="CREATE",
      *      class="TeachersAssignmentBundle:AssignmentMessage"
      * )
+     * @throws ForbiddenTransitionException
+     * @throws InvalidTransitionException
+     * @throws WorkflowException
      */
     public function createAction()
     {
-        return $this->update(new AssignmentMessage(), 'teachers_assignment_message_create');
+        $message = new AssignmentMessage();
+        $result = $this->update($message, 'teachers_assignment_message_create');
+        if ($message->getId()) {
+            $senderStudent = $this->get('teachers_users.helper.role')
+                ->hasThisUserIdThisRole($message->getOwner()->getId(), Role::ROLE_STUDENT);
+            if ($senderStudent) {
+                $msg = strtolower($message->getMessage());
+                if (!strstr($msg, 'invoice')
+                    && !strstr($msg, 'bill')
+                    && !strstr($msg, 'money')
+                    && !strstr($msg, 'pay')
+                ) {
+                    $wfm = $this->get('oro_workflow.manager');
+                    $item = $wfm->getWorkflowItem($message, AssignmentMessage::WORKFLOW_NAME);
+                    $wfm->transit($item, AssignmentMessage::WORKFLOW_TRANSITION_APPROVE);
+                }
+            }
+        }
+        return $result;
     }
 
     /**

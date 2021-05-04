@@ -10,7 +10,9 @@ workflows:
                 order: 20
                 allowed_transitions:
                     - unapprove
+                    - refresh
             not_approved:
                 order: 30
                 allowed_transitions:
                     - approve
+                    - refresh

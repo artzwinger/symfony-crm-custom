@@ -10,4 +10,10 @@ workflows:
                 step_to: not_approved
                 frontend_options:
                     icon: 'fa-thumbs-down'
+                    class: 'hide'
                 transition_definition: unapprove_definition
+            refresh:
+                step_to: pending
+                frontend_options:
+                    icon: 'fa-refresh'
+                transition_definition: refresh_definition

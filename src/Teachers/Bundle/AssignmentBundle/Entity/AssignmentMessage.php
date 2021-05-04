@@ -118,11 +118,13 @@ class AssignmentMessage extends ExtendAssignmentMessage
      */
     protected $updatedAt;
 
+    const ENUM_NAME_STATUS = 'assignment_msg_status';
     const STATUS_PENDING = 'pending';
     const STATUS_APPROVED = 'approved';
     const STATUS_NOT_APPROVED = 'not_approved';
 
     const WORKFLOW_NAME = 'assignment_message_flow';
+    const WORKFLOW_TRANSITION_REFRESH = 'refresh';
     const WORKFLOW_TRANSITION_APPROVE = 'approve';
     const WORKFLOW_TRANSITION_UNAPPROVE = 'unapprove';
     const WORKFLOW_PENDING = 'pending';

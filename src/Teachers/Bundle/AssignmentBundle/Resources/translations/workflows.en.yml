@@ -40,6 +40,9 @@ oro:
                     label: Not approved
             attribute: ~
             transition:
+                refresh:
+                    label: Move to Approval Queue
+                    warning_message: ''
                 approve:
                     label: Approve
                     warning_message: ''
