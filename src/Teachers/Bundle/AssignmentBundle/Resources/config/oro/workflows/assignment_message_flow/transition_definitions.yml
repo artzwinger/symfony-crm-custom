@@ -24,3 +24,8 @@ workflows:
                             enum_code: assignment_msg_status
                             identifier: not_approved
                             attribute: $assignment_message.status
+                    -   '@send_email_template':
+                            from: 'email@address.com'
+                            to: $assignment_message.owner.email
+                            template: 'teachers_assignment_message_rejected'
+                            entity: $assignment_message

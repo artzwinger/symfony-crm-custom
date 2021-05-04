@@ -123,7 +123,8 @@ class AssignmentMessage extends ExtendAssignmentMessage
     const STATUS_NOT_APPROVED = 'not_approved';
 
     const WORKFLOW_NAME = 'assignment_message_flow';
-
+    const WORKFLOW_TRANSITION_APPROVE = 'approve';
+    const WORKFLOW_TRANSITION_UNAPPROVE = 'unapprove';
     const WORKFLOW_PENDING = 'pending';
     const WORKFLOW_APPROVED = 'approved';
 

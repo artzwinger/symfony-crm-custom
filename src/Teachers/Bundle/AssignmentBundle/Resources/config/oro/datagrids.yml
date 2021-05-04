@@ -110,3 +110,97 @@ datagrids:
                         - asgm_teacher.id = @oro_security.token_accessor->getUserId
                         - asgm_student.id = @oro_security.token_accessor->getUserId
                         - course_manager.id = @oro_security.token_accessor->getUserId
+
+    teachers-assignment-messages-grid:
+        extended_entity_name: 'Teachers\Bundle\AssignmentBundle\Entity\AssignmentMessage'
+        acl_resource: teachers_assignment_message_view
+        views_list: "@teachers_assignment.message.datagrid_view_list"
+        source:
+            type: orm
+            query:
+                select:
+                    - assignment_message.id
+                    - assignment_message.message
+                    - assignment_message.createdAt
+                    - CONCAT(message_sender.firstName, message_sender.lastName) as senderFullName
+                    - message_status.id as status
+                    - message_status.name as statusLabel
+                from:
+                    - { table: 'Teachers\Bundle\AssignmentBundle\Entity\AssignmentMessage', alias: assignment_message }
+                join:
+                    inner:
+                        - { join: assignment_message.owner, alias: message_sender }
+                        - { join: assignment_message.status, alias: message_status }
+        columns:
+            message:
+                label: teachers.assignment.message.message.label
+            senderFullName:
+                label: teachers.assignment.message.sender_name.label
+            createdAt:
+                frontend_type: datetime
+                label: oro.ui.created_at
+        sorters:
+            columns:
+                message:
+                    data_name: assignment_message.message
+                createdAt:
+                    data_name: assignment_message.createdAt
+            default:
+                createdAt: DESC
+        filters:
+            columns:
+                message:
+                    type: string
+                    data_name: assignment_message.message
+                createdAt:
+                    type: datetime
+                    data_name: assignment_message.createdAt
+                statusLabel:
+                    label: teachers.assignment.message.status.label
+                    type: enum
+                    data_name: status
+                    enum_code: assignment_msg_status
+        properties:
+            id: ~
+            approve_link:
+                type: url
+                route: teachers_assignment_message_approve
+                params: [ id ]
+            unapprove_link:
+                type: url
+                route: teachers_assignment_message_unapprove
+                params: [ id ]
+        actions:
+            approve:
+                acl_resource: teachers_assignment_message_edit
+                type: ajaxdelete
+                requestType: POST
+                label: teachers.assignment.grid.action.approve
+                icon: thumbs-up
+                link: approve_link
+                defaultMessages:
+                    confirm_title: teachers.assignment.action.confirm_title.approve
+                    confirm_ok: teachers.assignment.action.confirm_ok
+                    confirm_cancel: teachers.assignment.action.confirm_cancel
+                    confirm_content: teachers.assignment.action.content.approve
+                    success: teachers.assignment.action.success.approve
+                    error: teachers.assignment.action.error.approve
+            unapprove:
+                type: dialog
+                acl_resource: teachers_assignment_message_edit
+                label: teachers.assignment.grid.action.unapprove
+                icon: thumbs-down
+                link: unapprove_link
+                widgetOptions:
+                    reload-grid-name: teachers-assignment-messages-grid
+                    options:
+                        dialogOptions:
+                            title: Mark Message as dangerous and left a comment
+                            width: 550
+                            allowMaximize: false
+                            allowMinimize: false
+                            modal: true
+                            maximizedHeightDecreaseBy: minimize-bar
+        options:
+            entityHint: teachers.assignment.message.entity_plural_label
+            entity_pagination: true

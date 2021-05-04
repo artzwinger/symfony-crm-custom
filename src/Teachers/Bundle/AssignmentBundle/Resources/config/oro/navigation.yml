@@ -19,6 +19,12 @@ navigation:
                 extras:
                     routes: [ 'teachers_assignment_*' ]
                 display: true
+            teachers_assignment_assignment_messages:
+                label: 'teachers.assignment.approval_queue_label'
+                route: 'teachers_assignment_message_index'
+                extras:
+                    routes: [ 'teachers_assignment_message_*' ]
+                display: true
         tree:
             application_menu:
                 children:
@@ -27,6 +33,7 @@ navigation:
                             teachers_assignment_assignment: ~
                             teachers_assignment_assignment_teacher: ~
                             teachers_assignment_assignment_my: ~
+                            teachers_assignment_assignment_messages: ~
     titles:
         teachers_assignment_index: ~
         teachers_assignment_view: '%assignment.subject%'

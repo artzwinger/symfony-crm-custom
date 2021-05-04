@@ -1,5 +1,12 @@
 teachers:
     assignment:
+        grid:
+            action:
+                approve: Approve
+                unapprove: Mark as dangerous
+            views:
+                pending: Pending Messages
+                declined: Declined Messages
         # activity
         teacher_group.label: Tutors group
         course_manager_name.label: Course Manager
@@ -17,8 +24,11 @@ teachers:
                 label: View tutors queue
             view_my_courses:
                 label: View my courses
+            view_messages_approval_queue:
+                label: View approval queue
         teachers_queue_label: Tutors Queue
         my_courses_label: My Courses
+        approval_queue_label: Approval Queue
 
         #private note activity
         assignmentprivatenote.entity_label: Private note
@@ -51,7 +61,10 @@ teachers:
             add_entity: Send message
             add_entity.title: Send message
             message.label: Message
+            status.label: Status
+            sender_name.label: Sender
             entity_label: Message
+            sender_name: Sender
             entity_plural_label: Messages
             entity_grid_all_view_label: All %entity_plural_label%
             block:

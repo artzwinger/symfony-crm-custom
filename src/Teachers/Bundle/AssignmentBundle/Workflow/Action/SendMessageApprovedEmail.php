@@ -17,7 +17,7 @@ use Teachers\Bundle\UsersBundle\Helper\Role;
 /**
  * Workflow action that sends emails based on passed templates
  */
-class SendAssignmentMessageEmailTemplate extends SendEmailTemplate
+class SendMessageApprovedEmail extends SendEmailTemplate
 {
     /**
      * @var Role
@@ -38,6 +38,14 @@ class SendAssignmentMessageEmailTemplate extends SendEmailTemplate
     {
         parent::__construct($contextAccessor, $emailProcessor, $emailAddressHelper, $entityNameResolver, $registry, $validator, $localizedTemplateProvider, $emailOriginHelper);
         $this->roleHelper = $roleHelper;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function initialize(array $options): SendEmailTemplate
+    {
+        return parent::initialize($options);
     }
 
     /**

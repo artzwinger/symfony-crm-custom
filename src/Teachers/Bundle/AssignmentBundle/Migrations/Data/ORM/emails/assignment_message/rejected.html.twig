@@ -1,0 +1,17 @@
+@name = teachers_assignment_message_rejected
+@entityName = Teachers\Bundle\AssignmentBundle\Entity\AssignmentMessage
+@subject = Your message is rejected
+@isSystem = 1
+@isEditable = 1
+
+<div>
+    <i>{{ entity.createdAt|date('F j, Y, g:i A') }}</i>
+</div>
+<h2>Author</h2>
+<div>
+    {{ entity.owner.firstName }}
+</div>
+<h2>Message</h2>
+<div>
+    {{ entity.message }}
+</div>

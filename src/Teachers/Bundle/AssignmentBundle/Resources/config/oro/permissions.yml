@@ -11,3 +11,9 @@ oro_permissions:
         apply_to_all: false
         apply_to_entities:
             - 'Teachers\Bundle\AssignmentBundle\Entity\Assignment'
+    VIEW_MESSAGES_APPROVAL_QUEUE:
+        label: teachers.assignment.permission.view_messages_approval_queue.label
+        group_names: ""
+        apply_to_all: false
+        apply_to_entities:
+            - 'Teachers\Bundle\AssignmentBundle\Entity\AssignmentMessage'

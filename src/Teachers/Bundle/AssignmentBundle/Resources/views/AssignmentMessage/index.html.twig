@@ -1,18 +1,4 @@
 {% extends 'OroUIBundle:actions:index.html.twig' %}
 {% import 'OroUIBundle::macros.html.twig' as UI %}
-{% set gridName  = 'teachers-assignments-grid' %}
-{% set pageTitle = 'teachers.assignment.entity_plural_label'|trans %}
-
-
-{% block navButtons %}
-    {% import 'OroUIBundle::macros.html.twig' as UI %}
-
-    {% if is_granted('teachers_assignment_create') %}
-        <div class="btn-group">
-            {{ UI.addButton({
-                'path' : path('teachers_assignment_create'),
-                'entity_label': 'teachers.assignment.entity_label'|trans,
-            }) }}
-        </div>
-    {% endif %}
-{% endblock %}
+{% set gridName  = 'teachers-assignment-messages-grid' %}
+{% set pageTitle = 'teachers.assignment.message.entity_plural_label'|trans %}

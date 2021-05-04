@@ -1,0 +1,28 @@
+{% extends 'OroUIBundle:actions:update.html.twig' %}
+
+{% set formAction = path('teachers_assignment_message_unapprove', { id: assignment_message.id }) %}
+
+{% block content_data %}
+    {% set id = 'comment-form' %}
+
+    {% set dataBlocks = [{
+        'title': 'teachers.assignment.message.block.general'|trans,
+        'subblocks': [
+            {
+                'title': 'teachers.assignment.message.block.message_information'|trans,
+                'data': [
+                    form_row(form.message),
+                    form_row(form.attachment)
+                ]
+            }
+        ]
+    }] %}
+
+    {% set dataBlocks = dataBlocks|merge(oro_form_additional_data(form, 'teachers.assignment.message.block.additional'|trans)) %}
+
+    {% set data = {
+        'formErrors': form_errors(form)? form_errors(form) : null,
+        'dataBlocks': dataBlocks,
+    } %}
+    {{ parent() }}
+{% endblock content_data %}

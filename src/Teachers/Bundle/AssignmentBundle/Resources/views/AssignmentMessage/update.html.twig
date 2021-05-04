@@ -20,7 +20,7 @@
     {% endif %}
     {{ UI.button({'path' : path('teachers_assignment_message_index'), 'title' : 'Cancel'|trans, 'label' : 'Cancel'|trans}) }}
     {% set html = UI.saveAndCloseButton({
-        'route': 'teachers_assignment_view',
+        'route': 'teachers_assignment_message_view',
         'params': {'id': '$id'}
     }) %}
     {% if is_granted('teachers_assignment_message_create') %}
@@ -28,7 +28,7 @@
             'route': 'teachers_assignment_message_create'
         }) %}
     {% endif %}
-    {% if is_granted('teachers_assignment_edit') %}
+    {% if is_granted('teachers_assignment_message_edit') %}
         {% set html = html ~ UI.saveAndStayButton({
             'route': 'teachers_assignment_message_update',
             'params': {'id': '$id'}

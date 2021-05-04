@@ -1,0 +1,13 @@
+teachers:
+    assignment:
+        action:
+            confirm_title:
+                approve: Approval confirmation
+            confirm_ok: Approve
+            confirm_cancel: Cancel
+            content:
+                approve: Are you sure you want to approve this message?
+            success:
+                approve: Message approved
+            error:
+                approve: Message is not approved

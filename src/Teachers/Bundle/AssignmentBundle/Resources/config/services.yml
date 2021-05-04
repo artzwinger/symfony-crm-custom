@@ -80,3 +80,8 @@ services:
         arguments:
             - '@oro_workflow.manager'
         public: true
+    teachers_assignment.message.datagrid_view_list:
+        class: Teachers\Bundle\AssignmentBundle\Datagrid\MessagesViewList
+        public: true
+        arguments:
+            - '@translator'

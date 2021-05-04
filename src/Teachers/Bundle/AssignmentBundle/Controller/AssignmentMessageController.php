@@ -5,11 +5,16 @@ namespace Teachers\Bundle\AssignmentBundle\Controller;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
+use Oro\Bundle\CommentBundle\Entity\Comment;
+use Oro\Bundle\CommentBundle\Entity\Manager\CommentApiManager;
 use Oro\Bundle\FormBundle\Model\UpdateHandlerFacade;
-use Oro\Bundle\SecurityBundle\Acl\Domain\DomainObjectWrapper;
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use Oro\Bundle\SecurityBundle\Annotation\CsrfProtection;
+use Oro\Bundle\WorkflowBundle\Exception\ForbiddenTransitionException;
+use Oro\Bundle\WorkflowBundle\Exception\InvalidTransitionException;
+use Oro\Bundle\WorkflowBundle\Exception\WorkflowException;
+use Oro\Bundle\WorkflowBundle\Model\WorkflowManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormFactory;
@@ -18,7 +23,6 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Acl\Domain\ObjectIdentity;
 use Teachers\Bundle\AssignmentBundle\Entity\AssignmentMessage;
 
 class AssignmentMessageController extends AbstractController
@@ -54,7 +58,12 @@ class AssignmentMessageController extends AbstractController
     /**
      * @Route(name="teachers_assignment_message_index", options={"expose"=true})
      * @Template("@TeachersAssignment/AssignmentMessage/index.html.twig")
-     * @AclAncestor("teachers_assignment_message_view")
+     * @Acl(
+     *      id="teachers_assignment_message_index",
+     *      type="entity",
+     *      permission="VIEW_MESSAGES_APPROVAL_QUEUE",
+     *      class="TeachersAssignmentBundle:AssignmentMessage"
+     * )
      */
     public function indexAction(): array
     {
@@ -145,6 +154,88 @@ class AssignmentMessageController extends AbstractController
         $em->flush();
 
         return new JsonResponse('', Response::HTTP_OK);
+    }
+
+    /**
+     * @Route(
+     *     "/approve/{id}",
+     *     name="teachers_assignment_message_approve",
+     *     requirements={"id"="\d+"},
+     *     methods={"POST"},
+     *     options={"expose"=true}
+     * )
+     * @AclAncestor("teachers_assignment_message_edit")
+     * @CsrfProtection()
+     * @param AssignmentMessage $assignmentMessage
+     * @return JsonResponse
+     * @throws ForbiddenTransitionException
+     * @throws InvalidTransitionException
+     * @throws WorkflowException
+     */
+    public function approveAction(AssignmentMessage $assignmentMessage): JsonResponse
+    {
+        /** @var WorkflowManager $wfm */
+        $wfm = $this->get('oro_workflow.manager');
+        $item = $wfm->getWorkflowItem($assignmentMessage, AssignmentMessage::WORKFLOW_NAME);
+        $wfm->transit($item, AssignmentMessage::WORKFLOW_TRANSITION_APPROVE);
+        return new JsonResponse(['successful' => true]);
+    }
+
+    /**
+     * @Route(
+     *     "/unapprove/{id}",
+     *     name="teachers_assignment_message_unapprove",
+     *     requirements={"id"="\d+"},
+     *     methods={"POST", "GET"},
+     *     options={"expose"=true}
+     * )
+     * @AclAncestor("teachers_assignment_message_edit")
+     * @Template("@TeachersAssignment/AssignmentMessage/update_comment.html.twig")
+     * @CsrfProtection()
+     * @param AssignmentMessage $assignmentMessage
+     * @return array|RedirectResponse
+     * @throws ForbiddenTransitionException
+     * @throws InvalidTransitionException
+     * @throws WorkflowException
+     */
+    public function unapproveAction(AssignmentMessage $assignmentMessage)
+    {
+        $relationClass = 'Teachers_Bundle_AssignmentBundle_Entity_AssignmentMessage';
+        if ($this->get('request_stack')->getCurrentRequest()->isMethod('POST')) {
+            /** @var WorkflowManager $wfm */
+            $wfm = $this->get('oro_workflow.manager');
+            $item = $wfm->getWorkflowItem($assignmentMessage, AssignmentMessage::WORKFLOW_NAME);
+            $wfm->transit($item, AssignmentMessage::WORKFLOW_TRANSITION_UNAPPROVE);
+        }
+        $comment = new Comment();
+        $this->getCommentManager()->setRelationField($comment, $relationClass, $assignmentMessage->getId());
+        /** @var UpdateHandlerFacade $handler */
+        $handler = $this->get('oro_form.update_handler');
+        /** @var FormFactory $factory */
+        $factory = $this->get('form.factory');
+        $builder = $factory->createNamedBuilder(
+            'oro_comment_api',
+            'Oro\Bundle\CommentBundle\Form\Type\CommentTypeApi'
+        );
+        $builder->setAction('teachers_assignment_message_unapprove');
+        $form = $builder->getForm();
+        $response = $handler->update(
+            $comment,
+            $form,
+            $this->get('translator')->trans('teachers.assignment.message.controller.assignment.saved.message')
+        );
+        $response['assignment_message'] = $assignmentMessage;
+        return $response;
+    }
+
+    /**
+     * Get entity Manager
+     *
+     * @return CommentApiManager
+     */
+    public function getCommentManager()
+    {
+        return $this->get('oro_comment.comment.api_manager');
     }
 
     /**
