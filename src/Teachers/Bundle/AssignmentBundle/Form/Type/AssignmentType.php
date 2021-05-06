@@ -2,11 +2,17 @@
 
 namespace Teachers\Bundle\AssignmentBundle\Form\Type;
 
+use DateTime;
+use DateTimeZone;
 use Oro\Bundle\EntityExtendBundle\Form\Type\EnumSelectType;
-use Oro\Bundle\FormBundle\Form\Type\OroResizeableRichTextType;
+use Oro\Bundle\FormBundle\Form\Type\OroDateTimeType;
+use Oro\Bundle\FormBundle\Utils\FormUtils;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints as Assert;
 use Teachers\Bundle\AssignmentBundle\Entity\Assignment;
@@ -25,13 +31,54 @@ class AssignmentType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('subject', TextType::class, [
+            ->add('firstName', TextType::class, [
                 'required' => true,
-                'label' => 'teachers.assignment.subject.label'
+                'label' => 'teachers.assignment.first_name.label'
             ])
-            ->add('description', OroResizeableRichTextType::class, [
+            ->add('lastName', TextType::class, [
+                'required' => true,
+                'label' => 'teachers.assignment.last_name.label'
+            ])
+            ->add('courseName', TextType::class, [
+                'required' => true,
+                'label' => 'teachers.assignment.course_name.label'
+            ])
+            ->add('coursePrefixes', TextType::class, [
+                'required' => true,
+                'label' => 'teachers.assignment.course_prefixes.label'
+            ])
+            ->add('description', TextareaType::class, [
                 'required' => true,
                 'label' => 'teachers.assignment.description.label'
+            ])
+            ->add('workToday', ChoiceType::class, [
+                'choices' => [
+                    'teachers.assignment.work_today.true.label' => true,
+                    'teachers.assignment.work_today.false.label' => false,
+                ],
+                'required' => true,
+                'label' => 'teachers.assignment.work_today.label',
+            ])
+            ->add('dueDate', OroDateTimeType::class, [
+                'required' => true,
+                'label' => 'teachers.assignment.due_date.label',
+                'constraints' => [
+                    $this->getDueDateValidationConstraint(new DateTime('now', new DateTimeZone('UTC')))
+                ]
+            ])
+            ->add('courseUrl', TextType::class, [
+                'required' => true,
+                'label' => 'teachers.assignment.course_url.label'
+            ])
+            ->add('instructions', TextareaType::class, [
+                'required' => true,
+                'label' => 'teachers.assignment.instructions.label'
+            ])
+            ->add('term', EnumSelectType::class, [
+                'label' => 'teachers.assignment.term.label',
+                'enum_code' => 'application_term',
+                'required' => true,
+                'constraints' => [new Assert\NotNull()]
             ])
             ->add('status', EnumSelectType::class, [
                 'label' => 'teachers.assignment.status.label',
@@ -73,5 +120,40 @@ class AssignmentType extends AbstractType
     public function getBlockPrefix(): string
     {
         return 'teachers_assignment';
+    }
+
+    /**
+     * @param FormEvent $event
+     */
+    protected function updateDueDateFieldConstraints(FormEvent $event)
+    {
+        /** @var Assignment $data */
+        $data = $event->getData();
+        if ($data && $data->getCreatedAt()) {
+            FormUtils::replaceField(
+                $event->getForm(),
+                'dueDate',
+                [
+                    'constraints' => [
+                        $this->getDueDateValidationConstraint($data->getCreatedAt())
+                    ]
+                ]
+            );
+        }
+    }
+
+    /**
+     * @param DateTime $startDate
+     *
+     * @return Assert\GreaterThanOrEqual
+     */
+    protected function getDueDateValidationConstraint(DateTime $startDate): Assert\GreaterThanOrEqual
+    {
+        return new Assert\GreaterThanOrEqual(
+            [
+                'value' => $startDate,
+                'message' => 'teachers.assignment.due_date_not_in_the_past'
+            ]
+        );
     }
 }

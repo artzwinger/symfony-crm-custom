@@ -30,6 +30,23 @@ teachers:
         my_courses_label: My Courses
         approval_queue_label: Approval Queue
 
+        first_name.label: First Name
+        last_name.label: Last Name
+        email.label: Email
+        phone.label: Phone
+        course_name.label: Course Name
+        course_prefixes.label: Course Prefixes
+        due_date.label: Due Date
+        course_url.label: Course URL
+        user_login.label: User ID
+        user_password.label: User Password
+        instructions.label: Instructions
+        work_today:
+            true.label: Yes
+            false.label: No
+            label: Works today
+        term.label: Length of Class Help
+
         #private note activity
         assignmentprivatenote.entity_label: Private note
         private_note:

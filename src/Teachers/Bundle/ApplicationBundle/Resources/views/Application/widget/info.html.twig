@@ -4,12 +4,22 @@
 <div class="widget-content">
     <div class="row-fluid form-horizontal">
         <div class="responsive-block">
-            {{ ui.renderProperty('teachers.application.subject.label'|trans, entity.subject) }}
+            {{ ui.renderProperty('teachers.application.first_name.label'|trans, entity.firstName) }}
+            {{ ui.renderProperty('teachers.application.last_name.label'|trans, entity.lastName) }}
+            {{ ui.renderProperty('teachers.application.email.label'|trans, entity.email) }}
+            {{ ui.renderProperty('teachers.application.phone.label'|trans, entity.phone) }}
+            {{ ui.renderProperty('teachers.application.course_name.label'|trans, entity.courseName) }}
+            {{ ui.renderProperty('teachers.application.course_prefixes.label'|trans, entity.coursePrefixes) }}
             {{ ui.renderProperty('teachers.application.description.label'|trans, entity.description) }}
-            {{ ui.renderProperty('teachers.application.studentLoginInfo.label'|trans, entity.studentLoginInfo) }}
             {{ ui.renderProperty('teachers.application.price.label'|trans, entity.price) }}
-            {{ ui.renderProperty('teachers.application.term.label'|trans, entity.term) }}
+            {{ ui.renderProperty('teachers.application.work_today.label'|trans, entity.workToday) }}
+            {{ ui.renderProperty('teachers.application.due_date.label'|trans, entity.dueDate|oro_format_datetime) }}
+            {{ ui.renderProperty('teachers.application.course_url.label'|trans, entity.courseUrl) }}
+            {{ ui.renderProperty('teachers.application.user_login.label'|trans, entity.userLogin) }}
+            {{ ui.renderProperty('teachers.application.user_password.label'|trans, entity.userPassword) }}
+            {{ ui.renderProperty('teachers.application.instructions.label'|trans, entity.instructions) }}
             {{ ui.renderProperty('teachers.application.status.label'|trans, entity.status) }}
+            {{ ui.renderProperty('teachers.application.term.label'|trans, entity.term) }}
 
             {{ entityConfig.renderDynamicFields(entity) }}
         </div>

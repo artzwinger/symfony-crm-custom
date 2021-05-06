@@ -1,14 +1,14 @@
 {% extends 'OroUIBundle:actions:view.html.twig' %}
 {% import 'OroUIBundle::macros.html.twig' as ui %}
-{% set subject = entity|oro_format_name|default('N/A'|trans) %}
-{% oro_title_set({ params : {"%application.subject%": subject} }) %}
+{% set className = entity|oro_format_name|default('N/A'|trans) %}
+{% oro_title_set({ params : {"%application.courseName%": className} }) %}
 
 {% block pageHeader %}
     {% set breadcrumbs = {
         'entity': entity,
         'indexPath': path('teachers_application_index'),
         'indexLabel': 'teachers.application.entity_plural_label'|trans,
-        'entityTitle': subject
+        'entityTitle': className
     } %}
     {{ parent() }}
 {% endblock pageHeader %}

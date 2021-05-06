@@ -29,3 +29,12 @@ services:
         arguments:
             - 'Teachers\Bundle\ApplicationBundle\Entity\Application'
             - "@doctrine.orm.entity_manager"
+
+    teachers_application.event_listener.orm.application_postupdate:
+        class: Teachers\Bundle\ApplicationBundle\EventListener\ORM\ApplicationPostupdate
+        arguments:
+            - '@doctrine.orm.entity_manager'
+            - '@oro_user.manager'
+            - '@teachers_users.helper.role'
+        tags:
+            - { name: doctrine.event_listener, event: postUpdate, connection: default, entity: 'Teachers\Bundle\ApplicationBundle\Entity\Application' }

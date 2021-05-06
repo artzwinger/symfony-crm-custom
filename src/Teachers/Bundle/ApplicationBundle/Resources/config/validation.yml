@@ -1,4 +1,57 @@
 Teachers\Bundle\ApplicationBundle\Entity\Application:
-  properties:
-    status:
-      - NotBlank: ~
+    properties:
+        firstName:
+            -   NotBlank: ~
+            -   Length:
+                    min: 1
+                    max: 255
+        lastName:
+            -   NotBlank: ~
+            -   Length:
+                    min: 1
+                    max: 255
+        email:
+            -   NotBlank: ~
+            -   Length:
+                    min: 1
+                    max: 255
+        phone:
+            -   NotBlank: ~
+            -   Length:
+                    min: 1
+                    max: 255
+        courseName:
+            -   NotBlank: ~
+            -   Length:
+                    min: 1
+                    max: 255
+        coursePrefixes:
+            -   NotBlank: ~
+            -   Length:
+                    min: 1
+                    max: 255
+        description:
+            -   NotBlank: ~
+        price:
+            -   NotBlank: ~
+            -   GreaterThanOrEqual:
+                    value: 0
+        workToday:
+            -   NotBlank: ~
+        courseUrl:
+            -   NotBlank: ~
+            -   Length:
+                    min: 1
+                    max: 255
+        userLogin:
+            -   NotBlank: ~
+            -   Length:
+                    min: 1
+                    max: 255
+        userPassword:
+            -   NotBlank: ~
+            -   Length:
+                    min: 1
+                    max: 255
+        instructions:
+            -   NotBlank: ~

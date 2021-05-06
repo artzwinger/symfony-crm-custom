@@ -2,12 +2,14 @@
 
 namespace Teachers\Bundle\ApplicationBundle\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Oro\Bundle\EntityBundle\EntityProperty\DatesAwareInterface;
 use Oro\Bundle\EntityBundle\EntityProperty\DatesAwareTrait;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
+use Oro\Bundle\UserBundle\Entity\User;
 use Teachers\Bundle\ApplicationBundle\Model\ExtendApplication;
 
 /**
@@ -44,7 +46,7 @@ class Application extends ExtendApplication implements DatesAwareInterface
     use DatesAwareTrait;
 
     /**
-     * @var int $id
+     * @var int|null $id
      *
      * @ORM\Column(type="integer")
      * @ORM\Id
@@ -60,11 +62,46 @@ class Application extends ExtendApplication implements DatesAwareInterface
     protected $id;
 
     /**
-     * @var string|null $subject
+     * @var string|null $firstName
      *
-     * @ORM\Column(type="string", length=255, nullable=false)
+     * @ORM\Column(name="first_name", type="string", length=255, nullable=false)
      */
-    protected $subject;
+    protected $firstName;
+
+    /**
+     * @var string|null $lastName
+     *
+     * @ORM\Column(name="last_name", type="string", length=255, nullable=false)
+     */
+    protected $lastName;
+
+    /**
+     * @var string|null $email
+     *
+     * @ORM\Column(name="email", type="string", length=255, nullable=false)
+     */
+    protected $email;
+
+    /**
+     * @var string|null $phone
+     *
+     * @ORM\Column(name="phone", type="string", length=255, nullable=false)
+     */
+    protected $phone;
+
+    /**
+     * @var string|null $courseName
+     *
+     * @ORM\Column(name="course_name", type="string", length=255, nullable=false)
+     */
+    protected $courseName;
+
+    /**
+     * @var string|null $coursePrefixes
+     *
+     * @ORM\Column(name="course_prefixes", type="string", length=255, nullable=false)
+     */
+    protected $coursePrefixes;
 
     /**
      * @var string|null $description
@@ -74,26 +111,74 @@ class Application extends ExtendApplication implements DatesAwareInterface
     protected $description;
 
     /**
-     * @var string|null $studentLoginInfo
+     * @var boolean|null $workToday
      *
-     * @ORM\Column(type="text", nullable=false)
+     * @ORM\Column(name="work_today", type="boolean", nullable=false)
      */
-    protected $studentLoginInfo;
+    protected $workToday;
 
     /**
-     * @var double $price
+     * @var DateTime|null
+     * @ORM\Column(name="due_date", type="datetime", nullable=true)
+     * @ConfigField(
+     *      defaultValues={
+     *          "dataaudit"={
+     *              "auditable"=true
+     *          }
+     *      }
+     * )
+     */
+    protected $dueDate;
+
+    /**
+     * @var string|null $courseUrl
+     *
+     * @ORM\Column(name="course_url", type="string", length=255, nullable=false)
+     */
+    protected $courseUrl;
+
+    /**
+     * @var string|null $userLogin
+     *
+     * @ORM\Column(name="user_login", type="string", length=255, nullable=false)
+     */
+    protected $userLogin;
+
+    /**
+     * @var string|null $userPassword
+     *
+     * @ORM\Column(name="user_password", type="string", length=255, nullable=false)
+     */
+    protected $userPassword;
+
+    /**
+     * @var string|null $instructions
+     *
+     * @ORM\Column(type="text", nullable=true)
+     */
+    protected $instructions;
+
+    /**
+     * @var double|null $price
      *
      * @ORM\Column(name="price", type="money", nullable=true)
      */
     protected $price;
 
     /**
-     * @var Organization
+     * @var Organization|null
      *
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\OrganizationBundle\Entity\Organization")
      * @ORM\JoinColumn(name="owner_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $owner;
+    /**
+     * @var User|null $student
+     *
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\UserBundle\Entity\User")
+     * @ORM\JoinColumn(name="student_id", referencedColumnName="id", nullable=true, onDelete="SET NULL")
+     */
+    protected $student;
 
     const STATUS_NEW = 'new';
     const STATUS_WORKING = 'working';
@@ -148,7 +233,7 @@ class Application extends ExtendApplication implements DatesAwareInterface
     }
 
     /**
-     * @return int
+     * @return int|null
      */
     public function getId(): ?int
     {
@@ -166,17 +251,97 @@ class Application extends ExtendApplication implements DatesAwareInterface
     /**
      * @return string|null
      */
-    public function getSubject(): ?string
+    public function getFirstName(): ?string
     {
-        return $this->subject;
+        return $this->firstName;
     }
 
     /**
-     * @param string|null $subject
+     * @param string|null $firstName
      */
-    public function setSubject(?string $subject): void
+    public function setFirstName(?string $firstName): void
     {
-        $this->subject = $subject;
+        $this->firstName = $firstName;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getLastName(): ?string
+    {
+        return $this->lastName;
+    }
+
+    /**
+     * @param string|null $lastName
+     */
+    public function setLastName(?string $lastName): void
+    {
+        $this->lastName = $lastName;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getEmail(): ?string
+    {
+        return $this->email;
+    }
+
+    /**
+     * @param string|null $email
+     */
+    public function setEmail(?string $email): void
+    {
+        $this->email = $email;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getPhone(): ?string
+    {
+        return $this->phone;
+    }
+
+    /**
+     * @param string|null $phone
+     */
+    public function setPhone(?string $phone): void
+    {
+        $this->phone = $phone;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getCourseName(): ?string
+    {
+        return $this->courseName;
+    }
+
+    /**
+     * @param string|null $courseName
+     */
+    public function setCourseName(?string $courseName): void
+    {
+        $this->courseName = $courseName;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getCoursePrefixes(): ?string
+    {
+        return $this->coursePrefixes;
+    }
+
+    /**
+     * @param string|null $coursePrefixes
+     */
+    public function setCoursePrefixes(?string $coursePrefixes): void
+    {
+        $this->coursePrefixes = $coursePrefixes;
     }
 
     /**
@@ -196,19 +361,99 @@ class Application extends ExtendApplication implements DatesAwareInterface
     }
 
     /**
-     * @return string|null
+     * @return bool|null
      */
-    public function getStudentLoginInfo(): ?string
+    public function getWorkToday(): ?bool
     {
-        return $this->studentLoginInfo;
+        return $this->workToday;
     }
 
     /**
-     * @param string|null $studentLoginInfo
+     * @param bool|null $workToday
      */
-    public function setStudentLoginInfo(?string $studentLoginInfo): void
+    public function setWorkToday(?bool $workToday): void
     {
-        $this->studentLoginInfo = $studentLoginInfo;
+        $this->workToday = $workToday;
+    }
+
+    /**
+     * @return DateTime|null
+     */
+    public function getDueDate(): ?DateTime
+    {
+        return $this->dueDate;
+    }
+
+    /**
+     * @param DateTime|null $dueDate
+     */
+    public function setDueDate(?DateTime $dueDate): void
+    {
+        $this->dueDate = $dueDate;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getCourseUrl(): ?string
+    {
+        return $this->courseUrl;
+    }
+
+    /**
+     * @param string|null $courseUrl
+     */
+    public function setCourseUrl(?string $courseUrl): void
+    {
+        $this->courseUrl = $courseUrl;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getUserLogin(): ?string
+    {
+        return $this->userLogin;
+    }
+
+    /**
+     * @param string|null $userLogin
+     */
+    public function setUserLogin(?string $userLogin): void
+    {
+        $this->userLogin = $userLogin;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getUserPassword(): ?string
+    {
+        return $this->userPassword;
+    }
+
+    /**
+     * @param string|null $userPassword
+     */
+    public function setUserPassword(?string $userPassword): void
+    {
+        $this->userPassword = $userPassword;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getInstructions(): ?string
+    {
+        return $this->instructions;
+    }
+
+    /**
+     * @param string|null $instructions
+     */
+    public function setInstructions(?string $instructions): void
+    {
+        $this->instructions = $instructions;
     }
 
     /**
@@ -220,9 +465,9 @@ class Application extends ExtendApplication implements DatesAwareInterface
     }
 
     /**
-     * @param float $price
+     * @param float|null $price
      */
-    public function setPrice(float $price): void
+    public function setPrice(?float $price): void
     {
         $this->price = $price;
     }
@@ -236,12 +481,26 @@ class Application extends ExtendApplication implements DatesAwareInterface
     }
 
     /**
-     * @param Organization $owningOrganization
-     * @return self
+     * @param Organization|null $owner
      */
-    public function setOwner(Organization $owningOrganization): Application
+    public function setOwner(?Organization $owner): void
     {
-        $this->owner = $owningOrganization;
-        return $this;
+        $this->owner = $owner;
+    }
+
+    /**
+     * @return User|null
+     */
+    public function getStudent(): ?User
+    {
+        return $this->student;
+    }
+
+    /**
+     * @param User|null $student
+     */
+    public function setStudent(?User $student): void
+    {
+        $this->student = $student;
     }
 }

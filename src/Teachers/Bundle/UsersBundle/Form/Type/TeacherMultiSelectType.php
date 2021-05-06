@@ -17,13 +17,13 @@ class TeacherMultiSelectType extends AbstractType
      */
     protected $entityManager;
     /**
-     * @var \Teachers\Bundle\UsersBundle\Helper\Role
+     * @var Role
      */
     private $roleHelper;
 
     /**
-     * @param \Doctrine\ORM\EntityManager $entityManager
-     * @param \Teachers\Bundle\UsersBundle\Helper\Role $roleHelper
+     * @param EntityManager $entityManager
+     * @param Role $roleHelper
      */
     public function __construct(EntityManager $entityManager, Role $roleHelper)
     {

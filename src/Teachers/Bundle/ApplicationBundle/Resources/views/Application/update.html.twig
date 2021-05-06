@@ -1,8 +1,8 @@
 {% extends 'OroUIBundle:actions:update.html.twig' %}
 
 {% set formAction = form.vars.value.id ? path('teachers_application_update', { 'id': form.vars.value.id }) : path('teachers_application_create') %}
-{% set subject = form.vars.value|oro_format_name|default('N/A'|trans) %}
-{% oro_title_set({ params : {"%application.subject%": subject} }) %}
+{% set className = form.vars.value|oro_format_name|default('N/A'|trans) %}
+{% oro_title_set({ params : {"%application.className%": className} }) %}
 
 {% block navButtons %}
     {% import 'OroUIBundle::macros.html.twig' as UI %}
@@ -43,7 +43,7 @@
             'entity':      form.vars.value,
             'indexPath':   path('teachers_application_index'),
             'indexLabel': 'teachers.application.entity_plural_label'|trans,
-            'entityTitle': subject
+            'entityTitle': className
         } %}
         {{ parent() }}
     {% else %}
@@ -61,12 +61,22 @@
             {
                 'title': 'teachers.application.block.application_information'|trans,
                 'data': [
-                    form_row(form.subject),
+                    form_row(form.firstName),
+                    form_row(form.lastName),
+                    form_row(form.email),
+                    form_row(form.phone),
+                    form_row(form.courseName),
+                    form_row(form.coursePrefixes),
                     form_row(form.description),
-                    form_row(form.studentLoginInfo),
                     form_row(form.price),
-                    form_row(form.term),
-                    form_row(form.status)
+                    form_row(form.workToday),
+                    form_row(form.dueDate),
+                    form_row(form.courseUrl),
+                    form_row(form.userLogin),
+                    form_row(form.userPassword),
+                    form_row(form.instructions),
+                    form_row(form.status),
+                    form_row(form.term)
                 ]
             }
         ]

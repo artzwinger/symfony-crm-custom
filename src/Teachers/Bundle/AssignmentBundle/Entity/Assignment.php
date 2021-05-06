@@ -2,6 +2,7 @@
 
 namespace Teachers\Bundle\AssignmentBundle\Entity;
 
+use DateTime;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Oro\Bundle\EntityBundle\EntityProperty\DatesAwareInterface;
@@ -71,19 +72,78 @@ class Assignment extends ExtendAssignment implements DatesAwareInterface
      */
     protected $id;
 
-    /**
-     * @var string|null $subject
-     *
-     * @ORM\Column(type="string", length=255, nullable=false)
-     */
     protected $subject;
+
+    protected $term;
+
+    /**
+     * @var string|null $firstName
+     *
+     * @ORM\Column(name="first_name", type="string", length=255, nullable=false)
+     */
+    protected $firstName;
+
+    /**
+     * @var string|null $lastName
+     *
+     * @ORM\Column(name="last_name", type="string", length=255, nullable=false)
+     */
+    protected $lastName;
+
+    /**
+     * @var string|null $courseName
+     *
+     * @ORM\Column(name="course_name", type="string", length=255, nullable=false)
+     */
+    protected $courseName;
+
+    /**
+     * @var string|null $coursePrefixes
+     *
+     * @ORM\Column(name="course_prefixes", type="string", length=255, nullable=false)
+     */
+    protected $coursePrefixes;
 
     /**
      * @var string|null $description
      *
-     * @ORM\Column(type="text", nullable=false)
+     * @ORM\Column(type="text", nullable=true)
      */
     protected $description;
+
+    /**
+     * @var boolean|null $workToday
+     *
+     * @ORM\Column(name="work_today", type="boolean", nullable=false)
+     */
+    protected $workToday;
+
+    /**
+     * @var DateTime|null
+     * @ORM\Column(name="due_date", type="datetime", nullable=true)
+     * @ConfigField(
+     *      defaultValues={
+     *          "dataaudit"={
+     *              "auditable"=true
+     *          }
+     *      }
+     * )
+     */
+    protected $dueDate;
+
+    /**
+     * @var string|null $courseUrl
+     *
+     * @ORM\Column(name="course_url", type="string", length=255, nullable=false)
+     */
+    protected $courseUrl;
+
+    /**
+     * @var string|null $instructions
+     *
+     * @ORM\Column(type="text", nullable=true)
+     */
+    protected $instructions;
 
     /**
      * @var User $teacher
@@ -217,6 +277,142 @@ class Assignment extends ExtendAssignment implements DatesAwareInterface
     /**
      * @return string|null
      */
+    public function getFirstName(): ?string
+    {
+        return $this->firstName;
+    }
+
+    /**
+     * @param string|null $firstName
+     */
+    public function setFirstName(?string $firstName): void
+    {
+        $this->firstName = $firstName;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getLastName(): ?string
+    {
+        return $this->lastName;
+    }
+
+    /**
+     * @param string|null $lastName
+     */
+    public function setLastName(?string $lastName): void
+    {
+        $this->lastName = $lastName;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getCourseName(): ?string
+    {
+        return $this->courseName;
+    }
+
+    /**
+     * @param string|null $courseName
+     */
+    public function setCourseName(?string $courseName): void
+    {
+        $this->courseName = $courseName;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getCoursePrefixes(): ?string
+    {
+        return $this->coursePrefixes;
+    }
+
+    /**
+     * @param string|null $coursePrefixes
+     */
+    public function setCoursePrefixes(?string $coursePrefixes): void
+    {
+        $this->coursePrefixes = $coursePrefixes;
+    }
+
+    /**
+     * @return bool|null
+     */
+    public function getWorkToday(): ?bool
+    {
+        return $this->workToday;
+    }
+
+    /**
+     * @param bool|null $workToday
+     */
+    public function setWorkToday(?bool $workToday): void
+    {
+        $this->workToday = $workToday;
+    }
+
+    /**
+     * @return DateTime|null
+     */
+    public function getDueDate(): ?DateTime
+    {
+        return $this->dueDate;
+    }
+
+    /**
+     * @param DateTime|null $dueDate
+     */
+    public function setDueDate(?DateTime $dueDate): void
+    {
+        $this->dueDate = $dueDate;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getCourseUrl(): ?string
+    {
+        return $this->courseUrl;
+    }
+
+    /**
+     * @param string|null $courseUrl
+     */
+    public function setCourseUrl(?string $courseUrl): void
+    {
+        $this->courseUrl = $courseUrl;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getUserLogin(): ?string
+    {
+        return $this->userLogin;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getInstructions(): ?string
+    {
+        return $this->instructions;
+    }
+
+    /**
+     * @param string|null $instructions
+     */
+    public function setInstructions(?string $instructions): void
+    {
+        $this->instructions = $instructions;
+    }
+
+    /**
+     * @return string|null
+     */
     public function getDescription(): ?string
     {
         return $this->description;
@@ -231,7 +427,7 @@ class Assignment extends ExtendAssignment implements DatesAwareInterface
     }
 
     /**
-     * @return \Oro\Bundle\UserBundle\Entity\User
+     * @return User
      */
     public function getTeacher(): ?User
     {
@@ -239,7 +435,7 @@ class Assignment extends ExtendAssignment implements DatesAwareInterface
     }
 
     /**
-     * @param \Oro\Bundle\UserBundle\Entity\User $teacher
+     * @param User $teacher
      */
     public function setTeacher(User $teacher): void
     {
@@ -247,7 +443,7 @@ class Assignment extends ExtendAssignment implements DatesAwareInterface
     }
 
     /**
-     * @return \Oro\Bundle\UserBundle\Entity\User
+     * @return User
      */
     public function getStudent(): ?User
     {
@@ -255,7 +451,7 @@ class Assignment extends ExtendAssignment implements DatesAwareInterface
     }
 
     /**
-     * @param \Oro\Bundle\UserBundle\Entity\User $student
+     * @param User $student
      */
     public function setStudent(User $student): void
     {
@@ -263,7 +459,7 @@ class Assignment extends ExtendAssignment implements DatesAwareInterface
     }
 
     /**
-     * @return \Doctrine\Common\Collections\Collection|\Teachers\Bundle\UsersBundle\Entity\TeacherGroup[]
+     * @return Collection|TeacherGroup[]
      */
     public function getTeacherGroups()
     {
@@ -271,7 +467,7 @@ class Assignment extends ExtendAssignment implements DatesAwareInterface
     }
 
     /**
-     * @param \Doctrine\Common\Collections\Collection|\Teachers\Bundle\UsersBundle\Entity\TeacherGroup[] $teacherGroups
+     * @param Collection|TeacherGroup[] $teacherGroups
      */
     public function setTeacherGroups($teacherGroups): void
     {
@@ -279,7 +475,7 @@ class Assignment extends ExtendAssignment implements DatesAwareInterface
     }
 
     /**
-     * @return \Oro\Bundle\UserBundle\Entity\User
+     * @return User
      */
     public function getCourseManager(): ?User
     {
@@ -287,7 +483,7 @@ class Assignment extends ExtendAssignment implements DatesAwareInterface
     }
 
     /**
-     * @param \Oro\Bundle\UserBundle\Entity\User $courseManager
+     * @param User $courseManager
      */
     public function setCourseManager(User $courseManager): void
     {
@@ -295,7 +491,7 @@ class Assignment extends ExtendAssignment implements DatesAwareInterface
     }
 
     /**
-     * @return \Oro\Bundle\OrganizationBundle\Entity\Organization
+     * @return Organization
      */
     public function getOrganization(): ?Organization
     {
@@ -303,7 +499,7 @@ class Assignment extends ExtendAssignment implements DatesAwareInterface
     }
 
     /**
-     * @param \Oro\Bundle\OrganizationBundle\Entity\Organization $organization
+     * @param Organization $organization
      */
     public function setOrganization(Organization $organization): void
     {

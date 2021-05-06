@@ -8,6 +8,8 @@ use Oro\Bundle\EntityExtendBundle\Entity\AbstractEnumValue;
 /**
  * @method AbstractEnumValue getStatus()
  * @method ExtendAssignment setStatus(AbstractEnumValue $status)
+ * @method AbstractEnumValue getTerm()
+ * @method ExtendAssignment setTerm(AbstractEnumValue $term)
  */
 class ExtendAssignment
 {

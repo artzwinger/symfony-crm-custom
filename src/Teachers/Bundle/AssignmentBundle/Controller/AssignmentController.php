@@ -3,9 +3,14 @@
 namespace Teachers\Bundle\AssignmentBundle\Controller;
 
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityNotFoundException;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
+use Exception;
+use Oro\Bundle\FormBundle\Model\UpdateHandlerFacade;
+use Symfony\Component\Form\FormFactory;
 use Symfony\Component\Form\FormInterface;
+use Teachers\Bundle\ApplicationBundle\Entity\Application;
 use Teachers\Bundle\AssignmentBundle\Entity\Assignment;
 use Oro\Bundle\SecurityBundle\Annotation\CsrfProtection;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -95,7 +100,36 @@ class AssignmentController extends AbstractController
      */
     public function createAction()
     {
-        return $this->update(new Assignment(), 'teachers_assignment_create');
+        $assignment = new Assignment();
+        $request = $this->get('request_stack')->getCurrentRequest();
+        $entityClass = $request->get('entityClass');
+        $entityId = $request->get('entityId');
+        try {
+            if ($entityClass && $entityId) {
+                $entityClass = str_replace('_', '\\', $entityClass);
+            }
+            $repository = $this->get('doctrine.orm.entity_manager')->getRepository($entityClass);
+            /** @var Application $application */
+            $application = $repository->find($entityId);
+            if (empty($application)) {
+                throw new EntityNotFoundException();
+            }
+            $assignment->setTerm($application->getTerm());
+            $assignment->setFirstName($application->getFirstName());
+            $assignment->setLastName($application->getLastName());
+            $assignment->setCourseName($application->getCourseName());
+            $assignment->setCoursePrefixes($application->getCoursePrefixes());
+            $assignment->setDescription($application->getDescription());
+            $assignment->setWorkToday($application->getWorkToday());
+            $assignment->setDueDate($application->getDueDate());
+            $assignment->setCourseUrl($application->getCourseUrl());
+            $assignment->setInstructions($application->getInstructions());
+            if ($application->getStudent()) {
+                $assignment->setStudent($application->getStudent());
+            }
+        } catch (Exception $e) {
+        }
+        return $this->update($assignment, 'teachers_assignment_create');
     }
 
     /**
@@ -136,7 +170,7 @@ class AssignmentController extends AbstractController
      */
     private function update(Assignment $entity, $action)
     {
-        /** @var \Oro\Bundle\FormBundle\Model\UpdateHandlerFacade $handler */
+        /** @var UpdateHandlerFacade $handler */
         $handler = $this->get('oro_form.update_handler');
         $form = $this->getForm($action);
         return $handler->update(
@@ -148,7 +182,7 @@ class AssignmentController extends AbstractController
 
     private function getForm($action): FormInterface
     {
-        /** @var \Symfony\Component\Form\FormFactory $factory */
+        /** @var FormFactory $factory */
         $factory = $this->get('form.factory');
         $builder = $factory->createNamedBuilder(
             'teachers_assignment_form',

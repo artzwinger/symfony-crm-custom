@@ -7,7 +7,17 @@ datagrids:
             query:
                 select:
                     - application.id
-                    - application.subject
+                    - application.firstName
+                    - application.lastName
+                    - application.email
+                    - application.phone
+                    - application.courseName
+                    - application.coursePrefixes
+                    - application.price
+                    - application.workToday
+                    - application.dueDate
+                    - application.courseUrl
+                    - application.userLogin
                     - applicationterm.name as termName
                     - applicationterm.id as termId
                     - application.createdAt
@@ -17,8 +27,33 @@ datagrids:
                     left:
                         - { join: application.term, alias: applicationterm }
         columns:
-            subject:
-                label: teachers.application.subject.label
+            firstName:
+                label: teachers.application.first_name.label
+            lastName:
+                label: teachers.application.last_name.label
+            email:
+                label: teachers.application.email.label
+            phone:
+                label: teachers.application.phone.label
+            courseName:
+                label: teachers.application.course_name.label
+            coursePrefixes:
+                label: teachers.application.course_prefixes.label
+            price:
+                label: teachers.application.price.label
+            workToday:
+                label: teachers.application.work_today.label
+                frontend_type: select
+                choices:
+                    teachers.application.work_today.true.label: enabled
+                    teachers.application.work_today.false.label: disabled
+            dueDate:
+                frontend_type: datetime
+                label: teachers.application.due_date.label
+            courseUrl:
+                label: teachers.application.course_url.label
+            userLogin:
+                label: teachers.application.user_login.label
             createdAt:
                 frontend_type: datetime
                 label: oro.ui.created_at
@@ -26,8 +61,26 @@ datagrids:
                 label: teachers.application.term.label
         sorters:
             columns:
-                subject:
-                    data_name: application.subject
+                firstName:
+                    data_name: application.firstName
+                lastName:
+                    data_name: application.lastName
+                email:
+                    data_name: application.email
+                phone:
+                    data_name: application.phone
+                courseName:
+                    data_name: application.courseName
+                coursePrefixes:
+                    data_name: application.coursePrefixe
+                price:
+                    data_name: application.price
+                dueDate:
+                    data_name: application.dueDate
+                courseUrl:
+                    data_name: application.courseUrl
+                userLogin:
+                    data_name: application.userLogin
                 createdAt:
                     data_name: application.createdAt
                 termName:
@@ -36,9 +89,44 @@ datagrids:
                 createdAt: DESC
         filters:
             columns:
-                subject:
+                firstName:
                     type: string
-                    data_name: application.subject
+                    data_name: application.firstName
+                lastName:
+                    type: string
+                    data_name: application.lastName
+                email:
+                    type: string
+                    data_name: application.email
+                phone:
+                    type: string
+                    data_name: application.phone
+                courseName:
+                    type: string
+                    data_name: application.courseName
+                coursePrefixe:
+                    type: string
+                    data_name: application.coursePrefixe
+                price:
+                    type: string
+                    data_name: application.price
+                workToday:
+                    data_name: c.enabled
+                    type: choice
+                    options:
+                        field_options:
+                            choices:
+                                teachers.application.work_today.false.label: 0
+                                teachers.application.work_today.true.label: 1
+                dueDate:
+                    type: string
+                    data_name: application.dueDate
+                courseUrl:
+                    type: string
+                    data_name: application.courseUrl
+                userLogin:
+                    type: string
+                    data_name: application.userLogin
                 createdAt:
                     type: datetime
                     data_name: application.createdAt

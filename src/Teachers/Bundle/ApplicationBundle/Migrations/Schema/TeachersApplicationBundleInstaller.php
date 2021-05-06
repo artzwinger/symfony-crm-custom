@@ -3,6 +3,7 @@
 namespace Teachers\Bundle\ApplicationBundle\Migrations\Schema;
 
 use Doctrine\DBAL\Schema\Schema;
+use Doctrine\DBAL\Schema\SchemaException;
 use Oro\Bundle\EntityExtendBundle\EntityConfig\ExtendScope;
 use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtension;
 use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtensionAwareInterface;
@@ -34,7 +35,7 @@ class TeachersApplicationBundleInstaller implements Installation, ExtendExtensio
 
     /**
      * {@inheritdoc}
-     * @throws \Doctrine\DBAL\Schema\SchemaException
+     * @throws SchemaException
      */
     public function up(Schema $schema, QueryBag $queries)
     {
@@ -83,7 +84,7 @@ class TeachersApplicationBundleInstaller implements Installation, ExtendExtensio
 
     /**
      * @param Schema $schema
-     * @throws \Doctrine\DBAL\Schema\SchemaException
+     * @throws SchemaException
      */
     protected function createApplicationTable(Schema $schema)
     {

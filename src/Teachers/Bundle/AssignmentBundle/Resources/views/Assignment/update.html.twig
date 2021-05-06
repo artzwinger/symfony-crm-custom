@@ -61,13 +61,21 @@
             {
                 'title': 'teachers.assignment.block.assignment_information'|trans,
                 'data': [
-                    form_row(form.subject),
-                    form_row(form.description),
-                    form_row(form.teacherGroups),
-                    form_row(form.courseManager),
-                    form_row(form.student),
-                    form_row(form.status)
-                ]
+                form_row(form.teacherGroups),
+                form_row(form.courseManager),
+                form_row(form.student),
+                form_row(form.firstName),
+                form_row(form.lastName),
+                form_row(form.courseName),
+                form_row(form.coursePrefixes),
+                form_row(form.description),
+                form_row(form.workToday),
+                form_row(form.dueDate),
+                form_row(form.courseUrl),
+                form_row(form.instructions),
+                form_row(form.status),
+                form_row(form.term)
+            ]
             }
         ]
     }] %}

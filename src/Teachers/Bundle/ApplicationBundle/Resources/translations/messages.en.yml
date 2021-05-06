@@ -5,11 +5,11 @@ teachers:
         entity_grid_all_view_label: All %entity_plural_label%
         id.label: ID
         subject.label: Subject
-        description.label: Description
+        description.label: What are we helping with?
         studentLoginInfo.label: Student login info
         price.label: Price
         status.label: Status
-        term.label: Term
+        term.label: Length of Class Help
         feedback.label: Feedback
         opportunity.label: Opportunity
         lead.label: Lead
@@ -17,6 +17,23 @@ teachers:
         emails.label: Emails
         organization_name.label: Organization name
         owner.label: Organization
+        due_date_not_in_the_past: Due Date cannot be in the past
+
+        first_name.label: First Name
+        last_name.label: Last Name
+        email.label: Email
+        phone.label: Phone
+        course_name.label: Course Name
+        course_prefixes.label: Course Prefixes
+        due_date.label: Due Date
+        course_url.label: Course URL
+        user_login.label: User ID
+        user_password.label: User Password
+        instructions.label: Instructions
+        work_today:
+            true.label: Yes
+            false.label: No
+            label: Works today
 
         course_managers_queue: Approval Queue
 
