@@ -60,7 +60,8 @@
         "oro/crm-hangouts-call-bundle": "4.1.*",
         "oro/crm-magento-embedded-contact-us": "4.1.*",
         "oro/crm-dotmailer": "4.1.*",
-        "oro/crm-zendesk": "4.1.*"
+        "oro/crm-zendesk": "4.1.*",
+        "google/recaptcha": "^1.2"
     },
     "require-dev": {
         "behat/behat": "3.4.*",
