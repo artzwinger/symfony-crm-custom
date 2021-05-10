@@ -88,6 +88,7 @@ services:
          tags:
              - { name: twig.extension }
     recaptcha:
+        class: ReCaptcha\ReCaptcha
         arguments:
             - '%env(GOOGLE_RECAPTCHA_SECRET_KEY)%'
 
