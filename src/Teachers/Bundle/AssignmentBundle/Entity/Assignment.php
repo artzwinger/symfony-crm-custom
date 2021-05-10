@@ -139,6 +139,20 @@ class Assignment extends ExtendAssignment implements DatesAwareInterface
     protected $courseUrl;
 
     /**
+     * @var string|null $userLogin
+     *
+     * @ORM\Column(name="user_login", type="string", length=255, nullable=false)
+     */
+    protected $userLogin;
+
+    /**
+     * @var string|null $userPassword
+     *
+     * @ORM\Column(name="user_password", type="string", length=255, nullable=false)
+     */
+    protected $userPassword;
+
+    /**
      * @var string|null $instructions
      *
      * @ORM\Column(type="text", nullable=true)
@@ -392,6 +406,30 @@ class Assignment extends ExtendAssignment implements DatesAwareInterface
     public function getUserLogin(): ?string
     {
         return $this->userLogin;
+    }
+
+    /**
+     * @param string|null $userLogin
+     */
+    public function setUserLogin(?string $userLogin): void
+    {
+        $this->userLogin = $userLogin;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getUserPassword(): ?string
+    {
+        return $this->userPassword;
+    }
+
+    /**
+     * @param string|null $userPassword
+     */
+    public function setUserPassword(?string $userPassword): void
+    {
+        $this->userPassword = $userPassword;
     }
 
     /**

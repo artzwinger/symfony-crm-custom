@@ -36,5 +36,7 @@ services:
             - '@doctrine.orm.entity_manager'
             - '@oro_user.manager'
             - '@teachers_users.helper.role'
+            - '@oro_config.manager'
+            - '@oro_email.manager.template_email'
         tags:
             - { name: doctrine.event_listener, event: postUpdate, connection: default, entity: 'Teachers\Bundle\ApplicationBundle\Entity\Application' }

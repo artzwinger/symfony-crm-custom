@@ -7,13 +7,19 @@ use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Exception;
+use Oro\Bundle\ConfigBundle\Config\ConfigManager;
+use Oro\Bundle\EmailBundle\Manager\EmailTemplateManager;
+use Oro\Bundle\EmailBundle\Model\EmailTemplateCriteria;
+use Oro\Bundle\EmailBundle\Model\From;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\UserBundle\Entity\UserManager;
+use RuntimeException;
 use Teachers\Bundle\ApplicationBundle\Entity\Application;
 use Teachers\Bundle\UsersBundle\Helper\Role;
 
 class ApplicationPostupdate
 {
+    public const INVITE_USER_TEMPLATE = 'invite_user';
     /**
      * @var bool $proceed
      */
@@ -30,16 +36,28 @@ class ApplicationPostupdate
      * @var Role
      */
     private $roleHelper;
+    /**
+     * @var ConfigManager
+     */
+    private $configManager;
+    /**
+     * @var EmailTemplateManager
+     */
+    private $emailTemplateManager;
 
     public function __construct(
         EntityManager $entityManager,
         UserManager $userManager,
-        Role $roleHelper
+        Role $roleHelper,
+        ConfigManager $configManager,
+        EmailTemplateManager $emailTemplateManager
     )
     {
         $this->entityManager = $entityManager;
         $this->userManager = $userManager;
         $this->roleHelper = $roleHelper;
+        $this->configManager = $configManager;
+        $this->emailTemplateManager = $emailTemplateManager;
     }
 
     /**
@@ -59,8 +77,6 @@ class ApplicationPostupdate
         if ($application->getStudent()) {
             return;
         }
-        $userLogin = $application->getUserLogin();
-        $userPassword = $application->getUserPassword();
         $firstName = $application->getFirstName();
         $lastName = $application->getLastName();
         $email = $application->getEmail();
@@ -74,10 +90,12 @@ class ApplicationPostupdate
         $student->setFirstName($firstName);
         $student->setLastName($lastName);
         $student->setEmail($email);
-        $student->setUsername($userLogin);
-        $student->setPlainPassword($userPassword);
+        $student->setUsername($email);
+        $password = $this->userManager->generatePassword(10);
+        $student->setPlainPassword($password);
 
         $this->userManager->updateUser($student, true);
+        $this->sendInviteMail($student, $password);
 
         if (!$student->getId()) {
             throw new Exception('Cannot create a user');
@@ -85,5 +103,29 @@ class ApplicationPostupdate
         $application->setStudent($student);
         $this->entityManager->persist($application);
         $this->entityManager->flush();
+    }
+
+    /**
+     * Send invite email to new user
+     *
+     * @param User $user
+     * @param string $plainPassword
+     *
+     * @throws RuntimeException
+     */
+    protected function sendInviteMail(User $user, string $plainPassword)
+    {
+        if (in_array(null, [$this->configManager, $this->emailTemplateManager], true)) {
+            throw new RuntimeException('Unable to send invitation email, unmet dependencies detected.');
+        }
+        $senderEmail = $this->configManager->get('oro_notification.email_notification_sender_email');
+        $senderName = $this->configManager->get('oro_notification.email_notification_sender_name');
+
+        $this->emailTemplateManager->sendTemplateEmail(
+            From::emailAddress($senderEmail, $senderName),
+            [$user],
+            new EmailTemplateCriteria(self::INVITE_USER_TEMPLATE, User::class),
+            ['user' => $user, 'password' => $plainPassword]
+        );
     }
 }

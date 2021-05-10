@@ -4,6 +4,7 @@ namespace Teachers\Bundle\AssignmentBundle\Form\Type;
 
 use DateTime;
 use DateTimeZone;
+use Exception;
 use Oro\Bundle\EntityExtendBundle\Form\Type\EnumSelectType;
 use Oro\Bundle\FormBundle\Form\Type\OroDateTimeType;
 use Oro\Bundle\FormBundle\Utils\FormUtils;
@@ -27,6 +28,7 @@ class AssignmentType extends AbstractType
 {
     /**
      * {@inheritdoc}
+     * @throws Exception
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -69,6 +71,14 @@ class AssignmentType extends AbstractType
             ->add('courseUrl', TextType::class, [
                 'required' => true,
                 'label' => 'teachers.assignment.course_url.label'
+            ])
+            ->add('userLogin', TextType::class, [
+                'required' => true,
+                'label' => 'teachers.assignment.user_login.label'
+            ])
+            ->add('userPassword', TextType::class, [
+                'required' => true,
+                'label' => 'teachers.assignment.user_password.label'
             ])
             ->add('instructions', TextareaType::class, [
                 'required' => true,

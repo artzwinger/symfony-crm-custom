@@ -180,6 +180,11 @@ class Application extends ExtendApplication implements DatesAwareInterface
      */
     protected $student;
 
+    /**
+     * @var string|null $reCaptchaToken
+     */
+    protected $reCaptchaToken;
+
     const STATUS_NEW = 'new';
     const STATUS_WORKING = 'working';
     const STATUS_COMPLETE = 'complete';
@@ -502,5 +507,21 @@ class Application extends ExtendApplication implements DatesAwareInterface
     public function setStudent(?User $student): void
     {
         $this->student = $student;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getReCaptchaToken(): ?string
+    {
+        return $this->reCaptchaToken;
+    }
+
+    /**
+     * @param string|null $reCaptchaToken
+     */
+    public function setReCaptchaToken(?string $reCaptchaToken): void
+    {
+        $this->reCaptchaToken = $reCaptchaToken;
     }
 }

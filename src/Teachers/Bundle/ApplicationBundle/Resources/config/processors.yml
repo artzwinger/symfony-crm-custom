@@ -1,0 +1,15 @@
+services:
+  teachers_application.api.create.processor.validate_student_uniqueness:
+    class: Teachers\Bundle\ApplicationBundle\Api\Processor\ValidateStudentUniqueness
+    arguments:
+      - '@oro_user.manager'
+    tags:
+      - { name: oro.api.processor, action: create, group: transform_data, priority: -255 }
+  teachers_application.api.create.processor.validate_recaptcha_token:
+    class: Teachers\Bundle\ApplicationBundle\Api\Processor\ValidateReCaptchaToken
+    arguments:
+      - '@logger'
+      - '@request_stack'
+      - '@recaptcha'
+    tags:
+      - { name: oro.api.processor, action: create, group: transform_data, priority: -255 }

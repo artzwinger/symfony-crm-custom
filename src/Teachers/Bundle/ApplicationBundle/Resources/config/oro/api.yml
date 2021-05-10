@@ -1,3 +1,12 @@
 api:
     entities:
-        Teachers\Bundle\ApplicationBundle\Entity\Application: ~
+        Teachers\Bundle\ApplicationBundle\Entity\Application:
+            fields:
+                reCaptchaToken:
+                    exclude: true
+                    data_type: string
+            actions:
+                create:
+                    fields:
+                        reCaptchaToken:
+                            exclude: false
