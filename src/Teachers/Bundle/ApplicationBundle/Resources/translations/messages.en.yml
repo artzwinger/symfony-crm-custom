@@ -33,9 +33,9 @@ teachers:
         work_today:
             true.label: Yes
             false.label: No
-            label: Works today
+            label: Due Today
 
-        course_managers_queue: Approval Queue
+        course_managers_queue: Application Queue
 
         datagrid:
             update: Update

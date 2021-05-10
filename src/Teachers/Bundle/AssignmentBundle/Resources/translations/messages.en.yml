@@ -25,10 +25,10 @@ teachers:
             view_my_courses:
                 label: View my courses
             view_messages_approval_queue:
-                label: View approval queue
+                label: View Messages Queue
         teachers_queue_label: Tutors Queue
         my_courses_label: My Courses
-        approval_queue_label: Approval Queue
+        approval_queue_label: Messages Queue
 
         first_name.label: First Name
         last_name.label: Last Name
