@@ -107,25 +107,25 @@ class AssignmentController extends AbstractController
         try {
             if ($entityClass && $entityId) {
                 $entityClass = str_replace('_', '\\', $entityClass);
-            }
-            $repository = $this->get('doctrine.orm.entity_manager')->getRepository($entityClass);
-            /** @var Application $application */
-            $application = $repository->find($entityId);
-            if (empty($application)) {
-                throw new EntityNotFoundException();
-            }
-            $assignment->setTerm($application->getTerm());
-            $assignment->setFirstName($application->getFirstName());
-            $assignment->setLastName($application->getLastName());
-            $assignment->setCourseName($application->getCourseName());
-            $assignment->setCoursePrefixes($application->getCoursePrefixes());
-            $assignment->setDescription($application->getDescription());
-            $assignment->setWorkToday($application->getWorkToday());
-            $assignment->setDueDate($application->getDueDate());
-            $assignment->setCourseUrl($application->getCourseUrl());
-            $assignment->setInstructions($application->getInstructions());
-            if ($application->getStudent()) {
-                $assignment->setStudent($application->getStudent());
+                $repository = $this->get('doctrine.orm.entity_manager')->getRepository($entityClass);
+                /** @var Application $application */
+                $application = $repository->find($entityId);
+                if (empty($application)) {
+                    throw new EntityNotFoundException();
+                }
+                $assignment->setTerm($application->getTerm());
+                $assignment->setFirstName($application->getFirstName());
+                $assignment->setLastName($application->getLastName());
+                $assignment->setCourseName($application->getCourseName());
+                $assignment->setCoursePrefixes($application->getCoursePrefixes());
+                $assignment->setDescription($application->getDescription());
+                $assignment->setWorkToday($application->getWorkToday());
+                $assignment->setDueDate($application->getDueDate());
+                $assignment->setCourseUrl($application->getCourseUrl());
+                $assignment->setInstructions($application->getInstructions());
+                if ($application->getStudent()) {
+                    $assignment->setStudent($application->getStudent());
+                }
             }
         } catch (Exception $e) {
         }
