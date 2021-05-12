@@ -8,8 +8,19 @@
             <div class="activity-context-activity-list">
                 {{ AC.activity_contexts(entity, target, true, 'oronote/js/app/components/note-context-component') }}
             </div>
-            {{ ui.renderProperty('teachers.assignment.subject.label'|trans, entity.subject) }}
-            {{ ui.renderProperty('teachers.assignment.description.label'|trans, entity.description|raw) }}
+            {{ ui.renderProperty('teachers.assignment.first_name.label'|trans, entity.firstName) }}
+            {{ ui.renderProperty('teachers.assignment.last_name.label'|trans, entity.lastName) }}
+            {{ ui.renderProperty('teachers.assignment.course_name.label'|trans, entity.courseName) }}
+            {{ ui.renderProperty('teachers.assignment.course_prefixes.label'|trans, entity.coursePrefixes) }}
+            {{ ui.renderProperty('teachers.assignment.description.label'|trans, entity.description) }}
+            {{ ui.renderProperty('teachers.assignment.work_today.label'|trans, entity.workToday) }}
+            {{ ui.renderProperty('teachers.assignment.due_date.label'|trans, entity.dueDate|oro_format_datetime) }}
+            {{ ui.renderProperty('teachers.assignment.course_url.label'|trans, entity.courseUrl) }}
+            {{ ui.renderProperty('teachers.assignment.user_login.label'|trans, entity.userLogin) }}
+            {{ ui.renderProperty('teachers.assignment.user_password.label'|trans, entity.userPassword) }}
+            {{ ui.renderProperty('teachers.assignment.instructions.label'|trans, entity.instructions) }}
+            {{ ui.renderProperty('teachers.assignment.status.label'|trans, entity.status) }}
+            {{ ui.renderProperty('teachers.assignment.term.label'|trans, entity.term) }}
 
             {{ entityConfig.renderDynamicFields(entity) }}
         </div>

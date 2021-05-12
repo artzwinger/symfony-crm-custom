@@ -44,7 +44,7 @@ teachers:
         work_today:
             true.label: Yes
             false.label: No
-            label: Works today
+            label: Due Today
         term.label: Length of Class Help
 
         #private note activity

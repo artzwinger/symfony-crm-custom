@@ -2,12 +2,9 @@
 
 namespace Teachers\Bundle\UsersBundle\Controller;
 
-use Oro\Bundle\EmailBundle\Model\EmailTemplateCriteria;
-use Oro\Bundle\EmailBundle\Model\From;
 use Oro\Bundle\FormBundle\Model\UpdateHandlerFacade;
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\UserBundle\Entity\User;
-use RuntimeException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormInterface;
@@ -17,7 +14,6 @@ use Teachers\Bundle\UsersBundle\Helper\Role as RoleHelper;
 
 class UserController extends AbstractController
 {
-    public const INVITE_USER_TEMPLATE = 'invite_user';
     /**
      * Create user form
      *
@@ -102,42 +98,12 @@ class UserController extends AbstractController
     {
         /** @var UpdateHandlerFacade $handler */
         $handler = $this->get('oro_form.update_handler');
-        $result = $handler->update(
+        return $handler->update(
             $entity,
             $form,
             $this->get('translator')->trans('oro.contact.controller.contact.saved.message'),
             null,
             'teachers_users.form.handler.user'
-        );
-        if ($entity->getId()) {
-            $this->sendInviteMail($entity, $entity->getPlainPassword());
-        }
-        return $result;
-    }
-
-    /**
-     * Send invite email to new user
-     *
-     * @param User $user
-     * @param string $plainPassword
-     *
-     * @throws RuntimeException
-     */
-    protected function sendInviteMail(User $user, string $plainPassword)
-    {
-        $configManager = $this->get('oro_config.manager');
-        $emailTemplateManager = $this->get('oro_email.manager.template_email');
-        if (in_array(null, [$configManager, $emailTemplateManager], true)) {
-            throw new RuntimeException('Unable to send invitation email, unmet dependencies detected.');
-        }
-        $senderEmail = $configManager->get('oro_notification.email_notification_sender_email');
-        $senderName = $configManager->get('oro_notification.email_notification_sender_name');
-
-        $emailTemplateManager->sendTemplateEmail(
-            From::emailAddress($senderEmail, $senderName),
-            [$user],
-            new EmailTemplateCriteria(self::INVITE_USER_TEMPLATE, User::class),
-            ['user' => $user, 'password' => $plainPassword]
         );
     }
 }

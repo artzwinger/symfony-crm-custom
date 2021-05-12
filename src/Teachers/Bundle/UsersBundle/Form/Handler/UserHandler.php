@@ -3,7 +3,12 @@
 namespace Teachers\Bundle\UsersBundle\Form\Handler;
 
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
 use Oro\Bundle\ConfigBundle\Config\ConfigManager;
+use Oro\Bundle\EmailBundle\Manager\EmailTemplateManager;
+use Oro\Bundle\EmailBundle\Model\EmailTemplateCriteria;
+use Oro\Bundle\EmailBundle\Model\From;
 use Oro\Bundle\FormBundle\Event\FormHandler\Events;
 use Oro\Bundle\FormBundle\Event\FormHandler\FormProcessEvent;
 use Oro\Bundle\FormBundle\Form\Handler\FormHandlerInterface;
@@ -11,10 +16,10 @@ use Oro\Bundle\FormBundle\Form\Handler\RequestHandlerTrait;
 use Oro\Bundle\SecurityBundle\Authentication\TokenAccessorInterface;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\UserBundle\Entity\UserManager;
+use RuntimeException;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Teachers\Bundle\UsersBundle\Entity\TeacherGroup;
 use Teachers\Bundle\UsersBundle\Entity\TeacherGroupToUser;
 
 /**
@@ -22,10 +27,11 @@ use Teachers\Bundle\UsersBundle\Entity\TeacherGroupToUser;
  */
 class UserHandler implements FormHandlerInterface
 {
+    public const INVITE_USER_TEMPLATE = 'invite_user';
     use RequestHandlerTrait;
 
     /**
-     * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
+     * @var EventDispatcherInterface
      */
     private $eventDispatcher;
     /**
@@ -37,27 +43,33 @@ class UserHandler implements FormHandlerInterface
      */
     protected $userConfigManager;
     /**
-     * @var \Doctrine\ORM\EntityManager
+     * @var EntityManager
      */
     protected $entityManager;
     /**
-     * @var \Oro\Bundle\SecurityBundle\Authentication\TokenAccessorInterface
+     * @var TokenAccessorInterface
      */
     private $tokenAccessor;
+    /**
+     * @var EmailTemplateManager
+     */
+    private $emailTemplateManager;
 
     /**
-     * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher
+     * @param EventDispatcherInterface $eventDispatcher
      * @param UserManager $manager
-     * @param \Doctrine\ORM\EntityManager $entityManager
-     * @param \Oro\Bundle\SecurityBundle\Authentication\TokenAccessorInterface $tokenAccessor
-     * @param \Oro\Bundle\ConfigBundle\Config\ConfigManager|null $userConfigManager
+     * @param EntityManager $entityManager
+     * @param TokenAccessorInterface $tokenAccessor
+     * @param ConfigManager $userConfigManager
+     * @param EmailTemplateManager $emailTemplateManager
      */
     public function __construct(
         EventDispatcherInterface $eventDispatcher,
         UserManager $manager,
         EntityManager $entityManager,
         TokenAccessorInterface $tokenAccessor,
-        ConfigManager $userConfigManager = null
+        ConfigManager $userConfigManager,
+        EmailTemplateManager $emailTemplateManager
     )
     {
         $this->eventDispatcher = $eventDispatcher;
@@ -65,6 +77,7 @@ class UserHandler implements FormHandlerInterface
         $this->entityManager = $entityManager;
         $this->userConfigManager = $userConfigManager;
         $this->tokenAccessor = $tokenAccessor;
+        $this->emailTemplateManager = $emailTemplateManager;
     }
 
     /**
@@ -101,8 +114,8 @@ class UserHandler implements FormHandlerInterface
     }
 
     /**
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\ORMException
+     * @throws OptimisticLockException
+     * @throws ORMException
      */
     protected function onSuccess(User $user, FormInterface $form, Request $request)
     {
@@ -110,11 +123,15 @@ class UserHandler implements FormHandlerInterface
             $this->manager->setAuthStatus($user, UserManager::STATUS_ACTIVE);
         }
 
+        $plainPassword = '';
         if (!$user->getId()) {
-            $this->handleNewUser($user, $form);
+            $plainPassword = $this->handleNewUser($user, $form);
         }
 
         $this->manager->updateUser($user);
+        if ($plainPassword) {
+            $this->sendInviteMail($user, $plainPassword);
+        }
         $requestData = $form->getName()
             ? $request->request->get($form->getName(), [])
             : $request->request->all();
@@ -128,8 +145,8 @@ class UserHandler implements FormHandlerInterface
     }
 
     /**
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\ORMException
+     * @throws OptimisticLockException
+     * @throws ORMException
      */
     protected function assignTeacherGroupToUser(User $user, $teacherGroupId)
     {
@@ -142,9 +159,10 @@ class UserHandler implements FormHandlerInterface
 
     /**
      * @param User $user
-     * @param \Symfony\Component\Form\FormInterface $form
+     * @param FormInterface $form
+     * @return string
      */
-    protected function handleNewUser(User $user, FormInterface $form): void
+    protected function handleNewUser(User $user, FormInterface $form): string
     {
         $sendPasswordInEmail = $this->userConfigManager &&
             $this->userConfigManager->get('oro_user.send_password_in_invitation_email');
@@ -155,5 +173,31 @@ class UserHandler implements FormHandlerInterface
             $user->setPlainPassword($this->manager->generatePassword(10));
         }
         $user->setOrganization($this->tokenAccessor->getOrganization());
+
+        return $sendPasswordInEmail ? $user->getPlainPassword() : '';
+    }
+
+    /**
+     * Send invite email to new user
+     *
+     * @param User $user
+     * @param string $plainPassword
+     *
+     * @throws RuntimeException
+     */
+    protected function sendInviteMail(User $user, string $plainPassword)
+    {
+        if (in_array(null, [$this->userConfigManager, $this->emailTemplateManager], true)) {
+            throw new RuntimeException('Unable to send invitation email, unmet dependencies detected.');
+        }
+        $senderEmail = $this->userConfigManager->get('oro_notification.email_notification_sender_email');
+        $senderName = $this->userConfigManager->get('oro_notification.email_notification_sender_name');
+
+        $this->emailTemplateManager->sendTemplateEmail(
+            From::emailAddress($senderEmail, $senderName),
+            [$user],
+            new EmailTemplateCriteria(self::INVITE_USER_TEMPLATE, User::class),
+            ['user' => $user, 'password' => $plainPassword]
+        );
     }
 }

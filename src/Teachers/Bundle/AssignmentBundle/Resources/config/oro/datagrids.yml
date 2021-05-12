@@ -7,7 +7,16 @@ datagrids:
             query:
                 select:
                     - assignment.id
-                    - assignment.subject
+                    - assignment.firstName
+                    - assignment.lastName
+                    - assignment.courseName
+                    - assignment.coursePrefixes
+                    - assignment.workToday
+                    - assignment.dueDate
+                    - assignment.courseUrl
+                    - assignment.userLogin
+                    - assignmentterm.name as termName
+                    - assignmentterm.id as termId
                     - assignment.createdAt
                     - CONCAT(course_manager.firstName, course_manager.lastName) as courseManagerFullName
                 from:
@@ -15,30 +24,95 @@ datagrids:
                 join:
                     inner:
                         - { join: assignment.courseManager, alias: course_manager }
+                    left:
+                        - { join: assignment.term, alias: assignmentterm }
         columns:
-            subject:
-                label: teachers.assignment.subject.label
-            courseManagerFullName:
-                label: teachers.assignment.course_manager_name.label
+            firstName:
+                label: teachers.assignment.first_name.label
+            lastName:
+                label: teachers.assignment.last_name.label
+            courseName:
+                label: teachers.assignment.course_name.label
+            coursePrefixes:
+                label: teachers.assignment.course_prefixes.label
+            workToday:
+                label: teachers.assignment.work_today.label
+                frontend_type: select
+                choices:
+                    teachers.assignment.work_today.true.label: enabled
+                    teachers.assignment.work_today.false.label: disabled
+            dueDate:
+                frontend_type: datetime
+                label: teachers.assignment.due_date.label
+            courseUrl:
+                label: teachers.assignment.course_url.label
+            userLogin:
+                label: teachers.assignment.user_login.label
             createdAt:
                 frontend_type: datetime
                 label: oro.ui.created_at
+            termName:
+                label: teachers.assignment.term.label
         sorters:
             columns:
-                subject:
-                    data_name: assignment.subject
+                firstName:
+                    data_name: assignment.firstName
+                lastName:
+                    data_name: assignment.lastName
+                courseName:
+                    data_name: assignment.courseName
+                coursePrefixes:
+                    data_name: assignment.coursePrefixe
+                dueDate:
+                    data_name: assignment.dueDate
+                courseUrl:
+                    data_name: assignment.courseUrl
+                userLogin:
+                    data_name: assignment.userLogin
                 createdAt:
                     data_name: assignment.createdAt
+                termName:
+                    data_name: termName
             default:
                 createdAt: DESC
         filters:
             columns:
-                subject:
+                firstName:
                     type: string
-                    data_name: assignment.subject
+                    data_name: assignment.firstName
+                lastName:
+                    type: string
+                    data_name: assignment.lastName
+                courseName:
+                    type: string
+                    data_name: assignment.courseName
+                coursePrefixe:
+                    type: string
+                    data_name: assignment.coursePrefixe
+                workToday:
+                    data_name: c.enabled
+                    type: choice
+                    options:
+                        field_options:
+                            choices:
+                                teachers.assignment.work_today.false.label: 0
+                                teachers.assignment.work_today.true.label: 1
+                dueDate:
+                    type: string
+                    data_name: assignment.dueDate
+                courseUrl:
+                    type: string
+                    data_name: assignment.courseUrl
+                userLogin:
+                    type: string
+                    data_name: assignment.userLogin
                 createdAt:
                     type: datetime
                     data_name: assignment.createdAt
+                termName:
+                    type: enum
+                    enum_code: application_term
+                    data_name: termId
         properties:
             id: ~
             view_link:
