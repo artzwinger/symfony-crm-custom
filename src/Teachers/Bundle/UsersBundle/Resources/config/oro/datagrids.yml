@@ -75,3 +75,28 @@ datagrids:
             bind_parameters:
                 -   name: role_id
                     default: null
+    users-grid:
+        source:
+            query:
+                select:
+                    - r.role as roleName
+                    - r.label as roleLabel
+                join:
+                    left:
+                        - { join: u.roles, alias: r }
+        columns:
+            roleLabel:
+                label: teachers.users.users.roleLabel.label
+        filters:
+            columns:
+                roleLabel:
+                    type: choice
+                    data_name: r.role
+                    label: teachers.users.users.roleLabel.label
+                    frontend_type: select
+                    options:
+                        field_options:
+                            choices:
+                                teachers.users.users.roleLabel.courseManager.label: ROLE_COURSE_MANAGER
+                                teachers.users.users.roleLabel.student.label: ROLE_STUDENT
+                                teachers.users.users.roleLabel.teacher.label: ROLE_TEACHER

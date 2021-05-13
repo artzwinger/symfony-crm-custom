@@ -85,3 +85,9 @@ services:
         public: true
         arguments:
             - '@translator'
+    teachers_assignment.event_listener.orm.assignment_postupdate:
+        class: Teachers\Bundle\AssignmentBundle\EventListener\ORM\AssignmentPostupdate
+        arguments:
+            - '@doctrine.orm.entity_manager'
+        tags:
+            - { name: doctrine.event_listener, event: postUpdate, connection: default, entity: 'Teachers\Bundle\AssignmentBundle\Entity\Assignment' }

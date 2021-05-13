@@ -174,7 +174,7 @@ class UserHandler implements FormHandlerInterface
         }
         $user->setOrganization($this->tokenAccessor->getOrganization());
 
-        return $sendPasswordInEmail ? $user->getPlainPassword() : '';
+        return $sendPasswordInEmail ? $form->getData()->getPlainPassword() : '';
     }
 
     /**

@@ -1,8 +1,9 @@
 services:
-  teachers_application.api.create.processor.validate_student_uniqueness:
-    class: Teachers\Bundle\ApplicationBundle\Api\Processor\ValidateStudentUniqueness
+  teachers_application.api.create.processor.set_student_if_exists:
+    class: Teachers\Bundle\ApplicationBundle\Api\Processor\SetStudentIfExists
     arguments:
       - '@oro_user.manager'
+      - '@oro_entity.doctrine_helper'
     tags:
       - { name: oro.api.processor, action: create, group: transform_data, priority: -255 }
   teachers_application.api.create.processor.validate_recaptcha_token:

@@ -5,6 +5,8 @@ namespace Teachers\Bundle\AssignmentBundle\Entity;
 use DateTime;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Oro\Bundle\AccountBundle\Entity\Account;
+use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\EntityBundle\EntityProperty\DatesAwareInterface;
 use Oro\Bundle\EntityBundle\EntityProperty\DatesAwareTrait;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
@@ -173,6 +175,34 @@ class Assignment extends ExtendAssignment implements DatesAwareInterface
      * @ORM\JoinColumn(name="student_id", referencedColumnName="id", nullable=true, onDelete="SET NULL")
      */
     protected $student;
+    /**
+     * @var Contact|null $studentContact
+     *
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\ContactBundle\Entity\Contact", cascade={"persist"})
+     * @ORM\JoinColumn(name="student_contact_id", referencedColumnName="id", onDelete="SET NULL")
+     */
+    protected $studentContact;
+    /**
+     * @var Account|null $studentContact
+     *
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\AccountBundle\Entity\Account", cascade={"persist"})
+     * @ORM\JoinColumn(name="student_account_id", referencedColumnName="id", onDelete="SET NULL")
+     */
+    protected $studentAccount;
+    /**
+     * @var Contact|null $teacherContact
+     *
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\ContactBundle\Entity\Contact", cascade={"persist"})
+     * @ORM\JoinColumn(name="teacher_contact_id", referencedColumnName="id", onDelete="SET NULL")
+     */
+    protected $teacherContact;
+    /**
+     * @var Account|null $teacherAccount
+     *
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\AccountBundle\Entity\Account", cascade={"persist"})
+     * @ORM\JoinColumn(name="teacher_account_id", referencedColumnName="id", onDelete="SET NULL")
+     */
+    protected $teacherAccount;
     /**
      * @var Collection|TeacherGroup[] $teacherGroups
      *
@@ -494,6 +524,70 @@ class Assignment extends ExtendAssignment implements DatesAwareInterface
     public function setStudent(User $student): void
     {
         $this->student = $student;
+    }
+
+    /**
+     * @return Contact|null
+     */
+    public function getStudentContact(): ?Contact
+    {
+        return $this->studentContact;
+    }
+
+    /**
+     * @param Contact|null $studentContact
+     */
+    public function setStudentContact(?Contact $studentContact): void
+    {
+        $this->studentContact = $studentContact;
+    }
+
+    /**
+     * @return Account|null
+     */
+    public function getStudentAccount(): ?Account
+    {
+        return $this->studentAccount;
+    }
+
+    /**
+     * @param Account|null $studentAccount
+     */
+    public function setStudentAccount(?Account $studentAccount): void
+    {
+        $this->studentAccount = $studentAccount;
+    }
+
+    /**
+     * @return Contact|null
+     */
+    public function getTeacherContact(): ?Contact
+    {
+        return $this->teacherContact;
+    }
+
+    /**
+     * @param Contact|null $teacherContact
+     */
+    public function setTeacherContact(?Contact $teacherContact): void
+    {
+        $this->teacherContact = $teacherContact;
+    }
+
+    /**
+     * @return Account|null
+     */
+    public function getTeacherAccount(): ?Account
+    {
+        return $this->teacherAccount;
+    }
+
+    /**
+     * @param Account|null $teacherAccount
+     */
+    public function setTeacherAccount(?Account $teacherAccount): void
+    {
+        $this->teacherAccount = $teacherAccount;
     }
 
     /**

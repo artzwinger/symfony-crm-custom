@@ -3,6 +3,12 @@ teachers:
         teachergroup:
             entity_label: Tutor Group
         teacherGroups.label: Tutor Groups
+        users:
+            roleLabel:
+                courseManager.label: Course Manager
+                student.label: Student
+                teacher.label: Tutor
+                label: Type
         teacher_group:
             entity_label: Tutor Group
             entity_plural_label: Tutor Groups

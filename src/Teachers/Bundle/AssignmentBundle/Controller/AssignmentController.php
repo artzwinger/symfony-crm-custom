@@ -128,6 +128,12 @@ class AssignmentController extends AbstractController
                 if ($application->getStudent()) {
                     $assignment->setStudent($application->getStudent());
                 }
+                if ($studentContact = $application->getStudentContact()) {
+                    $assignment->setStudentContact($studentContact);
+                }
+                if ($studentAccount = $application->getStudentAccount()) {
+                    $assignment->setStudentAccount($studentAccount);
+                }
             }
         } catch (Exception $e) {
         }

@@ -3,6 +3,8 @@
 namespace Teachers\Bundle\BidBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Oro\Bundle\AccountBundle\Entity\Account;
+use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\EntityBundle\EntityProperty\DatesAwareInterface;
 use Oro\Bundle\EntityBundle\EntityProperty\DatesAwareTrait;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
@@ -93,6 +95,20 @@ class Bid extends ExtendBid implements DatesAwareInterface
      * )
      */
     protected $teacher;
+    /**
+     * @var Contact|null $teacherContact
+     *
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\ContactBundle\Entity\Contact", cascade={"persist"})
+     * @ORM\JoinColumn(name="teacher_contact_id", referencedColumnName="id", onDelete="SET NULL")
+     */
+    protected $teacherContact;
+    /**
+     * @var Account|null $teacherAccount
+     *
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\AccountBundle\Entity\Account", cascade={"persist"})
+     * @ORM\JoinColumn(name="teacher_account_id", referencedColumnName="id", onDelete="SET NULL")
+     */
+    protected $teacherAccount;
     /**
      * @var Organization|null
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\OrganizationBundle\Entity\Organization")
@@ -192,6 +208,38 @@ class Bid extends ExtendBid implements DatesAwareInterface
     public function setTeacher(User $teacher): void
     {
         $this->teacher = $teacher;
+    }
+
+    /**
+     * @return Contact|null
+     */
+    public function getTeacherContact(): ?Contact
+    {
+        return $this->teacherContact;
+    }
+
+    /**
+     * @param Contact|null $teacherContact
+     */
+    public function setTeacherContact(?Contact $teacherContact): void
+    {
+        $this->teacherContact = $teacherContact;
+    }
+
+    /**
+     * @return Account|null
+     */
+    public function getTeacherAccount(): ?Account
+    {
+        return $this->teacherAccount;
+    }
+
+    /**
+     * @param Account|null $teacherAccount
+     */
+    public function setTeacherAccount(?Account $teacherAccount): void
+    {
+        $this->teacherAccount = $teacherAccount;
     }
 
     /**

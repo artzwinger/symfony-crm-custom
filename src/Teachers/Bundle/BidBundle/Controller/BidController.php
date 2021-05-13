@@ -5,11 +5,13 @@ namespace Teachers\Bundle\BidBundle\Controller;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
+use Oro\Bundle\FormBundle\Model\UpdateHandlerFacade;
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use Oro\Bundle\SecurityBundle\Annotation\CsrfProtection;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\FormFactory;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -124,13 +126,13 @@ class BidController extends AbstractController
     }
 
     /**
-     * @param \Teachers\Bundle\BidBundle\Entity\Bid $entity
+     * @param Bid $entity
      * @param $action
      * @return RedirectResponse|array
      */
     private function update(Bid $entity, $action)
     {
-        /** @var \Oro\Bundle\FormBundle\Model\UpdateHandlerFacade $handler */
+        /** @var UpdateHandlerFacade $handler */
         $handler = $this->get('oro_form.update_handler');
         $form = $this->getForm($action);
         return $handler->update(
@@ -142,7 +144,7 @@ class BidController extends AbstractController
 
     private function getForm($action): FormInterface
     {
-        /** @var \Symfony\Component\Form\FormFactory $factory */
+        /** @var FormFactory $factory */
         $factory = $this->get('form.factory');
         $builder = $factory->createNamedBuilder('teachers_bid_form', 'Teachers\Bundle\BidBundle\Form\Type\BidType');
         $builder->setAction($action);

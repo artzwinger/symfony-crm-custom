@@ -7,7 +7,13 @@ use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Exception;
+use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\ConfigBundle\Config\ConfigManager;
+use Oro\Bundle\ContactBundle\Entity\Contact;
+use Oro\Bundle\ContactBundle\Entity\ContactEmail;
+use Oro\Bundle\ContactBundle\Entity\ContactPhone;
+use Oro\Bundle\ContactBundle\Model\ExtendContactEmail;
+use Oro\Bundle\ContactBundle\Model\ExtendContactPhone;
 use Oro\Bundle\EmailBundle\Manager\EmailTemplateManager;
 use Oro\Bundle\EmailBundle\Model\EmailTemplateCriteria;
 use Oro\Bundle\EmailBundle\Model\From;
@@ -77,11 +83,27 @@ class ApplicationPostupdate
         if ($application->getStudent()) {
             return;
         }
+
+        $student = $this->getStudent($application);
+        $contact = $this->getStudentContact($application);
+        $account = $this->getStudentAccount($contact);
+
+        $application->setStudent($student);
+        $application->setStudentContact($contact);
+        $application->setStudentAccount($account);
+
+        $this->entityManager->persist($application);
+        $this->entityManager->flush();
+    }
+
+    /**
+     * @throws Exception
+     */
+    protected function getStudent(Application $application): User
+    {
         $firstName = $application->getFirstName();
         $lastName = $application->getLastName();
         $email = $application->getEmail();
-//        $phone = $application->getPhone();
-
         /** @var User $student */
         $student = $this->userManager->createUser();
         $student->setRoles([
@@ -100,9 +122,53 @@ class ApplicationPostupdate
         if (!$student->getId()) {
             throw new Exception('Cannot create a user');
         }
-        $application->setStudent($student);
-        $this->entityManager->persist($application);
-        $this->entityManager->flush();
+        return $student;
+    }
+
+    /**
+     * @throws OptimisticLockException
+     * @throws ORMException
+     * @throws Exception
+     */
+    protected function getStudentContact(Application $application): Contact
+    {
+        $firstName = $application->getFirstName();
+        $lastName = $application->getLastName();
+        $email = $application->getEmail();
+        $phone = $application->getPhone();
+        $contact = new Contact();
+        $contact->setFirstName($firstName);
+        $contact->setLastName($lastName);
+        $phone = new ContactPhone($phone);
+        $phone->setPrimary(true);
+        $contact->addPhone($phone);
+        $email = new ContactEmail($email);
+        $email->setPrimary(true);
+        $contact->addEmail($email);
+        $this->entityManager->persist($contact);
+        $this->entityManager->flush($contact);
+        if (!$contact->getId()) {
+            throw new Exception('Cannot create a contact');
+        }
+        return $contact;
+    }
+
+    /**
+     * @throws OptimisticLockException
+     * @throws ORMException
+     * @throws Exception
+     */
+    protected function getStudentAccount(Contact $contact): Account
+    {
+        $account = new Account();
+        $account->setName($contact->getLastName() . ' ' . $contact->getFirstName());
+        $account->setDefaultContact($contact);
+        $this->entityManager->persist($account);
+        $this->entityManager->flush($account);
+        if (!$account->getId()) {
+            throw new Exception('Cannot create an account');
+        }
+        return $account;
     }
 
     /**
