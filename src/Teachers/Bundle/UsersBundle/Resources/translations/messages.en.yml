@@ -45,3 +45,8 @@ teachers:
             general: General
             additional: Additional
             teacher_group_information: Tutor Group information
+        grid:
+            views:
+                students: Students
+                teachers: Tutors
+                course_managers: Course Managers

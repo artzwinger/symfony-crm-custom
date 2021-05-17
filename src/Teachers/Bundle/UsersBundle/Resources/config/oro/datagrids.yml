@@ -76,6 +76,7 @@ datagrids:
                 -   name: role_id
                     default: null
     users-grid:
+        views_list: "@teachers_users.user.datagrid_view_list"
         source:
             query:
                 select:

@@ -12,5 +12,10 @@ services:
         arguments:
             - 'Teachers\Bundle\UsersBundle\Entity\TeacherGroup'
             - "@doctrine.orm.entity_manager"
+    teachers_users.user.datagrid_view_list:
+        class: Teachers\Bundle\UsersBundle\Datagrid\ExtendUserViewLIst
+        public: true
+        arguments:
+            - '@translator'
 
 
