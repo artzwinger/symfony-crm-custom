@@ -1,0 +1,9 @@
+teachers_invoice:
+    resource: "@TeachersInvoiceBundle/Controller/InvoiceController.php"
+    type: annotation
+    prefix: /invoice
+
+teachers_payment:
+    resource: "@TeachersInvoiceBundle/Controller/PaymentController.php"
+    type: annotation
+    prefix: /payment

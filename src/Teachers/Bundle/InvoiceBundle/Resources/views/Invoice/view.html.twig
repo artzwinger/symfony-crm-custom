@@ -1,0 +1,75 @@
+{% extends 'OroUIBundle:actions:view.html.twig' %}
+{% import 'OroUIBundle::macros.html.twig' as ui %}
+{% set subject = entity|oro_format_name|default('N/A'|trans) %}
+{% oro_title_set({ params : {"%invoice.id%": subject} }) %}
+
+{% block pageHeader %}
+    {% set breadcrumbs = {
+        'entity': entity,
+        'indexPath': path('teachers_invoice_index'),
+        'indexLabel': 'teachers.invoice.entity_plural_label'|trans,
+        'entityTitle': subject
+    } %}
+    {{ parent() }}
+{% endblock pageHeader %}
+
+{% block navButtons %}
+    {% import 'OroUIBundle::macros.html.twig' as UI %}
+
+    {% if is_granted('teachers_invoice_delete') %}
+        {{ UI.deleteButton({
+            'dataUrl': path('teachers_invoice_delete', {'id': entity.id}),
+            'dataRedirect': path('teachers_invoice_index'),
+            'aCss': 'no-hash remove-button',
+            'id': 'btn-remove-invoice-form',
+            'dataId': entity.id,
+            'entity_label': 'teachers.invoice.entity_label'|trans,
+        }) }}
+        {{ UI.buttonSeparator() }}
+    {% endif %}
+
+    {% if is_granted('teachers_invoice_edit') %}
+        {{ UI.editButton({
+            'path': path('teachers_invoice_update', {'id': entity.id}),
+            'entity_label': 'teachers.invoice.entity_label'|trans,
+        }) }}
+    {% endif %}
+
+    {% if is_granted('teachers_invoice_send_email') %}
+        {{ UI.buttonSeparator() }}
+        {{ UI.clientButton({
+            'dataUrl': path('teachers_invoice_send_email', {'id': entity.id}),
+            'aCss': 'no-hash',
+            'iCss': 'fa-envelope',
+            'dataId': entity.id,
+            'label': 'teachers.invoice.send_email'|trans,
+            'title': 'teachers.invoice.send_email'|trans,
+            'dataAttributes': {
+                'page-component-module': 'teachersinvoice/js/app/components/send-email-button',
+            }
+        }) }}
+    {% endif %}
+{% endblock %}
+
+{% block content_data %}
+    {% set invoiceInformationWidget %}
+        {{ oro_widget_render({
+            'widgetType': 'block',
+            'url': path('teachers_invoice_info', {id: entity.id}),
+            'title': 'teachers.invoice.block.invoice_information'|trans
+        }) }}
+    {% endset %}
+
+    {% set dataBlocks = [
+        {
+            'title': 'General'|trans,
+            'subblocks': [
+                {'data': [invoiceInformationWidget]}
+            ]
+        }
+    ] %}
+
+    {% set id = 'invoiceView' %}
+    {% set data = {'dataBlocks': dataBlocks} %}
+    {{ parent() }}
+{% endblock %}

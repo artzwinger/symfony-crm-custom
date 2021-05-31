@@ -1,0 +1,27 @@
+{% import 'OroUIBundle::macros.html.twig' as UI %}
+
+{{ UI.clientLink({
+    'dataUrl': path('teachers_invoice_create', oro_action_params(entity, 'activity')),
+    'aCss': 'dropdown-item no-hash',
+    'iCss': 'fa-briefcase',
+    'dataId': entity.id,
+    'label': 'teachers.invoice.add_entity'|trans,
+    'title': 'teachers.invoice.add_entity.title'|trans,
+    'widget' : {
+        'type' : 'dialog',
+        'multiple' : true,
+        'reload-grid-name': 'user-invoices-grid',
+        'refresh-widget-alias': 'activity-list-widget',
+        'options' : {
+            'alias': 'invoice-dialog',
+            'dialogOptions' : {
+                'title' : 'teachers.invoice.add_entity'|trans,
+                'allowMaximize': true,
+                'allowMinimize': true,
+                'dblclick': 'maximize',
+                'maximizedHeightDecreaseBy': 'minimize-bar',
+                'width': 1000
+            }
+        }
+    }
+}) }}

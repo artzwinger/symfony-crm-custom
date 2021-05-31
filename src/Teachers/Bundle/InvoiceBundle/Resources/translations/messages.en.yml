@@ -1,0 +1,72 @@
+teachers:
+    invoice:
+        #activity
+        activity_item:
+            created_by: created by {{ user }}
+            updated_by: updated by {{ user }}
+        view_invoice: View invoice
+        update_invoice: Update invoice
+        delete_invoice: Delete invoice
+        add_entity: Invoice
+        add_entity.title: Invoice
+        send_email: Send Email
+        entity_label: Invoice
+        entity_plural_label: Invoices
+        entity_grid_all_view_label: All %entity_plural_label%
+        id.label: ID
+        subject.label: Subject
+        description.label: Description
+        price.label: Price
+        organization_name.label: Organization name
+        student.label: Student
+        teacher.label: Tutor
+        amountOwed.label: Amount Owed
+        due_date.label: Due Date
+        amountPaid.label: Amount Paid
+        amountRemaining.label: Amount Remaining
+        assignment.label: Assignment
+        controller:
+            invoice:
+                saved:
+                    message: Invoice successfully saved
+
+        datagrid:
+            update: Update
+            delete: Delete
+            view: View
+
+        method:
+            email: Email
+            phone: Phone
+            both: Both phone & email
+
+        widget:
+            info:
+                title: Invoice Details
+        entity:
+            saved: Invoice has been saved successfully
+        block:
+            general: General
+            additional: Additional
+            invoice_information: Invoice Information
+            payment_information: Payment Information
+        payment:
+            owner:
+                label: Who Pays
+            entity_label: Payment
+            entity_plural_label: Payments
+
+        billing:
+            menu:
+                billing_tab:
+                    label: Billing
+    payment:
+        #activity
+        activity_item:
+            created_by: made by {{ user }}
+            updated_by: made (upd) by {{ user }}
+        view_invoice: View payment
+        update_payment: Update payment
+        delete_payment: Delete payment
+        add_entity: Pay
+        add_entity.title: Pay

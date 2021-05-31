@@ -1,0 +1,119 @@
+datagrids:
+    invoices-grid:
+        extended_entity_name: 'Teachers\Bundle\InvoiceBundle\Entity\Invoice'
+        acl_resource: teachers_invoice_view
+        source:
+            type: orm
+            query:
+                select:
+                    - invoice.id
+                    - invoice.amountOwed
+                    - invoice.amountPaid
+                    - invoice.amountRemaining
+                    - invoice.dueDate
+                    - invoice.createdAt
+                    - assignment.courseName as assignmentCourseName
+                from:
+                    - { table: 'Teachers\Bundle\InvoiceBundle\Entity\Invoice', alias: invoice }
+                join:
+                    left:
+                        - { join: invoice.assignment, alias: assignment }
+
+        columns:
+            assignmentCourseName:
+                label: teachers.invoice.assignment.label
+                frontend_type: string
+            amountOwed:
+                label: teachers.invoice.amountOwed.label
+                frontend_type: decimal
+            amountPaid:
+                label: teachers.invoice.amountPaid.label
+                frontend_type: decimal
+            amountRemaining:
+                label: teachers.invoice.amountRemaining.label
+                frontend_type: decimal
+            dueDate:
+                frontend_type: datetime
+                label: teachers.invoice.due_date.label
+            createdAt:
+                frontend_type: datetime
+                label: oro.ui.created_at
+        sorters:
+            columns:
+                assignmentCourseName:
+                    data_name: assignment.courseName
+                amountOwed:
+                    data_name: invoice.amountOwed
+                amountPaid:
+                    data_name: invoice.amountPaid
+                amountRemaining:
+                    data_name: invoice.amountRemaining
+                dueDate:
+                    data_name: invoice.dueDate
+                createdAt:
+                    data_name: invoice.createdAt
+            default:
+                createdAt: DESC
+        filters:
+            columns:
+                assignmentCourseName:
+                    type: string
+                    data_name: assignment.courseName
+                amountOwed:
+                    type: currency
+                    data_name: invoice.amountOwed
+                    options:
+                        data_type: Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType::DATA_DECIMAL
+                amountPaid:
+                    type: currency
+                    data_name: invoice.amountPaid
+                    options:
+                        data_type: Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType::DATA_DECIMAL
+                amountRemaining:
+                    type: currency
+                    data_name: invoice.amountRemaining
+                    options:
+                        data_type: Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType::DATA_DECIMAL
+                dueDate:
+                    type: string
+                    data_name: invoice.dueDate
+                createdAt:
+                    type: datetime
+                    data_name: invoice.createdAt
+        properties:
+            id: ~
+            view_link:
+                type: url
+                route: teachers_invoice_view
+                params: [ id ]
+            update_link:
+                type: url
+                route: teachers_invoice_update
+                params: [ id ]
+            delete_link:
+                type: url
+                route: teachers_invoice_delete
+                params: [ id ]
+        actions:
+            view:
+                acl_resource: teachers_invoice_view
+                type: navigate
+                label: oro.grid.action.view
+                icon: eye
+                link: view_link
+                rowAction: true
+            update:
+                acl_resource: teachers_invoice_edit
+                type: navigate
+                label: oro.grid.action.update
+                icon: edit
+                link: update_link
+            delete:
+                acl_resource: teachers_invoice_delete
+                type: delete
+                label: oro.grid.action.delete
+                icon: trash
+                link: delete_link
+        options:
+            entityHint: teachers.invoice.entity_plural_label
+            entity_pagination: true

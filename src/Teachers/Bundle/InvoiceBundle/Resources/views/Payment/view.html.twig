@@ -1,0 +1,60 @@
+{% extends 'OroUIBundle:actions:view.html.twig' %}
+{% import 'OroUIBundle::macros.html.twig' as ui %}
+{% set subject = entity|oro_format_name|default('N/A'|trans) %}
+{% oro_title_set({ params : {"%invoice.subject%": subject} }) %}
+
+{% block pageHeader %}
+    {% set breadcrumbs = {
+        'entity': entity,
+        'indexPath': path('teachers_invoice_index'),
+        'indexLabel': 'teachers.invoice.entity_plural_label'|trans,
+        'entityTitle': subject
+    } %}
+    {{ parent() }}
+{% endblock pageHeader %}
+
+{% block navButtons %}
+    {% import 'OroUIBundle::macros.html.twig' as UI %}
+
+    {% if is_granted('teachers_payment_delete') %}
+        {{ UI.deleteButton({
+            'dataUrl': path('teachers_payment_delete', {'id': entity.id}),
+            'dataRedirect': path('teachers_invoice_index'),
+            'aCss': 'no-hash remove-button',
+            'id': 'btn-remove-invoice-form',
+            'dataId': entity.id,
+            'entity_label': 'teachers.invoice.entity_label'|trans,
+        }) }}
+        {{ UI.buttonSeparator() }}
+    {% endif %}
+
+    {% if is_granted('teachers_payment_edit') %}
+        {{ UI.editButton({
+            'path': path('teachers_invoice_update', {'id': entity.id}),
+            'entity_label': 'teachers.invoice.entity_label'|trans,
+        }) }}
+    {% endif %}
+{% endblock %}
+
+{% block content_data %}
+    {% set invoiceInformationWidget %}
+        {{ oro_widget_render({
+            'widgetType': 'block',
+            'url': path('teachers_payment_info', {id: entity.id}),
+            'title': 'teachers.invoice.block.payment_information'|trans
+        }) }}
+    {% endset %}
+
+    {% set dataBlocks = [
+        {
+            'title': 'General'|trans,
+            'subblocks': [
+                {'data': [invoiceInformationWidget]}
+            ]
+        }
+    ] %}
+
+    {% set id = 'invoiceView' %}
+    {% set data = {'dataBlocks': dataBlocks} %}
+    {{ parent() }}
+{% endblock %}

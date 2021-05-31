@@ -1,0 +1,7 @@
+ROLE_COURSE_MANAGER:
+    permissions:
+        entity|Teachers\Bundle\InvoiceBundle\Entity\Invoice: [ CREATE_SYSTEM, VIEW_SYSTEM, EDIT_SYSTEM ]
+        workflow|invoice_flow: [ VIEW_WORKFLOW_SYSTEM, PERFORM_TRANSITIONS_SYSTEM ]
+ROLE_STUDENT:
+    permissions:
+        entity|Teachers\Bundle\InvoiceBundle\Entity\Invoice: [ VIEW_SYSTEM, EDIT_LOCAL ]

@@ -1,0 +1,16 @@
+oro:
+    workflow:
+        invoice_flow:
+            step:
+                unpaid:
+                    label: Unpaid
+                paid:
+                    label: Paid
+            transition:
+                make_paid:
+                    label: Paid
+                    warning_message: ''
+                reopen:
+                    label: Reopen
+                    warning_message: ''
+            label: Invoice Flow

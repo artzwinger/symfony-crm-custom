@@ -1,0 +1,26 @@
+navigation:
+    menu_config:
+        items:
+            billing_tab:
+                label: 'teachers.invoice.billing.menu.billing_tab.label'
+                uri: '#'
+                position: 31
+                extras:
+                    icon: fa-credit-card
+            teachers_invoice_invoice:
+                label: 'teachers.invoice.entity_plural_label'
+                route: 'teachers_invoice_index'
+                extras:
+                    routes: [ 'teachers_invoice_*' ]
+                display: true
+        tree:
+            application_menu:
+                children:
+                    billing_tab:
+                        children:
+                            teachers_invoice_invoice: ~
+    titles:
+        teachers_invoice_index: ~
+        teachers_invoice_view: '%invoice.id%'
+        teachers_invoice_create: 'Create invoice'
+        teachers_invoice_update: '%invoice.id% - Edit'

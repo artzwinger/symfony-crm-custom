@@ -1,0 +1,18 @@
+workflows:
+    invoice_flow:
+        entity_restrictions:
+            invoice_status_creation:
+                attribute: invoice
+                field: status
+                mode: disallow
+                values:
+                    - 'unpaid'
+                    - 'paid'
+            invoice_status_unpaid:
+                attribute: invoice
+                field: status
+                step: unpaid
+            invoice_status_paid:
+                attribute: invoice
+                field: status
+                step: paid

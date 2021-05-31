@@ -1,0 +1,60 @@
+{% extends 'OroActivityListBundle:ActivityList/js:activityItemTemplate.html.twig' %}
+{% import 'OroActivityBundle::macros.html.twig' as AC %}
+
+{% set entityClass = 'Teachers\\Bundle\\InvoiceBundle\\Entity\\Payment' %}
+{% set entityName = oro_entity_config_value(entityClass, 'label')|trans %}
+
+{% block activityDetails %}
+    {{ entityName }}
+    <% var template = (verb == 'create')
+    ? {{ 'teachers.payment.activity_item.created_by'|trans|json_encode|raw }}
+    : {{ 'teachers.payment.activity_item.updated_by'|trans|json_encode|raw }};
+    %>
+    <%= _.template(template, { interpolate: /\{\{(.+?)\}\}/g })({
+    user: owner_url ? '<a class="user" href="' + owner_url + '">' + _.escape(owner) + '</a>' :  '<span class="user">' + _.escape(owner) + '</span>',
+    date: '<i class="date">' + createdAt + '</i>',
+    editor: editor_url ? '<a class="user" href="' + editor_url + '">' + _.escape(editor) + '</a>' : _.escape(editor),
+    editor_date: '<i class="date">' + updatedAt + '</i>'
+    }) %>
+{% endblock %}
+
+{% block activityShortMessage %}
+    {{ parent() }}
+{% endblock %}
+
+{% block activityActions %}
+    {% import 'OroActivityBundle::macros.html.twig' as AC %}
+
+    {% set action %}
+        {# Add button for add context in the activity list item #}
+        {{ AC.activity_context_link() }}
+    {% endset %}
+    {% set actions = [action] %}
+
+    {% set action %}
+        <% if (editable) { %>
+        <a href="#" class="dropdown-item action item-edit-button"
+           title="{{ 'teachers.payment.update_payment'|trans({'{{ entity }}': entityName}) }}"
+           data-action-extra-options="{{ {dialogOptions: {width: 1000}}|json_encode }}">
+            <span class="fa-pencil-square-o hide-text"
+                  aria-hidden="true">{{ 'teachers.payment.update_payment'|trans({'{{ entity }}': entityName}) }}</span>
+            {{ 'teachers.payment.update_payment'|trans({'{{ entity }}': entityName}) }}
+        </a>
+        <% } %>
+    {% endset %}
+    {% set actions = actions|merge([action]) %}
+
+    {% set action %}
+        <% if (removable) { %>
+        <a href="#" class="dropdown-item action item-remove-button"
+           title="{{ 'teachers.payment.delete_payment'|trans({'{{ entity }}': entityName}) }}">
+            <span class="fa-trash-o hide-text"
+                  aria-hidden="true">{{ 'teachers.payment.delete_payment'|trans({'{{ entity }}': entityName}) }}</span>
+            {{ 'teachers.payment.delete_payment'|trans({'{{ entity }}': entityName}) }}
+        </a>
+        <% } %>
+    {% endset %}
+    {% set actions = actions|merge([action]) %}
+
+    {{ parent() }}
+{% endblock %}

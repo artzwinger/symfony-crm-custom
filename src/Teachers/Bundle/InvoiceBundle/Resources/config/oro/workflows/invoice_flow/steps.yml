@@ -1,0 +1,11 @@
+workflows:
+    invoice_flow:
+        steps:
+            unpaid:
+                order: 10
+                allowed_transitions:
+                    - make_paid
+            paid:
+                order: 20
+                allowed_transitions:
+                    - reopen

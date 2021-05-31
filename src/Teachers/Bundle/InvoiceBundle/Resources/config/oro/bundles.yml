@@ -1,0 +1,2 @@
+bundles:
+  - { name: Teachers\Bundle\InvoiceBundle\TeachersInvoiceBundle, priority: 240 }

@@ -1,0 +1,93 @@
+services:
+    teachers_invoice.activity_list.provider:
+        class: Teachers\Bundle\InvoiceBundle\Provider\InvoiceActivityListProvider
+        arguments:
+            - "@oro_entity.doctrine_helper"
+            - "@oro_security.owner.entity_owner_accessor.link"
+            - "@oro_activity.association_helper"
+            - "@oro_comment.association_helper"
+            - '@oro_locale.formatter.date_time'
+        tags:
+            - { name: oro_activity_list.provider, class: Teachers\Bundle\InvoiceBundle\Entity\Invoice, priority: 20 }
+    teachers_invoice.payment_activity_list.provider:
+        class: Teachers\Bundle\InvoiceBundle\Provider\PaymentActivityListProvider
+        arguments:
+            - "@oro_entity.doctrine_helper"
+            - "@oro_security.owner.entity_owner_accessor.link"
+            - "@oro_activity.association_helper"
+            - "@oro_comment.association_helper"
+            - '@oro_locale.formatter.date_time'
+        tags:
+            - { name: oro_activity_list.provider, class: Teachers\Bundle\InvoiceBundle\Entity\Payment, priority: 20 }
+    teachers_invoice.embedded_form:
+        class: Teachers\Bundle\InvoiceBundle\Form\Type\InvoiceType
+        public: true
+        tags:
+            - { name: oro_embedded_form, type: Teachers\Bundle\InvoiceBundle\Form\Type\InvoiceType, label: teachers.invoice.entity_label }
+            - { name: form.type, alias: teachers_invoice_request }
+    teachers_invoice.payment.embedded_form:
+        class: Teachers\Bundle\InvoiceBundle\Form\Type\PaymentType
+        public: true
+        tags:
+            - { name: oro_embedded_form, type: Teachers\Bundle\InvoiceBundle\Form\Type\PaymentType, label: teachers.payment.entity_label }
+            - { name: form.type, alias: teachers_payment_request }
+    teachers_invoice.invoice.form:
+        class: Symfony\Component\Form\Form
+        factory: [ '@form.factory', createNamed ]
+        arguments:
+            - "teachers_invoice_request"
+            - Teachers\Bundle\InvoiceBundle\Form\Type\InvoiceType
+            - null
+    teachers_invoice.payment.form:
+        class: Symfony\Component\Form\Form
+        factory: [ '@form.factory', createNamed ]
+        arguments:
+            - "teachers_payment_request"
+            - Teachers\Bundle\InvoiceBundle\Form\Type\PaymentType
+            - null
+    teachers_invoice.invoice.form.handler:
+        class: Teachers\Bundle\InvoiceBundle\Form\Handler\InvoiceHandler
+        public: true
+        arguments:
+            - "@teachers_invoice.invoice.form"
+            - "@request_stack"
+            - "@doctrine"
+    teachers_invoice.payment.form.handler:
+        class: Teachers\Bundle\InvoiceBundle\Form\Handler\PaymentHandler
+        public: true
+        arguments:
+            - "@teachers_invoice.payment.form"
+            - "@request_stack"
+            - "@doctrine"
+    teachers_invoice.placeholder.filter:
+        class: Teachers\Bundle\InvoiceBundle\Placeholder\PlaceholderFilter
+        arguments:
+            - '@oro_workflow.manager'
+        public: true
+    teachers_invoice.event_listener.orm.invoice_preupdate:
+        class: Teachers\Bundle\InvoiceBundle\EventListener\ORM\InvoicePreUpdate
+        tags:
+            - { name: doctrine.event_listener, event: preUpdate, connection: default, entity: 'Teachers\Bundle\InvoiceBundle\Entity\Invoice' }
+    teachers_invoice.event_listener.orm.invoice_postupdate:
+        class: Teachers\Bundle\InvoiceBundle\EventListener\ORM\InvoicePostUpdate
+        tags:
+            - { name: doctrine.event_listener, event: postUpdate, connection: default, entity: 'Teachers\Bundle\InvoiceBundle\Entity\Invoice' }
+        arguments:
+          [ '@oro_workflow.manager', '@teachers_invoice.helper.invoice' ]
+    teachers_invoice.event_listener.orm.payment_postpersist:
+        class: Teachers\Bundle\InvoiceBundle\EventListener\ORM\PaymentPostPersist
+        arguments:
+            - '@doctrine.orm.entity_manager'
+        tags:
+            - { name: doctrine.event_listener, event: postPersist, connection: default, entity: 'Teachers\Bundle\InvoiceBundle\Entity\Payment' }
+    teachers_invoice.event_listener.orm.payment_postupdate:
+        class: Teachers\Bundle\InvoiceBundle\EventListener\ORM\PaymentPostUpdate
+        arguments:
+            - '@doctrine.orm.entity_manager'
+        tags:
+            - { name: doctrine.event_listener, event: postUpdate, connection: default, entity: 'Teachers\Bundle\InvoiceBundle\Entity\Payment' }
+    teachers_invoice.helper.invoice:
+        class: Teachers\Bundle\InvoiceBundle\Helper\Invoice
+        public: true
+        arguments:
+          [ '@oro_email.manager.template_email', '@oro_config.manager' ]

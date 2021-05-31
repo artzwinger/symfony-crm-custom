@@ -1,0 +1,3 @@
+workflows:
+    invoice_flow:
+        attributes: ~

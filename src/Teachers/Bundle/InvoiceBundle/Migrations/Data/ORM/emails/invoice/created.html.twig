@@ -1,0 +1,17 @@
+@name = teachers_invoice_created
+@entityName = Teachers\Bundle\InvoiceBundle\Entity\Invoice
+@subject = New invoice created in your course {{ assignment.courseName }}
+@isSystem = 1
+@isEditable = 1
+
+<div>
+    <i>{{ invoice.createdAt|date('F j, Y, g:i A') }}</i>
+</div>
+<h2>Course</h2>
+<div>
+    {{ assignment.courseName }}
+</div>
+<h2>Amount Owed</h2>
+<div>
+    {{ invoice.amountOwed }}
+</div>

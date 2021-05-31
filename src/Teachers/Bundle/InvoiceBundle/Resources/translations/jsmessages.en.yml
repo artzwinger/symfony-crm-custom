@@ -1,0 +1,8 @@
+teachers:
+    invoice:
+        button:
+            send_email:
+                error:
+                    message: Can't send an email, please check logs
+                success:
+                    message: E-Mail sent successfully

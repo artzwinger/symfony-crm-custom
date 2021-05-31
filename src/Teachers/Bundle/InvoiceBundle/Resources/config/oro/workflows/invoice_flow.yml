@@ -1,0 +1,15 @@
+imports:
+    - { resource: 'invoice_flow/steps.yml' }
+    - { resource: 'invoice_flow/attributes.yml' }
+    - { resource: 'invoice_flow/transitions.yml' }
+    - { resource: 'invoice_flow/transition_definitions.yml' }
+    - { resource: 'invoice_flow/entity_restrictions.yml' }
+
+workflows:
+    invoice_flow:
+        entity: Teachers\Bundle\InvoiceBundle\Entity\Invoice
+        entity_attribute: invoice
+        start_step: unpaid
+
+        defaults:
+            active: true

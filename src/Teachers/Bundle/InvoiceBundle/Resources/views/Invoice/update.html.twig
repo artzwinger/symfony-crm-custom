@@ -1,0 +1,78 @@
+{% extends 'OroUIBundle:actions:update.html.twig' %}
+
+{% set formAction = form.vars.value.id ? path('teachers_invoice_update', { 'id': form.vars.value.id }) : path('teachers_invoice_create') %}
+{% set subject = form.vars.value|oro_format_name|default('N/A'|trans) %}
+{% oro_title_set({ params : {"%invoice.id%": subject} }) %}
+
+{% block navButtons %}
+    {% import 'OroUIBundle::macros.html.twig' as UI %}
+
+    {% if form.vars.value.id and is_granted('teachers_invoice_delete') %}
+        {{ UI.deleteButton({
+            'dataUrl': path('teachers_invoice_delete', {'id': form.vars.value.id}),
+            'dataRedirect': path('teachers_invoice_index'),
+            'aCss': 'no-hash remove-button',
+            'id': 'btn-remove-invoice-form',
+            'dataId': form.vars.value.id,
+            'entity_label': 'teachers.invoice.entity_label'|trans,
+        }) }}
+        {{ UI.buttonSeparator() }}
+    {% endif %}
+    {{ UI.button({'path' : path('teachers_invoice_index'), 'title' : 'Cancel'|trans, 'label' : 'Cancel'|trans}) }}
+    {% set html = UI.saveAndCloseButton({
+        'route': 'teachers_invoice_view',
+        'params': {'id': '$id'}
+    }) %}
+    {% if is_granted('teachers_invoice_create') %}
+        {% set html = html ~ UI.saveAndNewButton({
+            'route': 'teachers_invoice_create'
+        }) %}
+    {% endif %}
+    {% if is_granted('teachers_invoice_edit') %}
+        {% set html = html ~ UI.saveAndStayButton({
+            'route': 'teachers_invoice_update',
+            'params': {'id': '$id'}
+        }) %}
+    {% endif %}
+    {{ UI.dropdownSaveButton({'html': html}) }}
+{% endblock %}
+
+{% block pageHeader %}
+    {% if form.vars.value.id %}
+        {% set breadcrumbs = {
+            'entity':      form.vars.value,
+            'indexPath':   path('teachers_invoice_index'),
+            'indexLabel': 'teachers.invoice.entity_plural_label'|trans,
+            'entityTitle': subject
+        } %}
+        {{ parent() }}
+    {% else %}
+        {% set title = 'oro.ui.create_entity'|trans({'%entityName%': 'teachers.invoice.entity_label'|trans}) %}
+        {% include 'OroUIBundle::page_title_block.html.twig' with { title: title } %}
+    {% endif %}
+{% endblock pageHeader %}
+
+{% block content_data %}
+    {% set id = 'invoice-form' %}
+
+    {% set dataBlocks = [{
+        'title': 'teachers.invoice.block.general'|trans,
+        'subblocks': [
+            {
+                'title': 'teachers.invoice.block.invoice_information'|trans,
+                'data': [
+                    form_row(form.amountOwed),
+                    form_row(form.dueDate)
+                ]
+            }
+        ]
+    }] %}
+
+    {% set dataBlocks = dataBlocks|merge(oro_form_additional_data(form, 'teachers.invoice.block.additional'|trans)) %}
+
+    {% set data = {
+        'formErrors': form_errors(form)? form_errors(form) : null,
+        'dataBlocks': dataBlocks,
+    } %}
+    {{ parent() }}
+{% endblock content_data %}

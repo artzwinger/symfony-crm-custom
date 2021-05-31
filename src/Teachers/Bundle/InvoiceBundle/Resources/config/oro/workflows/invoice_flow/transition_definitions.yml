@@ -1,0 +1,27 @@
+workflows:
+    invoice_flow:
+        transition_definitions:
+            __start___definition:
+                actions:
+                    -   '@request_enum_entity':
+                            enum_code: invoice_status
+                            identifier: unpaid
+                            attribute: $invoice.status
+            make_paid_definition:
+                actions:
+                    -   '@request_enum_entity':
+                            enum_code: invoice_status
+                            identifier: paid
+                            attribute: $invoice.status
+            reopen_definition:
+                actions:
+                    -   '@request_enum_entity':
+                            enum_code: invoice_status
+                            identifier: unpaid
+                            attribute: $invoice.status
+                    -   '@assign_value':
+                            attribute: $invoice.amountPaid
+                            value: 0
+                    -   '@assign_value':
+                            attribute: $invoice.amountRemaining
+                            value: $invoice.amountOwed
