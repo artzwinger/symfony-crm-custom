@@ -6,6 +6,10 @@ services:
       - '@oro_entity.doctrine_helper'
     tags:
       - { name: oro.api.processor, action: create, group: transform_data, priority: -255 }
+  teachers_application.api.create.processor.avoid_notblank_worktoday:
+    class: Teachers\Bundle\ApplicationBundle\Api\Processor\AvoidNotBlankWorkToday
+    tags:
+      - { name: oro.api.processor, action: create, group: transform_data, priority: -75 }
   teachers_application.api.create.processor.validate_recaptcha_token:
     class: Teachers\Bundle\ApplicationBundle\Api\Processor\ValidateReCaptchaToken
     arguments:

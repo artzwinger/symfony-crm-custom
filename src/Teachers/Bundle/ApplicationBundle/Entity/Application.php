@@ -115,9 +115,9 @@ class Application extends ExtendApplication implements DatesAwareInterface
     /**
      * @var boolean|null $workToday
      *
-     * @ORM\Column(name="work_today", type="boolean", nullable=false)
+     * @ORM\Column(name="work_today", type="boolean", nullable=true)
      */
-    protected $workToday;
+    protected $workToday = true;
 
     /**
      * @var DateTime|null
@@ -385,7 +385,7 @@ class Application extends ExtendApplication implements DatesAwareInterface
     /**
      * @return bool|null
      */
-    public function getWorkToday(): ?bool
+    public function getWorkToday() // do not add types
     {
         return $this->workToday;
     }
@@ -393,7 +393,7 @@ class Application extends ExtendApplication implements DatesAwareInterface
     /**
      * @param bool|null $workToday
      */
-    public function setWorkToday(?bool $workToday): void
+    public function setWorkToday($workToday): void // do not add types
     {
         $this->workToday = $workToday;
     }

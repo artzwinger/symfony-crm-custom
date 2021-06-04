@@ -49,6 +49,9 @@ class ValidateReCaptchaToken implements ProcessorInterface
     {
         /** @var Application $application */
         $application = $context->getResult();
+        if (!$application instanceof Application) {
+            return;
+        }
         $request = $this->requestStack->getCurrentRequest();
         $this->reCaptcha->setExpectedHostname($request->getHost());
         $result = $this->reCaptcha->verify($application->getReCaptchaToken(), $request->getClientIp());

@@ -5,6 +5,8 @@ api:
                 reCaptchaToken:
                     exclude: true
                     data_type: string
+                workToday:
+                    data_type: string
             actions:
                 create:
                     fields:

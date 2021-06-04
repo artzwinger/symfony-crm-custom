@@ -40,6 +40,9 @@ class SetStudentIfExists implements ProcessorInterface
     {
         /** @var Application $application */
         $application = $context->getResult();
+        if (!$application instanceof Application) {
+            return;
+        }
         $email = $application->getEmail();
         /** @var User $user */
         $user = $this->userManager->findUserByEmail($email);
