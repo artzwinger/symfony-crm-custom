@@ -56,3 +56,8 @@ teachers:
             general: General
             additional: Additional
             application_information: Application Information
+oro:
+    workflow:
+        workflowstep:
+            grid:
+                label: Status
