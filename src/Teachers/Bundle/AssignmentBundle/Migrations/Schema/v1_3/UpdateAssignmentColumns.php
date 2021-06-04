@@ -17,8 +17,10 @@ class UpdateAssignmentColumns implements Migration
     {
         if ($schema->hasTable('teachers_assignment')) {
             $table = $schema->getTable('teachers_assignment');
-            $table->addColumn('user_login', 'string', ['length' => 255, 'notnull' => true]);
-            $table->addColumn('user_password', 'string', ['length' => 255, 'notnull' => true]);
+            if (!$table->hasColumn('user_login')) {
+                $table->addColumn('user_login', 'string', ['length' => 255, 'notnull' => true]);
+                $table->addColumn('user_password', 'string', ['length' => 255, 'notnull' => true]);
+            }
         }
     }
 }

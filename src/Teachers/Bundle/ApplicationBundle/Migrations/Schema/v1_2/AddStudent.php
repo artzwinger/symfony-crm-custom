@@ -17,7 +17,9 @@ class AddStudent implements Migration
     {
         if ($schema->hasTable('teachers_application')) {
             $table = $schema->getTable('teachers_application');
-            $table->addColumn('student_id', 'integer', ['notnull' => false]);
+            if (!$table->hasColumn('student_id')) {
+                $table->addColumn('student_id', 'integer', ['notnull' => false]);
+            }
         }
     }
 }

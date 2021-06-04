@@ -19,6 +19,10 @@ class UpdateApplicationColumns implements Migration
         if ($schema->hasTable('teachers_application')) {
             $table = $schema->getTable('teachers_application');
 
+            if (!$table->hasColumn('studentLoginInfo') && $table->hasColumn('first_name')) {
+                return;
+            }
+
             $table->dropColumn('subject');
             $table->dropColumn('studentLoginInfo');
 

@@ -19,16 +19,20 @@ class UpdateAssignmentColumns implements Migration
         if ($schema->hasTable('teachers_assignment')) {
             $table = $schema->getTable('teachers_assignment');
 
-            $table->dropColumn('subject');
+            if ($table->hasColumn('subject')) {
+                $table->dropColumn('subject');
+            }
 
-            $table->addColumn('first_name', 'string', ['length' => 255, 'notnull' => true]);
-            $table->addColumn('last_name', 'string', ['length' => 255, 'notnull' => true]);
-            $table->addColumn('course_name', 'string', ['length' => 255, 'notnull' => true]);
-            $table->addColumn('course_prefixes', 'string', ['length' => 255, 'notnull' => true]);
-            $table->addColumn('work_today', Types::BOOLEAN, ['notnull' => true]);
-            $table->addColumn('due_date', 'datetime', ['notnull' => true]);
-            $table->addColumn('course_url', 'string', ['length' => 255, 'notnull' => true]);
-            $table->addColumn('instructions', 'text', ['notnull' => false]);
+            if (!$table->hasColumn('first_name')) {
+                $table->addColumn('first_name', 'string', ['length' => 255, 'notnull' => true]);
+                $table->addColumn('last_name', 'string', ['length' => 255, 'notnull' => true]);
+                $table->addColumn('course_name', 'string', ['length' => 255, 'notnull' => true]);
+                $table->addColumn('course_prefixes', 'string', ['length' => 255, 'notnull' => true]);
+                $table->addColumn('work_today', Types::BOOLEAN, ['notnull' => true]);
+                $table->addColumn('due_date', 'datetime', ['notnull' => true]);
+                $table->addColumn('course_url', 'string', ['length' => 255, 'notnull' => true]);
+                $table->addColumn('instructions', 'text', ['notnull' => false]);
+            }
         }
     }
 }
