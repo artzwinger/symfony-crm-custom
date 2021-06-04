@@ -133,31 +133,11 @@ class AssignmentMessageController extends AbstractController
      *      permission="CREATE",
      *      class="TeachersAssignmentBundle:AssignmentMessage"
      * )
-     * @throws ForbiddenTransitionException
-     * @throws InvalidTransitionException
-     * @throws WorkflowException
      */
     public function createAction()
     {
         $message = new AssignmentMessage();
-        $result = $this->update($message, 'teachers_assignment_message_create');
-        if ($message->getId()) {
-            $senderStudent = $this->get('teachers_users.helper.role')
-                ->hasThisUserIdThisRole($message->getOwner()->getId(), Role::ROLE_STUDENT);
-            if ($senderStudent) {
-                $msg = strtolower($message->getMessage());
-                if (!strstr($msg, 'invoice')
-                    && !strstr($msg, 'bill')
-                    && !strstr($msg, 'money')
-                    && !strstr($msg, 'pay')
-                ) {
-                    $wfm = $this->get('oro_workflow.manager');
-                    $item = $wfm->getWorkflowItem($message, AssignmentMessage::WORKFLOW_NAME);
-                    $wfm->transit($item, AssignmentMessage::WORKFLOW_TRANSITION_APPROVE);
-                }
-            }
-        }
-        return $result;
+        return $this->update($message, 'teachers_assignment_message_create');
     }
 
     /**
@@ -227,23 +207,23 @@ class AssignmentMessageController extends AbstractController
      * @AclAncestor("teachers_assignment_message_edit")
      * @Template("@TeachersAssignment/AssignmentMessage/update_comment.html.twig")
      * @CsrfProtection()
-     * @param AssignmentMessage $assignmentMessage
+     * @param AssignmentMessage $message
      * @return array|RedirectResponse
      * @throws ForbiddenTransitionException
      * @throws InvalidTransitionException
      * @throws WorkflowException
      */
-    public function unapproveAction(AssignmentMessage $assignmentMessage)
+    public function unapproveAction(AssignmentMessage $message)
     {
         $relationClass = 'Teachers_Bundle_AssignmentBundle_Entity_AssignmentMessage';
         if ($this->get('request_stack')->getCurrentRequest()->isMethod('POST')) {
             /** @var WorkflowManager $wfm */
             $wfm = $this->get('oro_workflow.manager');
-            $item = $wfm->getWorkflowItem($assignmentMessage, AssignmentMessage::WORKFLOW_NAME);
+            $item = $wfm->getWorkflowItem($message, AssignmentMessage::WORKFLOW_NAME);
             $wfm->transit($item, AssignmentMessage::WORKFLOW_TRANSITION_UNAPPROVE);
         }
         $comment = new Comment();
-        $this->getCommentManager()->setRelationField($comment, $relationClass, $assignmentMessage->getId());
+        $this->getCommentManager()->setRelationField($comment, $relationClass, $message->getId());
         /** @var UpdateHandlerFacade $handler */
         $handler = $this->get('oro_form.update_handler');
         /** @var FormFactory $factory */
@@ -259,7 +239,7 @@ class AssignmentMessageController extends AbstractController
             $form,
             $this->get('translator')->trans('teachers.assignment.message.controller.assignment.saved.message')
         );
-        $response['assignment_message'] = $assignmentMessage;
+        $response['assignment_message'] = $message;
         return $response;
     }
 

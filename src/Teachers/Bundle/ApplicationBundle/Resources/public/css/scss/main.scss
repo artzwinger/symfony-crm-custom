@@ -1,0 +1,26 @@
+.desktop-version {
+  .main-menu {
+    background-color: #293b61;
+  }
+
+  .main-menu__header, .main-menu-sided {
+    background-color: #102249;
+  }
+
+  .dropdown-level-1:not(.active) {
+    &:hover {
+      background-color: #f85945 !important;
+    }
+  }
+}
+
+.oro-datagrid {
+  .grid-header-cell {
+    background-color: #f85945;
+  }
+
+  .grid-header {
+    overflow: hidden;
+    border-radius: 5px;
+  }
+}
