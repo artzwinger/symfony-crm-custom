@@ -8,6 +8,7 @@ use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Exception;
 use Oro\Bundle\FormBundle\Model\UpdateHandlerFacade;
+use Oro\Bundle\UserBundle\Entity\User;
 use Symfony\Component\Form\FormFactory;
 use Symfony\Component\Form\FormInterface;
 use Teachers\Bundle\ApplicationBundle\Entity\Application;
@@ -86,6 +87,27 @@ class AssignmentController extends AbstractController
     public function updateAction(Assignment $assignment)
     {
         return $this->update($assignment, 'teachers_assignment_update');
+    }
+
+    /**
+     * @Route("/getuserinfo/{id}", name="teachers_assignment_getuserinfo", requirements={"id"="\d+"}, options={"expose"=true})
+     * @AclAncestor("teachers_assignment_edit")
+     * @param User $user
+     * @return JsonResponse
+     */
+    public function getUserInfo(User $user): JsonResponse
+    {
+        $data = [
+            'firstName' => '',
+            'lastName' => ''
+        ];
+        if ($user->getId()) {
+            $data = [
+                'firstName' => $user->getFirstName(),
+                'lastName' => $user->getFirstName()
+            ];
+        }
+        return new JsonResponse($data, Response::HTTP_OK);
     }
 
     /**
@@ -172,7 +194,7 @@ class AssignmentController extends AbstractController
     }
 
     /**
-     * @param \Teachers\Bundle\AssignmentBundle\Entity\Assignment $entity
+     * @param Assignment $entity
      * @param $action
      * @return RedirectResponse|array
      */

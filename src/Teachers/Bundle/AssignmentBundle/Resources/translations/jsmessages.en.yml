@@ -11,3 +11,5 @@ teachers:
                 approve: Message approved
             error:
                 approve: Message is not approved
+        userInfo:
+            error: Cannot load user info

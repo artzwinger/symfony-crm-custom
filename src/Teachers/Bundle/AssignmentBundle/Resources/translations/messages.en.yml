@@ -26,7 +26,7 @@ teachers:
                 label: View my courses
             view_messages_approval_queue:
                 label: View Messages Queue
-        teachers_queue_label: Tutors Queue
+        teachers_queue_label: Assignment Queue
         my_courses_label: My Courses
         approval_queue_label: Messages Queue
 

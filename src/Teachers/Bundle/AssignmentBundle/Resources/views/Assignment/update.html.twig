@@ -81,7 +81,39 @@
             }
         ]
     }] %}
-
+    <script type="text/javascript">
+        loadModules(['jquery', 'routing', 'oroui/js/mediator', 'oroui/js/messenger', 'orotranslation/js/translator'],
+            function ($, routing, mediator, messenger, __) {
+                $(function () {
+                    var $student = $('#{{ form.student.vars.id }}'),
+                        $firstName = $('#{{ form.firstName.vars.id }}'),
+                        $lastName = $('#{{ form.lastName.vars.id }}');
+                    $student.on('change', function (e) {
+                        var userId = parseInt($(e.target).val(), 10);
+                        if (isNaN(userId) || userId <= 0) {
+                            return;
+                        }
+                        var url = routing.generate('teachers_assignment_getuserinfo', {
+                            id: userId
+                        });
+                        mediator.execute('showLoading');
+                        $.post({
+                            url: url,
+                            errorHandlerMessage: __('teachers.assignment.userInfo.error')
+                        }).done(function (res, status, jqXHR) {
+                            if (res.firstName) {
+                                $firstName.val(res.firstName);
+                            }
+                            if (res.lastName) {
+                                $lastName.val(res.lastName);
+                            }
+                        }).always(function () {
+                            mediator.execute('hideLoading');
+                        });
+                    });
+                });
+            });
+    </script>
     {% set dataBlocks = dataBlocks|merge(oro_form_additional_data(form, 'teachers.assignment.block.additional'|trans)) %}
 
     {% set data = {
