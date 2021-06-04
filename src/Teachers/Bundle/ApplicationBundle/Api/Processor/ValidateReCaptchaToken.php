@@ -53,11 +53,12 @@ class ValidateReCaptchaToken implements ProcessorInterface
             return;
         }
         $request = $this->requestStack->getCurrentRequest();
-        $this->reCaptcha->setExpectedHostname($request->getHost());
+        $this->reCaptcha->setExpectedHostname('tutors-form.herokuapp.com');
         $result = $this->reCaptcha->verify($application->getReCaptchaToken(), $request->getClientIp());
         if (!$result->isSuccess()) {
             $this->logger->error('ReCaptcha token is not valid', [
                 'application_email' => $application->getEmail(),
+                'host' => $request->getHost(),
                 'recaptcha_errors' => $result->getErrorCodes()
             ]);
             throw new BadRequestHttpException('ReCaptcha token is not valid');
