@@ -4,16 +4,15 @@ navigation:
             teachers_group:
                 label: 'teachers.users.teacher_group.entity_plural_label'
                 route: 'teachers_group_index'
-                position: 30
+                position: 14
                 extras:
                     routes: [ 'teachers_group_*' ]
+                    icon: fa-users
                 display: true
         tree:
             application_menu:
                 children:
-                    activities_tab:
-                        children:
-                            teachers_group: ~
+                    teachers_group: ~
     titles:
         teachers_group_index: ~
         teachers_group_view: '%teacher_group.title%'

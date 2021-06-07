@@ -1,19 +1,18 @@
 navigation:
     menu_config:
         items:
-            teachers_application_application:
+            teachers_application_tab:
                 label: 'teachers.application.course_managers_queue'
                 route: 'teachers_application_index'
-                position: 30
+                position: 11
                 extras:
                     routes: [ 'teachers_application_*' ]
+                    icon: fa-folder
                 display: true
         tree:
             application_menu:
                 children:
-                    activities_tab:
-                        children:
-                            teachers_application_application: ~
+                    teachers_application_tab: ~
     titles:
         teachers_application_index: ~
         teachers_application_view: '%application.courseName%'

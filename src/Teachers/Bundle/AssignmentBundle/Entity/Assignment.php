@@ -26,7 +26,7 @@ use Teachers\Bundle\UsersBundle\Entity\TeacherGroup;
  *      routeName="teachers_assignment_index",
  *      defaultValues={
  *          "entity"={
- *              "icon"="fa-clipboard"
+ *              "icon"="fa-paperclip"
  *          },
  *          "ownership"={
  *              "owner_type"="USER",
