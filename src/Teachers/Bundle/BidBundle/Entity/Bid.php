@@ -72,10 +72,8 @@ class Bid extends ExtendBid implements DatesAwareInterface
      * )
      */
     protected $id;
-    /**
-     * @var string|null $subject
-     * @ORM\Column(type="string", length=255, nullable=false)
-     */
+
+    // removed
     protected $subject;
     /**
      * @var float|null $price

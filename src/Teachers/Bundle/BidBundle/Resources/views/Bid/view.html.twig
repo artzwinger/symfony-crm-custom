@@ -1,14 +1,14 @@
 {% extends 'OroUIBundle:actions:view.html.twig' %}
 {% import 'OroUIBundle::macros.html.twig' as ui %}
-{% set subject = entity|oro_format_name|default('N/A'|trans) %}
-{% oro_title_set({ params : {"%bid.subject%": subject} }) %}
+{% set price = entity|oro_format_name|default('N/A'|trans) %}
+{% oro_title_set({ params : {"%bid.price%": price} }) %}
 
 {% block pageHeader %}
     {% set breadcrumbs = {
         'entity': entity,
         'indexPath': path('teachers_bid_index'),
         'indexLabel': 'teachers.bid.entity_plural_label'|trans,
-        'entityTitle': subject
+        'entityTitle': price
     } %}
     {{ parent() }}
 {% endblock pageHeader %}

@@ -21,10 +21,6 @@ class BidType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('subject', TextType::class, [
-                'required' => true,
-                'label' => 'teachers.bid.subject.label'
-            ])
             ->add('price', OroMoneyType::class, [
                 'required' => false,
                 'label' => 'teachers.bid.price.label'

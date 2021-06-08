@@ -7,7 +7,7 @@ datagrids:
             query:
                 select:
                     - bid.id
-                    - bid.subject
+                    - bid.price
                     - bid.createdAt
                 from:
                     - { table: 'Teachers\Bundle\BidBundle\Entity\Bid', alias: bid }
@@ -15,24 +15,24 @@ datagrids:
                     left:
                         - { join: bid.status, alias: bidstatus }
         columns:
-            subject:
-                label: teachers.bid.bid.subject.label
+            price:
+                label: teachers.bid.price.label
             createdAt:
                 frontend_type: datetime
                 label: oro.ui.created_at
         sorters:
             columns:
-                subject:
-                    data_name: bid.subject
+                price:
+                    data_name: bid.price
                 createdAt:
                     data_name: bid.createdAt
             default:
                 createdAt: DESC
         filters:
             columns:
-                subject:
-                    type: string
-                    data_name: bid.subject
+                price:
+                    type: number-range
+                    data_name: bid.price
                 createdAt:
                     type: datetime
                     data_name: bid.createdAt

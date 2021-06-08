@@ -1,8 +1,8 @@
 {% extends 'OroUIBundle:actions:update.html.twig' %}
 
 {% set formAction = form.vars.value.id ? path('teachers_bid_update', { 'id': form.vars.value.id }) : path('teachers_bid_create') %}
-{% set subject = form.vars.value|oro_format_name|default('N/A'|trans) %}
-{% oro_title_set({ params : {"%bid.subject%": subject} }) %}
+{% set price = form.vars.value|oro_format_name|default('N/A'|trans) %}
+{% oro_title_set({ params : {"%bid.price%": price} }) %}
 
 {% block navButtons %}
     {% import 'OroUIBundle::macros.html.twig' as UI %}
@@ -43,7 +43,7 @@
             'entity':      form.vars.value,
             'indexPath':   path('teachers_bid_index'),
             'indexLabel': 'teachers.bid.entity_plural_label'|trans,
-            'entityTitle': subject
+            'entityTitle': price
         } %}
         {{ parent() }}
     {% else %}
@@ -61,7 +61,6 @@
             {
                 'title': 'teachers.bid.block.bid_information'|trans,
                 'data': [
-                    form_row(form.subject),
                     form_row(form.price),
                     form_row(form.teacher)
                 ]

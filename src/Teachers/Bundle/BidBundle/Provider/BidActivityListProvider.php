@@ -73,7 +73,7 @@ class BidActivityListProvider implements
     public function getSubject($entity): ?string
     {
         /** @var $entity Bid */
-        return $entity->getSubject();
+        return $entity->getPrice();
     }
 
     /**
@@ -82,7 +82,7 @@ class BidActivityListProvider implements
     public function getDescription($entity): ?string
     {
         /** @var $entity Bid */
-        return $entity->getSubject() . ' ' . $entity->getPrice();
+        return $entity->getPrice();
     }
 
     /**
