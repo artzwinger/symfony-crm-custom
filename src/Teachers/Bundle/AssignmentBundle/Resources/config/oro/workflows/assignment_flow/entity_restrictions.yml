@@ -16,6 +16,10 @@ workflows:
                 attribute: assignment
                 field: status
                 step: up_for_bid
+            assignment_status_paused_due_nonpayment:
+                attribute: assignment
+                field: status
+                step: paused_due_nonpayment
             assignment_status_assigned:
                 attribute: assignment
                 field: status

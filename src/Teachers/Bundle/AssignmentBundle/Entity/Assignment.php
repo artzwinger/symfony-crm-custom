@@ -58,6 +58,7 @@ use Teachers\Bundle\UsersBundle\Entity\TeacherGroup;
 class Assignment extends ExtendAssignment implements DatesAwareInterface
 {
     use DatesAwareTrait;
+
     /**
      * @var int $id
      *
@@ -248,10 +249,12 @@ class Assignment extends ExtendAssignment implements DatesAwareInterface
     const STATUS_UP_FOR_BID = 'up_for_bid';
     const STATUS_ASSIGNED = 'assigned';
     const STATUS_COMPLETE = 'complete';
+    const STATUS_PAUSED_DUE_NONPAYMENT = 'paused_due_nonpayment';
 
     const WORKFLOW_STEP_NEW = 'new';
     const WORKFLOW_STEP_UP_FOR_BID = 'up_for_bid';
     const WORKFLOW_STEP_ASSIGNED = 'assigned';
+    const WORKFLOW_STEP_PAUSED_DUE_NONPAYMENT = 'paused_due_nonpayment';
     const WORKFLOW_STEP_COMPLETE = 'complete';
 
     public static function getAvailableWorkflowSteps(): array
@@ -260,7 +263,8 @@ class Assignment extends ExtendAssignment implements DatesAwareInterface
             self::WORKFLOW_STEP_NEW,
             self::WORKFLOW_STEP_UP_FOR_BID,
             self::WORKFLOW_STEP_ASSIGNED,
-            self::WORKFLOW_STEP_COMPLETE
+            self::WORKFLOW_STEP_COMPLETE,
+            self::WORKFLOW_STEP_PAUSED_DUE_NONPAYMENT
         ];
     }
 
@@ -281,6 +285,10 @@ class Assignment extends ExtendAssignment implements DatesAwareInterface
             ],
             self::STATUS_COMPLETE => [
                 'name' => 'Complete',
+                'is_default' => false
+            ],
+            self::STATUS_PAUSED_DUE_NONPAYMENT => [
+                'name' => 'Paused Due to Nonpayment',
                 'is_default' => false
             ],
         ];

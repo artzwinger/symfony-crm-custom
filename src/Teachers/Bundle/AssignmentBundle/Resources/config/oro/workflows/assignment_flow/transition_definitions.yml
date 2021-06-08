@@ -29,6 +29,18 @@ workflows:
                             object: $assignment
                             method: setTeacher
                             method_parameters: [ $teacher ]
+            pause_due_nonpayment_definition:
+                actions:
+                    -   '@request_enum_entity':
+                            enum_code: assignment_status
+                            identifier: paused_due_nonpayment
+                            attribute: $assignment.status
+            continue_definition:
+                actions:
+                    -   '@request_enum_entity':
+                            enum_code: assignment_status
+                            identifier: assigned
+                            attribute: $assignment.status
             complete_definition:
                 actions:
                     -   '@request_enum_entity':

@@ -19,6 +19,18 @@ workflows:
                 frontend_options:
                     icon: 'fa-check'
                 transition_definition: complete_definition
+            continue:
+                step_to: assigned
+                #is_unavailable_hidden: true
+                frontend_options:
+                    icon: 'fa-play'
+                transition_definition: continue_definition
+            pause_due_nonpayment:
+                step_to: paused_due_nonpayment
+                #is_unavailable_hidden: true
+                frontend_options:
+                    icon: 'fa-pause'
+                transition_definition: pause_due_nonpayment_definition
             reopen:
                 step_to: new
                 #is_unavailable_hidden: true

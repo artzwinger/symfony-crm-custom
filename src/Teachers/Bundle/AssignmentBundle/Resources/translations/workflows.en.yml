@@ -10,6 +10,8 @@ oro:
                     label: Assigned
                 complete:
                     label: Complete
+                paused_due_nonpayment:
+                    label: Paused Due Nonpayment
             attribute:
                 teacher:
                     label: Tutor
@@ -28,6 +30,12 @@ oro:
                     warning_message: ''
                 reopen:
                     label: Reopen
+                    warning_message: ''
+                continue:
+                    label: Continue
+                    warning_message: ''
+                pause_due_nonpayment:
+                    label: Pause Due Nonpayment
                     warning_message: ''
             label: Assignment Flow
         assignment_message_flow:
