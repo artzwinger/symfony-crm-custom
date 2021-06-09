@@ -13,6 +13,7 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\UserBundle\Entity\User;
+use Teachers\Bundle\ApplicationBundle\Entity\Application;
 use Teachers\Bundle\AssignmentBundle\Model\ExtendAssignment;
 use Teachers\Bundle\UsersBundle\Entity\TeacherGroup;
 
@@ -161,6 +162,14 @@ class Assignment extends ExtendAssignment implements DatesAwareInterface
      * @ORM\Column(type="text", nullable=true)
      */
     protected $instructions;
+
+    /**
+     * @var Application|null $application
+     *
+     * @ORM\ManyToOne(targetEntity="Teachers\Bundle\ApplicationBundle\Entity\Application")
+     * @ORM\JoinColumn(name="application_id", referencedColumnName="id", nullable=true, onDelete="SET NULL")
+     */
+    protected $application;
 
     /**
      * @var User $teacher
@@ -500,6 +509,22 @@ class Assignment extends ExtendAssignment implements DatesAwareInterface
     public function setDescription(?string $description): void
     {
         $this->description = $description;
+    }
+
+    /**
+     * @return Application|null
+     */
+    public function getApplication(): ?Application
+    {
+        return $this->application;
+    }
+
+    /**
+     * @param Application|null $application
+     */
+    public function setApplication(?Application $application): void
+    {
+        $this->application = $application;
     }
 
     /**
