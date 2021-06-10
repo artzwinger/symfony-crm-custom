@@ -17,5 +17,10 @@ services:
         public: true
         arguments:
             - '@translator'
-
+    teachers_users.menu_update.builder.update_users_management_visibility:
+        class: Teachers\Bundle\UsersBundle\Builder\UpdateUsersManagementVisibility
+        arguments:
+            - '@teachers_users.helper.role'
+        tags:
+            - { name: oro_menu.builder, priority: 150 }
 

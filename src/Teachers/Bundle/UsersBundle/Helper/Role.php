@@ -62,6 +62,16 @@ class Role
         return $this->hasCurrentUserRole($this->getCourseManagerRoleId());
     }
 
+    public function isCurrentUserTeacher(): bool
+    {
+        return $this->hasCurrentUserRole($this->getTeacherRoleId());
+    }
+
+    public function isCurrentUserStudent(): bool
+    {
+        return $this->hasCurrentUserRole($this->getStudentRoleId());
+    }
+
     public function getCourseManagerRoleId(): int
     {
         return $this->getCourseManagerRole()->getId();
@@ -118,6 +128,9 @@ class Role
     protected function hasCurrentUserRole(int $roleId): bool
     {
         $user = $this->tokenStorage->getToken()->getUser();
+        if (!is_object($user)) {
+            return false;
+        }
         foreach ($user->getRoles() as $role) {
             /** @var EntityRole $role */
             if ($role->getId() == $roleId) {
