@@ -382,6 +382,11 @@ class Application extends ExtendApplication implements DatesAwareInterface
         $this->description = $description;
     }
 
+    public function getWorkTodayLabel()
+    {
+        return $this->workToday ? 'Yes' : 'No';
+    }
+
     /**
      * @return bool|null
      */

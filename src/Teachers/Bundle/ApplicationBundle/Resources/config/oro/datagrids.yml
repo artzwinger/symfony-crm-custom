@@ -41,12 +41,15 @@ datagrids:
                 label: teachers.application.course_prefixes.label
             price:
                 label: teachers.application.price.label
+                type: twig
+                frontend_type: html
+                template: TeachersApplicationBundle:Datagrid:price.html.twig
             workToday:
                 label: teachers.application.work_today.label
                 frontend_type: select
                 choices:
-                    teachers.application.work_today.true.label: enabled
-                    teachers.application.work_today.false.label: disabled
+                    teachers.application.work_today.true.label: 1
+                    teachers.application.work_today.false.label: 0
             dueDate:
                 frontend_type: datetime
                 label: teachers.application.due_date.label

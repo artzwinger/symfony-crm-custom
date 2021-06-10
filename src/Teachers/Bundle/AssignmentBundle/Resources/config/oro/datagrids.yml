@@ -39,8 +39,8 @@ datagrids:
                 label: teachers.assignment.work_today.label
                 frontend_type: select
                 choices:
-                    teachers.assignment.work_today.true.label: enabled
-                    teachers.assignment.work_today.false.label: disabled
+                    teachers.assignment.work_today.true.label: 1
+                    teachers.assignment.work_today.false.label: 0
             dueDate:
                 frontend_type: datetime
                 label: teachers.assignment.due_date.label

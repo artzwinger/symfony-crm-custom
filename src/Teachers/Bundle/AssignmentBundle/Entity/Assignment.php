@@ -399,6 +399,11 @@ class Assignment extends ExtendAssignment implements DatesAwareInterface
         $this->coursePrefixes = $coursePrefixes;
     }
 
+    public function getWorkTodayLabel()
+    {
+        return $this->workToday ? 'Yes' : 'No';
+    }
+
     /**
      * @return bool|null
      */
