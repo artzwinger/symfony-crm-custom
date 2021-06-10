@@ -66,6 +66,7 @@ class UpdateUsersManagementVisibility implements BuilderInterface
             'digital_asset_list',
             'integrations_submenu',
             'tags_management',
+            'audit_list',
         ];
     }
 }
