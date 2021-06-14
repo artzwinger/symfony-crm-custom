@@ -200,10 +200,10 @@ class SatisfactionActivityListProvider implements
     /**
      * {@inheritdoc}
      */
-    public function getActivityOwners($bid, ActivityList $activityList)
+    public function getActivityOwners($entity, ActivityList $activityList)
     {
-        $organization = $this->getOrganization($bid);
-        $owner = $this->entityOwnerAccessorLink->getService()->getOwner($bid);
+        $organization = $this->getOrganization($entity);
+        $owner = $this->entityOwnerAccessorLink->getService()->getOwner($entity);
 
         if (!$organization || !$owner) {
             return [];

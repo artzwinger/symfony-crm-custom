@@ -205,10 +205,10 @@ class BidActivityListProvider implements
     /**
      * {@inheritdoc}
      */
-    public function getActivityOwners($bid, ActivityList $activityList): array
+    public function getActivityOwners($entity, ActivityList $activityList): array
     {
-        $org = $this->getOrganization($bid);
-        $owner = $this->entityOwnerAccessorLink->getService()->getOwner($bid);
+        $org = $this->getOrganization($entity);
+        $owner = $this->entityOwnerAccessorLink->getService()->getOwner($entity);
 
         if (!$org || !$owner) {
             return [];
