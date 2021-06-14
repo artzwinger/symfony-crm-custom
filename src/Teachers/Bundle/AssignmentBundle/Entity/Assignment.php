@@ -304,6 +304,20 @@ class Assignment extends ExtendAssignment implements DatesAwareInterface
     }
 
     /**
+     * @param User $user
+     * @return bool
+     */
+    public function isAssignedToUser(User $user): bool
+    {
+        return $this->getTeacher() && $this->getTeacher()->getId() == $user->getId();
+    }
+
+    public function isUpForBids(): bool
+    {
+        return $this->getStatus()->getId() === self::STATUS_UP_FOR_BID;
+    }
+
+    /**
      * @return int
      */
     public function getId(): ?int

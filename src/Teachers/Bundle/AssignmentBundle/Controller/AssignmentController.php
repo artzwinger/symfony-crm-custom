@@ -69,7 +69,8 @@ class AssignmentController extends AbstractController
     public function infoAction(Assignment $assignment): array
     {
         return [
-            'entity' => $assignment
+            'entity' => $assignment,
+            'roleHelper' => $this->get('teachers_users.helper.role'),
         ];
     }
 

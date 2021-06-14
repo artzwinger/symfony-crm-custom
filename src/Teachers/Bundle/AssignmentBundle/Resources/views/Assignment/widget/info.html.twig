@@ -25,8 +25,12 @@
             {{ ui.renderProperty('teachers.assignment.work_today.label'|trans, entity.workTodayLabel) }}
             {{ ui.renderProperty('teachers.assignment.due_date.label'|trans, entity.dueDate|oro_format_datetime) }}
             {{ ui.renderProperty('teachers.assignment.course_url.label'|trans, entity.courseUrl) }}
+
+            {% if not roleHelper.currentUserTeacher or (not entity.isUpForBids() and entity.isAssignedToUser(roleHelper.currentUser)) %}
             {{ ui.renderProperty('teachers.assignment.user_login.label'|trans, entity.userLogin) }}
             {{ ui.renderProperty('teachers.assignment.user_password.label'|trans, entity.userPassword) }}
+            {% endif %}
+
             {{ ui.renderProperty('teachers.assignment.instructions.label'|trans, entity.instructions) }}
             {{ ui.renderProperty('teachers.assignment.status.label'|trans, entity.status) }}
             {{ ui.renderProperty('teachers.assignment.term.label'|trans, entity.term) }}
