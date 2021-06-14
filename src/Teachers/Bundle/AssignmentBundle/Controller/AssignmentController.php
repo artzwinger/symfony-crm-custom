@@ -8,6 +8,7 @@ use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Exception;
 use Oro\Bundle\FormBundle\Model\UpdateHandlerFacade;
+use Oro\Bundle\UserBundle\Entity\Role;
 use Oro\Bundle\UserBundle\Entity\User;
 use Symfony\Component\Form\FormFactory;
 use Symfony\Component\Form\FormInterface;
@@ -122,6 +123,7 @@ class AssignmentController extends AbstractController
      */
     public function createAction()
     {
+        $em = $this->get('doctrine.orm.entity_manager');
         $assignment = new Assignment();
         $request = $this->get('request_stack')->getCurrentRequest();
         $entityClass = $request->get('entityClass');
@@ -129,11 +131,23 @@ class AssignmentController extends AbstractController
         try {
             if ($entityClass && $entityId) {
                 $entityClass = str_replace('_', '\\', $entityClass);
-                $repository = $this->get('doctrine.orm.entity_manager')->getRepository($entityClass);
+                $repository = $em->getRepository($entityClass);
                 /** @var Application $application */
                 $application = $repository->find($entityId);
                 if (empty($application)) {
                     throw new EntityNotFoundException();
+                }
+                if ($this->get('teachers_users.helper.role')->isCurrentUserCourseManager()) {
+                    $roleRepository = $em->getRepository(Role::class);
+                    $role = $roleRepository->findOneBy([
+                        'role' => User::ROLE_ADMINISTRATOR
+                    ]);
+                    if ($role) {
+                        $adminUser = $roleRepository->getFirstMatchedUser($role);
+                        if ($adminUser) {
+                            $assignment->setCourseManager($adminUser);
+                        }
+                    }
                 }
                 $assignment->setApplication($application);
                 $assignment->setTerm($application->getTerm());

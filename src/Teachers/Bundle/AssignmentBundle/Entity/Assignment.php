@@ -31,8 +31,8 @@ use Teachers\Bundle\UsersBundle\Entity\TeacherGroup;
  *          },
  *          "ownership"={
  *              "owner_type"="USER",
- *              "owner_field_name"="courseManager",
- *              "owner_column_name"="course_manager_id",
+ *              "owner_field_name"="student",
+ *              "owner_column_name"="student_id",
  *              "organization_field_name"="organization",
  *              "organization_column_name"="organization_id"
  *          },

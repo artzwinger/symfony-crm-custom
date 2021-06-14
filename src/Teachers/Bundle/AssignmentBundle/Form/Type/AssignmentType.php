@@ -100,10 +100,10 @@ class AssignmentType extends AbstractType
                 'label' => 'teachers.assignment.teacherGroups.label',
                 'required' => true
             ])
-            ->add('courseManager', CourseManagerSelectType::class, [
-                'label' => 'teachers.assignment.course_manager.label',
-                'required' => true
-            ])
+//            ->add('courseManager', CourseManagerSelectType::class, [
+//                'label' => 'teachers.assignment.course_manager.label',
+//                'required' => true
+//            ])
 //            ->add('teacher', TeacherSelectType::class, [
 //                'label' => 'teachers.assignment.teacher.label',
 //                'required' => false
