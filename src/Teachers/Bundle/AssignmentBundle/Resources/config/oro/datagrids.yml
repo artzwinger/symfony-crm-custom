@@ -208,6 +208,9 @@ datagrids:
         columns:
             message:
                 label: teachers.assignment.message.message.label
+                type: twig
+                frontend_type: html
+                template: TeachersAssignmentBundle:AssignmentMessage/Datagrid:message.html.twig
             senderFullName:
                 label: teachers.assignment.message.sender_name.label
             createdAt:

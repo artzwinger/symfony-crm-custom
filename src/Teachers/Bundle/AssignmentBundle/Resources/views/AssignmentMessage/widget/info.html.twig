@@ -5,7 +5,7 @@
 <div class="widget-content">
     <div class="row-fluid form-horizontal">
         <div class="responsive-block">
-            {{ entity.message|raw }}
+            <pre>{{ entity.message }}</pre>
             {{ entityConfig.renderDynamicFields(entity) }}
         </div>
     </div>

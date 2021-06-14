@@ -2,8 +2,8 @@
 
 namespace Teachers\Bundle\AssignmentBundle\Form\Type;
 
-use Oro\Bundle\FormBundle\Form\Type\OroRichTextType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -16,7 +16,7 @@ class AssignmentMessageType extends AbstractType
     {
         $builder->add(
             'message',
-            OroRichTextType::class,
+            TextareaType::class,
             [
                 'label' => 'teachers.assignment.message.message.label'
             ]
