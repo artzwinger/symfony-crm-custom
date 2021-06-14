@@ -47,19 +47,19 @@ teachers:
             label: Due Today
         term.label: Length of Class Help
 
-        #private note activity
-        assignmentprivatenote.entity_label: Private note
+        #Personal Note activity
+        assignmentprivatenote.entity_label: Personal Note
         private_note:
             activity_item:
                 created_by: created by {{ user }}
                 updated_by: updated by {{ user }}
-            update: Update private note
-            delete: Delete private note
-            add_entity: Add private note
-            add_entity.title: Add private note
+            update: Update Personal Note
+            delete: Delete Personal Note
+            add_entity: Add Personal Note
+            add_entity.title: Add Personal Note
             message.label: Message
-            entity_label: Private note
-            entity_plural_label: Private notes
+            entity_label: Personal Note
+            entity_plural_label: Personal Notes
             entity_grid_all_view_label: All %entity_plural_label%
             block:
                 general: General
@@ -127,3 +127,17 @@ teachers:
             general: General
             additional: Additional
             assignment_information: Assignment Information
+
+oro:
+    note:
+        enabled: Enable internal notes
+        entity_label: Internal Note
+        entity_plural_label: Internal Notes
+        entity_grid_all_view_label: All %entity_plural_label%
+        entity_description: Additional information that a user can leave about an entity record.
+        action:
+            add: Add Internal Note
+            edit: Edit Internal Note
+            remove: Remove Internal Note
+        no_notes_exist: No Internal Notes found
+        note_saved: Internal Note saved

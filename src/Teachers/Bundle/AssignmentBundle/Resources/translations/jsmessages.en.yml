@@ -13,3 +13,12 @@ teachers:
                 approve: Message is not approved
         userInfo:
             error: Cannot load user info
+
+oro.note.add_note_title: Add Internal Note
+oro.note.edit_note_title: Update Internal Note
+oro.note.note_saved: Internal Note saved
+oro.note.note_removed: Internal Note deleted
+oro.note.note_delete_confirmation: Are you sure you want to delete this Internal Note?
+oro.note.load_notes_error: Sorry, Internal Notes were not loaded correctly.
+oro.note.delete_note_error: Sorry, the Internal Note deleting was failed.
+oro.note.forbidden_error: You do not have permission to perform this action.
