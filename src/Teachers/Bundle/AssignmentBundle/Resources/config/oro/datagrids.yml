@@ -26,6 +26,9 @@ datagrids:
                         - { join: assignment.courseManager, alias: course_manager }
                     left:
                         - { join: assignment.term, alias: assignmentterm }
+                        - { join: assignment.teacher, alias: teacher }
+                        - { join: assignment.student, alias: student }
+                        - { join: assignment.courseManager, alias: courseManager }
         columns:
             firstName:
                 label: teachers.assignment.first_name.label
@@ -150,6 +153,18 @@ datagrids:
         options:
             entityHint: teachers.assignment.entity_plural_label
             entity_pagination: true
+
+    user-assignments-grid:
+        extends: teachers-assignments-grid
+        source:
+            query:
+                where:
+                    and:
+                        - (teacher.id = :id OR student.id = :id OR courseManager.id = :id)
+            bind_parameters:
+                - id
+        options:
+            entity_pagination: false
 
     teachers-assignments-teacher-grid:
         extends: teachers-assignments-grid
