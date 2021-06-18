@@ -60,8 +60,12 @@ class ApplicationController extends AbstractController
      */
     public function infoAction(Application $application): array
     {
+        $attachmentProvider = $this->get('oro_attachment.provider.attachment');
+        $attachment = $attachmentProvider->getAttachmentInfo($application);
+
         return [
-            'entity' => $application
+            'entity' => $application,
+            'attachment' => $attachment
         ];
     }
 
