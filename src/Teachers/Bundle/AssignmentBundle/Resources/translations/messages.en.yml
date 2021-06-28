@@ -69,7 +69,7 @@ teachers:
         assignmentmessage.entity_label: Message
         message:
             not_approved_message: The message violates our rules and was blocked by the course manager
-            approval_pending_message: The message will be reviewed by the course manager
+            approval_pending_message: This message will be reviewed by the course manager. Once it is approved it will be visible here.
             activity_item:
                 created_by: from {{ user }}
                 updated_by: from {{ user }}
