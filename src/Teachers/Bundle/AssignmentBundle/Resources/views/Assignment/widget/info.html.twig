@@ -17,6 +17,19 @@
                 'label': entity.application.courseName
             })) }}
             {% endif %}
+            {% set teacherGroupsHtml = '' %}
+            {% for teacherGroup in entity.teacherGroups %}
+                {% set teacherGroupsHtml = teacherGroupsHtml ~ ui.link({
+                    'path': path('teachers_group_view', { entityClass: oro_class_name(teacherGroup, true), id: teacherGroup.id }),
+                    'iCss': 'fa-users',
+                    'aCss': 'link-icon-need-space',
+                    'title': teacherGroup.title,
+                    'label': teacherGroup.title
+                }) %}
+            {% endfor %}
+            {% if teacherGroupsHtml != '' %}
+                {{ ui.renderAttribute('teachers.assignment.teacherGroups.label'|trans, teacherGroupsHtml) }}
+            {% endif %}
             {{ ui.renderProperty('teachers.assignment.first_name.label'|trans, entity.firstName) }}
             {{ ui.renderProperty('teachers.assignment.last_name.label'|trans, entity.lastName) }}
             {{ ui.renderProperty('teachers.assignment.course_name.label'|trans, entity.courseName) }}
