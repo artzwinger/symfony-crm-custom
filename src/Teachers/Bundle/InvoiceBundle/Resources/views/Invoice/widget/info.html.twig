@@ -8,9 +8,9 @@
             <div class="activity-context-activity-list">
                 {{ AC.activity_contexts(entity, target, true, 'oronote/js/app/components/note-context-component') }}
             </div>
-            {{ ui.renderProperty('teachers.invoice.amountOwed.label'|trans, entity.amountOwed) }}
-            {{ ui.renderProperty('teachers.invoice.amountPaid.label'|trans, entity.amountPaid) }}
-            {{ ui.renderProperty('teachers.invoice.amountRemaining.label'|trans, entity.amountRemaining) }}
+            {{ ui.renderProperty('teachers.invoice.amountOwed.label'|trans, '$' ~ entity.amountOwed|number_format(2)) }}
+            {{ ui.renderProperty('teachers.invoice.amountPaid.label'|trans, '$' ~ entity.amountPaid|number_format(2)) }}
+            {{ ui.renderProperty('teachers.invoice.amountRemaining.label'|trans, '$' ~ entity.amountRemaining|number_format(2)) }}
             {{ ui.renderProperty('teachers.invoice.student.label'|trans, entity.student) }}
             {{ ui.renderProperty('teachers.invoice.assignment.label'|trans, entity.assignment.courseName) }}
 

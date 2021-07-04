@@ -25,13 +25,19 @@ datagrids:
                 frontend_type: string
             amountOwed:
                 label: teachers.invoice.amountOwed.label
-                frontend_type: decimal
+                type: twig
+                frontend_type: html
+                template: TeachersApplicationBundle:Datagrid:price.html.twig
             amountPaid:
                 label: teachers.invoice.amountPaid.label
-                frontend_type: decimal
+                type: twig
+                frontend_type: html
+                template: TeachersApplicationBundle:Datagrid:price.html.twig
             amountRemaining:
                 label: teachers.invoice.amountRemaining.label
-                frontend_type: decimal
+                type: twig
+                frontend_type: html
+                template: TeachersApplicationBundle:Datagrid:price.html.twig
             dueDate:
                 frontend_type: datetime
                 label: teachers.invoice.due_date.label
@@ -147,19 +153,29 @@ datagrids:
                 frontend_type: string
             amountOwed:
                 label: teachers.payment.invoice_amountOwed.label
-                frontend_type: decimal
+                type: twig
+                frontend_type: html
+                template: TeachersApplicationBundle:Datagrid:price.html.twig
             amountRefunded:
                 label: teachers.payment.amountRefunded.label
-                frontend_type: decimal
+                type: twig
+                frontend_type: html
+                template: TeachersApplicationBundle:Datagrid:price.html.twig
             paymentAmountPaid:
                 label: teachers.payment.amountPaid.label
-                frontend_type: decimal
+                type: twig
+                frontend_type: html
+                template: TeachersApplicationBundle:Datagrid:price.html.twig
             invoiceAmountPaid:
                 label: teachers.payment.invoice_amountPaid.label
-                frontend_type: decimal
+                type: twig
+                frontend_type: html
+                template: TeachersApplicationBundle:Datagrid:price.html.twig
             amountRemaining:
                 label: teachers.payment.invoice_amountRemaining.label
-                frontend_type: decimal
+                type: twig
+                frontend_type: html
+                template: TeachersApplicationBundle:Datagrid:price.html.twig
             dueDate:
                 frontend_type: datetime
                 label: teachers.payment.invoice_due_date.label

@@ -17,6 +17,9 @@ datagrids:
         columns:
             price:
                 label: teachers.bid.price.label
+                type: twig
+                frontend_type: html
+                template: TeachersApplicationBundle:Datagrid:price.html.twig
             createdAt:
                 frontend_type: datetime
                 label: oro.ui.created_at

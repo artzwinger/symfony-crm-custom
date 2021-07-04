@@ -8,10 +8,10 @@
             <div class="activity-context-activity-list">
                 {{ AC.activity_contexts(entity, target, true, 'oronote/js/app/components/note-context-component') }}
             </div>
-            {{ ui.renderProperty('teachers.invoice.amountOwed.label'|trans, entity.invoice.amountOwed) }}
-            {{ ui.renderProperty('teachers.invoice.amountPaid.label'|trans, entity.amountPaid) }}
-            {{ ui.renderProperty('teachers.payment.amountRefunded.label'|trans, entity.amountRefunded) }}
-            {{ ui.renderProperty('teachers.invoice.amountRemaining.label'|trans, entity.invoice.amountRemaining) }}
+            {{ ui.renderProperty('teachers.invoice.amountOwed.label'|trans, '$' ~ entity.invoice.amountOwed|number_format(2)) }}
+            {{ ui.renderProperty('teachers.invoice.amountPaid.label'|trans, '$' ~ entity.amountPaid|number_format(2)) }}
+            {{ ui.renderProperty('teachers.payment.amountRefunded.label'|trans, '$' ~ entity.amountRefunded|number_format(2)) }}
+            {{ ui.renderProperty('teachers.invoice.amountRemaining.label'|trans, '$' ~ entity.invoice.amountRemaining|number_format(2)) }}
             {{ ui.renderProperty('teachers.invoice.student.label'|trans, entity.invoice.student) }}
             {{ ui.renderProperty('teachers.invoice.assignment.label'|trans, entity.invoice.assignment.courseName) }}
 
