@@ -1,0 +1,13 @@
+workflows:
+    payment_flow:
+        steps:
+            created:
+                order: 10
+                allowed_transitions:
+                    - refund
+            partially_refunded:
+                order: 20
+                allowed_transitions:
+                    - refund
+            fully_refunded:
+                order: 30

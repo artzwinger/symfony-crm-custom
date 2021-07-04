@@ -1,5 +1,5 @@
 workflows:
-    invoice_flow:
+    payment_flow:
         attributes:
-            amountPaid:
+            amount_refunded:
                 type: float

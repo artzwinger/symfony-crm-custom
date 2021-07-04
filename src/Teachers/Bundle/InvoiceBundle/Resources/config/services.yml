@@ -19,6 +19,16 @@ services:
             - '@oro_locale.formatter.date_time'
         tags:
             - { name: oro_activity_list.provider, class: Teachers\Bundle\InvoiceBundle\Entity\Payment, priority: 20 }
+    teachers_invoice.refund_activity_list.provider:
+        class: Teachers\Bundle\InvoiceBundle\Provider\RefundActivityListProvider
+        arguments:
+            - "@oro_entity.doctrine_helper"
+            - "@oro_security.owner.entity_owner_accessor.link"
+            - "@oro_activity.association_helper"
+            - "@oro_comment.association_helper"
+            - '@oro_locale.formatter.date_time'
+        tags:
+            - { name: oro_activity_list.provider, class: Teachers\Bundle\InvoiceBundle\Entity\Refund, priority: 20 }
     teachers_invoice.embedded_form:
         class: Teachers\Bundle\InvoiceBundle\Form\Type\InvoiceType
         public: true
@@ -31,6 +41,12 @@ services:
         tags:
             - { name: oro_embedded_form, type: Teachers\Bundle\InvoiceBundle\Form\Type\PaymentType, label: teachers.payment.entity_label }
             - { name: form.type, alias: teachers_payment_request }
+    teachers_invoice.refund.embedded_form:
+        class: Teachers\Bundle\InvoiceBundle\Form\Type\RefundType
+        public: true
+        tags:
+            - { name: oro_embedded_form, type: Teachers\Bundle\InvoiceBundle\Form\Type\RefundType, label: teachers.refund.entity_label }
+            - { name: form.type, alias: teachers_refund_request }
     teachers_invoice.invoice.form:
         class: Symfony\Component\Form\Form
         factory: [ '@form.factory', createNamed ]
@@ -44,6 +60,13 @@ services:
         arguments:
             - "teachers_payment_request"
             - Teachers\Bundle\InvoiceBundle\Form\Type\PaymentType
+            - null
+    teachers_invoice.refund.form:
+        class: Symfony\Component\Form\Form
+        factory: [ '@form.factory', createNamed ]
+        arguments:
+            - "teachers_refund_request"
+            - Teachers\Bundle\InvoiceBundle\Form\Type\RefundType
             - null
     teachers_invoice.invoice.form.handler:
         class: Teachers\Bundle\InvoiceBundle\Form\Handler\InvoiceHandler
@@ -73,19 +96,34 @@ services:
         tags:
             - { name: doctrine.event_listener, event: postUpdate, connection: default, entity: 'Teachers\Bundle\InvoiceBundle\Entity\Invoice' }
         arguments:
-          [ '@oro_workflow.manager', '@teachers_invoice.helper.invoice' ]
+          [ '@oro_workflow.manager', '@doctrine.orm.entity_manager' ]
+    teachers_invoice.event_listener.orm.invoice_postpersist:
+        class: Teachers\Bundle\InvoiceBundle\EventListener\ORM\InvoicePostPersist
+        tags:
+            - { name: doctrine.event_listener, event: postPersist, connection: default, entity: 'Teachers\Bundle\InvoiceBundle\Entity\Invoice' }
+        arguments:
+          [ '@teachers_invoice.helper.invoice' ]
     teachers_invoice.event_listener.orm.payment_postpersist:
         class: Teachers\Bundle\InvoiceBundle\EventListener\ORM\PaymentPostPersist
         arguments:
             - '@doctrine.orm.entity_manager'
+            - '@oro_activity.manager'
         tags:
             - { name: doctrine.event_listener, event: postPersist, connection: default, entity: 'Teachers\Bundle\InvoiceBundle\Entity\Payment' }
     teachers_invoice.event_listener.orm.payment_postupdate:
         class: Teachers\Bundle\InvoiceBundle\EventListener\ORM\PaymentPostUpdate
         arguments:
             - '@doctrine.orm.entity_manager'
+            - '@oro_workflow.manager'
         tags:
             - { name: doctrine.event_listener, event: postUpdate, connection: default, entity: 'Teachers\Bundle\InvoiceBundle\Entity\Payment' }
+    teachers_invoice.event_listener.orm.refund_postpersist:
+        class: Teachers\Bundle\InvoiceBundle\EventListener\ORM\RefundPostPersist
+        arguments:
+            - '@doctrine.orm.entity_manager'
+            - '@oro_activity.manager'
+        tags:
+            - { name: doctrine.event_listener, event: postPersist, connection: default, entity: 'Teachers\Bundle\InvoiceBundle\Entity\Refund' }
     teachers_invoice.helper.invoice:
         class: Teachers\Bundle\InvoiceBundle\Helper\Invoice
         public: true

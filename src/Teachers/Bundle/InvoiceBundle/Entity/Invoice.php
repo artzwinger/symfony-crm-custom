@@ -148,8 +148,10 @@ class Invoice extends ExtendInvoice implements DatesAwareInterface
 
     const STATUS_UNPAID = 'unpaid';
     const STATUS_PAID = 'paid';
+    const STATUS_PARTIALLY_PAID = 'partially_paid';
     const WORKFLOW_STEP_UNPAID = 'unpaid';
     const WORKFLOW_STEP_PAID = 'paid';
+    const WORKFLOW_STEP_PARTIALLY_PAID = 'partially_paid';
 
     public static function getAvailableStatuses(): array
     {
@@ -160,6 +162,10 @@ class Invoice extends ExtendInvoice implements DatesAwareInterface
             ],
             self::STATUS_PAID => [
                 'name' => 'Paid',
+                'is_default' => false
+            ],
+            self::STATUS_PARTIALLY_PAID => [
+                'name' => 'Partially Paid',
                 'is_default' => false
             ],
         ];
@@ -339,5 +345,10 @@ class Invoice extends ExtendInvoice implements DatesAwareInterface
     public function setOrganization(?Organization $organization): void
     {
         $this->organization = $organization;
+    }
+
+    public function hasPayments(): bool
+    {
+        return $this->getPayments()->count() !== 0;
     }
 }

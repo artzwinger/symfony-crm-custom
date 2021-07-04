@@ -6,8 +6,8 @@ workflows:
                 field: status
                 mode: disallow
                 values:
-                    - 'unpaid'
                     - 'paid'
+                    - 'partially_paid'
             invoice_status_unpaid:
                 attribute: invoice
                 field: status
@@ -16,3 +16,7 @@ workflows:
                 attribute: invoice
                 field: status
                 step: paid
+            invoice_status_partially_paid:
+                attribute: invoice
+                field: status
+                step: partially_paid

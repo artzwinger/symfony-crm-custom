@@ -7,3 +7,8 @@ teachers_payment:
     resource: "@TeachersInvoiceBundle/Controller/PaymentController.php"
     type: annotation
     prefix: /payment
+
+teachers_refund:
+    resource: "@TeachersInvoiceBundle/Controller/RefundController.php"
+    type: annotation
+    prefix: /refund

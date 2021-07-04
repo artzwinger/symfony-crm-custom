@@ -1,0 +1,22 @@
+workflows:
+    payment_flow:
+        entity_restrictions:
+            payment_status_creation:
+                attribute: payment
+                field: status
+                mode: disallow
+                values:
+                    - 'partially_refunded'
+                    - 'fully_refunded'
+            payment_status_created:
+                attribute: payment
+                field: status
+                step: created
+            payment_status_partially_refunded:
+                attribute: payment
+                field: status
+                step: partially_refunded
+            payment_status_fully_refunded:
+                attribute: payment
+                field: status
+                step: fully_refunded

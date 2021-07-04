@@ -1,0 +1,27 @@
+workflows:
+    payment_flow:
+        transition_definitions:
+            __start___definition:
+                actions:
+                    -   '@request_enum_entity':
+                            enum_code: payment_status
+                            identifier: created
+                            attribute: $payment.status
+            refund_definition:
+                conditions:
+                    '@and':
+                        -   '@greater':
+                                message: 'Amount refunded must be greater or equal to 0'
+                                parameters: [ $amount_refunded, 0 ]
+                        -   '@less_or_equal':
+                                message: 'Amount refunded must be less or equal to the payment amount'
+                                parameters: [ $amount_refunded, $payment.amountPaidAfterRefund ]
+                actions:
+                    -   '@create_entity': # create a refund
+                            class: Teachers\Bundle\InvoiceBundle\Entity\Refund
+                            attribute: $.result.refund
+                            data:
+                                amount_refunded: $amount_refunded
+                                owner: $payment.owner
+                                payment: $payment
+                                invoice: $payment.invoice

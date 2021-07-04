@@ -1,12 +1,20 @@
 workflows:
     invoice_flow:
         transitions:
-            make_paid:
-                step_to: paid
+            pay:
+                step_to: partially_paid
                 #is_unavailable_hidden: true
                 frontend_options:
-                    icon: 'fa-check'
-                transition_definition: make_paid_definition
+                    icon: 'fa-credit-card'
+                transition_definition: pay_definition
+                form_options:
+                    attribute_fields:
+                        amountPaid:
+                            form_type: Oro\Bundle\FormBundle\Form\Type\OroMoneyType
+                            options:
+                                required: true
+                                constraints:
+                                    -   NotBlank: ~
             reopen:
                 step_to: unpaid
                 #is_unavailable_hidden: true

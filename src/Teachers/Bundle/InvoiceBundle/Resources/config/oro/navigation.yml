@@ -13,14 +13,26 @@ navigation:
                 extras:
                     routes: [ 'teachers_invoice_*' ]
                 display: true
+            teachers_invoice_payment:
+                label: 'teachers.payment.entity_plural_label'
+                route: 'teachers_payment_index'
+                extras:
+                    routes: [ 'teachers_payment_*' ]
+                display: true
         tree:
             application_menu:
                 children:
                     billing_tab:
                         children:
                             teachers_invoice_invoice: ~
+                            teachers_invoice_payment: ~
     titles:
         teachers_invoice_index: ~
         teachers_invoice_view: '%invoice.id%'
-        teachers_invoice_create: 'Create invoice'
+        teachers_invoice_create: 'Create Invoice'
         teachers_invoice_update: '%invoice.id% - Edit'
+
+        teachers_payment_index: ~
+        teachers_payment_view: '%payment.id%'
+        teachers_payment_create: 'Create Payment'
+        teachers_payment_update: '%payment.id% - Edit'

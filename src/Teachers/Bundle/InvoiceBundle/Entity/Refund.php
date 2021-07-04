@@ -2,7 +2,6 @@
 
 namespace Teachers\Bundle\InvoiceBundle\Entity;
 
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Oro\Bundle\EntityBundle\EntityProperty\DatesAwareInterface;
 use Oro\Bundle\EntityBundle\EntityProperty\DatesAwareTrait;
@@ -10,20 +9,20 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\UserBundle\Entity\User;
-use Teachers\Bundle\InvoiceBundle\Model\ExtendPayment;
+use Teachers\Bundle\InvoiceBundle\Model\ExtendRefund;
 
 /**
  * @ORM\Entity(repositoryClass="Teachers\Bundle\InvoiceBundle\Entity\Repository\PaymentRepository")
  * @ORM\Table(
- *      name="teachers_payment",
+ *      name="teachers_refund",
  * )
  * @ORM\HasLifecycleCallbacks()
  * @Config(
- *      routeName="teachers_payment_index",
- *      routeView="teachers_payment_view",
+ *      routeName="teachers_refund_index",
+ *      routeView="teachers_refund_view",
  *      defaultValues={
  *          "entity"={
- *              "icon"="fa-credit-card"
+ *              "icon"="fa-undo"
  *          },
  *          "ownership"={
  *              "owner_type"="USER",
@@ -35,24 +34,22 @@ use Teachers\Bundle\InvoiceBundle\Model\ExtendPayment;
  *          "security"={
  *              "type"="ACL",
  *              "group_name"="",
- *              "category"="payment"
+ *              "category"="refund"
  *          },
  *          "grouping"={
  *              "groups"={"activity"}
  *          },
  *          "activity"={
- *              "route"="teachers_payment_activity_view",
- *              "acl"="teachers_payment_view",
- *              "action_button_widget"="teachers_payment_button",
- *              "action_link_widget"="teachers_payment_link"
+ *              "route"="teachers_refund_activity_view",
+ *              "acl"="teachers_refund_view"
  *          },
  *          "grid"={
- *              "default"="payments-grid"
+ *              "default"="refunds-grid"
  *          }
  *      }
  * )
  */
-class Payment extends ExtendPayment implements DatesAwareInterface
+class Refund extends ExtendRefund implements DatesAwareInterface
 {
     use DatesAwareTrait;
 
@@ -71,18 +68,8 @@ class Payment extends ExtendPayment implements DatesAwareInterface
      */
     protected $id;
     /**
-     * @var float|null $amountPaid
-     * @ORM\Column(name="amount_paid", type="money", nullable=false)
-     */
-    protected $amountPaid;
-    /**
-     * @var float|null $amountPaidAfterRefund
-     * @ORM\Column(name="amount_paid_after_refund", type="money", nullable=true)
-     */
-    protected $amountPaidAfterRefund;
-    /**
      * @var float|null $amountRefunded
-     * @ORM\Column(name="amount_refunded", type="money", nullable=true)
+     * @ORM\Column(name="amount_refunded", type="money", nullable=false)
      */
     protected $amountRefunded;
     /**
@@ -92,10 +79,11 @@ class Payment extends ExtendPayment implements DatesAwareInterface
      */
     protected $invoice;
     /**
-     * @var Refund[]|Collection|null
-     * @ORM\OneToMany(targetEntity="Teachers\Bundle\InvoiceBundle\Entity\Refund", mappedBy="payment")
+     * @var Payment|null
+     * @ORM\ManyToOne(targetEntity="Teachers\Bundle\InvoiceBundle\Entity\Payment")
+     * @ORM\JoinColumn(name="payment_id", referencedColumnName="id", onDelete="SET NULL")
      */
-    protected $refunds;
+    protected $payment;
     /**
      * @var User|null
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\UserBundle\Entity\User")
@@ -109,31 +97,6 @@ class Payment extends ExtendPayment implements DatesAwareInterface
      * @ORM\JoinColumn(name="organization_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $organization;
-
-    const STATUS_CREATED = 'created';
-    const STATUS_PARTIALLY_REFUNDED = 'partially_refunded';
-    const STATUS_FULLY_REFUNDED = 'fully_refunded';
-    const WORKFLOW_STEP_CREATED = 'created';
-    const WORKFLOW_STEP_PARTIALLY_REFUNDED = 'partially_refunded';
-    const WORKFLOW_STEP_FULLY_REFUNDED = 'fully_refunded';
-
-    public static function getAvailableStatuses(): array
-    {
-        return [
-            self::STATUS_CREATED => [
-                'name' => 'Created',
-                'is_default' => true
-            ],
-            self::STATUS_PARTIALLY_REFUNDED => [
-                'name' => 'Partially Refunded',
-                'is_default' => false
-            ],
-            self::STATUS_FULLY_REFUNDED => [
-                'name' => 'Fully Refunded',
-                'is_default' => false
-            ],
-        ];
-    }
 
     /**
      * @return int|null
@@ -149,38 +112,6 @@ class Payment extends ExtendPayment implements DatesAwareInterface
     public function setId(?int $id): void
     {
         $this->id = $id;
-    }
-
-    /**
-     * @return float|null
-     */
-    public function getAmountPaid(): ?float
-    {
-        return $this->amountPaid;
-    }
-
-    /**
-     * @param float|null $amountPaid
-     */
-    public function setAmountPaid(?float $amountPaid): void
-    {
-        $this->amountPaid = $amountPaid;
-    }
-
-    /**
-     * @return float|null
-     */
-    public function getAmountPaidAfterRefund(): ?float
-    {
-        return $this->amountPaidAfterRefund;
-    }
-
-    /**
-     * @param float|null $amountPaidAfterRefund
-     */
-    public function setAmountPaidAfterRefund(?float $amountPaidAfterRefund): void
-    {
-        $this->amountPaidAfterRefund = $amountPaidAfterRefund;
     }
 
     /**
@@ -216,19 +147,19 @@ class Payment extends ExtendPayment implements DatesAwareInterface
     }
 
     /**
-     * @return Collection|Refund[]|null
+     * @return Payment|null
      */
-    public function getRefunds()
+    public function getPayment(): ?Payment
     {
-        return $this->refunds;
+        return $this->payment;
     }
 
     /**
-     * @param Collection|Refund[]|null $refunds
+     * @param Payment|null $payment
      */
-    public function setRefunds($refunds): void
+    public function setPayment(?Payment $payment): void
     {
-        $this->refunds = $refunds;
+        $this->payment = $payment;
     }
 
     /**
@@ -261,25 +192,5 @@ class Payment extends ExtendPayment implements DatesAwareInterface
     public function setOrganization(?Organization $organization): void
     {
         $this->organization = $organization;
-    }
-
-    public function isFullyRefunded(): bool
-    {
-        return $this->getAmountRefunded() === $this->getAmountPaid();
-    }
-
-    public function isStatusFullyRefunded(): bool
-    {
-        return $this->getStatus()->getId() === self::STATUS_FULLY_REFUNDED;
-    }
-
-    public function isPartiallyRefunded(): bool
-    {
-        return $this->getAmountRefunded() > 0 && !$this->isFullyRefunded();
-    }
-
-    public function isStatusPartiallyRefunded(): bool
-    {
-        return $this->getStatus()->getId() === self::STATUS_PARTIALLY_REFUNDED;
     }
 }

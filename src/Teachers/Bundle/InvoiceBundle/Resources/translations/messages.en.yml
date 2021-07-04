@@ -50,11 +50,17 @@ teachers:
             additional: Additional
             invoice_information: Invoice Information
             payment_information: Payment Information
+            refund_information: Payment Information
         payment:
             owner:
                 label: Who Pays
             entity_label: Payment
             entity_plural_label: Payments
+        refund:
+            owner:
+                label: Whom To Refund
+            entity_label: Refund
+            entity_plural_label: Refunds
 
         billing:
             menu:
@@ -62,11 +68,40 @@ teachers:
                     label: Billing
     payment:
         #activity
+        entity_label: Payment
+        entity_plural_label: Payments
+        entity_grid_all_view_label: All %entity_plural_label%
         activity_item:
             created_by: made by {{ user }}
-            updated_by: made (upd) by {{ user }}
-        view_invoice: View payment
+            updated_by: made by {{ user }}
+        view_payment: View payment
         update_payment: Update payment
         delete_payment: Delete payment
         add_entity: Pay
         add_entity.title: Pay
+
+        invoice_amountOwed.label: Invoice Amount Owed
+        amountRefunded.label: Amount Refunded
+        amountPaid.label: Payment Amount Paid
+        invoice_amountPaid.label: Invoice Amount Paid
+        invoice_amountRemaining.label: Invoice Amount Remaining
+        invoice_due_date.label: Invoice Due Date
+    refund:
+        #activity
+        entity_label: Refund
+        entity_plural_label: Refunds
+        entity_grid_all_view_label: All %entity_plural_label%
+        activity_item:
+            created_by: made by {{ user }}
+            updated_by: made by {{ user }}
+        view_refund: View refund
+        update_refund: Update refund
+        delete_refund: Delete refund
+        add_entity: Refund
+        add_entity.title: Refund
+        amountRefunded.label: Amount Refunded
+        amountOwed.label: Invoice Amount Owed
+        amountPaid.label: Payment Amount Paid
+        amountRemaining.label: Invoice Amount Remaining
+        assignment.label: Assignment
+        student.label: Who Paid

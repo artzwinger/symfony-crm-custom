@@ -44,7 +44,8 @@ class InvoiceController extends AbstractController
     public function viewAction(Invoice $invoice): array
     {
         return [
-            'entity' => $invoice
+            'entity' => $invoice,
+            'invoice_has_payments' => $invoice->hasPayments()
         ];
     }
 

@@ -15,12 +15,13 @@ use Oro\Bundle\LocaleBundle\Formatter\DateTimeFormatterInterface;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Component\DependencyInjection\ServiceLink;
-use Teachers\Bundle\InvoiceBundle\Entity\Payment;
+use Teachers\Bundle\InvoiceBundle\Entity\Refund;
+use function is_object;
 
 /**
- * Provides a way to use Payment entity in an activity list.
+ * Provides a way to use Refund entity in an activity list.
  */
-class PaymentActivityListProvider implements
+class RefundActivityListProvider implements
     ActivityListProviderInterface,
     CommentProviderInterface,
     ActivityListDateProviderInterface
@@ -70,7 +71,7 @@ class PaymentActivityListProvider implements
     {
         return $this->activityAssociationHelper->isActivityAssociationEnabled(
             $entityClass,
-            Payment::class,
+            Refund::class,
             $accessible
         );
     }
@@ -80,8 +81,8 @@ class PaymentActivityListProvider implements
      */
     public function getSubject($entity): ?string
     {
-        /** @var $entity Payment */
-        return 'Payment from ' . $this->dateTimeFormatter->format($entity->getCreatedAt());
+        /** @var $entity Refund */
+        return 'Refund made at ' . $this->dateTimeFormatter->format($entity->getCreatedAt());
     }
 
     /**
@@ -89,12 +90,8 @@ class PaymentActivityListProvider implements
      */
     public function getDescription($entity): ?string
     {
-        /** @var $entity Payment */
-        $desc = 'Payment with amount paid ' . $entity->getAmountPaid();
-        if ($entity->getAmountRefunded()) {
-            $desc .= ' and amount refunded ' . $entity->getAmountRefunded();
-        }
-        return $desc;
+        /** @var $entity Refund */
+        return 'Refund with amount refunded ' . $entity->getAmountRefunded();
     }
 
     /**
@@ -102,23 +99,7 @@ class PaymentActivityListProvider implements
      */
     public function getData(ActivityList $activityListEntity): array
     {
-        /** @var Payment $invoice */
-        $invoice = $this->doctrineHelper
-            ->getEntityManager($activityListEntity->getRelatedActivityClass())
-            ->getRepository($activityListEntity->getRelatedActivityClass())
-            ->find($activityListEntity->getRelatedActivityId());
-
-        if (!$invoice->getStatus()) {
-            return [
-                'statusId' => null,
-                'statusName' => null,
-            ];
-        }
-
-        return [
-            'statusId' => $invoice->getStatus()->getId(),
-            'statusName' => $invoice->getStatus()->getName(),
-        ];
+        return [];
     }
 
     /**
@@ -126,7 +107,7 @@ class PaymentActivityListProvider implements
      */
     public function getOwner($entity): ?User
     {
-        /** @var $entity Payment */
+        /** @var $entity Refund */
         return $entity->getOwner();
     }
 
@@ -135,7 +116,7 @@ class PaymentActivityListProvider implements
      */
     public function getCreatedAt($entity): ?DateTime
     {
-        /** @var $entity Payment */
+        /** @var $entity Refund */
         return $entity->getCreatedAt();
     }
 
@@ -144,7 +125,7 @@ class PaymentActivityListProvider implements
      */
     public function getUpdatedAt($entity): ?DateTime
     {
-        /** @var $entity Payment */
+        /** @var $entity Refund */
         return $entity->getUpdatedAt();
     }
 
@@ -153,7 +134,7 @@ class PaymentActivityListProvider implements
      */
     public function getOrganization($activityEntity): ?Organization
     {
-        /** @var $activityEntity Payment */
+        /** @var $activityEntity Refund */
         return $activityEntity->getOrganization();
     }
 
@@ -162,7 +143,7 @@ class PaymentActivityListProvider implements
      */
     public function getTemplate(): string
     {
-        return 'TeachersInvoiceBundle:Payment:js/activityItemTemplate.html.twig';
+        return 'TeachersInvoiceBundle:Refund:js/activityItemTemplate.html.twig';
     }
 
     /**
@@ -171,9 +152,9 @@ class PaymentActivityListProvider implements
     public function getRoutes($activityEntity): array
     {
         return [
-            'itemView' => 'teachers_payment_info',
-            'itemEdit' => 'teachers_payment_update',
-            'itemDelete' => 'teachers_payment_delete'
+            'itemView' => 'teachers_refund_info',
+            'itemEdit' => 'teachers_refund_update',
+            'itemDelete' => 'teachers_refund_delete'
         ];
     }
 
@@ -190,11 +171,11 @@ class PaymentActivityListProvider implements
      */
     public function isApplicable($entity): bool
     {
-        if (\is_object($entity)) {
-            return $entity instanceof Payment;
+        if (is_object($entity)) {
+            return $entity instanceof Refund;
         }
 
-        return $entity === Payment::class;
+        return $entity === Refund::class;
     }
 
     /**
@@ -202,7 +183,7 @@ class PaymentActivityListProvider implements
      */
     public function getTargetEntities($entity)
     {
-        /** @var Payment $entity */
+        /** @var Refund $entity */
         return $entity->getActivityTargets();
     }
 

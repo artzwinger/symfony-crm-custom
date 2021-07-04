@@ -1,0 +1,15 @@
+imports:
+    - { resource: 'payment_flow/steps.yml' }
+    - { resource: 'payment_flow/attributes.yml' }
+    - { resource: 'payment_flow/transitions.yml' }
+    - { resource: 'payment_flow/transition_definitions.yml' }
+    - { resource: 'payment_flow/entity_restrictions.yml' }
+
+workflows:
+    payment_flow:
+        entity: Teachers\Bundle\InvoiceBundle\Entity\Payment
+        entity_attribute: payment
+        start_step: created
+
+        defaults:
+            active: true

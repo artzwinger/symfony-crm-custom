@@ -5,6 +5,7 @@ namespace Teachers\Bundle\InvoiceBundle\EventListener\ORM;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\ORMException;
+use Oro\Bundle\ActivityBundle\Manager\ActivityManager;
 use Teachers\Bundle\InvoiceBundle\Entity\Payment;
 
 class PaymentPostPersist
@@ -13,12 +14,23 @@ class PaymentPostPersist
      * @var EntityManager $entityManager
      */
     private $entityManager;
+    /**
+     * @var ActivityManager
+     */
+    private $activityManager;
 
+    /**
+     * PaymentPostPersist constructor.
+     * @param EntityManager $entityManager
+     * @param ActivityManager $activityManager
+     */
     public function __construct(
-        EntityManager $entityManager
+        EntityManager $entityManager,
+        ActivityManager $activityManager
     )
     {
         $this->entityManager = $entityManager;
+        $this->activityManager = $activityManager;
     }
 
     /**
@@ -35,6 +47,13 @@ class PaymentPostPersist
         $invoice = $payment->getInvoice();
         if (!$invoice) {
             return;
+        }
+        $this->activityManager->addActivityTarget($payment, $invoice);
+        $amountPaidAfterRefund = $payment->getAmountPaid() - $payment->getAmountRefunded();
+        if ($amountPaidAfterRefund !== $payment->getAmountPaidAfterRefund()) {
+            $payment->setAmountPaidAfterRefund($amountPaidAfterRefund);
+            $this->entityManager->persist($payment);
+            $this->entityManager->flush($payment);
         }
         if ($payment->getAmountPaid() > $invoice->getAmountRemaining()) {
             $payment->setAmountPaid($invoice->getAmountRemaining());

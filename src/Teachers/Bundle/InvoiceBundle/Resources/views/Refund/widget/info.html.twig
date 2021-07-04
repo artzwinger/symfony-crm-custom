@@ -1,0 +1,20 @@
+{% import 'OroUIBundle::macros.html.twig' as ui %}
+{% import 'OroActivityBundle::macros.html.twig' as AC %}
+{% import 'OroEntityConfigBundle::macros.html.twig' as entityConfig %}
+
+<div class="widget-content">
+    <div class="row-fluid form-horizontal">
+        <div class="responsive-block">
+            <div class="activity-context-activity-list">
+                {{ AC.activity_contexts(entity, target, true, 'oronote/js/app/components/note-context-component') }}
+            </div>
+            {{ ui.renderProperty('teachers.refund.amountOwed.label'|trans, entity.payment.invoice.amountOwed) }}
+            {{ ui.renderProperty('teachers.refund.amountPaid.label'|trans, entity.payment.amountPaid) }}
+            {{ ui.renderProperty('teachers.refund.amountRemaining.label'|trans, entity.payment.invoice.amountRemaining) }}
+            {{ ui.renderProperty('teachers.refund.student.label'|trans, entity.owner) }}
+            {{ ui.renderProperty('teachers.refund.assignment.label'|trans, entity.payment.invoice.assignment.courseName) }}
+
+            {{ entityConfig.renderDynamicFields(entity) }}
+        </div>
+    </div>
+</div>

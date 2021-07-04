@@ -3,3 +3,4 @@ teachers:
         max_payment_value: Payment value cannot be bigger than the invoice amount remaining
         due_date_required: "Due date must be set for {{ field }}"
         due_date_not_in_the_past: "Due date must not be in the past"
+        max_refund_value: Refund value cannot be bigger than the payment amount

@@ -117,3 +117,145 @@ datagrids:
         options:
             entityHint: teachers.invoice.entity_plural_label
             entity_pagination: true
+
+    payments-grid:
+        extended_entity_name: 'Teachers\Bundle\InvoiceBundle\Entity\Payment'
+        acl_resource: teachers_payment_view
+        source:
+            type: orm
+            query:
+                select:
+                    - payment.id
+                    - payment.amountPaid as paymentAmountPaid
+                    - invoice.amountOwed
+                    - invoice.amountPaid as invoiceAmountPaid
+                    - invoice.amountRemaining
+                    - invoice.dueDate
+                    - payment.createdAt
+                    - assignment.courseName as assignmentCourseName
+                    - payment.amountRefunded
+                from:
+                    - { table: 'Teachers\Bundle\InvoiceBundle\Entity\Payment', alias: payment }
+                join:
+                    left:
+                        - { join: payment.invoice, alias: invoice }
+                        - { join: invoice.assignment, alias: assignment }
+                groupBy: payment.id
+        columns:
+            assignmentCourseName:
+                label: teachers.invoice.assignment.label
+                frontend_type: string
+            amountOwed:
+                label: teachers.payment.invoice_amountOwed.label
+                frontend_type: decimal
+            amountRefunded:
+                label: teachers.payment.amountRefunded.label
+                frontend_type: decimal
+            paymentAmountPaid:
+                label: teachers.payment.amountPaid.label
+                frontend_type: decimal
+            invoiceAmountPaid:
+                label: teachers.payment.invoice_amountPaid.label
+                frontend_type: decimal
+            amountRemaining:
+                label: teachers.payment.invoice_amountRemaining.label
+                frontend_type: decimal
+            dueDate:
+                frontend_type: datetime
+                label: teachers.payment.invoice_due_date.label
+            createdAt:
+                frontend_type: datetime
+                label: oro.ui.created_at
+        sorters:
+            columns:
+                assignmentCourseName:
+                    data_name: assignment.courseName
+                amountOwed:
+                    data_name: invoice.amountOwed
+                amountRefunded:
+                    data_name: amountRefunded
+                paymentAmountPaid:
+                    data_name: paymentAmountPaid
+                invoiceAmountPaid:
+                    data_name: invoiceAmountPaid
+                amountRemaining:
+                    data_name: invoice.amountRemaining
+                dueDate:
+                    data_name: invoice.dueDate
+                createdAt:
+                    data_name: invoice.createdAt
+            default:
+                createdAt: DESC
+        filters:
+            columns:
+                assignmentCourseName:
+                    type: string
+                    data_name: assignment.courseName
+                amountOwed:
+                    type: currency
+                    data_name: invoice.amountOwed
+                    options:
+                        data_type: Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType::DATA_DECIMAL
+                amountRefunded:
+                    type: currency
+                    data_name: amountRefunded
+                    options:
+                        data_type: Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType::DATA_DECIMAL
+                paymentAmountPaid:
+                    type: currency
+                    data_name: paymentAmountPaid
+                    options:
+                        data_type: Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType::DATA_DECIMAL
+                invoiceAmountPaid:
+                    type: currency
+                    data_name: invoiceAmountPaid
+                    options:
+                        data_type: Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType::DATA_DECIMAL
+                amountRemaining:
+                    type: currency
+                    data_name: invoice.amountRemaining
+                    options:
+                        data_type: Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType::DATA_DECIMAL
+                dueDate:
+                    type: string
+                    data_name: invoice.dueDate
+                createdAt:
+                    type: datetime
+                    data_name: invoice.createdAt
+        properties:
+            id: ~
+            view_link:
+                type: url
+                route: teachers_payment_view
+                params: [ id ]
+            update_link:
+                type: url
+                route: teachers_payment_update
+                params: [ id ]
+            delete_link:
+                type: url
+                route: teachers_payment_delete
+                params: [ id ]
+        actions:
+            view:
+                acl_resource: teachers_payment_view
+                type: navigate
+                label: oro.grid.action.view
+                icon: eye
+                link: view_link
+                rowAction: true
+            update:
+                acl_resource: teachers_payment_edit
+                type: navigate
+                label: oro.grid.action.update
+                icon: edit
+                link: update_link
+            delete:
+                acl_resource: teachers_payment_delete
+                type: delete
+                label: oro.grid.action.delete
+                icon: trash
+                link: delete_link
+        options:
+            entityHint: teachers.payment.entity_plural_label
+            entity_pagination: true

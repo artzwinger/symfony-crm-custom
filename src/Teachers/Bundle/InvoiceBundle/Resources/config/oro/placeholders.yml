@@ -4,15 +4,7 @@ placeholders:
             template: TeachersInvoiceBundle:Invoice:activityButton.html.twig
             applicable: '@teachers_invoice.placeholder.filter->isAssignmentUpForInvoice($entity$)'
             acl: teachers_invoice_create
-        teachers_payment_button:
-            template: TeachersInvoiceBundle:Payment:activityButton.html.twig
-            applicable: '@teachers_invoice.placeholder.filter->isInvoiceUpForPayment($entity$)'
-            acl: teachers_payment_create
         teachers_invoice_link:
             template: TeachersInvoiceBundle:Invoice:activityLink.html.twig
             applicable: '@teachers_invoice.placeholder.filter->isAssignmentUpForInvoice($entity$)'
             acl: teachers_invoice_create
-        teachers_payment_link:
-            template: TeachersInvoiceBundle:Payment:activityLink.html.twig
-            applicable: '@teachers_invoice.placeholder.filter->isInvoiceUpForPayment($entity$)'
-            acl: teachers_payment_create

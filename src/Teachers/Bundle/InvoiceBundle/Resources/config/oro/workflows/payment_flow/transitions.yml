@@ -1,0 +1,16 @@
+workflows:
+    payment_flow:
+        transitions:
+            refund:
+                step_to: partially_refunded
+                frontend_options:
+                    icon: 'fa-undo'
+                transition_definition: refund_definition
+                form_options:
+                    attribute_fields:
+                        amount_refunded:
+                            form_type: Oro\Bundle\FormBundle\Form\Type\OroMoneyType
+                            options:
+                                required: true
+                                constraints:
+                                    -   NotBlank: ~

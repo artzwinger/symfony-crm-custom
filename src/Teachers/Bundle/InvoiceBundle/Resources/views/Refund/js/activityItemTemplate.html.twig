@@ -1,14 +1,14 @@
 {% extends 'OroActivityListBundle:ActivityList/js:activityItemTemplate.html.twig' %}
 {% import 'OroActivityBundle::macros.html.twig' as AC %}
 
-{% set entityClass = 'Teachers\\Bundle\\InvoiceBundle\\Entity\\Payment' %}
+{% set entityClass = 'Teachers\\Bundle\\InvoiceBundle\\Entity\\Refund' %}
 {% set entityName = oro_entity_config_value(entityClass, 'label')|trans %}
 
 {% block activityDetails %}
     {{ entityName }}
     <% var template = (verb == 'create')
-    ? {{ 'teachers.payment.activity_item.created_by'|trans|json_encode|raw }}
-    : {{ 'teachers.payment.activity_item.updated_by'|trans|json_encode|raw }};
+    ? {{ 'teachers.refund.activity_item.created_by'|trans|json_encode|raw }}
+    : {{ 'teachers.refund.activity_item.updated_by'|trans|json_encode|raw }};
     %>
     <%= _.template(template, { interpolate: /\{\{(.+?)\}\}/g })({
     user: owner_url ? '<a class="user" href="' + owner_url + '">' + _.escape(owner) + '</a>' :  '<span class="user">' + _.escape(owner) + '</span>',
@@ -21,15 +21,14 @@
 {% block activityShortMessage %}
     <% if (!_.isUndefined(data.statusId) && data.statusId) { %>
     <div class="activity-short-message">
-        <% if (data.statusId === 'partially_refunded') { %>
+        <% if (data.statusId === 'unpaid') { %>
         <div class="badge badge-pill badge-tentatively status-tentatively"><span
                     class="icon-status-tentatively fa-circle" aria-hidden="true"></span>
             <%- data.statusName %>
         </div>
-        <% } %>
-        <% if (data.statusId === 'fully_refunded') { %>
-        <div class="badge badge-pill badge-danger status-danger"><span
-                    class="icon-status-danger fa-circle" aria-hidden="true"></span>
+        <% } else { %>
+        <div class="badge badge-pill badge-enabled status-enabled"><span class="icon-status-enabled fa-circle"
+                                                                         aria-hidden="true"></span>
             <%- data.statusName %>
         </div>
         <% } %>
@@ -48,13 +47,25 @@
     {% set actions = [action] %}
 
     {% set action %}
-        <a href="<%= routing.generate('teachers_payment_view', {'id': relatedActivityId}) %>"
+        <a href="<%= routing.generate('teachers_invoice_view', {'id': relatedActivityId}) %>"
            class="dropdown-item"
-           title="{{ 'teachers.payment.view_payment'|trans({'{{ entity }}': entityName}) }}"><span
+           title="{{ 'teachers.refund.view_refund'|trans({'{{ entity }}': entityName}) }}"><span
                     class="fa-eye hide-text"
-                    aria-hidden="true">{{ 'teachers.payment.view_payment'|trans({'{{ entity }}': entityName}) }}</span>
-            {{ 'teachers.payment.view_payment'|trans({'{{ entity }}': entityName}) }}
+                    aria-hidden="true">{{ 'teachers.refund.view_refund'|trans({'{{ entity }}': entityName}) }}</span>
+            {{ 'teachers.refund.view_refund'|trans({'{{ entity }}': entityName}) }}
         </a>
+    {% endset %}
+    {% set actions = actions|merge([action]) %}
+
+    {% set action %}
+        <% if (removable) { %>
+        <a href="#" class="dropdown-item action item-remove-button"
+           title="{{ 'teachers.refund.delete_refund'|trans({'{{ entity }}': entityName}) }}">
+            <span class="fa-trash-o hide-text"
+                  aria-hidden="true">{{ 'teachers.refund.delete_refund'|trans({'{{ entity }}': entityName}) }}</span>
+            {{ 'teachers.refund.delete_refund'|trans({'{{ entity }}': entityName}) }}
+        </a>
+        <% } %>
     {% endset %}
     {% set actions = actions|merge([action]) %}
 

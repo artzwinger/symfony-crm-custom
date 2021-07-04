@@ -1,21 +1,21 @@
 {% import 'OroUIBundle::macros.html.twig' as UI %}
 
 {{ UI.clientButton({
-    'dataUrl': path('teachers_payment_create', oro_action_params(entity, 'activity')),
+    'dataUrl': path('teachers_refund_create', oro_action_params(entity, 'activity')),
     'aCss': 'no-hash',
-    'iCss': 'fa-briefcase',
+    'iCss': 'fa-undo',
     'dataId': entity.id,
-    'label': 'teachers.payment.add_entity'|trans,
-    'title': 'teachers.payment.add_entity.title'|trans,
+    'label': 'teachers.refund.add_entity'|trans,
+    'title': 'teachers.refund.add_entity.title'|trans,
     'widget' : {
         'type' : 'dialog',
         'multiple' : true,
-        'reload-grid-name': 'user-payments-grid',
+        'reload-grid-name': 'user-refunds-grid',
         'refresh-widget-alias': 'activity-list-widget',
         'options' : {
-            'alias': 'payment-dialog',
+            'alias': 'refund-dialog',
             'dialogOptions' : {
-                'title' : 'teachers.payment.add_entity'|trans,
+                'title' : 'teachers.refund.add_entity'|trans,
                 'allowMaximize': true,
                 'allowMinimize': true,
                 'dblclick': 'maximize',

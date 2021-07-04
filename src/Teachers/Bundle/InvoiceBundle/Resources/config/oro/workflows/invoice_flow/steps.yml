@@ -4,7 +4,11 @@ workflows:
             unpaid:
                 order: 10
                 allowed_transitions:
-                    - make_paid
+                    - pay
+            partially_paid:
+                order: 15
+                allowed_transitions:
+                    - pay
             paid:
                 order: 20
                 allowed_transitions:

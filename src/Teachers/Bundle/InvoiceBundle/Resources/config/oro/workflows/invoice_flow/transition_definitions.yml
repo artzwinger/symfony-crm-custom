@@ -7,21 +7,28 @@ workflows:
                             enum_code: invoice_status
                             identifier: unpaid
                             attribute: $invoice.status
-            make_paid_definition:
+            pay_definition:
+                conditions:
+                    '@and':
+                        -   '@greater':
+                                message: 'Amount paid must be greater than 0'
+                                parameters: [ $amountPaid, 0 ]
+                        -   '@less_or_equal':
+                                message: 'Amount paid must be less or equal to the invoice owed amount'
+                                parameters: [ $amountPaid, $invoice.amountOwed ]
                 actions:
-                    -   '@request_enum_entity':
-                            enum_code: invoice_status
-                            identifier: paid
-                            attribute: $invoice.status
+                    -   '@create_entity': # create a payment
+                            class: Teachers\Bundle\InvoiceBundle\Entity\Payment
+                            attribute: $.result.payment
+                            data:
+                                amount_paid: $amountPaid
+                                amount_refunded: 0
+                                amount_paid_after_refund: $amountPaid
+                                owner: $invoice.student
+                                invoice: $invoice
             reopen_definition:
                 actions:
                     -   '@request_enum_entity':
                             enum_code: invoice_status
                             identifier: unpaid
                             attribute: $invoice.status
-                    -   '@assign_value':
-                            attribute: $invoice.amountPaid
-                            value: 0
-                    -   '@assign_value':
-                            attribute: $invoice.amountRemaining
-                            value: $invoice.amountOwed

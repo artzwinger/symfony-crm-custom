@@ -2,13 +2,14 @@
 
 namespace Teachers\Bundle\InvoiceBundle\EventListener\ORM;
 
+use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Event\LifecycleEventArgs;
+use Doctrine\ORM\ORMException;
 use Oro\Bundle\WorkflowBundle\Exception\ForbiddenTransitionException;
 use Oro\Bundle\WorkflowBundle\Exception\InvalidTransitionException;
 use Oro\Bundle\WorkflowBundle\Exception\WorkflowException;
 use Oro\Bundle\WorkflowBundle\Model\WorkflowManager;
 use Teachers\Bundle\InvoiceBundle\Entity\Invoice;
-use Teachers\Bundle\InvoiceBundle\Helper\Invoice as InvoiceHelper;
 
 class InvoicePostUpdate
 {
@@ -17,21 +18,21 @@ class InvoicePostUpdate
      */
     private $workflowManager;
     /**
-     * @var InvoiceHelper
+     * @var EntityManager
      */
-    private $invoiceHelper;
+    private $entityManager;
 
     /**
      * @param WorkflowManager $workflowManager
-     * @param InvoiceHelper $invoiceHelper
+     * @param EntityManager $entityManager
      */
     public function __construct(
         WorkflowManager $workflowManager,
-        InvoiceHelper $invoiceHelper
+        EntityManager $entityManager
     )
     {
         $this->workflowManager = $workflowManager;
-        $this->invoiceHelper = $invoiceHelper;
+        $this->entityManager = $entityManager;
     }
 
     /**
@@ -39,6 +40,7 @@ class InvoicePostUpdate
      * @throws ForbiddenTransitionException
      * @throws InvalidTransitionException
      * @throws WorkflowException
+     * @throws ORMException
      */
     public function postUpdate(LifecycleEventArgs $args): void
     {
@@ -47,19 +49,23 @@ class InvoicePostUpdate
         if (!$invoice instanceof Invoice) {
             return;
         }
-        $this->invoiceHelper->sendEmailForInvoice($invoice);
         $remaining = $invoice->getAmountRemaining();
-        if ($invoice->getStatus()->getId() === Invoice::STATUS_PAID) {
+        $workflow = $this->workflowManager->getWorkflowItem($invoice, 'invoice_flow');
+        if ($workflow->getCurrentStep()->getName() === Invoice::WORKFLOW_STEP_PAID) {
             if ($remaining > 0) {
-                $workflowItem = $this->workflowManager->getWorkflowItem($invoice, 'invoice_flow');
-                $this->workflowManager->transit($workflowItem, 'reopen');
+                $workflow = $this->workflowManager->getWorkflowItem($invoice, 'invoice_flow');
+                $this->workflowManager->transit($workflow, 'reopen');
             }
             return;
         }
-        if ($remaining != 0) {
+        $targetStepName = $remaining == 0 ? Invoice::WORKFLOW_STEP_PAID : Invoice::WORKFLOW_STEP_PARTIALLY_PAID;
+        if ($workflow->getCurrentStep()->getName() === $targetStepName) {
             return;
         }
-        $workflowItem = $this->workflowManager->getWorkflowItem($invoice, 'invoice_flow');
-        $this->workflowManager->transit($workflowItem, 'make_paid');
+        $workflow->setCurrentStep(
+            $workflow->getDefinition()->getStepByName($targetStepName)
+        );
+        $this->entityManager->persist($workflow);
+        $this->entityManager->flush($workflow);
     }
 }
