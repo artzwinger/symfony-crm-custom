@@ -8,6 +8,15 @@
             <div class="activity-context-activity-list">
                 {{ AC.activity_contexts(entity, target, true, 'oronote/js/app/components/note-context-component') }}
             </div>
+            {% if entity.assignment %}
+                {{ ui.renderAttribute('teachers.assignment.entity_label'|trans, ui.link({
+                    'path': path('teachers_assignment_view', { entityClass: oro_class_name(entity.assignment, true), id: entity.assignment.id }),
+                    'iCss': 'fa-clipboard',
+                    'aCss': 'link-icon-need-space',
+                    'title': entity.assignment.courseName,
+                    'label': entity.assignment.courseName
+                })) }}
+            {% endif %}
             {{ ui.renderProperty('teachers.bid.price.label'|trans, '$' ~ entity.price|number_format(2)) }}
             {{ ui.renderProperty('teachers.bid.teacher.label'|trans, entity.teacher) }}
 

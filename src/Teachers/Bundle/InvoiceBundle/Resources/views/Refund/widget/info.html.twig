@@ -8,11 +8,28 @@
             <div class="activity-context-activity-list">
                 {{ AC.activity_contexts(entity, target, true, 'oronote/js/app/components/note-context-component') }}
             </div>
+            {% if entity.invoice %}
+                {{ ui.renderAttribute('teachers.invoice.entity_label'|trans, ui.link({
+                    'path': path('teachers_invoice_view', { entityClass: oro_class_name(entity.invoice, true), id: entity.invoice.id }),
+                    'iCss': 'fa-file',
+                    'aCss': 'link-icon-need-space',
+                    'title': entity.invoice.id,
+                    'label': entity.invoice.id
+                })) }}
+            {% endif %}
+            {% if entity.invoice and entity.invoice.assignment %}
+                {{ ui.renderAttribute('teachers.assignment.entity_label'|trans, ui.link({
+                    'path': path('teachers_assignment_view', { entityClass: oro_class_name(entity.invoice.assignment, true), id: entity.invoice.assignment.id }),
+                    'iCss': 'fa-clipboard',
+                    'aCss': 'link-icon-need-space',
+                    'title': entity.invoice.assignment.courseName,
+                    'label': entity.invoice.assignment.courseName
+                })) }}
+            {% endif %}
             {{ ui.renderProperty('teachers.refund.amountOwed.label'|trans, '$' ~ entity.payment.invoice.amountOwed|number_format(2)) }}
             {{ ui.renderProperty('teachers.refund.amountPaid.label'|trans, '$' ~ entity.payment.amountPaid|number_format(2)) }}
             {{ ui.renderProperty('teachers.refund.amountRemaining.label'|trans, '$' ~ entity.payment.invoice.amountRemaining|number_format(2)) }}
             {{ ui.renderProperty('teachers.refund.student.label'|trans, entity.owner) }}
-            {{ ui.renderProperty('teachers.refund.assignment.label'|trans, entity.payment.invoice.assignment.courseName) }}
 
             {{ entityConfig.renderDynamicFields(entity) }}
         </div>
