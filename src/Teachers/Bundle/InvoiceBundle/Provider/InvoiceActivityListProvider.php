@@ -90,7 +90,7 @@ class InvoiceActivityListProvider implements
     public function getDescription($entity): ?string
     {
         /** @var $entity Invoice */
-        return 'Invoice with amount owed ' . $entity->getAmountOwed();
+        return 'Invoice with amount owed $' . number_format($entity->getAmountOwed(), 2);
     }
 
     /**

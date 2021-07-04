@@ -22,13 +22,18 @@
     <% if (!_.isUndefined(data.statusId) && data.statusId) { %>
     <div class="activity-short-message">
         <% if (data.statusId === 'unpaid') { %>
-        <div class="badge badge-pill badge-tentatively status-tentatively"><span
-                    class="icon-status-tentatively fa-circle" aria-hidden="true"></span>
+        <div class="badge badge-pill badge-tentatively status-tentatively">
+            <span class="icon-status-tentatively fa-circle" aria-hidden="true"></span>
+            <%- data.statusName %>
+        </div>
+        <% } else if (data.statusId === 'partially_paid') { %>
+        <div class="badge badge-pill badge-info status-info">
+            <span class="icon-status-info fa-circle" aria-hidden="true"></span>
             <%- data.statusName %>
         </div>
         <% } else { %>
-        <div class="badge badge-pill badge-enabled status-enabled"><span class="icon-status-enabled fa-circle"
-                                                                         aria-hidden="true"></span>
+        <div class="badge badge-pill badge-enabled status-enabled">
+            <span class="icon-status-enabled fa-circle" aria-hidden="true"></span>
             <%- data.statusName %>
         </div>
         <% } %>

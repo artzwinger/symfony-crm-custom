@@ -22,14 +22,14 @@
     <% if (!_.isUndefined(data.statusId) && data.statusId) { %>
     <div class="activity-short-message">
         <% if (data.statusId === 'partially_refunded') { %>
-        <div class="badge badge-pill badge-tentatively status-tentatively"><span
-                    class="icon-status-tentatively fa-circle" aria-hidden="true"></span>
+        <div class="badge badge-pill badge-tentatively status-tentatively">
+            <span class="icon-status-tentatively fa-circle" aria-hidden="true"></span>
             <%- data.statusName %>
         </div>
         <% } %>
         <% if (data.statusId === 'fully_refunded') { %>
-        <div class="badge badge-pill badge-danger status-danger"><span
-                    class="icon-status-danger fa-circle" aria-hidden="true"></span>
+        <div class="badge badge-pill badge-danger status-danger">
+            <span class="icon-status-danger fa-circle" aria-hidden="true"></span>
             <%- data.statusName %>
         </div>
         <% } %>

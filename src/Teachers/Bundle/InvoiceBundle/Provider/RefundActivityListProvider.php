@@ -91,7 +91,7 @@ class RefundActivityListProvider implements
     public function getDescription($entity): ?string
     {
         /** @var $entity Refund */
-        return 'Refund with amount refunded ' . $entity->getAmountRefunded();
+        return 'Refund with amount refunded $' . number_format($entity->getAmountRefunded(), 2);
     }
 
     /**

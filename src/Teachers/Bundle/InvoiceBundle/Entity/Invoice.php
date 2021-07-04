@@ -146,6 +146,7 @@ class Invoice extends ExtendInvoice implements DatesAwareInterface
      */
     protected $organization;
 
+    const INTERNAL_STATUS_CODE = 'invoice_status';
     const STATUS_UNPAID = 'unpaid';
     const STATUS_PAID = 'paid';
     const STATUS_PARTIALLY_PAID = 'partially_paid';

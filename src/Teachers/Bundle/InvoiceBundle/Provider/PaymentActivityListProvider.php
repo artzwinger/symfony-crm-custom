@@ -90,9 +90,9 @@ class PaymentActivityListProvider implements
     public function getDescription($entity): ?string
     {
         /** @var $entity Payment */
-        $desc = 'Payment with amount paid ' . $entity->getAmountPaid();
+        $desc = 'Payment with amount paid $' . number_format($entity->getAmountPaid(), 2);
         if ($entity->getAmountRefunded()) {
-            $desc .= ' and amount refunded ' . $entity->getAmountRefunded();
+            $desc .= ' and amount refunded $' . number_format($entity->getAmountRefunded(), 2);
         }
         return $desc;
     }
