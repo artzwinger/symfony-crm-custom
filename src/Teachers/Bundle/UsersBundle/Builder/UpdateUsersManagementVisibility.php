@@ -33,6 +33,12 @@ class UpdateUsersManagementVisibility implements BuilderInterface
             return;
         }
         foreach ($menu->getChildren() as $item) {
+            if ($item->getName() === 'teachers_group') {
+                if ($this->roleHelper->isCurrentUserTeacher() || $this->roleHelper->isCurrentUserStudent()) {
+                    $item->setExtra('isAllowed', false);
+                }
+                continue;
+            }
             if ($item->getName() !== 'system_tab') {
                 continue;
             }
