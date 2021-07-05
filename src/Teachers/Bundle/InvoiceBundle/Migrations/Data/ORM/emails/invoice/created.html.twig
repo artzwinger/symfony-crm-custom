@@ -1,17 +1,56 @@
 @name = teachers_invoice_created
 @entityName = Teachers\Bundle\InvoiceBundle\Entity\Invoice
-@subject = New invoice created in your course {{ assignment.courseName }}
+@subject = OCH Invoice #{{ invoice.id }}
 @isSystem = 1
 @isEditable = 1
 
-<div>
-    <i>{{ invoice.createdAt|date('F j, Y, g:i A') }}</i>
-</div>
-<h2>Course</h2>
-<div>
-    {{ assignment.courseName }}
-</div>
-<h2>Amount Owed</h2>
-<div>
-    {{ invoice.amountOwed }}
-</div>
+<style>
+    @media (max-width: 480pt) {
+        .wrapper {
+            width: 100% !important;
+        }
+    }
+
+    a:hover {
+        text-decoration: underline;
+    }
+</style>
+<table class="wrapper"
+       style="border-collapse: collapse; width: 640px; width: 480pt; max-width: 100%; box-sizing: border-box">
+    <tr>
+        <td style="background-color: #ffffff; padding: 4pt">
+            <span style="font-family: Arial, Helvetica, sans-serif; font-size: 14pt; line-height: 14pt; color: #444444">Hi, {{ invoice.student|oro_format_name }},</span>
+            <div style="height: 10pt; line-height: 10pt">&nbsp;</div>
+            <p style="color: #444444; font-size: 10pt; font-family: Arial, Helvetica, sans-serif; font-weight: normal; margin: 5pt 0 10pt 0;">
+                Thank you for your purchase! Invoice details are below:<br>
+                INVOICE #<br>
+                {{ invoice.id }}<br>
+                DATE OF ISSUE<br>
+                {{ invoice.createdAt|date('F j, Y, g:i A') }}<br>
+                BILLED TO<br>
+                {{ invoice.student|oro_format_name }}<br>
+                {{ invoice.student.email }}<br>
+            </p>
+            <span style="font-family: Arial, Helvetica, sans-serif; font-size: 14pt; line-height: 14pt; color: #444444"><b>Invoice Summary</b></span>
+            <p style="color: #444444; font-size: 10pt; font-family: Arial, Helvetica, sans-serif; font-weight: normal; margin: 5pt 0 10pt 0;">
+                SERVICE AMOUNT<br>
+                {{ assignment.term }} ${{ invoice.amountOwed|oro_format_number(2) }}<br>
+            </p>
+            <table style="width: 100%;">
+                <tbody>
+                <tr>
+                    <td>&nbsp;</td>
+                    <td style="padding: 5pt 0; background: #2ea63a; width: 140pt; text-align: center">
+                        <a style="color: #ffffff; font-size: 11pt; text-transform: uppercase; text-decoration: none; line-height: 1em; font-family: Arial, Helvetica, sans-serif;"
+                           href="{{ oro_get_absolute_url('teachers_invoice_view', { id: invoice.id }) }}"
+                           target="_blank">
+                            VIEW INVOICE DETAILS
+                        </a>
+                    </td>
+                    <td>&nbsp;</td>
+                </tr>
+                </tbody>
+            </table>
+        </td>
+    </tr>
+</table>
