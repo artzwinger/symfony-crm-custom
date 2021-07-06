@@ -22,11 +22,17 @@
             <span style="font-family: Arial, Helvetica, sans-serif; font-size: 14pt; line-height: 14pt; color: #444444">Hi, {{ invoice.student|oro_format_name }},</span>
             <div style="height: 10pt; line-height: 10pt">&nbsp;</div>
             <p style="color: #444444; font-size: 10pt; font-family: Arial, Helvetica, sans-serif; font-weight: normal; margin: 5pt 0 10pt 0;">
-                Thank you for your purchase! Invoice details are below:<br>
+                Thank you for your purchase! Invoice details are below:
+            </p>
+            <p style="color: #444444; font-size: 10pt; font-family: Arial, Helvetica, sans-serif; font-weight: normal; margin: 5pt 0 10pt 0;">
                 INVOICE #<br>
-                {{ invoice.id }}<br>
+                {{ invoice.id }}
+            </p>
+            <p style="color: #444444; font-size: 10pt; font-family: Arial, Helvetica, sans-serif; font-weight: normal; margin: 5pt 0 10pt 0;">
                 DATE OF ISSUE<br>
-                {{ invoice.createdAt|date('F j, Y, g:i A') }}<br>
+                {{ invoice.createdAt|date('F j, Y, g:i A') }}
+            </p>
+            <p style="color: #444444; font-size: 10pt; font-family: Arial, Helvetica, sans-serif; font-weight: normal; margin: 5pt 0 10pt 0;">
                 BILLED TO<br>
                 {{ invoice.student|oro_format_name }}<br>
                 {{ invoice.student.email }}<br>
@@ -34,7 +40,7 @@
             <span style="font-family: Arial, Helvetica, sans-serif; font-size: 14pt; line-height: 14pt; color: #444444"><b>Invoice Summary</b></span>
             <p style="color: #444444; font-size: 10pt; font-family: Arial, Helvetica, sans-serif; font-weight: normal; margin: 5pt 0 10pt 0;">
                 SERVICE AMOUNT<br>
-                {{ assignment.term }} ${{ invoice.amountOwed|oro_format_number(2) }}<br>
+                {{ assignment.term }} {{ invoice.amountOwed|oro_format_currency }}<br>
             </p>
             <table style="width: 100%;">
                 <tbody>

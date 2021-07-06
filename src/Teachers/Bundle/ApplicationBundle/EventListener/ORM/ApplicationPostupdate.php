@@ -12,11 +12,11 @@ use Oro\Bundle\ConfigBundle\Config\ConfigManager;
 use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\ContactBundle\Entity\ContactEmail;
 use Oro\Bundle\ContactBundle\Entity\ContactPhone;
-use Oro\Bundle\ContactBundle\Model\ExtendContactEmail;
-use Oro\Bundle\ContactBundle\Model\ExtendContactPhone;
 use Oro\Bundle\EmailBundle\Manager\EmailTemplateManager;
 use Oro\Bundle\EmailBundle\Model\EmailTemplateCriteria;
 use Oro\Bundle\EmailBundle\Model\From;
+use Oro\Bundle\OrganizationBundle\Entity\BusinessUnit;
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\UserBundle\Entity\UserManager;
 use RuntimeException;
@@ -50,6 +50,14 @@ class ApplicationPostupdate
      * @var EmailTemplateManager
      */
     private $emailTemplateManager;
+    /**
+     * @var Organization
+     */
+    private $defaultOrganization;
+    /**
+     * @var BusinessUnit
+     */
+    private $defaultBusinessUnit;
 
     public function __construct(
         EntityManager $entityManager,
@@ -115,6 +123,9 @@ class ApplicationPostupdate
         $student->setUsername($email);
         $password = $this->userManager->generatePassword(10);
         $student->setPlainPassword($password);
+        $student->setOrganization($this->getDefaultOrganization());
+        $student->addOrganization($this->getDefaultOrganization());
+        $student->addBusinessUnit($this->getDefaultBusinessUnit());
 
         $this->userManager->updateUser($student, true);
         $this->sendInviteMail($student, $password);
@@ -145,6 +156,7 @@ class ApplicationPostupdate
         $email = new ContactEmail($email);
         $email->setPrimary(true);
         $contact->addEmail($email);
+        $contact->setOrganization($this->getDefaultOrganization());
         $this->entityManager->persist($contact);
         $this->entityManager->flush($contact);
         if (!$contact->getId()) {
@@ -163,6 +175,7 @@ class ApplicationPostupdate
         $account = new Account();
         $account->setName($contact->getLastName() . ' ' . $contact->getFirstName());
         $account->setDefaultContact($contact);
+        $account->setOrganization($this->getDefaultOrganization());
         $this->entityManager->persist($account);
         $this->entityManager->flush($account);
         if (!$account->getId()) {
@@ -193,5 +206,39 @@ class ApplicationPostupdate
             new EmailTemplateCriteria(self::INVITE_USER_TEMPLATE, User::class),
             ['user' => $user, 'password' => $plainPassword]
         );
+    }
+
+    /**
+     * @return Organization
+     */
+    protected function getDefaultOrganization()
+    {
+        if (null === $this->defaultOrganization) {
+            $repo = $this->entityManager->getRepository('OroOrganizationBundle:Organization');
+            $organizations = $repo->createQueryBuilder('e')
+                ->setMaxResults(1)
+                ->getQuery()
+                ->getResult();
+            $this->defaultOrganization = current($organizations);
+        }
+
+        return $this->defaultOrganization;
+    }
+
+    /**
+     * @return BusinessUnit
+     */
+    protected function getDefaultBusinessUnit()
+    {
+        if (null === $this->defaultBusinessUnit) {
+            $repo = $this->entityManager->getRepository('OroOrganizationBundle:BusinessUnit');
+            $units = $repo->createQueryBuilder('e')
+                ->setMaxResults(1)
+                ->getQuery()
+                ->getResult();
+            $this->defaultBusinessUnit = current($units);
+        }
+
+        return $this->defaultBusinessUnit;
     }
 }
