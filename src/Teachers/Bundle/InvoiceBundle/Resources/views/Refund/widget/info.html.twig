@@ -29,7 +29,33 @@
             {{ ui.renderProperty('teachers.refund.amountOwed.label'|trans, '$' ~ entity.payment.invoice.amountOwed|number_format(2)) }}
             {{ ui.renderProperty('teachers.refund.amountPaid.label'|trans, '$' ~ entity.payment.amountPaid|number_format(2)) }}
             {{ ui.renderProperty('teachers.refund.amountRemaining.label'|trans, '$' ~ entity.payment.invoice.amountRemaining|number_format(2)) }}
-            {{ ui.renderProperty('teachers.refund.student.label'|trans, entity.owner) }}
+            {% if entity.payment.invoice.student %}
+                {{ ui.renderAttribute('teachers.invoice.student.label'|trans, ui.link({
+                    'path': path('oro_user_view', { entityClass: oro_class_name(entity.payment.invoice.student, true), id: entity.payment.invoice.student.id }),
+                    'iCss': 'fa-users',
+                    'aCss': 'link-icon-need-space',
+                    'title': entity.payment.invoice.student.fullName,
+                    'label': entity.payment.invoice.student.fullName
+                })) }}
+            {% endif %}
+            {% if entity.payment.invoice.studentAccount %}
+                {{ ui.renderAttribute('teachers.invoice.studentAccount.label'|trans, ui.link({
+                    'path': path('oro_account_view', { entityClass: oro_class_name(entity.payment.invoice.studentAccount, true), id: entity.payment.invoice.studentAccount.id }),
+                    'iCss': 'fa-suitcase',
+                    'aCss': 'link-icon-need-space',
+                    'title': entity.payment.invoice.studentAccount.name,
+                    'label': entity.payment.invoice.studentAccount.name
+                })) }}
+            {% endif %}
+            {% if entity.payment.invoice.studentContact %}
+                {{ ui.renderAttribute('teachers.invoice.studentContact.label'|trans, ui.link({
+                    'path': path('oro_contact_view', { entityClass: oro_class_name(entity.payment.invoice.studentContact, true), id: entity.payment.invoice.studentContact.id }),
+                    'iCss': 'fa-users',
+                    'aCss': 'link-icon-need-space',
+                    'title': entity.payment.invoice.studentContact.lastName ~ ' ' ~ entity.payment.invoice.studentContact.firstName,
+                    'label': entity.payment.invoice.studentContact.lastName ~ ' ' ~ entity.payment.invoice.studentContact.firstName
+                })) }}
+            {% endif %}
 
             {{ entityConfig.renderDynamicFields(entity) }}
         </div>

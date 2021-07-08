@@ -19,6 +19,8 @@ teachers:
         price.label: Price
         organization_name.label: Organization name
         student.label: Student
+        studentAccount.label: Student Account
+        studentContact.label: Student Contact
         teacher.label: Tutor
         amountOwed.label: Amount Owed
         due_date.label: Due Date

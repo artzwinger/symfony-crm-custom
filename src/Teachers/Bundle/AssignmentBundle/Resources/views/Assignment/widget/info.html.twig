@@ -9,13 +9,13 @@
                 {{ AC.activity_contexts(entity, target, true, 'oronote/js/app/components/note-context-component') }}
             </div>
             {% if entity.application %}
-            {{ ui.renderAttribute('teachers.application.entity_label'|trans, ui.link({
-                'path': path('teachers_application_view', { entityClass: oro_class_name(entity.application, true), id: entity.application.id }),
-                'iCss': 'fa-clipboard',
-                'aCss': 'link-icon-need-space',
-                'title': entity.application.courseName,
-                'label': entity.application.courseName
-            })) }}
+                {{ ui.renderAttribute('teachers.application.entity_label'|trans, ui.link({
+                    'path': path('teachers_application_view', { entityClass: oro_class_name(entity.application, true), id: entity.application.id }),
+                    'iCss': 'fa-clipboard',
+                    'aCss': 'link-icon-need-space',
+                    'title': entity.application.courseName,
+                    'label': entity.application.courseName
+                })) }}
             {% endif %}
             {% set teacherGroupsHtml = '' %}
             {% for teacherGroup in entity.teacherGroups %}
@@ -40,13 +40,43 @@
             {{ ui.renderProperty('teachers.assignment.course_url.label'|trans, entity.courseUrl) }}
 
             {% if not roleHelper.currentUserTeacher or (not entity.isUpForBids() and entity.isAssignedToUser(roleHelper.currentUser)) %}
-            {{ ui.renderProperty('teachers.assignment.user_login.label'|trans, entity.userLogin) }}
-            {{ ui.renderProperty('teachers.assignment.user_password.label'|trans, entity.userPassword) }}
+                {{ ui.renderProperty('teachers.assignment.user_login.label'|trans, entity.userLogin) }}
+                {{ ui.renderProperty('teachers.assignment.user_password.label'|trans, entity.userPassword) }}
             {% endif %}
 
             {{ ui.renderProperty('teachers.assignment.instructions.label'|trans, entity.instructions) }}
             {{ ui.renderProperty('teachers.assignment.status.label'|trans, entity.status) }}
             {{ ui.renderProperty('teachers.assignment.term.label'|trans, entity.term) }}
+
+            {% if not roleHelper.currentUserTeacher and not roleHelper.currentUserStudent %}
+                {% if entity.teacher %}
+                    {{ ui.renderAttribute('teachers.assignment.teacher.label'|trans, ui.link({
+                        'path': path('oro_user_view', { entityClass: oro_class_name(entity.teacher, true), id: entity.teacher.id }),
+                        'iCss': 'fa-users',
+                        'aCss': 'link-icon-need-space',
+                        'title': entity.teacher.fullName,
+                        'label': entity.teacher.fullName
+                    })) }}
+                {% endif %}
+                {% if entity.teacherAccount %}
+                    {{ ui.renderAttribute('teachers.assignment.teacherAccount.label'|trans, ui.link({
+                        'path': path('oro_account_view', { entityClass: oro_class_name(entity.teacherAccount, true), id: entity.teacherAccount.id }),
+                        'iCss': 'fa-suitcase',
+                        'aCss': 'link-icon-need-space',
+                        'title': entity.teacherAccount.name,
+                        'label': entity.teacherAccount.name
+                    })) }}
+                {% endif %}
+                {% if entity.teacherContact %}
+                    {{ ui.renderAttribute('teachers.assignment.teacherContact.label'|trans, ui.link({
+                        'path': path('oro_contact_view', { entityClass: oro_class_name(entity.teacherContact, true), id: entity.teacherContact.id }),
+                        'iCss': 'fa-users',
+                        'aCss': 'link-icon-need-space',
+                        'title': entity.teacherContact.lastName ~ ' ' ~ entity.teacherContact.firstName,
+                        'label': entity.teacherContact.lastName ~ ' ' ~ entity.teacherContact.firstName
+                    })) }}
+                {% endif %}
+            {% endif %}
 
             {{ entityConfig.renderDynamicFields(entity) }}
         </div>

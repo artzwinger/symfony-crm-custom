@@ -106,6 +106,8 @@ teachers:
         course_manager.label: Course Manager
         student.label: Student
         teacher.label: Tutor
+        teacherAccount.label: Tutor Account
+        teacherContact.label: Tutor Contact
         teacherGroups.label: Tutor Groups
 
         datagrid:

@@ -30,7 +30,34 @@
             {{ ui.renderProperty('teachers.invoice.amountPaid.label'|trans, '$' ~ entity.amountPaid|number_format(2)) }}
             {{ ui.renderProperty('teachers.payment.amountRefunded.label'|trans, '$' ~ entity.amountRefunded|number_format(2)) }}
             {{ ui.renderProperty('teachers.invoice.amountRemaining.label'|trans, '$' ~ entity.invoice.amountRemaining|number_format(2)) }}
-            {{ ui.renderProperty('teachers.invoice.student.label'|trans, entity.invoice.student) }}
+
+            {% if entity.invoice.student %}
+                {{ ui.renderAttribute('teachers.invoice.student.label'|trans, ui.link({
+                    'path': path('oro_user_view', { entityClass: oro_class_name(entity.invoice.student, true), id: entity.invoice.student.id }),
+                    'iCss': 'fa-users',
+                    'aCss': 'link-icon-need-space',
+                    'title': entity.invoice.student.fullName,
+                    'label': entity.invoice.student.fullName
+                })) }}
+            {% endif %}
+            {% if entity.invoice.studentAccount %}
+                {{ ui.renderAttribute('teachers.invoice.studentAccount.label'|trans, ui.link({
+                    'path': path('oro_account_view', { entityClass: oro_class_name(entity.invoice.studentAccount, true), id: entity.invoice.studentAccount.id }),
+                    'iCss': 'fa-suitcase',
+                    'aCss': 'link-icon-need-space',
+                    'title': entity.invoice.studentAccount.name,
+                    'label': entity.invoice.studentAccount.name
+                })) }}
+            {% endif %}
+            {% if entity.invoice.studentContact %}
+                {{ ui.renderAttribute('teachers.invoice.studentContact.label'|trans, ui.link({
+                    'path': path('oro_contact_view', { entityClass: oro_class_name(entity.invoice.studentContact, true), id: entity.invoice.studentContact.id }),
+                    'iCss': 'fa-users',
+                    'aCss': 'link-icon-need-space',
+                    'title': entity.invoice.studentContact.lastName ~ ' ' ~ entity.invoice.studentContact.firstName,
+                    'label': entity.invoice.studentContact.lastName ~ ' ' ~ entity.invoice.studentContact.firstName
+                })) }}
+            {% endif %}
 
             {{ entityConfig.renderDynamicFields(entity) }}
         </div>
