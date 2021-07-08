@@ -4,4 +4,4 @@ ROLE_COURSE_MANAGER:
         workflow|invoice_flow: [ VIEW_WORKFLOW_SYSTEM, PERFORM_TRANSITIONS_SYSTEM ]
 ROLE_STUDENT:
     permissions:
-        entity|Teachers\Bundle\InvoiceBundle\Entity\Invoice: [ VIEW_SYSTEM, EDIT_LOCAL ]
+        entity|Teachers\Bundle\InvoiceBundle\Entity\Invoice: [ VIEW_BASIC ]
