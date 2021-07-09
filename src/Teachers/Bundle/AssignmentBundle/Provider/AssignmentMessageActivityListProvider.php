@@ -226,7 +226,7 @@ class AssignmentMessageActivityListProvider implements
      */
     public function isCommentsEnabled($entityClass): bool
     {
-        return $this->commentAssociationHelper->isCommentAssociationEnabled($entityClass);
+        return false;
     }
 
     /**
