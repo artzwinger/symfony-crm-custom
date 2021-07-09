@@ -36,8 +36,6 @@ Teachers\Bundle\ApplicationBundle\Entity\Application:
             -   NotBlank: ~
             -   GreaterThanOrEqual:
                     value: 0
-        workToday:
-            -   NotBlank: ~
         courseUrl:
             -   NotBlank: ~
             -   Length:
