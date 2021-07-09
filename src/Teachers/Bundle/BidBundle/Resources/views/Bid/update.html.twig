@@ -54,16 +54,16 @@
 
 {% block content_data %}
     {% set id = 'bid-form' %}
-
+    {% set formData = [form_row(form.price)] %}
+    {% if not roleHelper.currentUserTeacher %}
+        {% set formData = formData|merge([form_row(form.teacher)]) %}
+    {% endif %}
     {% set dataBlocks = [{
         'title': 'teachers.bid.block.general'|trans,
         'subblocks': [
             {
                 'title': 'teachers.bid.block.bid_information'|trans,
-                'data': [
-                    form_row(form.price),
-                    form_row(form.teacher)
-                ]
+                'data': formData
             }
         ]
     }] %}

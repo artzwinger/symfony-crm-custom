@@ -82,7 +82,9 @@ class BidController extends AbstractController
      */
     public function updateAction(Bid $bid)
     {
-        return $this->update($bid, 'teachers_bid_update');
+        $result = $this->update($bid, 'teachers_bid_update');
+        $result['roleHelper'] = $this->get('teachers_users.helper.role');
+        return $result;
     }
 
     /**
@@ -97,7 +99,9 @@ class BidController extends AbstractController
      */
     public function createAction()
     {
-        return $this->update(new Bid(), 'teachers_bid_create');
+        $result = $this->update(new Bid(), 'teachers_bid_create');
+        $result['roleHelper'] = $this->get('teachers_users.helper.role');
+        return $result;
     }
 
     /**

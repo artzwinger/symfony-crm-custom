@@ -22,7 +22,7 @@ class BidType extends AbstractType
     {
         $builder
             ->add('price', OroMoneyType::class, [
-                'required' => false,
+                'required' => true,
                 'label' => 'teachers.bid.price.label'
             ])
             ->add('teacher', TeacherSelectType::class, [
