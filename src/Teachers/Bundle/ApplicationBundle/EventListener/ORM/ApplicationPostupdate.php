@@ -228,7 +228,7 @@ class ApplicationPostupdate
     /**
      * @return BusinessUnit
      */
-    protected function getDefaultBusinessUnit()
+    protected function getDefaultBusinessUnit(): BusinessUnit
     {
         if (null === $this->defaultBusinessUnit) {
             $repo = $this->entityManager->getRepository('OroOrganizationBundle:BusinessUnit');

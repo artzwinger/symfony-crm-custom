@@ -12,6 +12,7 @@ datagrids:
                     - assignment.courseName
                     - assignment.coursePrefixes
                     - assignment.workToday
+                    - assignment.amountDueToday
                     - assignment.dueDate
                     - assignment.courseUrl
                     - assignment.userLogin
@@ -40,6 +41,11 @@ datagrids:
                 label: teachers.assignment.course_name.label
             coursePrefixes:
                 label: teachers.assignment.course_prefixes.label
+            amountDueToday:
+                label: teachers.assignment.amountDueToday.label
+                type: twig
+                frontend_type: html
+                template: TeachersApplicationBundle:Datagrid:price.html.twig
             workToday:
                 label: teachers.assignment.work_today.label
                 frontend_type: select
@@ -81,6 +87,8 @@ datagrids:
                     data_name: assignment.courseName
                 coursePrefixes:
                     data_name: assignment.coursePrefixe
+                amountDueToday:
+                    data_name: application.amountDueToday
                 dueDate:
                     data_name: assignment.dueDate
                 courseUrl:
@@ -109,6 +117,9 @@ datagrids:
                 coursePrefixe:
                     type: string
                     data_name: assignment.coursePrefixe
+                amountDueToday:
+                    type: string
+                    data_name: application.amountDueToday
                 workToday:
                     data_name: c.enabled
                     type: choice

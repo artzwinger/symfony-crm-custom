@@ -41,6 +41,7 @@ teachers:
         user_login.label: User ID
         user_password.label: User Password
         instructions.label: Instructions
+        amountDueToday.label: Amount Due Today
         work_today:
             true.label: Yes
             false.label: No

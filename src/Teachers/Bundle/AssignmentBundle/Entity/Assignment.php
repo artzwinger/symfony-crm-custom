@@ -164,6 +164,13 @@ class Assignment extends ExtendAssignment implements DatesAwareInterface
     protected $instructions;
 
     /**
+     * @var double|null $amountDueToday
+     *
+     * @ORM\Column(name="amount_due_today", type="money", nullable=true)
+     */
+    protected $amountDueToday;
+
+    /**
      * @var Application|null $application
      *
      * @ORM\ManyToOne(targetEntity="Teachers\Bundle\ApplicationBundle\Entity\Application")
@@ -512,6 +519,22 @@ class Assignment extends ExtendAssignment implements DatesAwareInterface
     public function setInstructions(?string $instructions): void
     {
         $this->instructions = $instructions;
+    }
+
+    /**
+     * @return float|null
+     */
+    public function getAmountDueToday(): ?float
+    {
+        return $this->amountDueToday;
+    }
+
+    /**
+     * @param float|null $amountDueToday
+     */
+    public function setAmountDueToday(?float $amountDueToday): void
+    {
+        $this->amountDueToday = $amountDueToday;
     }
 
     /**

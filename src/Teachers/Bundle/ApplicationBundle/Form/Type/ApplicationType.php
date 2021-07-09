@@ -60,6 +60,11 @@ class ApplicationType extends AbstractType
                 'required' => true,
                 'label' => 'teachers.application.description.label'
             ])
+            ->add('amountDueToday', OroMoneyType::class, [
+                'required' => true,
+                'label' => 'teachers.application.amountDueToday.label',
+                'constraints' => [new Assert\GreaterThanOrEqual(0)]
+            ])
             ->add('price', OroMoneyType::class, [
                 'required' => true,
                 'label' => 'teachers.application.price.label',

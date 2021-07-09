@@ -64,6 +64,7 @@
             {{ ui.renderProperty('teachers.assignment.course_name.label'|trans, entity.courseName) }}
             {{ ui.renderProperty('teachers.assignment.course_prefixes.label'|trans, entity.coursePrefixes) }}
             {{ ui.renderProperty('teachers.assignment.description.label'|trans, entity.description) }}
+            {{ ui.renderProperty('teachers.assignment.amountDueToday.label'|trans, entity.amountDueToday|oro_format_currency) }}
             {{ ui.renderProperty('teachers.assignment.work_today.label'|trans, entity.workTodayLabel) }}
             {{ ui.renderProperty('teachers.assignment.due_date.label'|trans, entity.dueDate|oro_format_datetime) }}
             {{ ui.renderProperty('teachers.assignment.course_url.label'|trans, entity.courseUrl) }}

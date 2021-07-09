@@ -13,6 +13,7 @@ datagrids:
                     - application.phone
                     - application.courseName
                     - application.coursePrefixes
+                    - application.amountDueToday
                     - application.price
                     - application.workToday
                     - application.dueDate
@@ -39,6 +40,11 @@ datagrids:
                 label: teachers.application.course_name.label
             coursePrefixes:
                 label: teachers.application.course_prefixes.label
+            amountDueToday:
+                label: teachers.application.amountDueToday.label
+                type: twig
+                frontend_type: html
+                template: TeachersApplicationBundle:Datagrid:price.html.twig
             price:
                 label: teachers.application.price.label
                 type: twig
@@ -76,6 +82,8 @@ datagrids:
                     data_name: application.courseName
                 coursePrefixes:
                     data_name: application.coursePrefixe
+                amountDueToday:
+                    data_name: application.amountDueToday
                 price:
                     data_name: application.price
                 dueDate:
@@ -110,6 +118,9 @@ datagrids:
                 coursePrefixe:
                     type: string
                     data_name: application.coursePrefixe
+                amountDueToday:
+                    type: string
+                    data_name: application.amountDueToday
                 price:
                     type: string
                     data_name: application.price

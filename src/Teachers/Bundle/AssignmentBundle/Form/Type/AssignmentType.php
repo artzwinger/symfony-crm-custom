@@ -7,6 +7,7 @@ use DateTimeZone;
 use Exception;
 use Oro\Bundle\EntityExtendBundle\Form\Type\EnumSelectType;
 use Oro\Bundle\FormBundle\Form\Type\OroDateTimeType;
+use Oro\Bundle\FormBundle\Form\Type\OroMoneyType;
 use Oro\Bundle\FormBundle\Utils\FormUtils;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -83,6 +84,11 @@ class AssignmentType extends AbstractType
             ->add('instructions', TextareaType::class, [
                 'required' => true,
                 'label' => 'teachers.assignment.instructions.label'
+            ])
+            ->add('amountDueToday', OroMoneyType::class, [
+                'required' => true,
+                'label' => 'teachers.assignment.amountDueToday.label',
+                'constraints' => [new Assert\GreaterThanOrEqual(0)]
             ])
             ->add('term', EnumSelectType::class, [
                 'label' => 'teachers.assignment.term.label',

@@ -161,6 +161,13 @@ class Application extends ExtendApplication implements DatesAwareInterface
     protected $instructions;
 
     /**
+     * @var double|null $amountDueToday
+     *
+     * @ORM\Column(name="amount_due_today", type="money", nullable=true)
+     */
+    protected $amountDueToday;
+
+    /**
      * @var double|null $price
      *
      * @ORM\Column(name="price", type="money", nullable=true)
@@ -481,6 +488,22 @@ class Application extends ExtendApplication implements DatesAwareInterface
     public function setInstructions(?string $instructions): void
     {
         $this->instructions = $instructions;
+    }
+
+    /**
+     * @return float|null
+     */
+    public function getAmountDueToday(): ?float
+    {
+        return $this->amountDueToday;
+    }
+
+    /**
+     * @param float|null $amountDueToday
+     */
+    public function setAmountDueToday(?float $amountDueToday): void
+    {
+        $this->amountDueToday = $amountDueToday;
     }
 
     /**
