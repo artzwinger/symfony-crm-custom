@@ -1,6 +1,6 @@
 <?php
 
-namespace Teachers\Bundle\AssignmentBundle\Workflow\Action;
+namespace Teachers\Bundle\AssignmentBundle\Action;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Oro\Bundle\EmailBundle\Mailer\Processor;

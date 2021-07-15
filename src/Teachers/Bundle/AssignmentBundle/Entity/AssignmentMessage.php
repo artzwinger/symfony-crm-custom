@@ -77,6 +77,14 @@ class AssignmentMessage extends ExtendAssignmentMessage
     /**
      * @var User
      *
+     * @ORM\ManyToOne(targetEntity="Teachers\Bundle\AssignmentBundle\Entity\Assignment")
+     * @ORM\JoinColumn(name="assignment_id", referencedColumnName="id", onDelete="SET NULL")
+     */
+    protected $assignment;
+
+    /**
+     * @var User
+     *
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\UserBundle\Entity\User")
      * @ORM\JoinColumn(name="owner_id", referencedColumnName="id", onDelete="SET NULL")
      */
@@ -345,7 +353,10 @@ class AssignmentMessage extends ExtendAssignmentMessage
 
     public function getAssignment(): ?Assignment
     {
-        $targets = $this->getActivityTargets(Assignment::class);
-        return $targets ? $targets[0] : null;
+        if (!$this->assignment) {
+            $targets = $this->getActivityTargets(Assignment::class);
+            $this->assignment = $targets ? $targets[0] : null;
+        }
+        return $this->assignment;
     }
 }

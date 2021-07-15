@@ -1,7 +1,7 @@
 services:
     teachers.workflow.action.send_assignment_message_email_template:
         parent: oro_email.workflow.action.send_email_template
-        class: Teachers\Bundle\AssignmentBundle\Workflow\Action\SendMessageApprovedEmail
+        class: Teachers\Bundle\AssignmentBundle\Action\SendMessageApprovedEmail
         arguments:
             - '@teachers_users.helper.role'
         calls:
@@ -9,3 +9,10 @@ services:
             - [ setSender, [ '@oro_email.sender.aggregated_email_templates' ] ]
         tags:
             - { name: oro_action.action, alias: send_assignment_message_email_template }
+
+    teachers.action.parse_assignment_identifier:
+        class: Teachers\Bundle\AssignmentBundle\Action\ParseAssignmentIdentifier
+        arguments:
+            - '@oro_action.expression.context_accessor'
+        tags:
+            - { name: oro_action.action, alias: parse_assignment_identifier }

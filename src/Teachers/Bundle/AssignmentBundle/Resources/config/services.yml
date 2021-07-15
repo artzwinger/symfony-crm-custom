@@ -1,4 +1,8 @@
 services:
+    teachers_assignment.provider.mailbox_process.assignment_message:
+        class: Teachers\Bundle\AssignmentBundle\Provider\AssignmentMessageMailboxProcessProvider
+        tags:
+            - { name: oro_email.mailbox_process, type: assignment_message }
     teachers_assignment.embedded_form:
         class: Teachers\Bundle\AssignmentBundle\Form\Type\AssignmentType
         public: true

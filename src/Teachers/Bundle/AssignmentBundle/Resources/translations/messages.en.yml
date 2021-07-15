@@ -130,6 +130,9 @@ teachers:
             general: General
             additional: Additional
             assignment_information: Assignment Information
+        mailbox:
+            process:
+                label: Convert To Assignment Message
 
 oro:
     note:
