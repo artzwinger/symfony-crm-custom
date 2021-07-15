@@ -5,4 +5,4 @@ teachers:
                 error:
                     message: Can't send an email, please check logs
                 success:
-                    message: E-Mail sent successfully
+                    message: Email sent successfully

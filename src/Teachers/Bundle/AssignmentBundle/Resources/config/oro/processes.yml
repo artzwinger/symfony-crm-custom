@@ -1,7 +1,7 @@
 processes:
     definitions:
         convert_mailbox_email_to_assignment_message:
-            label: 'Convert Mailbox E-mail to Assignment Message'
+            label: 'Convert Mailbox Email to Assignment Message'
             enabled: true
             entity: Oro\Bundle\EmailBundle\Entity\EmailBody
             order: 150
