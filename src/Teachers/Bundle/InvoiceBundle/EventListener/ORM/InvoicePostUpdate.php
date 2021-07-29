@@ -81,7 +81,7 @@ class InvoicePostUpdate
         $this->entityManager->flush($workflow);
     }
 
-    protected function getTargetStepName(Invoice $invoice)
+    protected function getTargetStepName(Invoice $invoice): string
     {
         if ($invoice->getAmountRemaining() == 0) {
             return Invoice::WORKFLOW_STEP_PAID;

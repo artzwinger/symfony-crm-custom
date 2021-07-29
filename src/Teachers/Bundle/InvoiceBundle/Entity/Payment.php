@@ -86,6 +86,11 @@ class Payment extends ExtendPayment implements DatesAwareInterface
      */
     protected $amountRefunded;
     /**
+     * @var string|null $transaction
+     * @ORM\Column(name="transaction", type="string", nullable=true)
+     */
+    protected $transaction;
+    /**
      * @var Invoice|null
      * @ORM\ManyToOne(targetEntity="Teachers\Bundle\InvoiceBundle\Entity\Invoice")
      * @ORM\JoinColumn(name="invoice_id", referencedColumnName="id", onDelete="SET NULL")
@@ -197,6 +202,22 @@ class Payment extends ExtendPayment implements DatesAwareInterface
     public function setAmountRefunded(?float $amountRefunded): void
     {
         $this->amountRefunded = $amountRefunded;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getTransaction(): ?string
+    {
+        return $this->transaction;
+    }
+
+    /**
+     * @param string|null $transaction
+     */
+    public function setTransaction(?string $transaction): void
+    {
+        $this->transaction = $transaction;
     }
 
     /**

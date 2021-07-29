@@ -1,7 +1,6 @@
 imports:
     - { resource: 'invoice_flow/steps.yml' }
     - { resource: 'invoice_flow/attributes.yml' }
-    - { resource: 'invoice_flow/transitions.yml' }
     - { resource: 'invoice_flow/transition_definitions.yml' }
     - { resource: 'invoice_flow/entity_restrictions.yml' }
 

@@ -6,7 +6,7 @@ use Doctrine\ORM\Event\LifecycleEventArgs;
 use Teachers\Bundle\InvoiceBundle\Entity\Invoice;
 use Teachers\Bundle\InvoiceBundle\Helper\Invoice as InvoiceHelper;
 
-class InvoicePostPersist
+class SendInvoiceEmail
 {
     /**
      * @var InvoiceHelper

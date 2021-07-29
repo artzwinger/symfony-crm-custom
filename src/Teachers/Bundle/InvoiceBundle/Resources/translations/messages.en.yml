@@ -10,6 +10,7 @@ teachers:
         add_entity: Invoice
         add_entity.title: Invoice
         send_email: Send Email
+        pay: Pay
         entity_label: Invoice
         entity_plural_label: Invoices
         entity_grid_all_view_label: All %entity_plural_label%
@@ -26,11 +27,18 @@ teachers:
         due_date.label: Due Date
         amountPaid.label: Amount Paid
         amountRemaining.label: Amount Remaining
+
+        amountToPay.label: Amount To Pay
+        cardNumber.label: Card Number
+        cardExp.label: Expiration Date (e.g. 10/25)
+        cardSecret.label: CVV
         assignment.label: Assignment
         controller:
             invoice:
                 saved:
                     message: Invoice successfully saved
+                payment_received:
+                    message: Payment has been received
 
         datagrid:
             update: Update
@@ -51,6 +59,7 @@ teachers:
             general: General
             additional: Additional
             invoice_information: Invoice Information
+            card_information: Card Information
             payment_information: Payment Information
             refund_information: Payment Information
         payment:
@@ -83,6 +92,7 @@ teachers:
         add_entity.title: Pay
 
         invoice_amountOwed.label: Invoice Amount Owed
+        token.label: Transaction
         amountRefunded.label: Amount Refunded
         amountPaid.label: Payment Amount Paid
         invoice_amountPaid.label: Invoice Amount Paid

@@ -35,6 +35,16 @@
         }) }}
     {% endif %}
 
+    {% if is_granted('teachers_invoice_edit') and can_invoice_receive_payments %}
+        {{ UI.buttonSeparator() }}
+        {{ UI.button({
+            'path': path('teachers_invoice_pay', {'id': entity.id}),
+            'iCss': 'fa-credit-card',
+            'label': 'teachers.invoice.pay'|trans,
+            'title': 'teachers.invoice.pay'|trans
+        }) }}
+    {% endif %}
+
     {% if is_granted('teachers_invoice_send_email') %}
         {{ UI.buttonSeparator() }}
         {{ UI.clientButton({

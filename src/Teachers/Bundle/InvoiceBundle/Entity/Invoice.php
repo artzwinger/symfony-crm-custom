@@ -352,4 +352,9 @@ class Invoice extends ExtendInvoice implements DatesAwareInterface
     {
         return $this->getPayments()->count() !== 0;
     }
+
+    public function canReceivePayments(): bool
+    {
+        return $this->getAmountRemaining() > 0;
+    }
 }

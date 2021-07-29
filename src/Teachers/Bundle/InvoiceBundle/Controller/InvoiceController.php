@@ -6,13 +6,14 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityNotFoundException;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
+use DOMDocument;
 use Exception;
-use Oro\Bundle\EmailBundle\Tools\AggregatedEmailTemplatesSender;
 use Oro\Bundle\FormBundle\Model\UpdateHandlerFacade;
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use Oro\Bundle\SecurityBundle\Annotation\CsrfProtection;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use SimpleXMLElement;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormFactory;
 use Symfony\Component\Form\FormInterface;
@@ -20,10 +21,11 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Teachers\Bundle\AssignmentBundle\Entity\Assignment;
 use Teachers\Bundle\InvoiceBundle\Entity\Invoice;
+use Teachers\Bundle\InvoiceBundle\Entity\Payment;
 use Teachers\Bundle\InvoiceBundle\Helper\Invoice as InvoiceHelper;
-use Twig\Error\Error;
 
 class InvoiceController extends AbstractController
 {
@@ -45,7 +47,8 @@ class InvoiceController extends AbstractController
     {
         return [
             'entity' => $invoice,
-            'invoice_has_payments' => $invoice->hasPayments()
+            'invoice_has_payments' => $invoice->hasPayments(),
+            'can_invoice_receive_payments' => $invoice->canReceivePayments()
         ];
     }
 
@@ -133,6 +136,106 @@ class InvoiceController extends AbstractController
         } catch (Exception $e) {
         }
         return $this->update($invoice, 'teachers_invoice_create');
+    }
+
+    /**
+     * @Route("/pay/{id}", name="teachers_invoice_pay", requirements={"id"="\d+"}, options={"expose"=true})
+     * @Template("@TeachersInvoice/Invoice/pay.html.twig")
+     * @AclAncestor("teachers_invoice_edit")
+     * @param Invoice $invoice
+     * @return array
+     */
+    public function payAction(Invoice $invoice)
+    {
+        /** @var FormFactory $factory */
+        $factory = $this->get('form.factory');
+        $builder = $factory->createBuilder('Teachers\Bundle\InvoiceBundle\Form\Type\InvoicePayType');
+        $form = $builder->getForm();
+        return [
+            'entity' => $invoice,
+            'form' => $form->createView(),
+            'formAction' => $this->generateUrl('teachers_invoice_pay_step2', [
+                'id' => $invoice->getId()
+            ])
+        ];
+    }
+
+    /**
+     * @Route("/pay_step2/{id}", name="teachers_invoice_pay_step2", requirements={"id"="\d+"}, options={"expose"=true})
+     * @Template("@TeachersInvoice/Invoice/pay_step2.html.twig")
+     * @AclAncestor("teachers_invoice_edit")
+     * @param Invoice $invoice
+     * @return array
+     * @throws Exception
+     */
+    public function payStep2Action(Invoice $invoice)
+    {
+        $request = $this->get('request_stack')->getCurrentRequest();
+        $amount = $request->get('amountToPay', 0);
+        if ($amount <= 0) {
+            $amount = $invoice->getAmountRemaining();
+        }
+        $redirectUrl = $this->generateUrl('teachers_invoice_pay_step3', [
+                'id' => $invoice->getId()
+            ], UrlGeneratorInterface::ABSOLUTE_URL);
+        $data = $this->get('teachers_invoice.helper.payment_gateway')->sale($amount, $redirectUrl);
+        // Parse Step One's XML response
+        $gwResponse = @new SimpleXMLElement($data);
+        if ((string)$gwResponse->result == 1) {
+            // The form url for used in Step Two below
+            $formURL = (string)$gwResponse->{'form-url'};
+        } else {
+            throw new Exception(print " Error, received " . $data);
+        }
+        /** @var FormFactory $factory */
+        $factory = $this->get('form.factory');
+        $builder = $factory->createBuilder('Teachers\Bundle\InvoiceBundle\Form\Type\InvoicePayStep2Type');
+        $form = $builder->getForm();
+        return [
+            'entity' => $invoice,
+            'form' => $form->createView(),
+            'formAction' => $formURL
+        ];
+    }
+
+    /**
+     * @Route("/pay_step3/{id}", name="teachers_invoice_pay_step3", requirements={"id"="\d+"}, options={"expose"=true})
+     * @AclAncestor("teachers_invoice_edit")
+     * @param Invoice $invoice
+     * @return RedirectResponse
+     * @throws Exception
+     */
+    public function payStep3Action(Invoice $invoice)
+    {
+        $request = $this->get('request_stack')->getCurrentRequest();
+        $tokenId = $request->get('token-id');
+        $data = $this->get('teachers_invoice.helper.payment_gateway')->completeAction($tokenId);
+        $gwResponse = @new SimpleXMLElement((string)$data);
+        $nmiSuccess = (string)$gwResponse->result == 1;
+
+        if ($nmiSuccess) {
+            $payment = new Payment();
+            $payment->setInvoice($invoice);
+            $payment->setAmountPaid((string)$gwResponse->amount);
+            $payment->setAmountPaidAfterRefund($payment->getAmountPaid());
+            if ($invoice->getStudent()) {
+                $payment->setOwner($invoice->getStudent());
+            }
+            $payment->setOrganization($invoice->getOrganization());
+            $payment->setTransaction((string)$gwResponse->{'transaction-id'});
+            $em = $this->get('doctrine.orm.entity_manager');
+            $em->persist($payment);
+            $em->flush($payment);
+        }
+
+        $this->get('session')->getFlashBag()->add(
+            $nmiSuccess ? 'success' : 'error',
+            (string)$gwResponse->{'result-text'}
+        );
+
+        return $this->redirectToRoute('teachers_invoice_view', [
+            'id' => $invoice->getId()
+        ]);
     }
 
     /**

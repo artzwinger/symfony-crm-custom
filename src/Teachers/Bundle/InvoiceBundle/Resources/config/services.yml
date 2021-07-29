@@ -97,8 +97,8 @@ services:
             - { name: doctrine.event_listener, event: postUpdate, connection: default, entity: 'Teachers\Bundle\InvoiceBundle\Entity\Invoice' }
         arguments:
           [ '@oro_workflow.manager', '@doctrine.orm.entity_manager' ]
-    teachers_invoice.event_listener.orm.invoice_postpersist:
-        class: Teachers\Bundle\InvoiceBundle\EventListener\ORM\InvoicePostPersist
+    teachers_invoice.event_listener.orm.send_invoice_email:
+        class: Teachers\Bundle\InvoiceBundle\EventListener\ORM\SendInvoiceEmail
         tags:
             - { name: doctrine.event_listener, event: postPersist, connection: default, entity: 'Teachers\Bundle\InvoiceBundle\Entity\Invoice' }
         arguments:
@@ -129,3 +129,6 @@ services:
         public: true
         arguments:
           [ '@oro_email.manager.template_email', '@oro_config.manager' ]
+    teachers_invoice.helper.payment_gateway:
+        class: Teachers\Bundle\InvoiceBundle\Helper\PaymentGateway
+        public: true
