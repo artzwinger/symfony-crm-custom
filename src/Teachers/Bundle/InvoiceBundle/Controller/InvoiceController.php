@@ -48,7 +48,8 @@ class InvoiceController extends AbstractController
         return [
             'entity' => $invoice,
             'invoice_has_payments' => $invoice->hasPayments(),
-            'can_invoice_receive_payments' => $invoice->canReceivePayments()
+            'can_invoice_receive_payments' => $invoice->canReceivePayments(),
+            'is_user_student' => $this->get('teachers_users.helper.role')->isCurrentUserStudent()
         ];
     }
 

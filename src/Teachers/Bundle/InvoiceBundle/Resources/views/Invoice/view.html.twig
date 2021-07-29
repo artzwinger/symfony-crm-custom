@@ -27,7 +27,7 @@
         }) }}
     {% endif %}
 
-    {% if is_granted('teachers_invoice_edit') and not invoice_has_payments %}
+    {% if is_granted('teachers_invoice_edit') and not invoice_has_payments and not is_user_student %}
         {{ UI.buttonSeparator() }}
         {{ UI.editButton({
             'path': path('teachers_invoice_update', {'id': entity.id}),
