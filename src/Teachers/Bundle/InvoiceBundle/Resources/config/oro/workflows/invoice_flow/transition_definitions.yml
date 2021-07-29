@@ -7,3 +7,9 @@ workflows:
                             enum_code: invoice_status
                             identifier: unpaid
                             attribute: $invoice.status
+            reopen_definition:
+                actions:
+                    -   '@request_enum_entity':
+                            enum_code: invoice_status
+                            identifier: unpaid
+                            attribute: $invoice.status
