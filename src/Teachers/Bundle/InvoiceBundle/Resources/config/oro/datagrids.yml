@@ -22,6 +22,19 @@ datagrids:
                         - { join: invoice.student, alias: student }
 
         columns:
+            studentName:
+                label: teachers.invoice.student.label
+                inline_editing:
+                    enable: true
+                    editor:
+                        view: oroform/js/app/views/editor/related-id-relation-editor-view
+                        view_options:
+                            value_field_name: student
+                    autocomplete_api_accessor:
+                        search_handler_name: users_only_students
+                        label_field_name: fullName
+                        class: orouser/js/tools/acl-users-search-api-accessor
+                        permission_check_entity_name: Teachers_Bundle_InvoiceBundle_Entity_Invoice
             assignmentCourseName:
                 label: teachers.invoice.assignment.label
                 frontend_type: string
@@ -46,21 +59,10 @@ datagrids:
             createdAt:
                 frontend_type: datetime
                 label: oro.ui.created_at
-            studentName:
-                label: teachers.invoice.student.label
-                inline_editing:
-                    enable: true
-                    editor:
-                        view: oroform/js/app/views/editor/related-id-relation-editor-view
-                        view_options:
-                            value_field_name: student
-                    autocomplete_api_accessor:
-                        search_handler_name: users_only_students
-                        label_field_name: fullName
-                        class: orouser/js/tools/acl-users-search-api-accessor
-                        permission_check_entity_name: Teachers_Bundle_InvoiceBundle_Entity_Invoice
         sorters:
             columns:
+                studentName:
+                    data_name: studentName
                 assignmentCourseName:
                     data_name: assignment.courseName
                 amountOwed:
@@ -73,12 +75,17 @@ datagrids:
                     data_name: invoice.dueDate
                 createdAt:
                     data_name: invoice.createdAt
-                studentName:
-                    data_name: studentName
             default:
                 createdAt: DESC
         filters:
             columns:
+                studentName:
+                    type: choice-tree
+                    label: teachers.invoice.student.label
+                    data_name: invoice.student
+                    autocomplete_alias: users_only_students
+                    renderedPropertyName: 'fullName'
+                    className: 'Oro\Bundle\UserBundle\Entity\User'
                 assignmentCourseName:
                     type: string
                     data_name: assignment.courseName
@@ -103,13 +110,6 @@ datagrids:
                 createdAt:
                     type: datetime
                     data_name: invoice.createdAt
-                studentName:
-                    type: choice-tree
-                    label: teachers.invoice.student.label
-                    data_name: invoice.student
-                    autocomplete_alias: users_only_students
-                    renderedPropertyName: 'fullName'
-                    className: 'Oro\Bundle\UserBundle\Entity\User'
         properties:
             id: ~
             view_link:
@@ -175,6 +175,19 @@ datagrids:
                         - { join: invoice.assignment, alias: assignment }
                 groupBy: payment.id
         columns:
+            studentName:
+                label: teachers.invoice.student.label
+                inline_editing:
+                    enable: true
+                    editor:
+                        view: oroform/js/app/views/editor/related-id-relation-editor-view
+                        view_options:
+                            value_field_name: owner
+                    autocomplete_api_accessor:
+                        search_handler_name: users_only_students
+                        label_field_name: fullName
+                        class: orouser/js/tools/acl-users-search-api-accessor
+                        permission_check_entity_name: Teachers_Bundle_InvoiceBundle_Entity_Payment
             assignmentCourseName:
                 label: teachers.invoice.assignment.label
                 frontend_type: string
@@ -212,21 +225,10 @@ datagrids:
             createdAt:
                 frontend_type: datetime
                 label: oro.ui.created_at
-            studentName:
-                label: teachers.invoice.student.label
-                inline_editing:
-                    enable: true
-                    editor:
-                        view: oroform/js/app/views/editor/related-id-relation-editor-view
-                        view_options:
-                            value_field_name: owner
-                    autocomplete_api_accessor:
-                        search_handler_name: users_only_students
-                        label_field_name: fullName
-                        class: orouser/js/tools/acl-users-search-api-accessor
-                        permission_check_entity_name: Teachers_Bundle_InvoiceBundle_Entity_Payment
         sorters:
             columns:
+                studentName:
+                    data_name: studentName
                 assignmentCourseName:
                     data_name: assignment.courseName
                 token:
@@ -245,12 +247,17 @@ datagrids:
                     data_name: invoice.dueDate
                 createdAt:
                     data_name: invoice.createdAt
-                studentName:
-                    data_name: studentName
             default:
                 createdAt: DESC
         filters:
             columns:
+                studentName:
+                    type: choice-tree
+                    label: teachers.invoice.student.label
+                    data_name: payment.owner
+                    autocomplete_alias: users_only_students
+                    renderedPropertyName: 'fullName'
+                    className: 'Oro\Bundle\UserBundle\Entity\User'
                 assignmentCourseName:
                     type: string
                     data_name: assignment.courseName
@@ -288,13 +295,6 @@ datagrids:
                 createdAt:
                     type: datetime
                     data_name: invoice.createdAt
-                studentName:
-                    type: choice-tree
-                    label: teachers.invoice.student.label
-                    data_name: payment.owner
-                    autocomplete_alias: users_only_students
-                    renderedPropertyName: 'fullName'
-                    className: 'Oro\Bundle\UserBundle\Entity\User'
         properties:
             id: ~
             view_link:
