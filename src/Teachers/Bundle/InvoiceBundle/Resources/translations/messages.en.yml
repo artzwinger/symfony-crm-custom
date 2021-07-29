@@ -24,6 +24,7 @@ teachers:
         studentContact.label: Student Contact
         teacher.label: Tutor
         amountOwed.label: Amount Owed
+        orderNumber.label: Order Number
         due_date.label: Due Date
         amountPaid.label: Amount Paid
         amountRemaining.label: Amount Remaining

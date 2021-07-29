@@ -17,6 +17,8 @@
                     'label': entity.assignment.courseName
                 })) }}
             {% endif %}
+            {{ ui.renderProperty('teachers.invoice.orderNumber.label'|trans, '#' ~ entity.assignment.id) }}
+            {{ ui.renderProperty('teachers.invoice.due_date.label'|trans, entity.dueDate|date('F j, Y, g:i A')) }}
             {{ ui.renderProperty('teachers.invoice.amountOwed.label'|trans, '$' ~ entity.amountOwed|number_format(2)) }}
             {{ ui.renderProperty('teachers.invoice.amountPaid.label'|trans, '$' ~ entity.amountPaid|number_format(2)) }}
             {{ ui.renderProperty('teachers.invoice.amountRemaining.label'|trans, '$' ~ entity.amountRemaining|number_format(2)) }}

@@ -26,6 +26,7 @@
                     'label': entity.invoice.assignment.courseName
                 })) }}
             {% endif %}
+            {{ ui.renderProperty('teachers.invoice.orderNumber.label'|trans, '#' ~ entity.invoice.assignment.id) }}
             {{ ui.renderProperty('teachers.payment.token.label'|trans, entity.transaction) }}
             {{ ui.renderProperty('teachers.invoice.amountOwed.label'|trans, '$' ~ entity.invoice.amountOwed|number_format(2)) }}
             {{ ui.renderProperty('teachers.invoice.amountPaid.label'|trans, '$' ~ entity.amountPaid|number_format(2)) }}
