@@ -45,7 +45,7 @@
         }) }}
     {% endif %}
 
-    {% if is_granted('teachers_invoice_send_email') %}
+    {% if is_granted('teachers_invoice_send_email') and not is_user_student %}
         {{ UI.buttonSeparator() }}
         {{ UI.clientButton({
             'dataUrl': path('teachers_invoice_send_email', {'id': entity.id}),
