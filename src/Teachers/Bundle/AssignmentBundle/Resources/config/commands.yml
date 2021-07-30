@@ -1,0 +1,11 @@
+services:
+    _defaults:
+        public: false
+
+    Teachers\Bundle\AssignmentBundle\Command\Cron\ConvertEmailBodyToAssignmentMessage:
+        arguments:
+            - '@oro_featuretoggle.checker.feature_checker'
+            - '@doctrine.orm.entity_manager'
+            - '@oro_activity.manager'
+        tags:
+            - { name: console.command }
