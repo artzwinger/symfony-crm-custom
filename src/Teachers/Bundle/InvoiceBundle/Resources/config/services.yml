@@ -122,6 +122,9 @@ services:
         arguments:
             - '@doctrine.orm.entity_manager'
             - '@oro_activity.manager'
+            - '@teachers_invoice.helper.payment_gateway'
+            - '@logger'
+            - '@oro_ui.session.flash_bag'
         tags:
             - { name: doctrine.event_listener, event: postPersist, connection: default, entity: 'Teachers\Bundle\InvoiceBundle\Entity\Refund' }
     teachers_invoice.helper.invoice:

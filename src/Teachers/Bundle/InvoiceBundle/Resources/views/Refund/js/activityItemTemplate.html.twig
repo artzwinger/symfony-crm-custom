@@ -36,3 +36,38 @@
     <% } %>
     {{ parent() }}
 {% endblock %}
+
+{% block activityActions %}
+    {% import 'OroActivityBundle::macros.html.twig' as AC %}
+
+    {% set action %}
+        {# Add button for add context in the activity list item #}
+        {{ AC.activity_context_link() }}
+    {% endset %}
+    {% set actions = [action] %}
+
+    {% set action %}
+        <a href="<%= routing.generate('teachers_refund_view', {'id': relatedActivityId}) %>"
+           class="dropdown-item"
+           title="{{ 'teachers.refund.view_refund'|trans({'{{ entity }}': entityName}) }}"><span
+                    class="fa-eye hide-text"
+                    aria-hidden="true">{{ 'teachers.refund.view_refund'|trans({'{{ entity }}': entityName}) }}</span>
+            {{ 'teachers.refund.view_refund'|trans({'{{ entity }}': entityName}) }}
+        </a>
+    {% endset %}
+    {% set actions = actions|merge([action]) %}
+
+    {% set action %}
+        <% if (removable) { %>
+        <a href="#" class="dropdown-item action item-remove-button"
+           title="{{ 'teachers.refund.delete_refund'|trans({'{{ entity }}': entityName}) }}">
+            <span class="fa-trash-o hide-text"
+                  aria-hidden="true">{{ 'teachers.refund.delete_refund'|trans({'{{ entity }}': entityName}) }}</span>
+            {{ 'teachers.refund.delete_refund'|trans({'{{ entity }}': entityName}) }}
+        </a>
+        <% } %>
+    {% endset %}
+    {% set actions = actions|merge([action]) %}
+
+    {{ parent() }}
+{% endblock %}

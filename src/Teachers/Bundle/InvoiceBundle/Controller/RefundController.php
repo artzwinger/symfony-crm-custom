@@ -12,6 +12,7 @@ use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use Oro\Bundle\SecurityBundle\Annotation\CsrfProtection;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use SimpleXMLElement;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormFactory;
 use Symfony\Component\Form\FormInterface;
@@ -42,7 +43,8 @@ class RefundController extends AbstractController
     public function viewAction(Refund $refund): array
     {
         return [
-            'entity' => $refund
+            'entity' => $refund,
+            'is_user_student' => $this->get('teachers_users.helper.role')->isCurrentUserStudent()
         ];
     }
 
@@ -86,7 +88,44 @@ class RefundController extends AbstractController
      */
     public function updateAction(Refund $refund)
     {
-        return $this->update($refund, 'teachers_refund_update', PHP_FLOAT_MAX);
+        return $this->update($refund, 'teachers_refund_update');
+    }
+
+    /**
+     * @Route("/refundrequest/{id}", name="teachers_refund_refundrequest", requirements={"id"="\d+"}, options={"expose"=true})
+     * @AclAncestor("teachers_refund_edit")
+     * @param Refund $refund
+     * @return RedirectResponse
+     */
+    public function refundAction(Refund $refund): RedirectResponse
+    {
+        $payment = $refund->getPayment();
+        $flash = $this->get('session')->getFlashBag();
+        $gateway = $this->get('teachers_invoice.helper.payment_gateway');
+        $logger = $this->get('logger');
+        $entityManager = $this->get('doctrine.orm.entity_manager');
+        try {
+            $data = $gateway->refund($payment->getTransaction(), $refund->getAmountRefunded());
+            $gwResponse = @new SimpleXMLElement($data);
+            if ((string)$gwResponse->result != 1) {
+                throw new Exception($gwResponse->{'result-text'});
+            }
+            $flash->add('success', 'NMI refund requested');
+            $refund->setRefunded(true);
+            $entityManager->persist($refund);
+            $entityManager->flush($refund);
+        } catch (Exception $e) {
+            $flash->add('error', 'Refund request to NMI was not successful: ' . $e->getMessage());
+            $logger->critical($e->getMessage(), [
+                'type' => 'refund',
+                'transaction-id' => $payment->getTransaction(),
+                'amount' => $refund->getAmountRefunded()
+            ]);
+        }
+
+        return $this->redirectToRoute('teachers_refund_view', [
+            'id' => $refund->getId()
+        ]);
     }
 
     /**
@@ -115,6 +154,7 @@ class RefundController extends AbstractController
                 $invoice = $payment->getInvoice();
                 $refund->setPayment($payment);
                 $refund->setInvoice($invoice);
+                $refund->setRefunded(false);
                 if ($invoice->getStudent()) {
                     $refund->setOwner($invoice->getStudent());
                 }

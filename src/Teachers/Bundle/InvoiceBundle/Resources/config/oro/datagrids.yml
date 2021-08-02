@@ -156,7 +156,7 @@ datagrids:
             query:
                 select:
                     - payment.id
-                    - payment.token
+                    - payment.transaction
                     - payment.amountPaid as paymentAmountPaid
                     - invoice.amountOwed
                     - invoice.amountPaid as invoiceAmountPaid
@@ -191,8 +191,8 @@ datagrids:
             assignmentCourseName:
                 label: teachers.invoice.assignment.label
                 frontend_type: string
-            token:
-                label: teachers.payment.token.label
+            transaction:
+                label: teachers.payment.transaction.label
                 frontend_type: string
             amountOwed:
                 label: teachers.payment.invoice_amountOwed.label
@@ -231,8 +231,8 @@ datagrids:
                     data_name: studentName
                 assignmentCourseName:
                     data_name: assignment.courseName
-                token:
-                    data_name: payment.token
+                transaction:
+                    data_name: payment.transaction
                 amountOwed:
                     data_name: invoice.amountOwed
                 amountRefunded:
@@ -261,9 +261,9 @@ datagrids:
                 assignmentCourseName:
                     type: string
                     data_name: assignment.courseName
-                token:
+                transaction:
                     type: string
-                    data_name: payment.token
+                    data_name: payment.transaction
                 amountOwed:
                     type: currency
                     data_name: invoice.amountOwed

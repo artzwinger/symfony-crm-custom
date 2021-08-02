@@ -73,6 +73,11 @@ class Refund extends ExtendRefund implements DatesAwareInterface
      */
     protected $amountRefunded;
     /**
+     * @var bool|null $refunded
+     * @ORM\Column(name="refunded", type="boolean", nullable=false)
+     */
+    protected $refunded;
+    /**
      * @var Invoice|null
      * @ORM\ManyToOne(targetEntity="Teachers\Bundle\InvoiceBundle\Entity\Invoice")
      * @ORM\JoinColumn(name="invoice_id", referencedColumnName="id", onDelete="SET NULL")
@@ -128,6 +133,22 @@ class Refund extends ExtendRefund implements DatesAwareInterface
     public function setAmountRefunded(?float $amountRefunded): void
     {
         $this->amountRefunded = $amountRefunded;
+    }
+
+    /**
+     * @return bool|null
+     */
+    public function getRefunded(): ?bool
+    {
+        return $this->refunded;
+    }
+
+    /**
+     * @param bool|null $refunded
+     */
+    public function setRefunded(?bool $refunded): void
+    {
+        $this->refunded = $refunded;
     }
 
     /**

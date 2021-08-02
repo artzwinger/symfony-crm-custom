@@ -47,13 +47,14 @@ class PaymentGateway
     /**
      * @throws Exception
      */
-    public function void($transaction)
+    public function refund($transaction, $amount)
     {
         $xmlRequest = new DOMDocument('1.0', 'UTF-8');
         $xmlRequest->formatOutput = true;
-        $xmlCompleteTransaction = $xmlRequest->createElement('void');
+        $xmlCompleteTransaction = $xmlRequest->createElement('refund');
         $this->appendXmlNode($xmlRequest, $xmlCompleteTransaction, 'api-key', self::API_KEY);
         $this->appendXmlNode($xmlRequest, $xmlCompleteTransaction, 'transaction-id', $transaction);
+        $this->appendXmlNode($xmlRequest, $xmlCompleteTransaction, 'amount', $amount);
         $xmlRequest->appendChild($xmlCompleteTransaction);
 
         return $this->sendXMLviaCurl($xmlRequest);

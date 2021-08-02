@@ -28,10 +28,13 @@
         {{ UI.buttonSeparator() }}
     {% endif %}
 
-    {% if is_granted('teachers_refund_edit') %}
-        {{ UI.editButton({
-            'path': path('teachers_refund_update', {'id': entity.id}),
-            'entity_label': 'teachers.refund.entity_label'|trans,
+    {% if is_granted('teachers_refund_edit') and not entity.refunded and not is_user_student %}
+        {{ UI.button({
+            'path': path('teachers_refund_refundrequest', {'id': entity.id}),
+            'aCss': 'no-hash',
+            'iCss': 'fa-credit-card',
+            'label': 'teachers.refund.send_refund_request'|trans,
+            'title': 'teachers.refund.send_refund_request'|trans
         }) }}
     {% endif %}
 {% endblock %}

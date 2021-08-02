@@ -93,7 +93,7 @@ teachers:
         add_entity.title: Pay
 
         invoice_amountOwed.label: Invoice Amount Owed
-        token.label: Transaction
+        transaction.label: Transaction
         amountRefunded.label: Amount Refunded
         amountPaid.label: Payment Amount Paid
         invoice_amountPaid.label: Invoice Amount Paid
@@ -118,3 +118,4 @@ teachers:
         amountRemaining.label: Invoice Amount Remaining
         assignment.label: Assignment
         student.label: Who Paid
+        send_refund_request: Trigger NMI refund
