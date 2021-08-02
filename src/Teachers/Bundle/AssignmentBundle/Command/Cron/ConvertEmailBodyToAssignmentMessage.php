@@ -132,8 +132,9 @@ class ConvertEmailBodyToAssignmentMessage extends Command implements CronCommand
             throw new Exception('Cannot find assignment #' . $assignmentId . ' for email #' . $email->getId());
         }
         $body = $email->getEmailBody()->getTextBody();
+        preg_match_all('/(?<=>)\s*(?=<)|(?<=>)(?<!\?>)\n*([^<]+)/', $body, $texts);
         $assignmentMessage = new AssignmentMessage();
-        $assignmentMessage->setMessage($body);
+        $assignmentMessage->setMessage(count($texts) ? $texts[0] : $body);
         $assignmentMessage->setOrganization($assignment->getOrganization());
         // guess who is sender and make sender a message owner
         $sender = $email->getFromEmailAddress()->getEmail();
