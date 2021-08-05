@@ -42,6 +42,6 @@ navigation:
                     teachers_assignment_assignment_messages: ~
     titles:
         teachers_assignment_index: ~
-        teachers_assignment_view: '%assignment.courseName%'
+        teachers_assignment_view: '%courseName%'
         teachers_assignment_create: 'Create assignment'
-        teachers_assignment_update: '%assignment.courseName% - Edit'
+        teachers_assignment_update: '%courseName% - Edit'

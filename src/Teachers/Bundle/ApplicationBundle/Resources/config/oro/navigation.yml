@@ -15,6 +15,6 @@ navigation:
                     teachers_application_tab: ~
     titles:
         teachers_application_index: ~
-        teachers_application_view: '%application.courseName%'
+        teachers_application_view: '%courseName%'
         teachers_application_create: 'Create application'
-        teachers_application_update: '%application.courseName% - Edit'
+        teachers_application_update: '%courseName% - Edit'

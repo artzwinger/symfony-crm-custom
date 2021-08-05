@@ -1,7 +1,7 @@
 {% extends 'OroUIBundle:actions:view.html.twig' %}
 {% import 'OroUIBundle::macros.html.twig' as ui %}
-{% set subject = entity|oro_format_name|default('N/A'|trans) %}
-{% oro_title_set({ params : {"%assignment.courseName%": subject} }) %}
+{% set subject = entity.courseName|default('N/A'|trans) %}
+{% oro_title_set({ params : {"%courseName%": subject} }) %}
 
 {% block pageHeader %}
     {% set breadcrumbs = {

@@ -1,8 +1,8 @@
 {% extends 'OroUIBundle:actions:update.html.twig' %}
 
 {% set formAction = form.vars.value.id ? path('teachers_application_update', { 'id': form.vars.value.id }) : path('teachers_application_create') %}
-{% set className = form.vars.value|oro_format_name|default('N/A'|trans) %}
-{% oro_title_set({ params : {"%application.className%": className} }) %}
+{% set className = form.vars.value.courseName|default('N/A'|trans) %}
+{% oro_title_set({ params : {"%className%": className} }) %}
 
 {% block navButtons %}
     {% import 'OroUIBundle::macros.html.twig' as UI %}

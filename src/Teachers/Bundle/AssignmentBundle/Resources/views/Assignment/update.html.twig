@@ -1,8 +1,8 @@
 {% extends 'OroUIBundle:actions:update.html.twig' %}
 
 {% set formAction = form.vars.value.id ? path('teachers_assignment_update', { 'id': form.vars.value.id }) : path('teachers_assignment_create') %}
-{% set subject = form.vars.value|oro_format_name|default('N/A'|trans) %}
-{% oro_title_set({ params : {"%assignment.subject%": subject} }) %}
+{% set subject = form.vars.value.courseName|default('N/A'|trans) %}
+{% oro_title_set({ params : {"%courseName%": subject} }) %}
 
 {% block navButtons %}
     {% import 'OroUIBundle::macros.html.twig' as UI %}

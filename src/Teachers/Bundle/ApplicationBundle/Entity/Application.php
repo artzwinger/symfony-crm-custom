@@ -601,4 +601,9 @@ class Application extends ExtendApplication implements DatesAwareInterface
     {
         $this->reCaptchaToken = $reCaptchaToken;
     }
+
+    public function __toString(): string
+    {
+        return (string)$this->getCourseName();
+    }
 }
