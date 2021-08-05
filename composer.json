@@ -64,7 +64,8 @@
     "google/recaptcha": "^1.2",
     "ext-dom": "*",
     "ext-simplexml": "*",
-    "ext-curl": "*"
+    "ext-curl": "*",
+    "soundasleep/html2text": "^1.1"
   },
   "require-dev": {
     "behat/behat": "3.4.*",

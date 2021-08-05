@@ -5,12 +5,16 @@ namespace Teachers\Bundle\AssignmentBundle\Command\Cron;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
+use DOMDocument;
+use DOMXPath;
 use Exception;
 use Oro\Bundle\ActivityBundle\Manager\ActivityManager;
 use Oro\Bundle\CronBundle\Command\CronCommandInterface;
 use Oro\Bundle\EmailBundle\Entity\Email;
 use Oro\Bundle\FeatureToggleBundle\Checker\FeatureChecker;
 use Oro\Bundle\ImapBundle\Entity\ImapEmail;
+use Soundasleep\Html2Text;
+use Soundasleep\Html2TextException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -131,10 +135,40 @@ class ConvertEmailBodyToAssignmentMessage extends Command implements CronCommand
         if (!$assignment) {
             throw new Exception('Cannot find assignment #' . $assignmentId . ' for email #' . $email->getId());
         }
-        $body = $email->getEmailBody()->getTextBody();
-        preg_match_all('/(?<=>)\s*(?=<)|(?<=>)(?<!\?>)\n*([^<]+)/', $body, $texts);
+        $body = $email->getEmailBody()->getBodyContent();
+
+        $doc = new DOMDocument();
+        $doc->loadHTML($body);
+
+        $finder = new DomXPath($doc);
+        $attrClassName = 'attr';
+        $quoteClassName = 'quote';
+        $attrs = $finder->query("//*[contains(@class, '$attrClassName')]");
+        $quotes = $finder->query("//*[contains(@class, '$quoteClassName')]");
+        $blockquotes = $doc->getElementsByTagName('blockquote');
+        while ($blockquotes->length > 0) {
+            $p = $blockquotes->item(0);
+            $p->parentNode->removeChild($p);
+        }
+        foreach ($attrs as $attr) {
+            if ($attr->parentNode) {
+                $attr->parentNode->removeChild($attr);
+            }
+        }
+        foreach ($quotes as $quote) {
+            if ($quote->parentNode) {
+                $quote->parentNode->removeChild($quote);
+            }
+        }
+
+        $body = $doc->saveHTML();
         $assignmentMessage = new AssignmentMessage();
-        $assignmentMessage->setMessage(count($texts) ? $texts[0] : $body);
+        try {
+            $assignmentMessage->setMessage(trim(Html2Text::convert($body)));
+        } catch (Html2TextException $e) {
+            $assignmentMessage->setMessage($email->getEmailBody()->getTextBody());
+        }
+
         $assignmentMessage->setOrganization($assignment->getOrganization());
         // guess who is sender and make sender a message owner
         $sender = $email->getFromEmailAddress()->getEmail();
