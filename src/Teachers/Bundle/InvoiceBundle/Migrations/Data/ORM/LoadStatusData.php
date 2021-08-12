@@ -11,6 +11,7 @@ use Teachers\Bundle\InvoiceBundle\Entity\Invoice;
 class LoadStatusData extends AbstractFixture
 {
     const STATUS_ENUM_CLASS = 'invoice_status';
+
     /**
      * @param ObjectManager $manager
      */
