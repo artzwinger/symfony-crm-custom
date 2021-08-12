@@ -115,8 +115,8 @@ class TeachersInvoiceBundleInstaller implements Installation, ActivityExtensionA
         $table->addColumn('organization_id', 'integer', ['notnull' => false]);
         $table->setPrimaryKey(['id']);
         $table->addIndex(['invoice_id'], 'invoice_invoice_id_idx', []);
-        $table->addIndex(['organization_id'], 'invoice_org_id_idx', []);
-        $table->addIndex(['owner_id'], 'invoice_owner_id_idx', []);
+        $table->addIndex(['organization_id'], 'payment_org_id_idx', []);
+        $table->addIndex(['owner_id'], 'payment_owner_id_idx', []);
         $this->activityExtension->addActivityAssociation($schema, 'teachers_payment', 'teachers_invoice');
         $this->activityExtension->addActivityAssociation($schema, 'teachers_payment', 'oro_user');
         $table->addForeignKeyConstraint(
