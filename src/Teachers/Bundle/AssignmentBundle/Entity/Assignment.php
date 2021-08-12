@@ -66,7 +66,7 @@ class Assignment extends ExtendAssignment implements DatesAwareInterface
      * @ORM\Column(type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="SEQUENCE")
-     * @ORM\SequenceGenerator(sequenceName="id", initialValue=1000)
+     * @ORM\SequenceGenerator(sequenceName="teachers_assignment_id_seq", initialValue=1000)
      * @ConfigField(
      *      defaultValues={
      *          "importexport"={

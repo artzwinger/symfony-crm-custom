@@ -61,7 +61,7 @@ class Payment extends ExtendPayment implements DatesAwareInterface
      * @ORM\Column(type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="SEQUENCE")
-     * @ORM\SequenceGenerator(sequenceName="id", initialValue=1000)
+     * @ORM\SequenceGenerator(sequenceName="teachers_payment_id_seq", initialValue=1000)
      * @ConfigField(
      *      defaultValues={
      *          "importexport"={
