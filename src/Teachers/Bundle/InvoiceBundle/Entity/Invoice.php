@@ -64,7 +64,8 @@ class Invoice extends ExtendInvoice implements DatesAwareInterface
      * @var int|null $id
      * @ORM\Column(type="integer")
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
+     * @ORM\GeneratedValue(strategy="SEQUENCE")
+     * @ORM\SequenceGenerator(sequenceName="id", initialValue=1000)
      * @ConfigField(
      *      defaultValues={
      *          "importexport"={

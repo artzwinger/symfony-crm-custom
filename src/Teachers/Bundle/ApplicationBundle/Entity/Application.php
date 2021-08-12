@@ -52,7 +52,8 @@ class Application extends ExtendApplication implements DatesAwareInterface
      *
      * @ORM\Column(type="integer")
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
+     * @ORM\GeneratedValue(strategy="SEQUENCE")
+     * @ORM\SequenceGenerator(sequenceName="id", initialValue=1000)
      * @ConfigField(
      *      defaultValues={
      *          "importexport"={
