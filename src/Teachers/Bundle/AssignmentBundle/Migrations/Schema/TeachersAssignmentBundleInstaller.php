@@ -5,10 +5,8 @@ namespace Teachers\Bundle\AssignmentBundle\Migrations\Schema;
 use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Schema\SchemaException;
-use Doctrine\DBAL\Types\Types;
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtension;
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtensionAwareInterface;
-use Oro\Bundle\AttachmentBundle\Migration\Extension\AttachmentExtensionAwareTrait;
 use Oro\Bundle\CommentBundle\Migration\Extension\CommentExtension;
 use Oro\Bundle\CommentBundle\Migration\Extension\CommentExtensionAwareInterface;
 use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtension;
@@ -145,9 +143,9 @@ class TeachersAssignmentBundleInstaller implements Installation,
         $table->addColumn('createdAt', 'datetime', []);
         $table->addColumn('updatedAt', 'datetime', []);
         $table->setPrimaryKey(['id']);
-        $table->addIndex(['updated_by_id'], 'trs_asg_cmt_upd_by_idx', []);
-        $table->addIndex(['owner_id'], 'trs_asg_cmt_owner_idx', []);
-        $table->addIndex(['organization_id'], 'trs_asg_cmt_org_idx', []);
+        $table->addIndex(['updated_by_id'], 'trs_asg_prt_upd_by_idx', []);
+        $table->addIndex(['owner_id'], 'trs_asg_prt_owner_idx', []);
+        $table->addIndex(['organization_id'], 'trs_asg_prt_org_idx', []);
     }
 
     /**
@@ -166,9 +164,9 @@ class TeachersAssignmentBundleInstaller implements Installation,
         $table->addColumn('createdAt', 'datetime', []);
         $table->addColumn('updatedAt', 'datetime', []);
         $table->setPrimaryKey(['id']);
-        $table->addIndex(['updated_by_id'], 'trs_asg_cmt_upd_by_idx', []);
-        $table->addIndex(['owner_id'], 'trs_asg_cmt_owner_idx', []);
-        $table->addIndex(['organization_id'], 'trs_asg_cmt_org_idx', []);
+        $table->addIndex(['updated_by_id'], 'trs_asg_msg_upd_by_idx', []);
+        $table->addIndex(['owner_id'], 'trs_asg_msg_owner_idx', []);
+        $table->addIndex(['organization_id'], 'trs_asg_msg_org_idx', []);
 
         $enumTable = $this->extendExtension->addEnumField(
             $schema,
