@@ -90,7 +90,7 @@ services:
     recaptcha:
         class: ReCaptcha\ReCaptcha
         arguments:
-            - '%env(GOOGLE_RECAPTCHA_SECRET_KEY)%'
+            - '6Lfr5scaAAAAALkrsvG5XDdv51-bwWAr70YmQ7dD'
 
 oro_translation:
     locales:                  [en, fr]
