@@ -19,6 +19,13 @@ require_once __DIR__.'/../src/AppKernel.php';
 $kernel = new AppKernel('prod', false);
 
 //$kernel = new AppCache($kernel);
+if (isset($_SERVER['HTTP_X_FORWARDED_PROTO'])) {
+    Request::setTrustedProxies(
+        ['127.0.0.1', 'REMOTE_ADDR'],
+        Request::HEADER_X_FORWARDED_AWS_ELB
+    );
+}
+
 $request = Request::createFromGlobals();
 $response = $kernel->handle($request);
 $response->send();
