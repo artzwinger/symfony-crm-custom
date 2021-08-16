@@ -17,10 +17,10 @@ oro:
                     label: Tutor
             transition:
                 start_accepting_bids:
-                    label: Start accepting bids
+                    label: Start Bidding
                     warning_message: ''
                 stop_accepting_bids:
-                    label: Stop accepting bids
+                    label: Stop Bidding
                     warning_message: ''
                 assign:
                     label: Assign

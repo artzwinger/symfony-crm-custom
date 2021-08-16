@@ -290,11 +290,11 @@ class Assignment extends ExtendAssignment implements DatesAwareInterface
         return [
             self::STATUS_NEW => [
                 'name' => 'New',
-                'is_default' => true
+                'is_default' => false
             ],
             self::STATUS_UP_FOR_BID => [
                 'name' => 'Up for bid',
-                'is_default' => false
+                'is_default' => true
             ],
             self::STATUS_ASSIGNED => [
                 'name' => 'Assigned',
