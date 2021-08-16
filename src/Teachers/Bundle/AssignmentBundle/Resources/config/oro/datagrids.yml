@@ -114,9 +114,9 @@ datagrids:
                 courseName:
                     type: string
                     data_name: assignment.courseName
-                coursePrefixe:
+                coursePrefixes:
                     type: string
-                    data_name: assignment.coursePrefixe
+                    data_name: assignment.coursePrefixes
                 amountDueToday:
                     type: string
                     data_name: application.amountDueToday
@@ -213,9 +213,11 @@ datagrids:
                         - { join: assignment.teacherGroups, alias: tg }
                         - { join: Teachers\Bundle\UsersBundle\Entity\TeacherGroupToUser, alias: tg_to_usr, conditionType: WITH, condition: "tg_to_usr.teacherGroup = tg.id" }
                         - { join: tg_to_usr.user, alias: tg_user }
+                        - { join: assignment.status, alias: status }
                 where:
                     and:
                         - tg_user.id = @oro_security.token_accessor->getUserId
+                        - status.id = 'up_for_bid'
                 groupBy: assignment.id
         columns:
             tgtitle:
