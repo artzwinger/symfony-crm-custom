@@ -2,3 +2,9 @@ stof_doctrine_extensions:
     orm:
         default:
             softdeleteable:   true
+oro_theme:
+    themes:
+        oro:
+            logo: bundles/teachersapplication/images/oro-crm-logo.png
+        demo:
+            logo: bundles/teachersapplication/images/oro-crm-logo.png

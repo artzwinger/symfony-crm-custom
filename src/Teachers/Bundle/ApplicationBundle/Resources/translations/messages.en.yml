@@ -63,3 +63,9 @@ oro:
         workflowstep:
             grid:
                 label: Status
+    auth:
+        description:
+            logo: OCH Sign Up
+            main: OCH Sign Up
+            text: OCH Sign Up
+        copy: © 2021
