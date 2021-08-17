@@ -9,6 +9,8 @@ use Oro\Bundle\EntityExtendBundle\Entity\AbstractEnumValue;
 /**
  * @method AbstractEnumValue getStatus()
  * @method ExtendInvoice setStatus(AbstractEnumValue $status)
+ * @method AbstractEnumValue getRep()
+ * @method ExtendInvoice setRep(AbstractEnumValue $status)
  */
 class ExtendInvoice implements ActivityInterface
 {

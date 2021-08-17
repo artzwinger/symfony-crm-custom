@@ -20,6 +20,7 @@ teachers:
         owner.label: Organization
         due_date_not_in_the_past: Due Date cannot be in the past
 
+        rep.label: Rep
         first_name.label: First Name
         last_name.label: Last Name
         email.label: Email

@@ -10,6 +10,8 @@ use Teachers\Bundle\ApplicationBundle\Entity\Application;
  * @method Application setStatus(AbstractEnumValue $value)
  * @method AbstractEnumValue getTerm()
  * @method Application setTerm(AbstractEnumValue $term)
+ * @method AbstractEnumValue getRep()
+ * @method Application setRep(AbstractEnumValue $term)
  */
 class ExtendApplication
 {

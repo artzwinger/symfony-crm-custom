@@ -28,6 +28,7 @@ teachers:
         due_date.label: Due Date
         amountPaid.label: Amount Paid
         amountRemaining.label: Amount Remaining
+        rep.label: Rep
 
         amountToPay.label: Amount To Pay
         cardNumber.label: Card Number

@@ -30,6 +30,7 @@ teachers:
         my_courses_label: My Courses
         approval_queue_label: Messages Queue
 
+        rep.label: Rep
         first_name.label: First Name
         last_name.label: Last Name
         email.label: Email

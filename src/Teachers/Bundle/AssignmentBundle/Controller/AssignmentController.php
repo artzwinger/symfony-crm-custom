@@ -152,6 +152,7 @@ class AssignmentController extends AbstractController
                 }
                 $assignment->setApplication($application);
                 $assignment->setTerm($application->getTerm());
+                $assignment->setRep($application->getRep());
                 $assignment->setFirstName($application->getFirstName());
                 $assignment->setLastName($application->getLastName());
                 $assignment->setCourseName($application->getCourseName());

@@ -124,6 +124,7 @@ class InvoiceController extends AbstractController
                     throw new EntityNotFoundException();
                 }
                 $invoice->setAssignment($assignment);
+                $invoice->setRep($assignment->getRep());
                 if ($assignment->getStudent()) {
                     $invoice->setStudent($assignment->getStudent());
                 }

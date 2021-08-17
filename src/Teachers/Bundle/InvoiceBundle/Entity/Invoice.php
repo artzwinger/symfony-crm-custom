@@ -155,6 +155,11 @@ class Invoice extends ExtendInvoice implements DatesAwareInterface
     const WORKFLOW_STEP_PAID = 'paid';
     const WORKFLOW_STEP_PARTIALLY_PAID = 'partially_paid';
 
+    public static function getAvailableReps(): array
+    {
+        return Assignment::getAvailableReps();
+    }
+
     public static function getAvailableStatuses(): array
     {
         return [

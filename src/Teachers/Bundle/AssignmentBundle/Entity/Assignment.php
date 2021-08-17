@@ -274,6 +274,11 @@ class Assignment extends ExtendAssignment implements DatesAwareInterface
     const WORKFLOW_STEP_PAUSED_DUE_NONPAYMENT = 'paused_due_nonpayment';
     const WORKFLOW_STEP_COMPLETE = 'complete';
 
+    public static function getAvailableReps(): array
+    {
+        return Application::getAvailableReps();
+    }
+
     public static function getAvailableWorkflowSteps(): array
     {
         return [

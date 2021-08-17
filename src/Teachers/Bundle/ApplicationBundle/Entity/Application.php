@@ -214,6 +214,9 @@ class Application extends ExtendApplication implements DatesAwareInterface
     const STATUS_WORKING = 'working';
     const STATUS_COMPLETE = 'complete';
 
+    const REP_SALES = 'sales';
+    const REP_JOEL = 'joel';
+
     const TERM_SHORT = 'short';
     const TERM_LONG = 'long';
 
@@ -243,6 +246,20 @@ class Application extends ExtendApplication implements DatesAwareInterface
             ],
             self::STATUS_COMPLETE => [
                 'name' => 'Complete',
+                'is_default' => false
+            ],
+        ];
+    }
+
+    public static function getAvailableReps(): array
+    {
+        return [
+            self::REP_SALES => [
+                'name' => 'Sales',
+                'is_default' => true
+            ],
+            self::REP_JOEL => [
+                'name' => 'Joel',
                 'is_default' => false
             ],
         ];
