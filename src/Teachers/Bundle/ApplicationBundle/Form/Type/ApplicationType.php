@@ -107,6 +107,12 @@ class ApplicationType extends AbstractType
                 'required' => true,
                 'constraints' => [new Assert\NotNull()]
             ])
+            ->add('rep', EnumSelectType::class, [
+                'label' => 'teachers.application.rep.label',
+                'enum_code' => 'application_rep',
+                'required' => true,
+                'constraints' => [new Assert\NotNull()]
+            ])
             ->add('term', EnumSelectType::class, [
                 'label' => 'teachers.application.term.label',
                 'enum_code' => 'application_term',

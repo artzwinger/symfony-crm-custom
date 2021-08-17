@@ -5,6 +5,7 @@ namespace Teachers\Bundle\InvoiceBundle\Form\Type;
 use DateTime;
 use DateTimeZone;
 use Exception;
+use Oro\Bundle\EntityExtendBundle\Form\Type\EnumSelectType;
 use Oro\Bundle\FormBundle\Form\Type\OroDateTimeType;
 use Oro\Bundle\FormBundle\Form\Type\OroMoneyType;
 use Oro\Bundle\FormBundle\Utils\FormUtils;
@@ -30,6 +31,12 @@ class InvoiceType extends AbstractType
             ->add('amountOwed', OroMoneyType::class, [
                 'required' => true,
                 'label' => 'teachers.invoice.amountOwed.label'
+            ])
+            ->add('rep', EnumSelectType::class, [
+                'label' => 'teachers.invoice.rep.label',
+                'enum_code' => 'invoice_rep',
+                'required' => true,
+                'constraints' => [new Assert\NotNull()]
             ])
             ->add('dueDate', OroDateTimeType::class, [
                 'required' => true,
