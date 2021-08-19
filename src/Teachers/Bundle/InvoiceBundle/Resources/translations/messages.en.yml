@@ -24,11 +24,16 @@ teachers:
         studentContact.label: Student Contact
         teacher.label: Tutor
         amountOwed.label: Amount Owed
+        amount_owed.label: Amount Owed
         orderNumber.label: Order Number
+        order_number.label: Order Number
         due_date.label: Due Date
         amountPaid.label: Amount Paid
+        amount_paid.label: Amount Paid
         amountRemaining.label: Amount Remaining
+        amount_remaining.label: Amount Remaining
         rep.label: Rep
+        status.label: Status
 
         amountToPay.label: Amount To Pay
         cardNumber.label: Card Number
