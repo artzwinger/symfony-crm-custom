@@ -1,6 +1,15 @@
+oro:
+    reportcrm:
+        menu:
+            invoices_report_tab.label: Invoices
 teachers:
     invoice:
         #activity
+        invoices_report: Invoices
+        menu:
+            invoices_report_tab.label: Invoices
+            invoices_report_base.label: Invoices base
+            invoices_report_base.description: Invoices base report
         activity_item:
             created_by: created by {{ user }}
             updated_by: updated by {{ user }}

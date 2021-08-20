@@ -332,3 +332,141 @@ datagrids:
         options:
             entityHint: teachers.payment.entity_plural_label
             entity_pagination: true
+
+    oro_reportcrm-invoices-base:
+        pageTitle: teachers.invoice.invoices_report
+        acl_resource: oro_report_view
+        source:
+            type: orm
+            query:
+                select:
+                    - invoice.id
+                    - invoice.amountOwed
+                    - invoice.amountPaid
+                    - invoice.amountRemaining
+                    - invoice.dueDate
+                    - invoice.createdAt
+                    - assignment.courseName as assignmentCourseName
+                    - CONCAT_WS(' ', student.firstName, student.lastName) as studentName
+                from:
+                    - { table: 'Teachers\Bundle\InvoiceBundle\Entity\Invoice', alias: invoice }
+                join:
+                    left:
+                        - { join: invoice.assignment, alias: assignment }
+                        - { join: invoice.student, alias: student }
+                groupBy: assignment.id
+        totals:
+            total:
+                extends: grand_total
+                per_page: true
+                hide_if_one_page: true
+                columns:
+                    studentName:
+                        label: oro.magento.datagrid.columns.page_total
+            grand_total:
+                columns:
+                    studentName:
+                        label: oro.magento.datagrid.columns.grand_total
+                    amountOwed:
+                        expr: SUM(COALESCE(@oro_currency.query.currency_transformer->getTransformSelectQueryForDataGrid(amountOwed, invoice), 0))
+                        formatter: currency
+                    amountPaid:
+                        expr: SUM(COALESCE(@oro_currency.query.currency_transformer->getTransformSelectQueryForDataGrid(amountPaid, invoice), 0))
+                        formatter: currency
+                    amountRemaining:
+                        expr: SUM(COALESCE(@oro_currency.query.currency_transformer->getTransformSelectQueryForDataGrid(amountRemaining, invoice), 0))
+                        formatter: currency
+        columns:
+            studentName:
+                label: teachers.invoice.student.label
+                inline_editing:
+                    enable: true
+                    editor:
+                        view: oroform/js/app/views/editor/related-id-relation-editor-view
+                        view_options:
+                            value_field_name: student
+                    autocomplete_api_accessor:
+                        search_handler_name: users_only_students
+                        label_field_name: fullName
+                        class: orouser/js/tools/acl-users-search-api-accessor
+                        permission_check_entity_name: Teachers_Bundle_InvoiceBundle_Entity_Invoice
+            assignmentCourseName:
+                label: teachers.invoice.assignment.label
+                frontend_type: string
+            amountOwed:
+                label: teachers.invoice.amountOwed.label
+                type: twig
+                frontend_type: html
+                template: TeachersApplicationBundle:Datagrid:price.html.twig
+            amountPaid:
+                label: teachers.invoice.amountPaid.label
+                type: twig
+                frontend_type: html
+                template: TeachersApplicationBundle:Datagrid:price.html.twig
+            amountRemaining:
+                label: teachers.invoice.amountRemaining.label
+                type: twig
+                frontend_type: html
+                template: TeachersApplicationBundle:Datagrid:price.html.twig
+            dueDate:
+                frontend_type: datetime
+                label: teachers.invoice.due_date.label
+            createdAt:
+                frontend_type: datetime
+                label: oro.ui.created_at
+        sorters:
+            columns:
+                studentName:
+                    data_name: studentName
+                assignmentCourseName:
+                    data_name: assignment.courseName
+                amountOwed:
+                    data_name: invoice.amountOwed
+                amountPaid:
+                    data_name: invoice.amountPaid
+                amountRemaining:
+                    data_name: invoice.amountRemaining
+                dueDate:
+                    data_name: invoice.dueDate
+                createdAt:
+                    data_name: invoice.createdAt
+            default:
+                createdAt: DESC
+        filters:
+            columns:
+                studentName:
+                    type: choice-tree
+                    label: teachers.invoice.student.label
+                    data_name: invoice.student
+                    autocomplete_alias: users_only_students
+                    renderedPropertyName: 'fullName'
+                    className: 'Oro\Bundle\UserBundle\Entity\User'
+                assignmentCourseName:
+                    type: string
+                    data_name: assignment.courseName
+                amountOwed:
+                    type: currency
+                    data_name: invoice.amountOwed
+                    options:
+                        data_type: Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType::DATA_DECIMAL
+                amountPaid:
+                    type: currency
+                    data_name: invoice.amountPaid
+                    options:
+                        data_type: Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType::DATA_DECIMAL
+                amountRemaining:
+                    type: currency
+                    data_name: invoice.amountRemaining
+                    options:
+                        data_type: Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType::DATA_DECIMAL
+                dueDate:
+                    type: string
+                    data_name: invoice.dueDate
+                createdAt:
+                    type: datetime
+                    data_name: invoice.createdAt
+
+        options:
+            entityHint: oro.reportcrm.datagrid.default_entity_hint
+            export: true
+            entity_pagination: true

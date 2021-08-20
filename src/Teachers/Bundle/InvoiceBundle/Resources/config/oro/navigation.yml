@@ -19,6 +19,21 @@ navigation:
                 extras:
                     routes: [ 'teachers_payment_*' ]
                 display: true
+            teachers_invoice_report_tab:
+                label: 'teachers.invoice.menu.invoices_report_tab.label'
+                uri: '#'
+                position: 30
+                extras:
+                    skipBreadcrumbs: true
+            teachers_invoice_report:
+                label: 'teachers.invoice.menu.invoices_report_base.label'
+                route: 'oro_reportcrm_index'
+                route_parameters:
+                    reportGroupName: 'invoices'
+                    reportName: 'base'
+                extras:
+                    description: 'teachers.invoice.menu.invoices_report_base.description'
+                    skipBreadcrumbs: true
         tree:
             application_menu:
                 children:
@@ -26,6 +41,13 @@ navigation:
                         children:
                             teachers_invoice_invoice: ~
                             teachers_invoice_payment: ~
+                    reports_tab:
+                        children:
+                            static_reports_tab:
+                                children:
+                                    teachers_invoice_report_tab:
+                                        children:
+                                            teachers_invoice_report: ~
     titles:
         teachers_invoice_index: ~
         teachers_invoice_view: '%invoice.id%'
