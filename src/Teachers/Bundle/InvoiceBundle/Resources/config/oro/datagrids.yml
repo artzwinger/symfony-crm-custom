@@ -105,7 +105,7 @@ datagrids:
                     options:
                         data_type: Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType::DATA_DECIMAL
                 dueDate:
-                    type: string
+                    type: datetime
                     data_name: invoice.dueDate
                 createdAt:
                     type: datetime
@@ -290,7 +290,7 @@ datagrids:
                     options:
                         data_type: Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType::DATA_DECIMAL
                 dueDate:
-                    type: string
+                    type: datetime
                     data_name: invoice.dueDate
                 createdAt:
                     type: datetime
@@ -354,27 +354,22 @@ datagrids:
                     left:
                         - { join: invoice.assignment, alias: assignment }
                         - { join: invoice.student, alias: student }
-                groupBy: assignment.id
+                groupBy: invoice.id
         totals:
-            total:
-                extends: grand_total
-                per_page: true
-                hide_if_one_page: true
-                columns:
-                    studentName:
-                        label: oro.magento.datagrid.columns.page_total
             grand_total:
                 columns:
                     studentName:
                         label: oro.magento.datagrid.columns.grand_total
+                    assignmentCourseName:
+                        expr: COUNT(invoice.id)
                     amountOwed:
-                        expr: SUM(COALESCE(@oro_currency.query.currency_transformer->getTransformSelectQueryForDataGrid(amountOwed, invoice), 0))
+                        expr: SUM(COALESCE(invoice.amountOwed, 0))
                         formatter: currency
                     amountPaid:
-                        expr: SUM(COALESCE(@oro_currency.query.currency_transformer->getTransformSelectQueryForDataGrid(amountPaid, invoice), 0))
+                        expr: SUM(COALESCE(invoice.amountPaid, 0))
                         formatter: currency
                     amountRemaining:
-                        expr: SUM(COALESCE(@oro_currency.query.currency_transformer->getTransformSelectQueryForDataGrid(amountRemaining, invoice), 0))
+                        expr: SUM(COALESCE(invoice.amountRemaining, 0))
                         formatter: currency
         columns:
             studentName:
@@ -393,6 +388,12 @@ datagrids:
             assignmentCourseName:
                 label: teachers.invoice.assignment.label
                 frontend_type: string
+            dueDate:
+                frontend_type: datetime
+                label: teachers.invoice.due_date.label
+            createdAt:
+                frontend_type: datetime
+                label: oro.ui.created_at
             amountOwed:
                 label: teachers.invoice.amountOwed.label
                 type: twig
@@ -408,28 +409,22 @@ datagrids:
                 type: twig
                 frontend_type: html
                 template: TeachersApplicationBundle:Datagrid:price.html.twig
-            dueDate:
-                frontend_type: datetime
-                label: teachers.invoice.due_date.label
-            createdAt:
-                frontend_type: datetime
-                label: oro.ui.created_at
         sorters:
             columns:
                 studentName:
                     data_name: studentName
                 assignmentCourseName:
                     data_name: assignment.courseName
+                dueDate:
+                    data_name: invoice.dueDate
+                createdAt:
+                    data_name: invoice.createdAt
                 amountOwed:
                     data_name: invoice.amountOwed
                 amountPaid:
                     data_name: invoice.amountPaid
                 amountRemaining:
                     data_name: invoice.amountRemaining
-                dueDate:
-                    data_name: invoice.dueDate
-                createdAt:
-                    data_name: invoice.createdAt
             default:
                 createdAt: DESC
         filters:
@@ -444,6 +439,12 @@ datagrids:
                 assignmentCourseName:
                     type: string
                     data_name: assignment.courseName
+                dueDate:
+                    type: datetime
+                    data_name: invoice.dueDate
+                createdAt:
+                    type: datetime
+                    data_name: invoice.createdAt
                 amountOwed:
                     type: currency
                     data_name: invoice.amountOwed
@@ -459,13 +460,6 @@ datagrids:
                     data_name: invoice.amountRemaining
                     options:
                         data_type: Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType::DATA_DECIMAL
-                dueDate:
-                    type: string
-                    data_name: invoice.dueDate
-                createdAt:
-                    type: datetime
-                    data_name: invoice.createdAt
-
         options:
             entityHint: oro.reportcrm.datagrid.default_entity_hint
             export: true
