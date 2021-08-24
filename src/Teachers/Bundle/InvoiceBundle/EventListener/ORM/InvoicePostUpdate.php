@@ -2,6 +2,7 @@
 
 namespace Teachers\Bundle\InvoiceBundle\EventListener\ORM;
 
+use DateTime;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\ORMException;
@@ -67,6 +68,9 @@ class InvoicePostUpdate
                 ->getRepository(ExtendHelper::buildEnumValueClassName(Invoice::INTERNAL_STATUS_CODE))
                 ->find($targetStatusId);
             $invoice->setStatus($status);
+            if ($targetStatusId === Invoice::STATUS_PAID) {
+                $invoice->setFullyPaidDate(new DateTime());
+            }
             $this->entityManager->persist($invoice);
             $this->entityManager->flush($invoice);
             return;
@@ -92,7 +96,7 @@ class InvoicePostUpdate
         return Invoice::WORKFLOW_STEP_UNPAID;
     }
 
-    protected function getTargetStatusId(Invoice $invoice)
+    protected function getTargetStatusId(Invoice $invoice): string
     {
         if ($invoice->getAmountRemaining() == 0) {
             return Invoice::STATUS_PAID;

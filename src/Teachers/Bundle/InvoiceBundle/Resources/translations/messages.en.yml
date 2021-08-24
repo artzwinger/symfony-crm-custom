@@ -1,136 +1,146 @@
 oro:
-    reportcrm:
-        menu:
-            invoices_report_tab.label: Invoices
+  reportcrm:
+    menu:
+      invoices_report_tab.label: Invoices
 teachers:
-    invoice:
-        #activity
-        invoices_report: Invoices
-        menu:
-            invoices_report_tab.label: Invoices
-            invoices_report_base.label: Invoices base
-            invoices_report_base.description: Invoices base report
-        activity_item:
-            created_by: created by {{ user }}
-            updated_by: updated by {{ user }}
-        view_invoice: View invoice
-        update_invoice: Update invoice
-        delete_invoice: Delete invoice
-        add_entity: Invoice
-        add_entity.title: Invoice
-        send_email: Send Email
-        pay: Pay
-        entity_label: Invoice
-        entity_plural_label: Invoices
-        entity_grid_all_view_label: All %entity_plural_label%
-        id.label: ID
-        subject.label: Subject
-        description.label: Description
-        price.label: Price
-        organization_name.label: Organization name
-        student.label: Student
-        studentAccount.label: Student Account
-        studentContact.label: Student Contact
-        teacher.label: Tutor
-        amountOwed.label: Amount Owed
-        amount_owed.label: Amount Owed
-        orderNumber.label: Order Number
-        order_number.label: Order Number
-        due_date.label: Due Date
-        amountPaid.label: Amount Paid
-        amount_paid.label: Amount Paid
-        amountRemaining.label: Amount Remaining
-        amount_remaining.label: Amount Remaining
-        rep.label: Rep
-        status.label: Status
+  invoice:
 
-        amountToPay.label: Amount To Pay
-        cardNumber.label: Card Number
-        cardExp.label: Expiration Date (e.g. 10/25)
-        cardSecret.label: CVV
-        assignment.label: Assignment
-        controller:
-            invoice:
-                saved:
-                    message: Invoice successfully saved
-                payment_received:
-                    message: Payment has been received
+    #activity
+    invoices_report: Invoices
+    menu:
+      invoices_report_tab.label: Invoices
+      invoices_report_base.label: Invoices base
+      invoices_report_base.description: Invoices base report
+    activity_item:
+      created_by: created by {{ user }}
+      updated_by: updated by {{ user }}
+    view_invoice: View invoice
+    update_invoice: Update invoice
+    delete_invoice: Delete invoice
+    add_entity: Invoice
+    add_entity.title: Invoice
+    send_email: Send Email
+    pay: Pay
+    entity_label: Invoice
+    entity_plural_label: Invoices
+    entity_grid_all_view_label: All %entity_plural_label%
+    id.label: ID
+    subject.label: Subject
+    description.label: Description
+    price.label: Price
+    organization_name.label: Organization name
+    student.label: Student
+    student_email.label: Student Email
+    studentAccount.label: Student Account
+    studentContact.label: Student Contact
+    teacher.label: Tutor
+    amountOwed.label: Amount Owed
+    amount_owed.label: Amount Owed
+    orderNumber.label: Order Number
+    order_number.label: Order Number
+    due_date.label: Due Date
+    fully_paid_date.label: Invoice Paid Date
+    amountPaid.label: Amount Paid
+    amount_paid.label: Amount Paid
+    amountRemaining.label: Amount Remaining
+    amount_remaining.label: Amount Remaining
+    rep.label: Rep
+    status.label: Status
 
-        datagrid:
-            update: Update
-            delete: Delete
-            view: View
+    amountToPay.label: Amount To Pay
+    cardNumber.label: Card Number
+    cardExp.label: Expiration Date (e.g. 10/25)
+    cardSecret.label: CVV
+    assignment.label: Assignment
+    controller:
+      invoice:
+        saved:
+          message: Invoice successfully saved
+        payment_received:
+          message: Payment has been received
 
-        method:
-            email: Email
-            phone: Phone
-            both: Both phone & email
+    datagrid:
+      filters:
+        period:
+          this_month: This Month
+          last_month: Last Month
+          all: All
+      update: Update
+      delete: Delete
+      view: View
+      views:
+        fully_paid_last_month: Fully Paid Last Month
 
-        widget:
-            info:
-                title: Invoice Details
-        entity:
-            saved: Invoice has been saved successfully
-        block:
-            general: General
-            additional: Additional
-            invoice_information: Invoice Information
-            card_information: Card Information
-            payment_information: Payment Information
-            refund_information: Payment Information
-        payment:
-            owner:
-                label: Who Pays
-            entity_label: Payment
-            entity_plural_label: Payments
-        refund:
-            owner:
-                label: Whom To Refund
-            entity_label: Refund
-            entity_plural_label: Refunds
+    method:
+      email: Email
+      phone: Phone
+      both: Both phone & email
 
-        billing:
-            menu:
-                billing_tab:
-                    label: Billing
+    widget:
+      info:
+        title: Invoice Details
+    entity:
+      saved: Invoice has been saved successfully
+    block:
+      general: General
+      additional: Additional
+      invoice_information: Invoice Information
+      card_information: Card Information
+      payment_information: Payment Information
+      refund_information: Payment Information
     payment:
-        #activity
-        entity_label: Payment
-        entity_plural_label: Payments
-        entity_grid_all_view_label: All %entity_plural_label%
-        activity_item:
-            created_by: made by {{ user }}
-            updated_by: made by {{ user }}
-        view_payment: View payment
-        update_payment: Update payment
-        delete_payment: Delete payment
-        add_entity: Pay
-        add_entity.title: Pay
-
-        invoice_amountOwed.label: Invoice Amount Owed
-        transaction.label: Transaction
-        amountRefunded.label: Amount Refunded
-        amountPaid.label: Payment Amount Paid
-        invoice_amountPaid.label: Invoice Amount Paid
-        invoice_amountRemaining.label: Invoice Amount Remaining
-        invoice_due_date.label: Invoice Due Date
+      owner:
+        label: Who Pays
+      entity_label: Payment
+      entity_plural_label: Payments
     refund:
-        #activity
-        entity_label: Refund
-        entity_plural_label: Refunds
-        entity_grid_all_view_label: All %entity_plural_label%
-        activity_item:
-            created_by: made by {{ user }}
-            updated_by: made by {{ user }}
-        view_refund: View refund
-        update_refund: Update refund
-        delete_refund: Delete refund
-        add_entity: Refund
-        add_entity.title: Refund
-        amountRefunded.label: Amount Refunded
-        amountOwed.label: Invoice Amount Owed
-        amountPaid.label: Payment Amount Paid
-        amountRemaining.label: Invoice Amount Remaining
-        assignment.label: Assignment
-        student.label: Who Paid
-        send_refund_request: Trigger NMI refund
+      owner:
+        label: Whom To Refund
+      entity_label: Refund
+      entity_plural_label: Refunds
+
+    billing:
+      menu:
+        billing_tab:
+          label: Billing
+  payment:
+    #activity
+    entity_label: Payment
+    entity_plural_label: Payments
+    entity_grid_all_view_label: All %entity_plural_label%
+    activity_item:
+      created_by: made by {{ user }}
+      updated_by: made by {{ user }}
+    view_payment: View payment
+    update_payment: Update payment
+    delete_payment: Delete payment
+    add_entity: Pay
+    add_entity.title: Pay
+
+    invoice_amountOwed.label: Invoice Amount Owed
+    transaction.label: Transaction
+    amountRefunded.label: Amount Refunded
+    amountPaid.label: Payment Amount Paid
+    invoice_amountPaid.label: Invoice Amount Paid
+    invoice_amountRemaining.label: Invoice Amount Remaining
+    invoice_due_date.label: Invoice Due Date
+  refund:
+    #activity
+    entity_label: Refund
+    entity_plural_label: Refunds
+    entity_grid_all_view_label: All %entity_plural_label%
+    activity_item:
+      created_by: made by {{ user }}
+      updated_by: made by {{ user }}
+    view_refund: View refund
+    update_refund: Update refund
+    delete_refund: Delete refund
+    add_entity: Refund
+    add_entity.title: Refund
+    amountRefunded.label: Amount Refunded
+    amountOwed.label: Invoice Amount Owed
+    amountPaid.label: Payment Amount Paid
+    amountRemaining.label: Invoice Amount Remaining
+    assignment.label: Assignment
+    student.label: Who Paid
+    send_refund_request: Trigger NMI refund

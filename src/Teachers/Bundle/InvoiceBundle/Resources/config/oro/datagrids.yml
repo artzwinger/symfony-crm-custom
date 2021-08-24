@@ -341,13 +341,12 @@ datagrids:
             query:
                 select:
                     - invoice.id
-                    - invoice.amountOwed
+                    - student.email as studentEmail
+                    - assignment.id as orderNumber
                     - invoice.amountPaid
                     - invoice.amountRemaining
                     - invoice.dueDate
-                    - invoice.createdAt
-                    - assignment.courseName as assignmentCourseName
-                    - CONCAT_WS(' ', student.firstName, student.lastName) as studentName
+                    - invoice.fullyPaidDate
                 from:
                     - { table: 'Teachers\Bundle\InvoiceBundle\Entity\Invoice', alias: invoice }
                 join:
@@ -358,13 +357,8 @@ datagrids:
         totals:
             grand_total:
                 columns:
-                    studentName:
+                    studentEmail:
                         label: oro.magento.datagrid.columns.grand_total
-                    assignmentCourseName:
-                        expr: COUNT(invoice.id)
-                    amountOwed:
-                        expr: SUM(COALESCE(invoice.amountOwed, 0))
-                        formatter: currency
                     amountPaid:
                         expr: SUM(COALESCE(invoice.amountPaid, 0))
                         formatter: currency
@@ -372,33 +366,12 @@ datagrids:
                         expr: SUM(COALESCE(invoice.amountRemaining, 0))
                         formatter: currency
         columns:
-            studentName:
-                label: teachers.invoice.student.label
-                inline_editing:
-                    enable: true
-                    editor:
-                        view: oroform/js/app/views/editor/related-id-relation-editor-view
-                        view_options:
-                            value_field_name: student
-                    autocomplete_api_accessor:
-                        search_handler_name: users_only_students
-                        label_field_name: fullName
-                        class: orouser/js/tools/acl-users-search-api-accessor
-                        permission_check_entity_name: Teachers_Bundle_InvoiceBundle_Entity_Invoice
-            assignmentCourseName:
-                label: teachers.invoice.assignment.label
+            studentEmail:
+                label: teachers.invoice.student_email.label
                 frontend_type: string
-            dueDate:
-                frontend_type: datetime
-                label: teachers.invoice.due_date.label
-            createdAt:
-                frontend_type: datetime
-                label: oro.ui.created_at
-            amountOwed:
-                label: teachers.invoice.amountOwed.label
-                type: twig
-                frontend_type: html
-                template: TeachersApplicationBundle:Datagrid:price.html.twig
+            orderNumber:
+                label: teachers.invoice.order_number.label
+                frontend_type: string
             amountPaid:
                 label: teachers.invoice.amountPaid.label
                 type: twig
@@ -409,47 +382,46 @@ datagrids:
                 type: twig
                 frontend_type: html
                 template: TeachersApplicationBundle:Datagrid:price.html.twig
+            dueDate:
+                frontend_type: datetime
+                label: teachers.invoice.due_date.label
+            fullyPaidDate:
+                frontend_type: datetime
+                label: teachers.invoice.fully_paid_date.label
         sorters:
             columns:
-                studentName:
-                    data_name: studentName
-                assignmentCourseName:
-                    data_name: assignment.courseName
-                dueDate:
-                    data_name: invoice.dueDate
-                createdAt:
-                    data_name: invoice.createdAt
-                amountOwed:
-                    data_name: invoice.amountOwed
+                studentEmail:
+                    data_name: studentEmail
+                orderNumber:
+                    data_name: assignment.id
                 amountPaid:
                     data_name: invoice.amountPaid
                 amountRemaining:
                     data_name: invoice.amountRemaining
+                dueDate:
+                    data_name: invoice.dueDate
+                fullyPaidDate:
+                    data_name: invoice.fullyPaidDate
             default:
                 createdAt: DESC
         filters:
             columns:
-                studentName:
-                    type: choice-tree
-                    label: teachers.invoice.student.label
-                    data_name: invoice.student
-                    autocomplete_alias: users_only_students
-                    renderedPropertyName: 'fullName'
-                    className: 'Oro\Bundle\UserBundle\Entity\User'
-                assignmentCourseName:
-                    type: string
-                    data_name: assignment.courseName
-                dueDate:
-                    type: datetime
-                    data_name: invoice.dueDate
-                createdAt:
-                    type: datetime
-                    data_name: invoice.createdAt
-                amountOwed:
-                    type: currency
-                    data_name: invoice.amountOwed
+                period:
+                    type: oro_period_filter
+                    data_name: period
                     options:
-                        data_type: Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType::DATA_DECIMAL
+                        populate_default: false
+                        field_options:
+                            choices:
+                                teachers.invoice.datagrid.filters.period.this_month: thisMonth
+                                teachers.invoice.datagrid.filters.period.last_month: lastMonth
+                                teachers.invoice.datagrid.filters.period.all: periodAll
+                studentEmail:
+                    type: string
+                    data_name: teachers.invoice.student_email.label
+                orderNumber:
+                    type: string
+                    data_name: assignment.id
                 amountPaid:
                     type: currency
                     data_name: invoice.amountPaid
@@ -460,6 +432,14 @@ datagrids:
                     data_name: invoice.amountRemaining
                     options:
                         data_type: Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType::DATA_DECIMAL
+                dueDate:
+                    type: datetime
+                    data_name: invoice.dueDate
+                fullyPaidDate:
+                    type: datetime
+                    data_name: invoice.fullyPaidDate
+            default:
+                period: { value: lastMonth }
         options:
             entityHint: oro.reportcrm.datagrid.default_entity_hint
             export: true

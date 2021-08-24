@@ -103,6 +103,18 @@ class Invoice extends ExtendInvoice implements DatesAwareInterface
      */
     protected $dueDate;
     /**
+     * @var DateTime|null
+     * @ORM\Column(name="fully_paid_date", type="datetime", nullable=true)
+     * @ConfigField(
+     *      defaultValues={
+     *          "dataaudit"={
+     *              "auditable"=true
+     *          }
+     *      }
+     * )
+     */
+    protected $fullyPaidDate;
+    /**
      * @var User|null $student
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\UserBundle\Entity\User")
      * @ORM\JoinColumn(name="student_id", referencedColumnName="id", onDelete="SET NULL")
@@ -256,6 +268,22 @@ class Invoice extends ExtendInvoice implements DatesAwareInterface
     public function setDueDate(?DateTime $dueDate): void
     {
         $this->dueDate = $dueDate;
+    }
+
+    /**
+     * @return DateTime|null
+     */
+    public function getFullyPaidDate(): ?DateTime
+    {
+        return $this->fullyPaidDate;
+    }
+
+    /**
+     * @param DateTime|null $fullyPaidDate
+     */
+    public function setFullyPaidDate(?DateTime $fullyPaidDate): void
+    {
+        $this->fullyPaidDate = $fullyPaidDate;
     }
 
     /**

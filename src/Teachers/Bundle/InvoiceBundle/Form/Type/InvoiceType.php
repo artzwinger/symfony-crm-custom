@@ -32,12 +32,6 @@ class InvoiceType extends AbstractType
                 'required' => true,
                 'label' => 'teachers.invoice.amountOwed.label'
             ])
-            ->add('rep', EnumSelectType::class, [
-                'label' => 'teachers.invoice.rep.label',
-                'enum_code' => 'invoice_rep',
-                'required' => true,
-                'constraints' => [new Assert\NotNull()]
-            ])
             ->add('dueDate', OroDateTimeType::class, [
                 'required' => true,
                 'label' => 'teachers.invoice.due_date.label',
