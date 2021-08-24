@@ -34,9 +34,17 @@ class BidController extends AbstractController
      *      permission="VIEW",
      *      class="TeachersBidBundle:Bid"
      * )
+     * @throws ORMException
      */
     public function viewAction(Bid $bid): array
     {
+        /** @var EntityManager $em */
+        $em = $this->get('doctrine.orm.entity_manager');
+        if (!$bid->getViewed()) {
+            $bid->setViewed(true);
+            $em->persist($em);
+            $em->flush($em);
+        }
         return [
             'entity' => $bid
         ];

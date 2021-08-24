@@ -81,6 +81,11 @@ class Bid extends ExtendBid implements DatesAwareInterface
      */
     protected $price;
     /**
+     * @var boolean|null $viewed
+     * @ORM\Column(name="viewed", type="boolean", nullable=false)
+     */
+    protected $viewed = false;
+    /**
      * @var User|null Teacher
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\UserBundle\Entity\User")
      * @ORM\JoinColumn(name="teacher_id", referencedColumnName="id", onDelete="SET NULL")
@@ -190,6 +195,22 @@ class Bid extends ExtendBid implements DatesAwareInterface
     public function setPrice(float $price): void
     {
         $this->price = $price;
+    }
+
+    /**
+     * @return bool|null
+     */
+    public function getViewed(): ?bool
+    {
+        return $this->viewed;
+    }
+
+    /**
+     * @param bool|null $viewed
+     */
+    public function setViewed(?bool $viewed): void
+    {
+        $this->viewed = $viewed;
     }
 
     /**
