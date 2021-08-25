@@ -19,6 +19,7 @@ class Role
     const ROLE_TEACHER = 'ROLE_TEACHER';
     const ROLE_STUDENT = 'ROLE_STUDENT';
     const ROLE_COURSE_MANAGER = 'ROLE_COURSE_MANAGER';
+    const ROLE_ADMINISTRATOR = 'ROLE_ADMINISTRATOR';
 
     /**
      * @var EntityManager
@@ -62,6 +63,11 @@ class Role
         return $this->hasCurrentUserRole($this->getCourseManagerRoleId());
     }
 
+    public function isCurrentUserAdmin(): bool
+    {
+        return $this->hasCurrentUserRole($this->getAdminRoleId());
+    }
+
     public function isCurrentUserTeacher(): bool
     {
         return $this->hasCurrentUserRole($this->getTeacherRoleId());
@@ -77,10 +83,22 @@ class Role
         return $this->getCourseManagerRole()->getId();
     }
 
+    public function getAdminRoleId(): int
+    {
+        return $this->getAdminRole()->getId();
+    }
+
     public function getCourseManagerRole(): ?EntityRole
     {
         return $this->getRoleRepository()->findOneBy([
             'role' => self::ROLE_COURSE_MANAGER
+        ]);
+    }
+
+    public function getAdminRole(): ?EntityRole
+    {
+        return $this->getRoleRepository()->findOneBy([
+            'role' => self::ROLE_ADMINISTRATOR
         ]);
     }
 

@@ -32,6 +32,7 @@ datagrids:
                         - { join: assignment.teacher, alias: teacher }
                         - { join: assignment.student, alias: student }
                         - { join: assignment.courseManager, alias: courseManager }
+                groupBy: assignment.id
         columns:
             firstName:
                 label: teachers.assignment.first_name.label

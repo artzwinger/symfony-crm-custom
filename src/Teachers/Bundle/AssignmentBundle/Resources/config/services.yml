@@ -95,3 +95,11 @@ services:
             - '@doctrine.orm.entity_manager'
         tags:
             - { name: doctrine.event_listener, event: postUpdate, connection: default, entity: 'Teachers\Bundle\AssignmentBundle\Entity\Assignment' }
+    teachers_assignment.grid.listener:
+        class: Teachers\Bundle\AssignmentBundle\EventListener\AssignmentGridListener
+        arguments:
+            - '@teachers_users.helper.role'
+        tags:
+            - name: kernel.event_listener
+              event: oro_datagrid.datagrid.build.before.teachers-assignments-grid
+              method: onBuildBefore

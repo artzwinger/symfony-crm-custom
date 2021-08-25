@@ -1,5 +1,12 @@
 teachers:
     assignment:
+        has_unviewed_bids:
+            label: Unviewed Bids
+            yes:
+                label: Yes
+            no:
+                label: No
+
         grid:
             action:
                 approve: Approve

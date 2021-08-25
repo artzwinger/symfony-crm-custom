@@ -3,12 +3,16 @@
 namespace Teachers\Bundle\BidBundle\Controller;
 
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityNotFoundException;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
+use Exception;
 use Oro\Bundle\FormBundle\Model\UpdateHandlerFacade;
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use Oro\Bundle\SecurityBundle\Annotation\CsrfProtection;
+use Oro\Bundle\UserBundle\Entity\Role;
+use Oro\Bundle\UserBundle\Entity\User;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormFactory;
@@ -17,6 +21,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Teachers\Bundle\AssignmentBundle\Entity\Assignment;
 use Teachers\Bundle\BidBundle\Entity\Bid;
 
 class BidController extends AbstractController
@@ -39,11 +44,14 @@ class BidController extends AbstractController
     public function viewAction(Bid $bid): array
     {
         /** @var EntityManager $em */
-        $em = $this->get('doctrine.orm.entity_manager');
-        if (!$bid->getViewed()) {
-            $bid->setViewed(true);
-            $em->persist($em);
-            $em->flush($em);
+        $roleHelper = $this->get('teachers_users.helper.role');
+        if ($roleHelper->isCurrentUserCourseManager() || $roleHelper->isCurrentUserAdmin()) {
+            $em = $this->get('doctrine.orm.entity_manager');
+            if (!$bid->getViewed()) {
+                $bid->setViewed(true);
+                $em->persist($em);
+                $em->flush($em);
+            }
         }
         return [
             'entity' => $bid
@@ -107,7 +115,37 @@ class BidController extends AbstractController
      */
     public function createAction()
     {
-        $result = $this->update(new Bid(), 'teachers_bid_create');
+
+        $em = $this->get('doctrine.orm.entity_manager');
+        $bid = new Bid();
+        $request = $this->get('request_stack')->getCurrentRequest();
+        $entityClass = $request->get('entityClass');
+        $entityId = $request->get('entityId');
+        try {
+            if ($entityClass && $entityId) {
+                $entityClass = str_replace('_', '\\', $entityClass);
+                $repository = $em->getRepository($entityClass);
+                /** @var Assignment $assignment */
+                $assignment = $repository->find($entityId);
+                if (empty($assignment)) {
+                    throw new EntityNotFoundException();
+                }
+                if ($this->get('teachers_users.helper.role')->isCurrentUserCourseManager()) {
+                    $roleRepository = $em->getRepository(Role::class);
+                    $role = $roleRepository->findOneBy([
+                        'role' => User::ROLE_ADMINISTRATOR
+                    ]);
+                    if ($role) {
+                        $adminUser = $roleRepository->getFirstMatchedUser($role);
+                        if ($adminUser) {
+                            $assignment->setCourseManager($adminUser);
+                        }
+                    }
+                }
+            }
+        } catch (Exception $e) {
+        }
+        $result = $this->update($bid, 'teachers_bid_create');
         $result['roleHelper'] = $this->get('teachers_users.helper.role');
         return $result;
     }

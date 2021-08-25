@@ -15,6 +15,7 @@ use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\UserBundle\Entity\User;
 use Teachers\Bundle\ApplicationBundle\Entity\Application;
 use Teachers\Bundle\AssignmentBundle\Model\ExtendAssignment;
+use Teachers\Bundle\BidBundle\Entity\Bid;
 use Teachers\Bundle\UsersBundle\Entity\TeacherGroup;
 
 /**
@@ -238,6 +239,12 @@ class Assignment extends ExtendAssignment implements DatesAwareInterface
      * )
      */
     protected $teacherGroups;
+
+    /**
+     * @var Collection|Bid[] $bids
+     * @ORM\OneToMany(targetEntity="Teachers\Bundle\BidBundle\Entity\Bid", mappedBy="assignment")
+     */
+    protected $bids;
 
     /**
      * @var User

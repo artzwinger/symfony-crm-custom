@@ -86,7 +86,7 @@ class Bid extends ExtendBid implements DatesAwareInterface
      */
     protected $viewed = false;
     /**
-     * @var User|null Teacher
+     * @var User|null $teacher
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\UserBundle\Entity\User")
      * @ORM\JoinColumn(name="teacher_id", referencedColumnName="id", onDelete="SET NULL")
      * @ConfigField(
@@ -98,6 +98,12 @@ class Bid extends ExtendBid implements DatesAwareInterface
      * )
      */
     protected $teacher;
+    /**
+     * @var Assignment|null $assignment
+     * @ORM\ManyToOne(targetEntity="Teachers\Bundle\AssignmentBundle\Entity\Assignment")
+     * @ORM\JoinColumn(name="assignment_id", referencedColumnName="id", onDelete="SET NULL")
+     */
+    protected $assignment;
     /**
      * @var Contact|null $teacherContact
      *
@@ -173,12 +179,23 @@ class Bid extends ExtendBid implements DatesAwareInterface
      */
     public function getAssignment(): ?Assignment
     {
+        if ($this->assignment) {
+            return $this->assignment;
+        }
         foreach ($this->getActivityTargets() as $target) {
             if ($target instanceof Assignment) {
                 return $target;
             }
         }
         return null;
+    }
+
+    /**
+     * @param Assignment|null $assignment
+     */
+    public function setAssignment(?Assignment $assignment): void
+    {
+        $this->assignment = $assignment;
     }
 
     /**
