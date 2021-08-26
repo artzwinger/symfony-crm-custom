@@ -12,6 +12,7 @@ teachers:
                 approve: Approve
                 unapprove: Mark as dangerous
             views:
+                un_viewed_bids: Unviewed Bids
                 pending: Pending Messages
                 declined: Declined Messages
         # activity

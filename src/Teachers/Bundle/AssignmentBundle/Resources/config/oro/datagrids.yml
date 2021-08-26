@@ -2,6 +2,7 @@ datagrids:
     teachers-assignments-grid:
         extended_entity_name: 'Teachers\Bundle\AssignmentBundle\Entity\Assignment'
         acl_resource: teachers_assignment_view
+        views_list: '@teachers_assignment.assignments.datagrid_view_list'
         source:
             type: orm
             query:

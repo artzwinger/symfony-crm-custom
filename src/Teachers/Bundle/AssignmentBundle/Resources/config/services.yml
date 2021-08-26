@@ -89,6 +89,12 @@ services:
         public: true
         arguments:
             - '@translator'
+    teachers_assignment.assignments.datagrid_view_list:
+        class: Teachers\Bundle\AssignmentBundle\Datagrid\AssignmentsViewList
+        public: true
+        arguments:
+            - '@translator'
+            - '@teachers_users.helper.role'
     teachers_assignment.event_listener.orm.assignment_postupdate:
         class: Teachers\Bundle\AssignmentBundle\EventListener\ORM\AssignmentPostupdate
         arguments:
