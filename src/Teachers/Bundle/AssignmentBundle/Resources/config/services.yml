@@ -101,6 +101,13 @@ services:
             - '@doctrine.orm.entity_manager'
         tags:
             - { name: doctrine.event_listener, event: postUpdate, connection: default, entity: 'Teachers\Bundle\AssignmentBundle\Entity\Assignment' }
+    teachers_assignment.event_listener.orm.transit_new_assignment_up_for_bid:
+        class: Teachers\Bundle\AssignmentBundle\EventListener\ORM\TransitNewAssignmentUpForBid
+        arguments:
+            - '@oro_workflow.manager'
+        tags:
+            - { name: doctrine.event_listener, priority: 900, event: postPersist, connection: default, entity: 'Teachers\Bundle\AssignmentBundle\Entity\Assignment' }
+            - { name: doctrine.event_listener, event: postFlush }
     teachers_assignment.grid.listener:
         class: Teachers\Bundle\AssignmentBundle\EventListener\AssignmentGridListener
         arguments:

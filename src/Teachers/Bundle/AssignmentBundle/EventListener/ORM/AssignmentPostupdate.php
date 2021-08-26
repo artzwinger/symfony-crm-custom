@@ -11,7 +11,6 @@ use Oro\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\ContactBundle\Entity\ContactEmail;
 use Oro\Bundle\ContactBundle\Entity\Repository\ContactRepository;
-use Oro\Bundle\ContactBundle\Model\ExtendContactEmail;
 use Oro\Bundle\UserBundle\Entity\User;
 use Teachers\Bundle\AssignmentBundle\Entity\Assignment;
 

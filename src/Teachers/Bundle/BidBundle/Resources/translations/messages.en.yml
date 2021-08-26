@@ -7,7 +7,7 @@ teachers:
         view_bid: View bid
         update_bid: Update bid
         delete_bid: Delete bid
-        winning_bid: Winning bid
+        winning_bid: Top Bid
         add_entity: Bid
         add_entity.title: Make bid
 

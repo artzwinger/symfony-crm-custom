@@ -4,12 +4,14 @@ workflows:
             new:
                 order: 10
                 allowed_transitions:
+                    - __start__
                     - start_accepting_bids
                     - assign
                     - complete
             up_for_bid:
                 order: 20
                 allowed_transitions:
+                    - __start__
                     - stop_accepting_bids
                     - assign
                     - complete

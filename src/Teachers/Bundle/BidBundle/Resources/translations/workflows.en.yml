@@ -5,10 +5,10 @@ oro:
                 pending:
                     label: Pending
                 winning:
-                    label: Winning
+                    label: Top Bid
             transition:
                 make_winning:
-                    label: Winning
+                    label: Top Bid
                     warning_message: ''
                 reopen:
                     label: Reopen
