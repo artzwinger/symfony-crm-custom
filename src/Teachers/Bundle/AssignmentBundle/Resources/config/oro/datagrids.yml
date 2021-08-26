@@ -36,35 +36,46 @@ datagrids:
         columns:
             firstName:
                 label: teachers.assignment.first_name.label
+                order: 10
             lastName:
                 label: teachers.assignment.last_name.label
+                order: 20
             courseName:
                 label: teachers.assignment.course_name.label
+                order: 30
             coursePrefixes:
                 label: teachers.assignment.course_prefixes.label
+                order: 40
             amountDueToday:
                 label: teachers.assignment.amountDueToday.label
                 type: twig
                 frontend_type: html
                 template: TeachersApplicationBundle:Datagrid:price.html.twig
+                order: 50
             workToday:
                 label: teachers.assignment.work_today.label
                 frontend_type: select
                 choices:
                     teachers.assignment.work_today.true.label: 1
                     teachers.assignment.work_today.false.label: 0
+                order: 60
             dueDate:
                 frontend_type: datetime
                 label: teachers.assignment.due_date.label
+                order: 70
             courseUrl:
                 label: teachers.assignment.course_url.label
+                order: 80
             userLogin:
                 label: teachers.assignment.user_login.label
+                order: 90
             createdAt:
                 frontend_type: datetime
                 label: oro.ui.created_at
+                order: 100
             termName:
                 label: teachers.assignment.term.label
+                order: 110
             teacherName:
                 label: teachers.assignment.teacher.label
                 inline_editing:
@@ -78,6 +89,7 @@ datagrids:
                         label_field_name: fullName
                         class: orouser/js/tools/acl-users-search-api-accessor
                         permission_check_entity_name: Teachers_Bundle_AssignmentBundle_Entity_Assignment
+                order: 120
         sorters:
             columns:
                 firstName:

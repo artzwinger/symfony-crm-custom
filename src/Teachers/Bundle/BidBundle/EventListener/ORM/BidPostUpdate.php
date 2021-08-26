@@ -3,6 +3,7 @@
 namespace Teachers\Bundle\BidBundle\EventListener\ORM;
 
 use Doctrine\ORM\Event\LifecycleEventArgs;
+use Oro\Bundle\WorkflowBundle\Exception\WorkflowException;
 use Oro\Bundle\WorkflowBundle\Model\WorkflowManager;
 use Teachers\Bundle\BidBundle\Entity\Bid;
 
@@ -25,7 +26,7 @@ class BidPostUpdate
 
     /**
      * @param LifecycleEventArgs $args
-     * @throws \Oro\Bundle\WorkflowBundle\Exception\WorkflowException
+     * @throws WorkflowException
      */
     public function postUpdate(LifecycleEventArgs $args): void
     {
@@ -52,7 +53,7 @@ class BidPostUpdate
 
     protected function isCurrentBidFlowStepWinning(Bid $bid): bool
     {
-        return $this->workflowManager->getWorkflowItem($bid, 'bid_flow')
-                ->getCurrentStep()->getName() === 'winning';
+        $item = $this->workflowManager->getWorkflowItem($bid, 'bid_flow');
+        return $item && $item->getCurrentStep()->getName() === 'winning';
     }
 }

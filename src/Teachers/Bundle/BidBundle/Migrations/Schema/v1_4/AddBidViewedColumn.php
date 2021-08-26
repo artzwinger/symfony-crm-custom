@@ -18,7 +18,7 @@ class AddBidViewedColumn implements Migration
     {
         if ($schema->hasTable('teachers_bid')) {
             $table = $schema->getTable('teachers_bid');
-            $table->addColumn('viewed', Types::BOOLEAN, ['notnull' => true]);
+            $table->addColumn('un_viewed', Types::BOOLEAN, ['notnull' => true, 'default' => '1']);
         }
     }
 }

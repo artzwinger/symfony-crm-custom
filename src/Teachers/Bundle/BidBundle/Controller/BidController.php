@@ -11,8 +11,6 @@ use Oro\Bundle\FormBundle\Model\UpdateHandlerFacade;
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use Oro\Bundle\SecurityBundle\Annotation\CsrfProtection;
-use Oro\Bundle\UserBundle\Entity\Role;
-use Oro\Bundle\UserBundle\Entity\User;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormFactory;
@@ -47,10 +45,10 @@ class BidController extends AbstractController
         $roleHelper = $this->get('teachers_users.helper.role');
         if ($roleHelper->isCurrentUserCourseManager() || $roleHelper->isCurrentUserAdmin()) {
             $em = $this->get('doctrine.orm.entity_manager');
-            if (!$bid->getViewed()) {
-                $bid->setViewed(true);
-                $em->persist($em);
-                $em->flush($em);
+            if ($bid->getUnViewed()) {
+                $bid->setUnViewed(false);
+                $em->persist($bid);
+                $em->flush($bid);
             }
         }
         return [
@@ -76,9 +74,20 @@ class BidController extends AbstractController
      * @AclAncestor("teachers_bid_view")
      * @param Bid $bid
      * @return array
+     * @throws ORMException
      */
     public function infoAction(Bid $bid): array
     {
+        /** @var EntityManager $em */
+        $roleHelper = $this->get('teachers_users.helper.role');
+        if ($roleHelper->isCurrentUserCourseManager() || $roleHelper->isCurrentUserAdmin()) {
+            $em = $this->get('doctrine.orm.entity_manager');
+            if ($bid->getUnViewed()) {
+                $bid->setUnViewed(false);
+                $em->persist($bid);
+                $em->flush($bid);
+            }
+        }
         return [
             'entity' => $bid
         ];
@@ -130,18 +139,7 @@ class BidController extends AbstractController
                 if (empty($assignment)) {
                     throw new EntityNotFoundException();
                 }
-                if ($this->get('teachers_users.helper.role')->isCurrentUserCourseManager()) {
-                    $roleRepository = $em->getRepository(Role::class);
-                    $role = $roleRepository->findOneBy([
-                        'role' => User::ROLE_ADMINISTRATOR
-                    ]);
-                    if ($role) {
-                        $adminUser = $roleRepository->getFirstMatchedUser($role);
-                        if ($adminUser) {
-                            $assignment->setCourseManager($adminUser);
-                        }
-                    }
-                }
+                $bid->setAssignment($assignment);
             }
         } catch (Exception $e) {
         }
