@@ -5,7 +5,7 @@ namespace Teachers\Bundle\InvoiceBundle\EventListener\ORM;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Teachers\Bundle\InvoiceBundle\Entity\Invoice;
 
-class InvoicePreUpdate
+class InvoiceAmountRemainingPreUpdate
 {
     /**
      * @param LifecycleEventArgs $args

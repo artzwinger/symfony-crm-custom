@@ -14,7 +14,7 @@ use Oro\Bundle\WorkflowBundle\Exception\WorkflowException;
 use Oro\Bundle\WorkflowBundle\Model\WorkflowManager;
 use Teachers\Bundle\InvoiceBundle\Entity\Invoice;
 
-class InvoicePostUpdate
+class InvoiceStatusWorkflowPostUpdate
 {
     /**
      * @var WorkflowManager $workflowManager
@@ -65,11 +65,15 @@ class InvoicePostUpdate
         if ($invoice->getStatus()->getId() !== $targetStatusId) {
             /** @var AbstractEnumValue $status */
             $status = $this->entityManager
-                ->getRepository(ExtendHelper::buildEnumValueClassName(Invoice::INTERNAL_STATUS_CODE))
+                ->getRepository(ExtendHelper::buildEnumValueClassName(Invoice::ENUM_STATUS_CODE))
                 ->find($targetStatusId);
             $invoice->setStatus($status);
             if ($targetStatusId === Invoice::STATUS_PAID) {
                 $invoice->setFullyPaidDate(new DateTime());
+                $assignment = $invoice->getAssignment();
+                $assignment->setInvoiceDueTodayPaid(true);
+                $this->entityManager->persist($assignment);
+                $this->entityManager->flush($assignment);
             }
             $this->entityManager->persist($invoice);
             $this->entityManager->flush($invoice);

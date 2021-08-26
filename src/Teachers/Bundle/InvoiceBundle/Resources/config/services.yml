@@ -87,12 +87,12 @@ services:
         arguments:
             - '@oro_workflow.manager'
         public: true
-    teachers_invoice.event_listener.orm.invoice_preupdate:
-        class: Teachers\Bundle\InvoiceBundle\EventListener\ORM\InvoicePreUpdate
+    teachers_invoice.event_listener.orm.invoice_amount_remaining_pre_update:
+        class: Teachers\Bundle\InvoiceBundle\EventListener\ORM\InvoiceAmountRemainingPreUpdate
         tags:
             - { name: doctrine.event_listener, event: preUpdate, connection: default, entity: 'Teachers\Bundle\InvoiceBundle\Entity\Invoice' }
-    teachers_invoice.event_listener.orm.invoice_postupdate:
-        class: Teachers\Bundle\InvoiceBundle\EventListener\ORM\InvoicePostUpdate
+    teachers_invoice.event_listener.orm.invoice_status_workflow_post_update:
+        class: Teachers\Bundle\InvoiceBundle\EventListener\ORM\InvoiceStatusWorkflowPostUpdate
         tags:
             - { name: doctrine.event_listener, event: postUpdate, connection: default, entity: 'Teachers\Bundle\InvoiceBundle\Entity\Invoice' }
         arguments:

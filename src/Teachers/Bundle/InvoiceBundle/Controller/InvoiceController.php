@@ -8,6 +8,8 @@ use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use DOMDocument;
 use Exception;
+use Oro\Bundle\EntityExtendBundle\Entity\AbstractEnumValue;
+use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\FormBundle\Model\UpdateHandlerFacade;
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
@@ -114,17 +116,22 @@ class InvoiceController extends AbstractController
         $request = $this->get('request_stack')->getCurrentRequest();
         $entityClass = $request->get('entityClass');
         $entityId = $request->get('entityId');
+        $em = $this->get('doctrine.orm.entity_manager');
         try {
             if ($entityClass && $entityId) {
                 $entityClass = str_replace('_', '\\', $entityClass);
-                $repository = $this->get('doctrine.orm.entity_manager')->getRepository($entityClass);
+                $repository = $em->getRepository($entityClass);
                 /** @var Assignment $assignment */
                 $assignment = $repository->find($entityId);
                 if (empty($assignment)) {
                     throw new EntityNotFoundException();
                 }
                 $invoice->setAssignment($assignment);
-                $invoice->setRep($assignment->getRep());
+                /** @var AbstractEnumValue $rep */
+                $rep = $em
+                    ->getRepository(ExtendHelper::buildEnumValueClassName(Invoice::ENUM_REP_CODE))
+                    ->find($assignment->getRep()->getId());
+                $invoice->setRep($rep);
                 if ($assignment->getStudent()) {
                     $invoice->setStudent($assignment->getStudent());
                 }

@@ -76,6 +76,11 @@ class Invoice extends ExtendInvoice implements DatesAwareInterface
      */
     protected $id;
     /**
+     * @var boolean $dueToday
+     * @ORM\Column(name="due_today", type="boolean", nullable=false)
+     */
+    protected $dueToday = false;
+    /**
      * @var float|null $amountOwed
      * @ORM\Column(name="amount_owed", type="money", nullable=false)
      */
@@ -159,7 +164,8 @@ class Invoice extends ExtendInvoice implements DatesAwareInterface
      */
     protected $organization;
 
-    const INTERNAL_STATUS_CODE = 'invoice_status';
+    const ENUM_STATUS_CODE = 'invoice_status';
+    const ENUM_REP_CODE = 'invoice_rep';
     const STATUS_UNPAID = 'unpaid';
     const STATUS_PAID = 'paid';
     const STATUS_PARTIALLY_PAID = 'partially_paid';
@@ -204,6 +210,22 @@ class Invoice extends ExtendInvoice implements DatesAwareInterface
     public function setId(?int $id): void
     {
         $this->id = $id;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isDueToday(): bool
+    {
+        return $this->dueToday;
+    }
+
+    /**
+     * @param bool $dueToday
+     */
+    public function setDueToday(bool $dueToday): void
+    {
+        $this->dueToday = $dueToday;
     }
 
     /**

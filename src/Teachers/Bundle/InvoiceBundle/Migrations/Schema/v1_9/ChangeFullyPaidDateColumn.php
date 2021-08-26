@@ -1,13 +1,13 @@
 <?php
 
-namespace Teachers\Bundle\InvoiceBundle\Migrations\Schema\v1_7;
+namespace Teachers\Bundle\InvoiceBundle\Migrations\Schema\v1_9;
 
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Schema\SchemaException;
 use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 
-class AddFullyPaidDateColumn implements Migration
+class ChangeFullyPaidDateColumn implements Migration
 {
     /**
      * @inheritDoc
@@ -17,7 +17,7 @@ class AddFullyPaidDateColumn implements Migration
     {
         if ($schema->hasTable('teachers_invoice')) {
             $table = $schema->getTable('teachers_invoice');
-            $table->addColumn('fully_paid_date', 'datetime', ['notnull' => false]);
+            $table->changeColumn('fully_paid_date', ['notnull' => false]);
         }
     }
 }

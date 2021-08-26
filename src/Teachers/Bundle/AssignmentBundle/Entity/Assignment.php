@@ -173,6 +173,13 @@ class Assignment extends ExtendAssignment implements DatesAwareInterface
     protected $amountDueToday;
 
     /**
+     * @var boolean $invoiceDueTodayPaid
+     *
+     * @ORM\Column(name="invoice_due_today_paid", type="boolean", nullable=true)
+     */
+    protected $invoiceDueTodayPaid = false;
+
+    /**
      * @var Application|null $application
      *
      * @ORM\ManyToOne(targetEntity="Teachers\Bundle\ApplicationBundle\Entity\Application")
@@ -275,6 +282,7 @@ class Assignment extends ExtendAssignment implements DatesAwareInterface
     const STATUS_COMPLETE = 'complete';
     const STATUS_PAUSED_DUE_NONPAYMENT = 'paused_due_nonpayment';
 
+    const WORKFLOW_NAME = 'assignment_flow';
     const WORKFLOW_STEP_NEW = 'new';
     const WORKFLOW_STEP_UP_FOR_BID = 'up_for_bid';
     const WORKFLOW_STEP_ASSIGNED = 'assigned';
@@ -548,6 +556,22 @@ class Assignment extends ExtendAssignment implements DatesAwareInterface
     public function setAmountDueToday(?float $amountDueToday): void
     {
         $this->amountDueToday = $amountDueToday;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getInvoiceDueTodayPaid()
+    {
+        return $this->invoiceDueTodayPaid;
+    }
+
+    /**
+     * @param boolean $invoiceDueTodayPaid
+     */
+    public function setInvoiceDueTodayPaid(bool $invoiceDueTodayPaid): void
+    {
+        $this->invoiceDueTodayPaid = $invoiceDueTodayPaid;
     }
 
     /**
