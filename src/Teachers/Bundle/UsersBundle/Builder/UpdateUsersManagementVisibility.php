@@ -33,7 +33,7 @@ class UpdateUsersManagementVisibility implements BuilderInterface
             return;
         }
         foreach ($menu->getChildren() as $item) {
-            if ($item->getName() === 'teachers_group') {
+            if (in_array($item->getName(), $this->getNotAllowedEntries())) {
                 if ($this->roleHelper->isCurrentUserTeacher() || $this->roleHelper->isCurrentUserStudent()) {
                     $item->setExtra('isAllowed', false);
                 }
@@ -55,6 +55,14 @@ class UpdateUsersManagementVisibility implements BuilderInterface
                 }
             }
         }
+    }
+
+    protected function getNotAllowedEntries(): array
+    {
+        return [
+            'reports_tab',
+            'teachers_group'
+        ];
     }
 
     protected function getNotAllowedSystemEntries(): array
