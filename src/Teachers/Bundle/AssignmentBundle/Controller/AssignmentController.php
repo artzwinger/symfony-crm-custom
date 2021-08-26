@@ -39,9 +39,21 @@ class AssignmentController extends AbstractController
      *      permission="VIEW",
      *      class="TeachersAssignmentBundle:Assignment"
      * )
+     * @throws ORMException
      */
     public function viewAction(Assignment $assignment): array
     {
+        $bids = $assignment->getBids();
+        /** @var EntityManager $em */
+        $roleHelper = $this->get('teachers_users.helper.role');
+        if ($roleHelper->isCurrentUserCourseManager() || $roleHelper->isCurrentUserAdmin()) {
+            $em = $this->get('doctrine.orm.entity_manager');
+            foreach ($bids as $bid) {
+                $bid->setUnViewed(false);
+                $em->persist($bid);
+                $em->flush($bid);
+            }
+        }
         return [
             'entity' => $assignment
         ];

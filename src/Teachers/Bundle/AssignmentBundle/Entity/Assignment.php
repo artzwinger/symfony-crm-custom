@@ -695,6 +695,22 @@ class Assignment extends ExtendAssignment implements DatesAwareInterface
     }
 
     /**
+     * @return Collection|Bid[]
+     */
+    public function getBids()
+    {
+        return $this->bids;
+    }
+
+    /**
+     * @param Collection|Bid[] $bids
+     */
+    public function setBids($bids): void
+    {
+        $this->bids = $bids;
+    }
+
+    /**
      * @return User
      */
     public function getCourseManager(): ?User
