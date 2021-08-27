@@ -107,11 +107,13 @@ class AssignmentAmountDueTodayPostPersist
         if ($studentAccount = $assignment->getStudentAccount()) {
             $invoice->setStudentAccount($studentAccount);
         }
-        /** @var AbstractEnumValue $rep */
-        $rep = $this->entityManager
-            ->getRepository(ExtendHelper::buildEnumValueClassName(Invoice::ENUM_REP_CODE))
-            ->find($assignment->getRep()->getId());
-        $invoice->setRep($rep);
+        if ($assignment->getRep()) {
+            /** @var AbstractEnumValue $rep */
+            $rep = $this->entityManager
+                ->getRepository(ExtendHelper::buildEnumValueClassName(Invoice::ENUM_REP_CODE))
+                ->find($assignment->getRep()->getId());
+            $invoice->setRep($rep);
+        }
         $this->activityManager->addActivityTarget($invoice, $assignment);
         $this->entityManager->persist($invoice);
         $this->entityManager->flush($invoice);

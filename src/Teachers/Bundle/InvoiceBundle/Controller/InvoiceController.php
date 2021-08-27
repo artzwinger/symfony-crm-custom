@@ -132,11 +132,13 @@ class InvoiceController extends AbstractController
                     throw new EntityNotFoundException();
                 }
                 $invoice->setAssignment($assignment);
-                /** @var AbstractEnumValue $rep */
-                $rep = $em
-                    ->getRepository(ExtendHelper::buildEnumValueClassName(Invoice::ENUM_REP_CODE))
-                    ->find($assignment->getRep()->getId());
-                $invoice->setRep($rep);
+                if ($assignment->getRep()) {
+                    /** @var AbstractEnumValue $rep */
+                    $rep = $em
+                        ->getRepository(ExtendHelper::buildEnumValueClassName(Invoice::ENUM_REP_CODE))
+                        ->find($assignment->getRep()->getId());
+                    $invoice->setRep($rep);
+                }
                 if ($assignment->getStudent()) {
                     $invoice->setStudent($assignment->getStudent());
                 }
