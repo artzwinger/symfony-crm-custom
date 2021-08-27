@@ -12,6 +12,7 @@ use Oro\Bundle\WorkflowBundle\Exception\ForbiddenTransitionException;
 use Oro\Bundle\WorkflowBundle\Exception\InvalidTransitionException;
 use Oro\Bundle\WorkflowBundle\Exception\WorkflowException;
 use Oro\Bundle\WorkflowBundle\Model\WorkflowManager;
+use Teachers\Bundle\AssignmentBundle\Entity\Assignment;
 use Teachers\Bundle\InvoiceBundle\Entity\Invoice;
 
 class InvoiceStatusWorkflowPostUpdate
@@ -44,6 +45,7 @@ class InvoiceStatusWorkflowPostUpdate
      * @throws InvalidTransitionException
      * @throws WorkflowException
      * @throws ORMException
+     * @throws \Exception
      */
     public function postUpdate(LifecycleEventArgs $args): void
     {
@@ -74,6 +76,10 @@ class InvoiceStatusWorkflowPostUpdate
                 $assignment->setInvoiceDueTodayPaid(true);
                 $this->entityManager->persist($assignment);
                 $this->entityManager->flush($assignment);
+                $item = $this->workflowManager->getWorkflowItem($assignment, Assignment::WORKFLOW_NAME);
+                if ($item->getCurrentStep()->getName() === Assignment::WORKFLOW_STEP_NEW) {
+                    $this->workflowManager->transitIfAllowed($item, Assignment::WORKFLOW_TRANSITION_START_BIDDING);
+                }
             }
             $this->entityManager->persist($invoice);
             $this->entityManager->flush($invoice);

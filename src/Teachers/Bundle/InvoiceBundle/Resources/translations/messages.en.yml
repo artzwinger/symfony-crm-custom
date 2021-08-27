@@ -20,6 +20,7 @@ teachers:
     add_entity: Invoice
     add_entity.title: Invoice
     send_email: Send Email
+    manually_pay: Manually Add Payment
     pay: Pay
     entity_label: Invoice
     entity_plural_label: Invoices
@@ -33,6 +34,7 @@ teachers:
     student_email.label: Student Email
     studentAccount.label: Student Account
     studentContact.label: Student Contact
+    manualPaymentReason.label: Manual Payment Reason
     teacher.label: Tutor
     amountOwed.label: Amount Owed
     amount_owed.label: Amount Owed
@@ -47,6 +49,7 @@ teachers:
     rep.label: Rep
     status.label: Status
 
+    reason.label: Manual Payment Reason
     amountToPay.label: Amount To Pay
     cardNumber.label: Card Number
     cardExp.label: Expiration Date (e.g. 10/25)

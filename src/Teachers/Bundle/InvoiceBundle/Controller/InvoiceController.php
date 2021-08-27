@@ -14,6 +14,7 @@ use Oro\Bundle\FormBundle\Model\UpdateHandlerFacade;
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use Oro\Bundle\SecurityBundle\Annotation\CsrfProtection;
+use Oro\Bundle\UIBundle\Model\FlashBag;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use SimpleXMLElement;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -21,13 +22,16 @@ use Symfony\Component\Form\FormFactory;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Teachers\Bundle\AssignmentBundle\Entity\Assignment;
 use Teachers\Bundle\InvoiceBundle\Entity\Invoice;
 use Teachers\Bundle\InvoiceBundle\Entity\Payment;
 use Teachers\Bundle\InvoiceBundle\Helper\Invoice as InvoiceHelper;
+use Teachers\Bundle\UsersBundle\Helper\Role;
 
 class InvoiceController extends AbstractController
 {
@@ -51,7 +55,8 @@ class InvoiceController extends AbstractController
             'entity' => $invoice,
             'invoice_has_payments' => $invoice->hasPayments(),
             'can_invoice_receive_payments' => $invoice->canReceivePayments(),
-            'is_user_student' => $this->get('teachers_users.helper.role')->isCurrentUserStudent()
+            'is_user_student' => $this->getRoleHelper()->isCurrentUserStudent(),
+            'is_user_admin' => $this->getRoleHelper()->isCurrentUserAdmin()
         ];
     }
 
@@ -166,6 +171,52 @@ class InvoiceController extends AbstractController
             'formAction' => $this->generateUrl('teachers_invoice_pay_step2', [
                 'id' => $invoice->getId()
             ])
+        ];
+    }
+
+    /**
+     * @Route("/manual_pay/{id}", name="teachers_invoice_manual_pay", requirements={"id"="\d+"}, options={"expose"=true})
+     * @Template("@TeachersInvoice/Invoice/manual_pay.html.twig")
+     * @AclAncestor("teachers_invoice_edit")
+     * @param Invoice $invoice
+     * @return array|RedirectResponse
+     * @throws ORMException
+     * @throws OptimisticLockException
+     */
+    public function manualPayAction(Invoice $invoice)
+    {
+        $roleHelper = $this->getRoleHelper();
+        if (!$roleHelper->isCurrentUserAdmin()) {
+            $this->getFlashBag()->add('error', 'Only admins can add payments this way');
+            return $this->redirectToRoute('teachers_invoice_view', [
+                'id' => $invoice->getId()
+            ]);
+        }
+        $builder = $this->getFormFactory()
+            ->createBuilder('Teachers\Bundle\InvoiceBundle\Form\Type\InvoiceManualPayType');
+        $request = $this->getCurrentRequest();
+        $amount = $request->get('amountToPay', 0);
+        if ($amount > 0) {
+            $payment = new Payment();
+            $payment->setInvoice($invoice);
+            $payment->setAmountPaid($amount);
+            $payment->setManualPaymentReason($request->get('reason', 'No reason'));
+            $payment->setAmountPaidAfterRefund($payment->getAmountPaid());
+            if ($invoice->getStudent()) {
+                $payment->setOwner($invoice->getStudent());
+            }
+            $payment->setOrganization($invoice->getOrganization());
+            $em = $this->getEntityManager();
+            $em->persist($payment);
+            $em->flush($payment);
+            $this->getFlashBag()->add('success', 'Payment added manually');
+            return $this->redirectToRoute('teachers_invoice_view', [
+                'id' => $invoice->getId()
+            ]);
+        }
+        return [
+            'entity' => $invoice,
+            'form' => $builder->getForm()->createView()
         ];
     }
 
@@ -317,5 +368,45 @@ class InvoiceController extends AbstractController
         $builder->setAction($action);
 
         return $builder->getForm();
+    }
+
+    /**
+     * @return EntityManager
+     */
+    private function getEntityManager(): EntityManager
+    {
+        return $this->get('doctrine.orm.entity_manager');
+    }
+
+    /**
+     * @return Role
+     */
+    private function getRoleHelper(): Role
+    {
+        return $this->get('teachers_users.helper.role');
+    }
+
+    /**
+     * @return FormFactory
+     */
+    private function getFormFactory(): FormFactory
+    {
+        return $this->get('form.factory');
+    }
+
+    /**
+     * @return Request|null
+     */
+    private function getCurrentRequest(): ?Request
+    {
+        return $this->get('request_stack')->getCurrentRequest();
+    }
+
+    /**
+     * @return FlashBagInterface
+     */
+    private function getFlashBag(): FlashBagInterface
+    {
+        return $this->get('session')->getFlashBag();
     }
 }

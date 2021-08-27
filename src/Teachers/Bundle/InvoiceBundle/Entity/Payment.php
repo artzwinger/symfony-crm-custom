@@ -92,6 +92,11 @@ class Payment extends ExtendPayment implements DatesAwareInterface
      */
     protected $transaction;
     /**
+     * @var string|null $manualPaymentReason
+     * @ORM\Column(name="manual_payment_reason", type="string", nullable=true)
+     */
+    protected $manualPaymentReason;
+    /**
      * @var Invoice|null
      * @ORM\ManyToOne(targetEntity="Teachers\Bundle\InvoiceBundle\Entity\Invoice")
      * @ORM\JoinColumn(name="invoice_id", referencedColumnName="id", onDelete="SET NULL")
@@ -219,6 +224,22 @@ class Payment extends ExtendPayment implements DatesAwareInterface
     public function setTransaction(?string $transaction): void
     {
         $this->transaction = $transaction;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getManualPaymentReason(): ?string
+    {
+        return $this->manualPaymentReason;
+    }
+
+    /**
+     * @param string|null $manualPaymentReason
+     */
+    public function setManualPaymentReason(?string $manualPaymentReason): void
+    {
+        $this->manualPaymentReason = $manualPaymentReason;
     }
 
     /**

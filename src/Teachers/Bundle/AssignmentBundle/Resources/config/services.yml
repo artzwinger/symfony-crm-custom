@@ -101,12 +101,6 @@ services:
             - '@doctrine.orm.entity_manager'
         tags:
             - { name: doctrine.event_listener, event: postUpdate, connection: default, entity: 'Teachers\Bundle\AssignmentBundle\Entity\Assignment' }
-    teachers_assignment.event_listener.orm.assignment_invoice_due_today_paid_post_update:
-        class: Teachers\Bundle\AssignmentBundle\EventListener\ORM\AssignmentInvoiceDueTodayPaidPostUpdate
-        arguments:
-            - '@oro_workflow.manager'
-        tags:
-            - { name: doctrine.event_listener, event: postUpdate, connection: default, entity: 'Teachers\Bundle\AssignmentBundle\Entity\Assignment' }
     teachers_assignment.event_listener.orm.assignment_amount_due_today_post_persist:
         class: Teachers\Bundle\AssignmentBundle\EventListener\ORM\AssignmentAmountDueTodayPostPersist
         arguments:

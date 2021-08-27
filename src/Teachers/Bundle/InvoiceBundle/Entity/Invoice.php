@@ -261,6 +261,18 @@ class Invoice extends ExtendInvoice implements DatesAwareInterface
     }
 
     /**
+     * @param float|null $amountPaid
+     */
+    public function addAmountPaid(?float $amountPaid): void
+    {
+        $amount = $amountPaid + $this->getAmountPaid();
+        if ($amount > $this->getAmountOwed()) {
+            $amount = $this->getAmountOwed();
+        }
+        $this->setAmountPaid($amount);
+    }
+
+    /**
      * @return float|null
      */
     public function getAmountRemaining(): ?float

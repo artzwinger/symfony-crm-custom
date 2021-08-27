@@ -60,6 +60,9 @@
                     'label': entity.invoice.studentContact.lastName ~ ' ' ~ entity.invoice.studentContact.firstName
                 })) }}
             {% endif %}
+            {% if entity.manualPaymentReason %}
+                {{ ui.renderProperty('teachers.invoice.manualPaymentReason.label'|trans, entity.manualPaymentReason) }}
+            {% endif %}
 
             {{ entityConfig.renderDynamicFields(entity) }}
         </div>

@@ -283,6 +283,7 @@ class Assignment extends ExtendAssignment implements DatesAwareInterface
     const STATUS_PAUSED_DUE_NONPAYMENT = 'paused_due_nonpayment';
 
     const WORKFLOW_NAME = 'assignment_flow';
+    const WORKFLOW_TRANSITION_START_BIDDING = 'start_accepting_bids';
     const WORKFLOW_STEP_NEW = 'new';
     const WORKFLOW_STEP_UP_FOR_BID = 'up_for_bid';
     const WORKFLOW_STEP_ASSIGNED = 'assigned';
@@ -561,7 +562,7 @@ class Assignment extends ExtendAssignment implements DatesAwareInterface
     /**
      * @return boolean
      */
-    public function getInvoiceDueTodayPaid()
+    public function getInvoiceDueTodayPaid(): bool
     {
         return $this->invoiceDueTodayPaid;
     }

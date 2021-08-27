@@ -10,10 +10,10 @@ workflows:
             start_accepting_bids_definition:
                 conditions:
                     '@or':
-                        parameters:
-                            -   '@equal': [ $assignment.amountDueToday, 0 ]
-                            -   '@equal': [ $assignment.invoiceDueTodayPaid, 1 ]
                         message: 'Amount due today must be 0 or the invoice with this amount must be paid'
+                        parameters:
+                            - '@equal': [$assignment.amountDueToday, 0]
+                            - '@equal': [$assignment.invoiceDueTodayPaid, 1]
                 actions:
                     -   '@request_enum_entity':
                             enum_code: assignment_status

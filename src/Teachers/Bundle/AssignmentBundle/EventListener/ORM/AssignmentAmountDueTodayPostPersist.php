@@ -17,8 +17,6 @@ use Teachers\Bundle\InvoiceBundle\Entity\Invoice;
 
 class AssignmentAmountDueTodayPostPersist
 {
-    const ASSIGNMENT_WORKFLOW_NAME = 'assignment_flow';
-    const START_BIDDING_TRANSITION_NAME = 'start_accepting_bids';
     /**
      * @var bool $processed
      */
@@ -78,9 +76,9 @@ class AssignmentAmountDueTodayPostPersist
             $this->createInvoice();
             return;
         }
-        $item = $this->workflowManager->getWorkflowItem($this->assignment, self::ASSIGNMENT_WORKFLOW_NAME);
-        if ($item) {
-            $this->workflowManager->transitIfAllowed($item, self::START_BIDDING_TRANSITION_NAME);
+        $item = $this->workflowManager->getWorkflowItem($this->assignment, Assignment::WORKFLOW_NAME);
+        if ($item->getCurrentStep()->getName() === Assignment::WORKFLOW_STEP_NEW) {
+            $this->workflowManager->transitIfAllowed($item, Assignment::WORKFLOW_TRANSITION_START_BIDDING);
         }
     }
 
