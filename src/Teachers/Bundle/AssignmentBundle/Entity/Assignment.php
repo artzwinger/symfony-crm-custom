@@ -560,17 +560,17 @@ class Assignment extends ExtendAssignment implements DatesAwareInterface
     }
 
     /**
-     * @return boolean
+     * @return boolean|null
      */
-    public function getInvoiceDueTodayPaid(): bool
+    public function getInvoiceDueTodayPaid(): ?bool
     {
         return $this->invoiceDueTodayPaid;
     }
 
     /**
-     * @param boolean $invoiceDueTodayPaid
+     * @param boolean|null $invoiceDueTodayPaid
      */
-    public function setInvoiceDueTodayPaid(bool $invoiceDueTodayPaid): void
+    public function setInvoiceDueTodayPaid(?bool $invoiceDueTodayPaid): void
     {
         $this->invoiceDueTodayPaid = $invoiceDueTodayPaid;
     }
