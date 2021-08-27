@@ -55,6 +55,7 @@ class AssignmentController extends AbstractController
             }
         }
         return [
+            'is_user_teacher' => $this->get('teachers_users.helper.role')->isCurrentUserTeacher(),
             'entity' => $assignment
         ];
     }
@@ -83,6 +84,7 @@ class AssignmentController extends AbstractController
         return [
             'entity' => $assignment,
             'roleHelper' => $this->get('teachers_users.helper.role'),
+            'is_user_teacher' => $this->get('teachers_users.helper.role')->isCurrentUserTeacher(),
         ];
     }
 

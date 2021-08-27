@@ -81,7 +81,7 @@ datagrids:
                 courseName:
                     data_name: application.courseName
                 coursePrefixes:
-                    data_name: application.coursePrefixe
+                    data_name: application.coursePrefixes
                 amountDueToday:
                     data_name: application.amountDueToday
                 price:
@@ -115,9 +115,9 @@ datagrids:
                 courseName:
                     type: string
                     data_name: application.courseName
-                coursePrefixe:
+                coursePrefixes:
                     type: string
-                    data_name: application.coursePrefixe
+                    data_name: application.coursePrefixes
                 amountDueToday:
                     type: string
                     data_name: application.amountDueToday

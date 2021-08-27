@@ -100,7 +100,7 @@ datagrids:
                 courseName:
                     data_name: assignment.courseName
                 coursePrefixes:
-                    data_name: assignment.coursePrefixe
+                    data_name: assignment.coursePrefixes
                 amountDueToday:
                     data_name: application.amountDueToday
                 dueDate:
@@ -216,34 +216,221 @@ datagrids:
             entity_pagination: false
 
     teachers-assignments-teacher-grid:
-        extends: teachers-assignments-grid
+        extended_entity_name: 'Teachers\Bundle\AssignmentBundle\Entity\Assignment'
+        acl_resource: teachers_assignment_view
+        views_list: '@teachers_assignment.assignments.datagrid_view_list'
         source:
             type: orm
             query:
                 select:
+                    - assignment.id
+                    - assignment.firstName
+                    - assignment.lastName
+                    - assignment.courseName
+                    - assignment.coursePrefixes
+                    - assignment.workToday
+                    - assignment.dueDate
+                    - assignment.courseUrl
+                    - assignment.userLogin
+                    - assignmentterm.name as termName
+                    - assignmentterm.id as termId
+                    - assignment.createdAt
+                    - CONCAT_WS(' ', course_manager.firstName, course_manager.lastName) as courseManagerFullName
+                    - CONCAT_WS(' ', teacher.firstName, teacher.lastName) as teacherName
+                    - CONCAT_WS(' ', student.firstName, student.lastName) as studentName
                     - GROUP_CONCAT(tg.title) as tgtitle
+                from:
+                    - { table: 'Teachers\Bundle\AssignmentBundle\Entity\Assignment', alias: assignment }
                 join:
                     inner:
+                        - { join: assignment.courseManager, alias: course_manager }
                         - { join: assignment.teacherGroups, alias: tg }
                         - { join: Teachers\Bundle\UsersBundle\Entity\TeacherGroupToUser, alias: tg_to_usr, conditionType: WITH, condition: "tg_to_usr.teacherGroup = tg.id" }
                         - { join: tg_to_usr.user, alias: tg_user }
                         - { join: assignment.status, alias: status }
+                    left:
+                        - { join: assignment.term, alias: assignmentterm }
+                        - { join: assignment.teacher, alias: teacher }
+                        - { join: assignment.student, alias: student }
+                        - { join: assignment.courseManager, alias: courseManager }
                 where:
                     and:
                         - tg_user.id = @oro_security.token_accessor->getUserId
                         - status.id = 'up_for_bid'
                 groupBy: assignment.id
         columns:
+            firstName:
+                label: teachers.assignment.first_name.label
+                order: 10
+            lastName:
+                label: teachers.assignment.last_name.label
+                order: 20
+            courseName:
+                label: teachers.assignment.course_name.label
+                order: 30
+            coursePrefixes:
+                label: teachers.assignment.course_prefixes.label
+                order: 40
+            workToday:
+                label: teachers.assignment.work_today.label
+                frontend_type: select
+                choices:
+                    teachers.assignment.work_today.true.label: 1
+                    teachers.assignment.work_today.false.label: 0
+                order: 60
+            dueDate:
+                frontend_type: datetime
+                label: teachers.assignment.due_date.label
+                order: 70
+            courseUrl:
+                label: teachers.assignment.course_url.label
+                order: 80
+            userLogin:
+                label: teachers.assignment.user_login.label
+                order: 90
+            createdAt:
+                frontend_type: datetime
+                label: oro.ui.created_at
+                order: 100
+            termName:
+                label: teachers.assignment.term.label
+                order: 110
+            teacherName:
+                label: teachers.assignment.teacher.label
+                inline_editing:
+                    enable: true
+                    editor:
+                        view: oroform/js/app/views/editor/related-id-relation-editor-view
+                        view_options:
+                            value_field_name: teacher
+                    autocomplete_api_accessor:
+                        search_handler_name: users_only_teachers
+                        label_field_name: fullName
+                        class: orouser/js/tools/acl-users-search-api-accessor
+                        permission_check_entity_name: Teachers_Bundle_AssignmentBundle_Entity_Assignment
+                order: 120
             tgtitle:
                 label: teachers.assignment.teacher_group.label
+        sorters:
+            columns:
+                firstName:
+                    data_name: assignment.firstName
+                lastName:
+                    data_name: assignment.lastName
+                courseName:
+                    data_name: assignment.courseName
+                coursePrefixes:
+                    data_name: assignment.coursePrefixes
+                dueDate:
+                    data_name: assignment.dueDate
+                courseUrl:
+                    data_name: assignment.courseUrl
+                userLogin:
+                    data_name: assignment.userLogin
+                createdAt:
+                    data_name: assignment.createdAt
+                termName:
+                    data_name: termName
+                teacherName:
+                    data_name: teacherName
+            default:
+                createdAt: DESC
+        filters:
+            columns:
+                firstName:
+                    type: string
+                    data_name: assignment.firstName
+                lastName:
+                    type: string
+                    data_name: assignment.lastName
+                courseName:
+                    type: string
+                    data_name: assignment.courseName
+                coursePrefixes:
+                    type: string
+                    data_name: assignment.coursePrefixes
+                workToday:
+                    data_name: c.enabled
+                    type: choice
+                    options:
+                        field_options:
+                            choices:
+                                teachers.assignment.work_today.false.label: 0
+                                teachers.assignment.work_today.true.label: 1
+                dueDate:
+                    type: string
+                    data_name: assignment.dueDate
+                courseUrl:
+                    type: string
+                    data_name: assignment.courseUrl
+                userLogin:
+                    type: string
+                    data_name: assignment.userLogin
+                createdAt:
+                    type: datetime
+                    data_name: assignment.createdAt
+                termName:
+                    type: enum
+                    enum_code: application_term
+                    data_name: termId
+                teacherName:
+                    type: choice-tree
+                    label: teachers.assignment.teacher.label
+                    data_name: assignment.teacher
+                    autocomplete_alias: users_only_teachers
+                    renderedPropertyName: 'fullName'
+                    className: 'Oro\Bundle\UserBundle\Entity\User'
+        properties:
+            id: ~
+            view_link:
+                type: url
+                route: teachers_assignment_view
+                params: [ id ]
+        actions:
+            view:
+                acl_resource: teachers_assignment_view
+                type: navigate
+                label: oro.grid.action.view
+                icon: eye
+                link: view_link
+                rowAction: true
+        options:
+            entityHint: teachers.assignment.entity_plural_label
+            entity_pagination: true
 
     teachers-assignments-my-grid:
-        extends: teachers-assignments-grid
+        extended_entity_name: 'Teachers\Bundle\AssignmentBundle\Entity\Assignment'
+        acl_resource: teachers_assignment_view
+        views_list: '@teachers_assignment.assignments.datagrid_view_list'
         source:
             type: orm
             query:
+                select:
+                    - assignment.id
+                    - assignment.firstName
+                    - assignment.lastName
+                    - assignment.courseName
+                    - assignment.coursePrefixes
+                    - assignment.workToday
+                    - assignment.dueDate
+                    - assignment.courseUrl
+                    - assignment.userLogin
+                    - assignmentterm.name as termName
+                    - assignmentterm.id as termId
+                    - assignment.createdAt
+                    - CONCAT_WS(' ', course_manager.firstName, course_manager.lastName) as courseManagerFullName
+                    - CONCAT_WS(' ', teacher.firstName, teacher.lastName) as teacherName
+                    - CONCAT_WS(' ', student.firstName, student.lastName) as studentName
+                from:
+                    - { table: 'Teachers\Bundle\AssignmentBundle\Entity\Assignment', alias: assignment }
                 join:
+                    inner:
+                        - { join: assignment.courseManager, alias: course_manager }
                     left:
+                        - { join: assignment.term, alias: assignmentterm }
+                        - { join: assignment.teacher, alias: teacher }
+                        - { join: assignment.student, alias: student }
+                        - { join: assignment.courseManager, alias: courseManager }
                         - { join: assignment.teacher, alias: asgm_teacher }
                         - { join: assignment.student, alias: asgm_student }
                 where:
@@ -251,6 +438,144 @@ datagrids:
                         - asgm_teacher.id = @oro_security.token_accessor->getUserId
                         - asgm_student.id = @oro_security.token_accessor->getUserId
                         - course_manager.id = @oro_security.token_accessor->getUserId
+                groupBy: assignment.id
+        columns:
+            firstName:
+                label: teachers.assignment.first_name.label
+                order: 10
+            lastName:
+                label: teachers.assignment.last_name.label
+                order: 20
+            courseName:
+                label: teachers.assignment.course_name.label
+                order: 30
+            coursePrefixes:
+                label: teachers.assignment.course_prefixes.label
+                order: 40
+            workToday:
+                label: teachers.assignment.work_today.label
+                frontend_type: select
+                choices:
+                    teachers.assignment.work_today.true.label: 1
+                    teachers.assignment.work_today.false.label: 0
+                order: 60
+            dueDate:
+                frontend_type: datetime
+                label: teachers.assignment.due_date.label
+                order: 70
+            courseUrl:
+                label: teachers.assignment.course_url.label
+                order: 80
+            userLogin:
+                label: teachers.assignment.user_login.label
+                order: 90
+            createdAt:
+                frontend_type: datetime
+                label: oro.ui.created_at
+                order: 100
+            termName:
+                label: teachers.assignment.term.label
+                order: 110
+            teacherName:
+                label: teachers.assignment.teacher.label
+                inline_editing:
+                    enable: true
+                    editor:
+                        view: oroform/js/app/views/editor/related-id-relation-editor-view
+                        view_options:
+                            value_field_name: teacher
+                    autocomplete_api_accessor:
+                        search_handler_name: users_only_teachers
+                        label_field_name: fullName
+                        class: orouser/js/tools/acl-users-search-api-accessor
+                        permission_check_entity_name: Teachers_Bundle_AssignmentBundle_Entity_Assignment
+                order: 120
+        sorters:
+            columns:
+                firstName:
+                    data_name: assignment.firstName
+                lastName:
+                    data_name: assignment.lastName
+                courseName:
+                    data_name: assignment.courseName
+                coursePrefixes:
+                    data_name: assignment.coursePrefixes
+                dueDate:
+                    data_name: assignment.dueDate
+                courseUrl:
+                    data_name: assignment.courseUrl
+                userLogin:
+                    data_name: assignment.userLogin
+                createdAt:
+                    data_name: assignment.createdAt
+                termName:
+                    data_name: termName
+                teacherName:
+                    data_name: teacherName
+            default:
+                createdAt: DESC
+        filters:
+            columns:
+                firstName:
+                    type: string
+                    data_name: assignment.firstName
+                lastName:
+                    type: string
+                    data_name: assignment.lastName
+                courseName:
+                    type: string
+                    data_name: assignment.courseName
+                coursePrefixes:
+                    type: string
+                    data_name: assignment.coursePrefixes
+                workToday:
+                    data_name: c.enabled
+                    type: choice
+                    options:
+                        field_options:
+                            choices:
+                                teachers.assignment.work_today.false.label: 0
+                                teachers.assignment.work_today.true.label: 1
+                dueDate:
+                    type: string
+                    data_name: assignment.dueDate
+                courseUrl:
+                    type: string
+                    data_name: assignment.courseUrl
+                userLogin:
+                    type: string
+                    data_name: assignment.userLogin
+                createdAt:
+                    type: datetime
+                    data_name: assignment.createdAt
+                termName:
+                    type: enum
+                    enum_code: application_term
+                    data_name: termId
+                teacherName:
+                    type: choice-tree
+                    label: teachers.assignment.teacher.label
+                    data_name: assignment.teacher
+                    autocomplete_alias: users_only_teachers
+                    renderedPropertyName: 'fullName'
+                    className: 'Oro\Bundle\UserBundle\Entity\User'
+        properties:
+            id: ~
+            view_link:
+                type: url
+                route: teachers_assignment_view
+                params: [ id ]
+        actions:
+            view:
+                acl_resource: teachers_assignment_view
+                type: navigate
+                label: oro.grid.action.view
+                icon: eye
+                link: view_link
+                rowAction: true
+        options:
+            entityHint: teachers.assignment.entity_plural_label
+            entity_pagination: true
 
     teachers-assignment-messages-grid:
         extended_entity_name: 'Teachers\Bundle\AssignmentBundle\Entity\AssignmentMessage'
