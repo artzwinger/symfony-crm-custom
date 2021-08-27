@@ -8,6 +8,7 @@
             <div class="activity-context-activity-list">
                 {{ AC.activity_contexts(entity, target, true, 'oronote/js/app/components/note-context-component') }}
             </div>
+            {{ ui.renderProperty('teachers.assignment.order_number.label'|trans, '#' ~ entity.id) }}
             {% if entity.application %}
                 {{ ui.renderAttribute('teachers.application.entity_label'|trans, ui.link({
                     'path': path('teachers_application_view', { entityClass: oro_class_name(entity.application, true), id: entity.application.id }),
@@ -17,16 +18,18 @@
                     'label': entity.application.courseName
                 })) }}
             {% endif %}
-            {% set teacherGroupsHtml = '' %}
-            {% for teacherGroup in entity.teacherGroups %}
-                {% set teacherGroupsHtml = teacherGroupsHtml ~ ui.link({
-                    'path': path('teachers_group_view', { entityClass: oro_class_name(teacherGroup, true), id: teacherGroup.id }),
-                    'iCss': 'fa-users',
-                    'aCss': 'link-icon-need-space',
-                    'title': teacherGroup.title,
-                    'label': teacherGroup.title
-                }) %}
-            {% endfor %}
+            {% if not entity.teacher %}
+                {% set teacherGroupsHtml = '' %}
+                {% for teacherGroup in entity.teacherGroups %}
+                    {% set teacherGroupsHtml = teacherGroupsHtml ~ ui.link({
+                        'path': path('teachers_group_view', { entityClass: oro_class_name(teacherGroup, true), id: teacherGroup.id }),
+                        'iCss': 'fa-users',
+                        'aCss': 'link-icon-need-space',
+                        'title': teacherGroup.title,
+                        'label': teacherGroup.title
+                    }) %}
+                {% endfor %}
+            {% endif %}
             {% if teacherGroupsHtml != '' %}
                 {{ ui.renderAttribute('teachers.assignment.teacherGroups.label'|trans, teacherGroupsHtml) }}
             {% endif %}

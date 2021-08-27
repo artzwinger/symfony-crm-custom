@@ -2,18 +2,12 @@
 
 namespace Teachers\Bundle\InvoiceBundle\Form\Type;
 
-use Doctrine\ORM\EntityManager;
 use Oro\Bundle\FormBundle\Form\Type\OroMoneyType;
-use Oro\Bundle\FormBundle\Utils\FormUtils;
-use Oro\Bundle\TaskBundle\Entity\Task;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\FormEvent;
-use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Teachers\Bundle\InvoiceBundle\Entity\Invoice;
-use Teachers\Bundle\InvoiceBundle\Entity\Payment;
 use Symfony\Component\Validator\Constraints as Assert;
+use Teachers\Bundle\InvoiceBundle\Entity\Payment;
 
 /**
  * Form type for Invoice entity

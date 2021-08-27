@@ -119,6 +119,7 @@ teachers:
         teacherAccount.label: Tutor Account
         teacherContact.label: Tutor Contact
         teacherGroups.label: Tutor Groups
+        order_number.label: Order Number
 
         datagrid:
             update: Update

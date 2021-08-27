@@ -5,16 +5,13 @@ namespace Teachers\Bundle\InvoiceBundle\Form\Type;
 use DateTime;
 use DateTimeZone;
 use Exception;
-use Oro\Bundle\EntityExtendBundle\Form\Type\EnumSelectType;
 use Oro\Bundle\FormBundle\Form\Type\OroDateTimeType;
 use Oro\Bundle\FormBundle\Form\Type\OroMoneyType;
-use Oro\Bundle\FormBundle\Utils\FormUtils;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\FormEvent;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Teachers\Bundle\InvoiceBundle\Entity\Invoice;
 use Symfony\Component\Validator\Constraints as Assert;
+use Teachers\Bundle\InvoiceBundle\Entity\Invoice;
 
 /**
  * Form type for Invoice entity

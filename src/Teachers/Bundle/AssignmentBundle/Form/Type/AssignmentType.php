@@ -102,12 +102,6 @@ class AssignmentType extends AbstractType
                 'required' => true,
                 'constraints' => [new Assert\NotNull()]
             ])
-            ->add('rep', EnumSelectType::class, [
-                'label' => 'teachers.assignment.rep.label',
-                'enum_code' => 'assignment_rep',
-                'required' => true,
-                'constraints' => [new Assert\NotNull()]
-            ])
             ->add('teacherGroups', TeacherGroupsMultiSelectType::class, [
                 'label' => 'teachers.assignment.teacherGroups.label',
                 'required' => true
