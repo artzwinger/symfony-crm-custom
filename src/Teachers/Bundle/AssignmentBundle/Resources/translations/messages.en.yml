@@ -16,7 +16,7 @@ teachers:
                 pending: Pending Messages
                 declined: Declined Messages
         # activity
-        teacher_group.label: Tutors group
+        teacher_group.label: Tutor Group
         course_manager_name.label: Course Manager
         activity_item:
             created_by: created by {{ user }}
