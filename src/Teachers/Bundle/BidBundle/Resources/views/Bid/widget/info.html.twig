@@ -26,24 +26,6 @@
                     'label': entity.teacher.fullName
                 })) }}
             {% endif %}
-            {% if entity.teacherAccount %}
-                {{ ui.renderAttribute('teachers.assignment.teacherAccount.label'|trans, ui.link({
-                    'path': path('oro_account_view', { entityClass: oro_class_name(entity.teacherAccount, true), id: entity.teacherAccount.id }),
-                    'iCss': 'fa-suitcase',
-                    'aCss': 'link-icon-need-space',
-                    'title': entity.teacherAccount.name,
-                    'label': entity.teacherAccount.name
-                })) }}
-            {% endif %}
-            {% if entity.teacherContact %}
-                {{ ui.renderAttribute('teachers.assignment.teacherContact.label'|trans, ui.link({
-                    'path': path('oro_contact_view', { entityClass: oro_class_name(entity.teacherContact, true), id: entity.teacherContact.id }),
-                    'iCss': 'fa-users',
-                    'aCss': 'link-icon-need-space',
-                    'title': entity.teacherContact.lastName ~ ' ' ~ entity.teacherContact.firstName,
-                    'label': entity.teacherContact.lastName ~ ' ' ~ entity.teacherContact.firstName
-                })) }}
-            {% endif %}
             {{ ui.renderProperty('teachers.bid.price.label'|trans, '$' ~ entity.price|number_format(2)) }}
 
             {{ entityConfig.renderDynamicFields(entity) }}
