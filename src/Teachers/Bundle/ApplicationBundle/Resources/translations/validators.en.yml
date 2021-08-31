@@ -2,3 +2,4 @@ teachers:
     application:
         due_date_required: "Due date must be set for {{ field }}"
         due_date_not_in_the_past: "Due date must not be in the past"
+        amount_due_today_not_less_than_total_price: "Amount Due Today must be less than total price"

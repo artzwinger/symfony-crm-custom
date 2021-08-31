@@ -16,6 +16,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints as Assert;
 use Teachers\Bundle\ApplicationBundle\Entity\Application;
@@ -63,7 +64,9 @@ class ApplicationType extends AbstractType
             ->add('amountDueToday', OroMoneyType::class, [
                 'required' => true,
                 'label' => 'teachers.application.amountDueToday.label',
-                'constraints' => [new Assert\GreaterThanOrEqual(0)]
+                'constraints' => [
+                    $this->getAmountDueTodayConstraint()
+                ]
             ])
             ->add('price', OroMoneyType::class, [
                 'required' => true,
@@ -119,6 +122,34 @@ class ApplicationType extends AbstractType
                 'required' => true,
                 'constraints' => [new Assert\NotNull()]
             ]);
+        $builder->addEventListener(FormEvents::PRE_SUBMIT, [$this, 'preSubmit']);
+    }
+
+    /**
+     * @param FormEvent $event
+     */
+    public function preSubmit(FormEvent $event)
+    {
+        $this->updateAmountDueTodayConstraints($event);
+    }
+
+    /**
+     * @param FormEvent $event
+     */
+    protected function updateAmountDueTodayConstraints(FormEvent $event)
+    {
+        $data = $event->getData();
+        if ($data && $data['price'] > 0) {
+            FormUtils::replaceField(
+                $event->getForm(),
+                'amountDueToday',
+                [
+                    'constraints' => [
+                        $this->getAmountDueTodayConstraint(floatval($data['price']))
+                    ]
+                ]
+            );
+        }
     }
 
     /**
@@ -139,24 +170,14 @@ class ApplicationType extends AbstractType
         return 'teachers_application';
     }
 
-    /**
-     * @param FormEvent $event
-     */
-    protected function updateDueDateFieldConstraints(FormEvent $event)
+    protected function getAmountDueTodayConstraint($totalPrice = PHP_INT_MAX): Assert\LessThanOrEqual
     {
-        /** @var Application $data */
-        $data = $event->getData();
-        if ($data && $data->getCreatedAt()) {
-            FormUtils::replaceField(
-                $event->getForm(),
-                'dueDate',
-                [
-                    'constraints' => [
-                        $this->getDueDateValidationConstraint($data->getCreatedAt())
-                    ]
-                ]
-            );
-        }
+        return new Assert\LessThanOrEqual(
+            [
+                'value' => $totalPrice,
+                'message' => 'teachers.application.amount_due_today_not_less_than_total_price'
+            ]
+        );
     }
 
     /**
