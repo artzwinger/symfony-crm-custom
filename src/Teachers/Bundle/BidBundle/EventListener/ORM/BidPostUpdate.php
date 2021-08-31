@@ -47,6 +47,7 @@ class BidPostUpdate
         }
         $data = $workflowItem->getData();
         $data->set('teacher', $teacher);
+        $data->set('assignment_value', $bid->getPrice());
         $workflowItem->setData($data);
         $this->workflowManager->transit($workflowItem, 'assign');
     }

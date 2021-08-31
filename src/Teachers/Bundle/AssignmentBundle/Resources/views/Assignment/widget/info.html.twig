@@ -71,6 +71,9 @@
             {% if not is_user_teacher %}
                 {{ ui.renderProperty('teachers.assignment.amountDueToday.label'|trans, entity.amountDueToday|oro_format_currency) }}
             {% endif %}
+            {% if entity.isAssigned() and not roleHelper.currentUserStudent %}
+                {{ ui.renderProperty('teachers.assignment.assignmentValue.label'|trans, entity.assignmentValue|oro_format_currency) }}
+            {% endif %}
             {{ ui.renderProperty('teachers.assignment.work_today.label'|trans, entity.workTodayLabel) }}
             {{ ui.renderProperty('teachers.assignment.due_date.label'|trans, entity.dueDate|oro_format_datetime) }}
             {{ ui.renderProperty('teachers.assignment.course_url.label'|trans, entity.courseUrl) }}

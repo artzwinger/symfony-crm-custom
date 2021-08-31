@@ -5,3 +5,5 @@ workflows:
                 type: entity
                 options:
                     class: Oro\Bundle\UserBundle\Entity\User
+            assignment_value:
+                type: float

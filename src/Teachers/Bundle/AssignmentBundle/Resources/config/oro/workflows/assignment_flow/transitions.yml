@@ -51,3 +51,9 @@ workflows:
                             form_type: Teachers\Bundle\UsersBundle\Form\Type\TeacherSelectType
                             options:
                                 required: true
+                        assignment_value:
+                            form_type: Oro\Bundle\FormBundle\Form\Type\OroMoneyType
+                            options:
+                                required: true
+                                constraints:
+                                    -   NotBlank: ~

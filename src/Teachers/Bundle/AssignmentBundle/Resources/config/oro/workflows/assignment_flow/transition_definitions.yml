@@ -31,10 +31,14 @@ workflows:
                             enum_code: assignment_status
                             identifier: assigned
                             attribute: $assignment.status
-                    -   '@call_method': # add Account
+                    -   '@call_method':
                             object: $assignment
                             method: setTeacher
                             method_parameters: [ $teacher ]
+                    -   '@call_method':
+                            object: $assignment
+                            method: setAssignmentValue
+                            method_parameters: [ $assignment_value ]
             pause_due_nonpayment_definition:
                 actions:
                     -   '@request_enum_entity':

@@ -66,7 +66,7 @@ class Assignment extends ExtendAssignment implements DatesAwareInterface
      *
      * @ORM\Column(type="integer")
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
+     * @ORM\GeneratedValue(strategy="SEQUENCE")
      * @ORM\SequenceGenerator(sequenceName="teachers_assignment_id_seq", initialValue=1000)
      * @ConfigField(
      *      defaultValues={
@@ -171,6 +171,13 @@ class Assignment extends ExtendAssignment implements DatesAwareInterface
      * @ORM\Column(name="amount_due_today", type="money", nullable=true)
      */
     protected $amountDueToday;
+
+    /**
+     * @var double|null $assignmentValue
+     *
+     * @ORM\Column(name="assignment_value", type="money", nullable=true)
+     */
+    protected $assignmentValue;
 
     /**
      * @var boolean $invoiceDueTodayPaid
@@ -344,6 +351,11 @@ class Assignment extends ExtendAssignment implements DatesAwareInterface
     public function isUpForBids(): bool
     {
         return $this->getStatus()->getId() === self::STATUS_UP_FOR_BID;
+    }
+
+    public function isAssigned(): bool
+    {
+        return $this->getStatus()->getId() === self::STATUS_ASSIGNED;
     }
 
     /**
@@ -557,6 +569,22 @@ class Assignment extends ExtendAssignment implements DatesAwareInterface
     public function setAmountDueToday(?float $amountDueToday): void
     {
         $this->amountDueToday = $amountDueToday;
+    }
+
+    /**
+     * @return float|null
+     */
+    public function getAssignmentValue(): ?float
+    {
+        return $this->assignmentValue;
+    }
+
+    /**
+     * @param float|null $assignmentValue
+     */
+    public function setAssignmentValue(?float $assignmentValue): void
+    {
+        $this->assignmentValue = $assignmentValue;
     }
 
     /**
