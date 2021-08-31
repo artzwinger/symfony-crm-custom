@@ -8,7 +8,7 @@ use Exception;
 class PaymentGateway
 {
     const GATEWAY_URL = 'https://secure.networkmerchants.com/api/v2/three-step';
-    const API_KEY = '2F822Rw39fx762MaV7Yy86jXGTC7sCDy';
+    const API_KEY = 'n3RApVU527kXv4PKnR4qV4dSqHS5SwU3';
 
     /**
      * @throws Exception
