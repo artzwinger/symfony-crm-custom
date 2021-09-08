@@ -135,11 +135,8 @@ services:
     teachers_invoice.helper.payment_gateway:
         class: Teachers\Bundle\InvoiceBundle\Helper\PaymentGateway
         public: true
-    teachers_invoice.report.grid.listener:
-        class: Teachers\Bundle\InvoiceBundle\EventListener\InvoiceReportGridListener
+    teachers_invoice.report.datagrid_view_list:
+        class: Teachers\Bundle\InvoiceBundle\Datagrid\ReportViewList
+        public: true
         arguments:
-            - '@oro_filter.provider.state.filters'
-        tags:
-            - name: kernel.event_listener
-              event: oro_datagrid.datagrid.build.before.oro_reportcrm-invoices-base
-              method: onBuildBefore
+            - '@translator'

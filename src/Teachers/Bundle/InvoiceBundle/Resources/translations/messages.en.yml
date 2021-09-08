@@ -61,13 +61,20 @@ teachers:
           message: Invoice successfully saved
         payment_received:
           message: Payment has been received
-
+    grid:
+      views:
+        this_month: Invoices Paid This Month
+        last_month: Invoices Paid Last Month
+        this_year: Invoices Paid This Year
+        last_year: Invoices Paid Last Year
     datagrid:
       filters:
         period:
           this_month: This Month
           last_month: Last Month
-          all: All
+          this_year: This Year
+          last_year: Last Year
+          all: All Time
       update: Update
       delete: Delete
       view: View

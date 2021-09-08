@@ -353,7 +353,6 @@ datagrids:
                     left:
                         - { join: invoice.assignment, alias: assignment }
                         - { join: invoice.student, alias: student }
-                groupBy: invoice.id
         totals:
             grand_total:
                 columns:
@@ -406,16 +405,6 @@ datagrids:
                 createdAt: DESC
         filters:
             columns:
-                period:
-                    type: oro_period_filter
-                    data_name: period
-                    options:
-                        populate_default: false
-                        field_options:
-                            choices:
-                                teachers.invoice.datagrid.filters.period.this_month: thisMonth
-                                teachers.invoice.datagrid.filters.period.last_month: lastMonth
-                                teachers.invoice.datagrid.filters.period.all: periodAll
                 studentEmail:
                     type: string
                     data_name: teachers.invoice.student_email.label
@@ -438,9 +427,8 @@ datagrids:
                 fullyPaidDate:
                     type: datetime
                     data_name: invoice.fullyPaidDate
-            default:
-                period: { value: lastMonth }
         options:
             entityHint: oro.reportcrm.datagrid.default_entity_hint
             export: true
             entity_pagination: true
+        views_list: '@teachers_invoice.report.datagrid_view_list'
