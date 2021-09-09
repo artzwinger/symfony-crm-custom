@@ -138,7 +138,7 @@ class TeacherGroup extends ExtendTeacherGroup
     }
 
     /**
-     * @return \Doctrine\Common\Collections\Collection|\Oro\Bundle\UserBundle\Entity\User[]
+     * @return Collection|User[]
      */
     public function getTeachers()
     {
@@ -146,7 +146,7 @@ class TeacherGroup extends ExtendTeacherGroup
     }
 
     /**
-     * @param \Doctrine\Common\Collections\Collection|\Oro\Bundle\UserBundle\Entity\User[] $teachers
+     * @param Collection|User[] $teachers
      */
     public function setTeachers($teachers): void
     {
@@ -154,7 +154,7 @@ class TeacherGroup extends ExtendTeacherGroup
     }
 
     /**
-     * @return \Oro\Bundle\OrganizationBundle\Entity\Organization
+     * @return Organization
      */
     public function getOwner(): ?Organization
     {
@@ -162,7 +162,7 @@ class TeacherGroup extends ExtendTeacherGroup
     }
 
     /**
-     * @param \Oro\Bundle\OrganizationBundle\Entity\Organization $owner
+     * @param Organization $owner
      */
     public function setOwner(Organization $owner): void
     {

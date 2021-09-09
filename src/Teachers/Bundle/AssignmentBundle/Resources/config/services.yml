@@ -110,6 +110,13 @@ services:
         tags:
             - { name: doctrine.event_listener, priority: 900, event: postPersist, connection: default, entity: 'Teachers\Bundle\AssignmentBundle\Entity\Assignment' }
             - { name: doctrine.event_listener, event: postFlush }
+    teachers_assignment.event_listener.orm.assignment_send_emails_post_persist:
+        class: Teachers\Bundle\AssignmentBundle\EventListener\ORM\AssignmentSendEmailsPostPersist
+        arguments:
+            - '@oro_email.manager.template_email'
+            - '@oro_config.manager'
+        tags:
+            - { name: doctrine.event_listener, event: postPersist }
     teachers_assignment.grid.listener:
         class: Teachers\Bundle\AssignmentBundle\EventListener\AssignmentGridListener
         arguments:
