@@ -30,12 +30,12 @@ class AssignmentGridListener
         }
         $config = $event->getConfig();
         $source = $config->getOrmQuery();
-        $source->addSelect('(CASE WHEN (SUM(COALESCE(unViewedBid.unViewed,0)) > 0) THEN 1 ELSE 0 END) as hasUnViewedBids');
+        $source->addSelect('(CASE WHEN (SUM(CASE WHEN unViewedBid.unViewed = true THEN 1 ELSE 0 END) > 0) THEN true ELSE false END) as hasUnViewedBids');
         $source->addLeftJoin(
             'assignment.bids',
             'unViewedBid',
             'WITH',
-            'unViewedBid.assignment = assignment.id and unViewedBid.unViewed = 1'
+            'unViewedBid.assignment = assignment.id and unViewedBid.unViewed = true'
         );
         $filterPath = sprintf('%s[%s]', FilterConfiguration::COLUMNS_PATH, self::COLUMN_NAME);
         $config->offsetSetByPath(
@@ -65,11 +65,11 @@ class AssignmentGridListener
         );
         $config->offsetSetByPath(
             sprintf('%s[%s][%s]', $columnPath, 'choices', 'teachers.assignment.has_unviewed_bids.yes.label'),
-            1
+            true
         );
         $config->offsetSetByPath(
             sprintf('%s[%s][%s]', $columnPath, 'choices', 'teachers.assignment.has_unviewed_bids.no.label'),
-            0
+            false
         );
     }
 }

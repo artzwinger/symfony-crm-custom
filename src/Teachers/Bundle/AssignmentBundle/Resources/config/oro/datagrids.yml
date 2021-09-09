@@ -26,9 +26,8 @@ datagrids:
                 from:
                     - { table: 'Teachers\Bundle\AssignmentBundle\Entity\Assignment', alias: assignment }
                 join:
-                    inner:
-                        - { join: assignment.courseManager, alias: course_manager }
                     left:
+                        - { join: assignment.courseManager, alias: course_manager }
                         - { join: assignment.term, alias: assignmentterm }
                         - { join: assignment.teacher, alias: teacher }
                         - { join: assignment.student, alias: student }
@@ -243,12 +242,12 @@ datagrids:
                     - { table: 'Teachers\Bundle\AssignmentBundle\Entity\Assignment', alias: assignment }
                 join:
                     inner:
-                        - { join: assignment.courseManager, alias: course_manager }
                         - { join: assignment.teacherGroups, alias: tg }
                         - { join: Teachers\Bundle\UsersBundle\Entity\TeacherGroupToUser, alias: tg_to_usr, conditionType: WITH, condition: "tg_to_usr.teacherGroup = tg.id" }
                         - { join: tg_to_usr.user, alias: tg_user }
                         - { join: assignment.status, alias: status }
                     left:
+                        - { join: assignment.courseManager, alias: course_manager }
                         - { join: assignment.term, alias: assignmentterm }
                         - { join: assignment.teacher, alias: teacher }
                         - { join: assignment.student, alias: student }
@@ -424,9 +423,8 @@ datagrids:
                 from:
                     - { table: 'Teachers\Bundle\AssignmentBundle\Entity\Assignment', alias: assignment }
                 join:
-                    inner:
-                        - { join: assignment.courseManager, alias: course_manager }
                     left:
+                        - { join: assignment.courseManager, alias: course_manager }
                         - { join: assignment.term, alias: assignmentterm }
                         - { join: assignment.teacher, alias: teacher }
                         - { join: assignment.student, alias: student }
