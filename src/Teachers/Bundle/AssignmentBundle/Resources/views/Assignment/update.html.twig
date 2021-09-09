@@ -53,72 +53,77 @@
 {% endblock pageHeader %}
 
 {% block content_data %}
-    {% set id = 'assignment-form' %}
-
-    {% set dataBlocks = [{
-        'title': 'teachers.assignment.block.general'|trans,
-        'subblocks': [
-            {
-                'title': 'teachers.assignment.block.assignment_information'|trans,
-                'data': [
-                form_row(form.teacherGroups),
-                form_row(form.student),
-                form_row(form.firstName),
-                form_row(form.lastName),
-                form_row(form.courseName),
-                form_row(form.coursePrefixes),
-                form_row(form.description),
-                form_row(form.workToday),
-                form_row(form.dueDate),
-                form_row(form.courseUrl),
-                form_row(form.userLogin),
-                form_row(form.userPassword),
-                form_row(form.instructions),
-                form_row(form.amountDueToday),
-                form_row(form.status),
-                form_row(form.term)
+    {% if cannotCreateAssignment %}
+        <div class="alert alert-error">
+            Assignment already created
+        </div>
+    {% else %}
+        {% set id = 'assignment-form' %}
+        {% set dataBlocks = [{
+            'title': 'teachers.assignment.block.general'|trans,
+            'subblocks': [
+                {
+                    'title': 'teachers.assignment.block.assignment_information'|trans,
+                    'data': [
+                    form_row(form.teacherGroups),
+                    form_row(form.student),
+                    form_row(form.firstName),
+                    form_row(form.lastName),
+                    form_row(form.courseName),
+                    form_row(form.coursePrefixes),
+                    form_row(form.description),
+                    form_row(form.workToday),
+                    form_row(form.dueDate),
+                    form_row(form.courseUrl),
+                    form_row(form.userLogin),
+                    form_row(form.userPassword),
+                    form_row(form.instructions),
+                    form_row(form.amountDueToday),
+                    form_row(form.status),
+                    form_row(form.term)
+                ]
+                }
             ]
-            }
-        ]
-    }] %}
-    <script type="text/javascript">
-        loadModules(['jquery', 'routing', 'oroui/js/mediator', 'oroui/js/messenger', 'orotranslation/js/translator'],
-            function ($, routing, mediator, messenger, __) {
-                $(function () {
-                    var $student = $('#{{ form.student.vars.id }}'),
-                        $firstName = $('#{{ form.firstName.vars.id }}'),
-                        $lastName = $('#{{ form.lastName.vars.id }}');
-                    $student.on('change', function (e) {
-                        var userId = parseInt($(e.target).val(), 10);
-                        if (isNaN(userId) || userId <= 0) {
-                            return;
-                        }
-                        var url = routing.generate('teachers_assignment_getuserinfo', {
-                            id: userId
-                        });
-                        mediator.execute('showLoading');
-                        $.post({
-                            url: url,
-                            errorHandlerMessage: __('teachers.assignment.userInfo.error')
-                        }).done(function (res, status, jqXHR) {
-                            if (res.firstName) {
-                                $firstName.val(res.firstName);
+        }] %}
+        <script type="text/javascript">
+            loadModules(['jquery', 'routing', 'oroui/js/mediator', 'oroui/js/messenger', 'orotranslation/js/translator'],
+                function ($, routing, mediator, messenger, __) {
+                    $(function () {
+                        var $student = $('#{{ form.student.vars.id }}'),
+                            $firstName = $('#{{ form.firstName.vars.id }}'),
+                            $lastName = $('#{{ form.lastName.vars.id }}');
+                        $student.on('change', function (e) {
+                            var userId = parseInt($(e.target).val(), 10);
+                            if (isNaN(userId) || userId <= 0) {
+                                return;
                             }
-                            if (res.lastName) {
-                                $lastName.val(res.lastName);
-                            }
-                        }).always(function () {
-                            mediator.execute('hideLoading');
+                            var url = routing.generate('teachers_assignment_getuserinfo', {
+                                id: userId
+                            });
+                            mediator.execute('showLoading');
+                            $.post({
+                                url: url,
+                                errorHandlerMessage: __('teachers.assignment.userInfo.error')
+                            }).done(function (res, status, jqXHR) {
+                                if (res.firstName) {
+                                    $firstName.val(res.firstName);
+                                }
+                                if (res.lastName) {
+                                    $lastName.val(res.lastName);
+                                }
+                            }).always(function () {
+                                mediator.execute('hideLoading');
+                            });
                         });
                     });
                 });
-            });
-    </script>
-    {% set dataBlocks = dataBlocks|merge(oro_form_additional_data(form, 'teachers.assignment.block.additional'|trans)) %}
+        </script>
+        {% set dataBlocks = dataBlocks|merge(oro_form_additional_data(form, 'teachers.assignment.block.additional'|trans)) %}
 
-    {% set data = {
-        'formErrors': form_errors(form)? form_errors(form) : null,
-        'dataBlocks': dataBlocks,
-    } %}
-    {{ parent() }}
+        {% set data = {
+            'formErrors': form_errors(form)? form_errors(form) : null,
+            'dataBlocks': dataBlocks,
+        } %}
+        {{ parent() }}
+    {% endif %}
 {% endblock content_data %}

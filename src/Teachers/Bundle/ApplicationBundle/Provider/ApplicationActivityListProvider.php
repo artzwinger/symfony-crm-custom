@@ -139,7 +139,7 @@ class ApplicationActivityListProvider implements
     public function getOrganization($activityEntity)
     {
         /** @var $activityEntity Application */
-        return $activityEntity->getOrganization();
+        return $activityEntity->getOwner();
     }
 
     /**

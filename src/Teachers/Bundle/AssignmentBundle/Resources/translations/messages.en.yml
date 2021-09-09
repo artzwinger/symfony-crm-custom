@@ -1,5 +1,10 @@
 teachers:
     assignment:
+        controller:
+            assignment:
+                saved:
+                    message: Assignment Saved
+
         has_unviewed_bids:
             label: Unviewed Bids
             yes:

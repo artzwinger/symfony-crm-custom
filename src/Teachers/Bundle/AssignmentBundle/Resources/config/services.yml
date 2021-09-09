@@ -117,6 +117,12 @@ services:
             - '@oro_config.manager'
         tags:
             - { name: doctrine.event_listener, event: postPersist }
+    teachers_assignment.event_listener.orm.assignment_set_to_application_post_persist:
+        class: Teachers\Bundle\AssignmentBundle\EventListener\ORM\AssignmentSetToApplicationPostPersist
+        arguments:
+            - '@doctrine.orm.entity_manager'
+        tags:
+            - { name: doctrine.event_listener, event: postPersist }
     teachers_assignment.grid.listener:
         class: Teachers\Bundle\AssignmentBundle\EventListener\AssignmentGridListener
         arguments:

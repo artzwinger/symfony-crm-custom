@@ -8,21 +8,22 @@ use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Exception;
 use Oro\Bundle\FormBundle\Model\UpdateHandlerFacade;
+use Oro\Bundle\SecurityBundle\Annotation\Acl;
+use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
+use Oro\Bundle\SecurityBundle\Annotation\CsrfProtection;
 use Oro\Bundle\UserBundle\Entity\Role;
 use Oro\Bundle\UserBundle\Entity\User;
-use Symfony\Component\Form\FormFactory;
-use Symfony\Component\Form\FormInterface;
-use Teachers\Bundle\ApplicationBundle\Entity\Application;
-use Teachers\Bundle\AssignmentBundle\Entity\Assignment;
-use Oro\Bundle\SecurityBundle\Annotation\CsrfProtection;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\FormFactory;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
-use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
-use Oro\Bundle\SecurityBundle\Annotation\Acl;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Annotation\Route;
+use Teachers\Bundle\ApplicationBundle\Entity\Application;
+use Teachers\Bundle\AssignmentBundle\Entity\Assignment;
 
 class AssignmentController extends AbstractController
 {
@@ -143,6 +144,7 @@ class AssignmentController extends AbstractController
         $request = $this->get('request_stack')->getCurrentRequest();
         $entityClass = $request->get('entityClass');
         $entityId = $request->get('entityId');
+        $cannotCreateAssignment = false;
         try {
             if ($entityClass && $entityId) {
                 $entityClass = str_replace('_', '\\', $entityClass);
@@ -151,6 +153,9 @@ class AssignmentController extends AbstractController
                 $application = $repository->find($entityId);
                 if (empty($application)) {
                     throw new EntityNotFoundException();
+                }
+                if ($application->getAssignment()) {
+                    $cannotCreateAssignment = true;
                 }
                 if ($this->get('teachers_users.helper.role')->isCurrentUserCourseManager()) {
                     $roleRepository = $em->getRepository(Role::class);
@@ -191,7 +196,10 @@ class AssignmentController extends AbstractController
             }
         } catch (Exception $e) {
         }
-        return $this->update($assignment, 'teachers_assignment_create');
+        $result = $this->update($assignment, 'teachers_assignment_create');
+        $result['cannotCreateAssignment'] = $cannotCreateAssignment;
+
+        return $result;
     }
 
     /**

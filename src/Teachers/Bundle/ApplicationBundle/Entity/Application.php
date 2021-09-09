@@ -13,6 +13,7 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\UserBundle\Entity\User;
 use Teachers\Bundle\ApplicationBundle\Model\ExtendApplication;
+use Teachers\Bundle\AssignmentBundle\Entity\Assignment;
 
 /**
  * @ORM\Entity(repositoryClass="Teachers\Bundle\ApplicationBundle\Entity\Repository\ApplicationRepository")
@@ -189,6 +190,13 @@ class Application extends ExtendApplication implements DatesAwareInterface
      * @ORM\JoinColumn(name="student_id", referencedColumnName="id", nullable=true, onDelete="SET NULL")
      */
     protected $student;
+    /**
+     * @var Assignment|null $student
+     *
+     * @ORM\ManyToOne(targetEntity="Teachers\Bundle\AssignmentBundle\Entity\Assignment")
+     * @ORM\JoinColumn(name="assignment_id", referencedColumnName="id", nullable=true, onDelete="SET NULL")
+     */
+    protected $assignment;
 
     /**
      * @var Contact|null $studentContact
@@ -570,6 +578,22 @@ class Application extends ExtendApplication implements DatesAwareInterface
     public function setStudent(?User $student): void
     {
         $this->student = $student;
+    }
+
+    /**
+     * @return Assignment|null
+     */
+    public function getAssignment(): ?Assignment
+    {
+        return $this->assignment;
+    }
+
+    /**
+     * @param Assignment|null $assignment
+     */
+    public function setAssignment(?Assignment $assignment): void
+    {
+        $this->assignment = $assignment;
     }
 
     /**

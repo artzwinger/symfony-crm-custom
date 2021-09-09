@@ -14,26 +14,6 @@
 {% endblock pageHeader %}
 
 {% block navButtons %}
-    {% import 'OroUIBundle::macros.html.twig' as UI %}
-
-    {% if is_granted('teachers_application_delete') %}
-        {{ UI.deleteButton({
-            'dataUrl': path('teachers_application_delete', {'id': entity.id}),
-            'dataRedirect': path('teachers_application_index'),
-            'aCss': 'no-hash remove-button',
-            'id': 'btn-remove-application-form',
-            'dataId': entity.id,
-            'entity_label': 'teachers.application.entity_label'|trans,
-        }) }}
-        {{ UI.buttonSeparator() }}
-    {% endif %}
-
-    {% if is_granted('teachers_application_edit') %}
-        {{ UI.editButton({
-            'path': path('teachers_application_update', {'id': entity.id}),
-            'entity_label': 'teachers.application.entity_label'|trans,
-        }) }}
-    {% endif %}
 {% endblock %}
 
 {% block content_data %}
