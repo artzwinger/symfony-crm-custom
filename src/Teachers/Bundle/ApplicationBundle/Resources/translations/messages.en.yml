@@ -1,5 +1,8 @@
 teachers:
     application:
+        grid:
+            views:
+                new: New Applications
         entity_label: Application
         entity_plural_label: Applications
         entity_grid_all_view_label: All %entity_plural_label%

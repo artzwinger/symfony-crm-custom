@@ -2,6 +2,7 @@ datagrids:
     teachers-applications-grid:
         extended_entity_name: 'Teachers\Bundle\ApplicationBundle\Entity\Application'
         acl_resource: teachers_application_view
+        views_list: '@teachers_application.applications_view_list'
         source:
             type: orm
             query:

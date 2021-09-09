@@ -5,6 +5,7 @@ teachers:
                 saved:
                     message: Assignment Saved
 
+
         has_unviewed_bids:
             label: Unviewed Bids
             yes:
@@ -17,6 +18,11 @@ teachers:
                 approve: Approve
                 unapprove: Mark as dangerous
             views:
+                paused_due_nonpayment: Paused / Nonpayment
+                complete: Completed
+                up_for_bid: Up For Bid
+                new: New Assignments
+                assigned: Assigned
                 un_viewed_bids: Unviewed Bids
                 pending: Pending Messages
                 declined: Declined Messages
