@@ -136,7 +136,7 @@ class Bid extends ExtendBid implements DatesAwareInterface
                 'is_default' => true
             ],
             self::STATUS_WINNING => [
-                'name' => 'Winning',
+                'name' => 'Won',
                 'is_default' => false
             ],
         ];
