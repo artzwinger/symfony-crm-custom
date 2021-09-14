@@ -7,6 +7,18 @@ workflows:
                             enum_code: payment_status
                             identifier: created
                             attribute: $payment.status
+            partial_payment_definition:
+                actions:
+                    -   '@request_enum_entity':
+                            enum_code: payment_status
+                            identifier: partial_payment
+                            attribute: $payment.status
+            paid_in_full_definition:
+                actions:
+                    -   '@request_enum_entity':
+                            enum_code: payment_status
+                            identifier: paid_in_full
+                            attribute: $payment.status
             refund_definition:
                 conditions:
                     '@and':

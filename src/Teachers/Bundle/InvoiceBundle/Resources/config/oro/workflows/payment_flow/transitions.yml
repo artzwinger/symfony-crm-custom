@@ -14,3 +14,13 @@ workflows:
                                 required: true
                                 constraints:
                                     -   NotBlank: ~
+            paid_in_full:
+                step_to: paid_in_full
+                frontend_options:
+                    class: 'hide'
+                transition_definition: paid_in_full_definition
+            partial_payment:
+                step_to: partial_payment
+                frontend_options:
+                    class: 'hide'
+                transition_definition: partial_payment_definition

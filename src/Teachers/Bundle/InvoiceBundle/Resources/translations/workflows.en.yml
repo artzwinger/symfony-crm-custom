@@ -26,6 +26,10 @@ oro:
             step:
                 created:
                     label: Created
+                partial_payment:
+                    label: Partial Payment
+                paid_in_full:
+                    label: Paid in Full
                 partially_refunded:
                     label: Partially Refunded
                 fully_refunded:

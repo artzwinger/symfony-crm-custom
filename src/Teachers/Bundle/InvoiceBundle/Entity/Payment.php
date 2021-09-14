@@ -121,19 +121,44 @@ class Payment extends ExtendPayment implements DatesAwareInterface
      */
     protected $organization;
 
+    const STATUS_ENUM_CLASS = 'payment_status';
+    const WORKFLOW_NAME = 'payment_flow';
+
+    /**
+     * transitions
+     */
+    const TRANSITION_PAID_IN_FULL = 'paid_in_full';
+    const TRANSITION_PARTIAL_PAYMENT = 'partial_payment';
+
+    /*
+     * outdated statuses
+     */
     const STATUS_CREATED = 'created';
+    const WORKFLOW_STEP_CREATED = 'created';
+
+    /*
+     * relevant statuses
+     */
+    const STATUS_PARTIAL_PAYMENT = 'partial_payment';
+    const STATUS_PAID_IN_FULL = 'paid_in_full';
     const STATUS_PARTIALLY_REFUNDED = 'partially_refunded';
     const STATUS_FULLY_REFUNDED = 'fully_refunded';
-    const WORKFLOW_STEP_CREATED = 'created';
+
+    const WORKFLOW_STEP_PARTIAL_PAYMENT = 'partial_payment';
+    const WORKFLOW_STEP_PAID_IN_FULL = 'paid_in_full';
     const WORKFLOW_STEP_PARTIALLY_REFUNDED = 'partially_refunded';
     const WORKFLOW_STEP_FULLY_REFUNDED = 'fully_refunded';
 
     public static function getAvailableStatuses(): array
     {
         return [
-            self::STATUS_CREATED => [
-                'name' => 'Created',
+            self::STATUS_PARTIAL_PAYMENT => [
+                'name' => 'Partial Payment',
                 'is_default' => true
+            ],
+            self::STATUS_PAID_IN_FULL => [
+                'name' => 'Paid in Full',
+                'is_default' => false
             ],
             self::STATUS_PARTIALLY_REFUNDED => [
                 'name' => 'Partially Refunded',

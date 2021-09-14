@@ -108,8 +108,10 @@ services:
         arguments:
             - '@doctrine.orm.entity_manager'
             - '@oro_activity.manager'
+            - '@oro_workflow.manager'
         tags:
             - { name: doctrine.event_listener, event: postPersist, connection: default, entity: 'Teachers\Bundle\InvoiceBundle\Entity\Payment' }
+            - { name: doctrine.event_listener, event: postFlush }
     teachers_invoice.event_listener.orm.payment_postupdate:
         class: Teachers\Bundle\InvoiceBundle\EventListener\ORM\PaymentPostUpdate
         arguments:

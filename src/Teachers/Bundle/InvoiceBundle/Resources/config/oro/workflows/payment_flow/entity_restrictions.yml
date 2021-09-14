@@ -12,6 +12,14 @@ workflows:
                 attribute: payment
                 field: status
                 step: created
+            payment_status_partial_payment:
+                attribute: payment
+                field: status
+                step: partial_payment
+            payment_status_paid_in_full:
+                attribute: payment
+                field: status
+                step: paid_in_full
             payment_status_partially_refunded:
                 attribute: payment
                 field: status

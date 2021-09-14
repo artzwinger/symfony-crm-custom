@@ -1,7 +1,14 @@
 workflows:
     payment_flow:
         steps:
+            partial_payment:
+                order: 3
+            paid_in_full:
+                order: 6
             created:
+                allowed_transitions:
+                    - paid_in_full
+                    - partial_payment
                 order: 10
             partially_refunded:
                 order: 20
