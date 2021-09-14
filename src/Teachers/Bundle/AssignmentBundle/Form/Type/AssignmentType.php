@@ -7,6 +7,7 @@ use DateTimeZone;
 use Exception;
 use Oro\Bundle\EntityExtendBundle\Form\Type\EnumSelectType;
 use Oro\Bundle\FormBundle\Form\Type\OroDateTimeType;
+use Oro\Bundle\FormBundle\Form\Type\OroDateType;
 use Oro\Bundle\FormBundle\Form\Type\OroMoneyType;
 use Oro\Bundle\FormBundle\Utils\FormUtils;
 use Symfony\Component\Form\AbstractType;
@@ -65,6 +66,13 @@ class AssignmentType extends AbstractType
             ->add('dueDate', OroDateTimeType::class, [
                 'required' => true,
                 'label' => 'teachers.assignment.due_date.label',
+                'constraints' => [
+                    $this->getDueDateValidationConstraint(new DateTime('now', new DateTimeZone('UTC')))
+                ]
+            ])
+            ->add('classStartDate', OroDateType::class, [
+                'required' => false,
+                'label' => 'teachers.assignment.class_start_date.label',
                 'constraints' => [
                     $this->getDueDateValidationConstraint(new DateTime('now', new DateTimeZone('UTC')))
                 ]

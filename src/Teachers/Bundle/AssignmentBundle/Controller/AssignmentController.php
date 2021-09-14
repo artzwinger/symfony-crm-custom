@@ -179,6 +179,7 @@ class AssignmentController extends AbstractController
                 $assignment->setDescription($application->getDescription());
                 $assignment->setWorkToday($application->getWorkToday());
                 $assignment->setDueDate($application->getDueDate());
+                $assignment->setClassStartDate($application->getClassStartDate());
                 $assignment->setUserLogin($application->getUserLogin());
                 $assignment->setUserPassword($application->getUserPassword());
                 $assignment->setCourseUrl($application->getCourseUrl());

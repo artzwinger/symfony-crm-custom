@@ -138,6 +138,19 @@ class Assignment extends ExtendAssignment implements DatesAwareInterface
     protected $dueDate;
 
     /**
+     * @var DateTime|null
+     * @ORM\Column(name="class_start_date", type="datetime", nullable=true)
+     * @ConfigField(
+     *      defaultValues={
+     *          "dataaudit"={
+     *              "auditable"=true
+     *          }
+     *      }
+     * )
+     */
+    protected $classStartDate;
+
+    /**
      * @var string|null $courseUrl
      *
      * @ORM\Column(name="course_url", type="string", length=255, nullable=false)
@@ -489,6 +502,22 @@ class Assignment extends ExtendAssignment implements DatesAwareInterface
     public function setDueDate(?DateTime $dueDate): void
     {
         $this->dueDate = $dueDate;
+    }
+
+    /**
+     * @return DateTime|null
+     */
+    public function getClassStartDate(): ?DateTime
+    {
+        return $this->classStartDate;
+    }
+
+    /**
+     * @param DateTime|null $classStartDate
+     */
+    public function setClassStartDate(?DateTime $classStartDate): void
+    {
+        $this->classStartDate = $classStartDate;
     }
 
     /**

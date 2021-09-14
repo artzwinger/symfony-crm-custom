@@ -15,6 +15,7 @@ datagrids:
                     - assignment.workToday
                     - assignment.amountDueToday
                     - assignment.dueDate
+                    - assignment.classStartDate
                     - assignment.courseUrl
                     - assignment.userLogin
                     - assignmentterm.name as termName
@@ -63,6 +64,10 @@ datagrids:
                 frontend_type: datetime
                 label: teachers.assignment.due_date.label
                 order: 70
+            classStartDate:
+                frontend_type: datetime
+                label: teachers.assignment.class_start_date.label
+                order: 72
             courseUrl:
                 label: teachers.assignment.course_url.label
                 order: 80
@@ -104,6 +109,8 @@ datagrids:
                     data_name: application.amountDueToday
                 dueDate:
                     data_name: assignment.dueDate
+                classStartDate:
+                    data_name: assignment.classStartDate
                 courseUrl:
                     data_name: assignment.courseUrl
                 userLogin:
@@ -144,6 +151,9 @@ datagrids:
                 dueDate:
                     type: string
                     data_name: assignment.dueDate
+                classStartDate:
+                    type: string
+                    data_name: assignment.classStartDate
                 courseUrl:
                     type: string
                     data_name: assignment.courseUrl
@@ -229,6 +239,7 @@ datagrids:
                     - assignment.coursePrefixes
                     - assignment.workToday
                     - assignment.dueDate
+                    - assignment.classStartDate
                     - assignment.courseUrl
                     - assignment.userLogin
                     - assignmentterm.name as termName
@@ -281,6 +292,10 @@ datagrids:
                 frontend_type: datetime
                 label: teachers.assignment.due_date.label
                 order: 70
+            classStartDate:
+                frontend_type: datetime
+                label: teachers.assignment.class_start_date.label
+                order: 72
             courseUrl:
                 label: teachers.assignment.course_url.label
                 order: 80
@@ -322,6 +337,8 @@ datagrids:
                     data_name: assignment.coursePrefixes
                 dueDate:
                     data_name: assignment.dueDate
+                classStartDate:
+                    data_name: assignment.classStartDate
                 courseUrl:
                     data_name: assignment.courseUrl
                 userLogin:
@@ -359,6 +376,9 @@ datagrids:
                 dueDate:
                     type: string
                     data_name: assignment.dueDate
+                classStartDate:
+                    type: string
+                    data_name: assignment.classStartDate
                 courseUrl:
                     type: string
                     data_name: assignment.courseUrl
@@ -412,6 +432,7 @@ datagrids:
                     - assignment.coursePrefixes
                     - assignment.workToday
                     - assignment.dueDate
+                    - assignment.classStartDate
                     - assignment.courseUrl
                     - assignment.userLogin
                     - assignmentterm.name as termName
@@ -461,6 +482,10 @@ datagrids:
                 frontend_type: datetime
                 label: teachers.assignment.due_date.label
                 order: 70
+            classStartDate:
+                frontend_type: datetime
+                label: teachers.assignment.class_start_date.label
+                order: 72
             courseUrl:
                 label: teachers.assignment.course_url.label
                 order: 80
@@ -500,6 +525,8 @@ datagrids:
                     data_name: assignment.coursePrefixes
                 dueDate:
                     data_name: assignment.dueDate
+                classStartDate:
+                    data_name: assignment.classStartDate
                 courseUrl:
                     data_name: assignment.courseUrl
                 userLogin:
@@ -537,6 +564,9 @@ datagrids:
                 dueDate:
                     type: string
                     data_name: assignment.dueDate
+                classStartDate:
+                    type: string
+                    data_name: assignment.classStartDate
                 courseUrl:
                     type: string
                     data_name: assignment.courseUrl

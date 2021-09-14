@@ -15,7 +15,12 @@
             {{ ui.renderProperty('teachers.application.amountDueToday.label'|trans, entity.amountDueToday|oro_format_currency) }}
             {{ ui.renderProperty('teachers.application.price.label'|trans, entity.price|oro_format_currency) }}
             {{ ui.renderProperty('teachers.application.work_today.label'|trans, entity.workTodayLabel) }}
-            {{ ui.renderProperty('teachers.application.due_date.label'|trans, entity.dueDate|oro_format_datetime) }}
+            {% if entity.classStartDate %}
+                {{ ui.renderProperty('teachers.application.class_start_date.label'|trans, entity.classStartDate|oro_format_datetime) }}
+                {{ ui.renderProperty('teachers.application.class_end_date.label'|trans, entity.dueDate|oro_format_datetime) }}
+            {% else %}
+                {{ ui.renderProperty('teachers.application.due_date.label'|trans, entity.dueDate|oro_format_datetime) }}
+            {% endif %}
             {{ ui.renderProperty('teachers.application.course_url.label'|trans, entity.courseUrl) }}
             {{ ui.renderProperty('teachers.application.user_login.label'|trans, entity.userLogin) }}
             {{ ui.renderProperty('teachers.application.user_password.label'|trans, entity.userPassword) }}

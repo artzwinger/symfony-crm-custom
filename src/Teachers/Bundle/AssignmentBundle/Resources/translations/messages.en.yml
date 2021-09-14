@@ -57,6 +57,8 @@ teachers:
         course_name.label: Course Name
         course_prefixes.label: Course Prefixes
         due_date.label: Due Date
+        class_start_date.label: Class Start Date
+        class_end_date.label: Class End Date
         course_url.label: Course URL
         user_login.label: User ID
         user_password.label: User Password
