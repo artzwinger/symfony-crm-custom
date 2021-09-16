@@ -7,5 +7,27 @@ services:
             - '@oro_featuretoggle.checker.feature_checker'
             - '@doctrine.orm.entity_manager'
             - '@oro_activity.manager'
+            - '@?snc_redis.cache'
+        tags:
+            - { name: console.command }
+
+    Teachers\Bundle\AssignmentBundle\Command\Cron\EmailBodySyncCommandDecorator:
+        decorates: Oro\Bundle\EmailBundle\Command\Cron\EmailBodySyncCommand
+        decoration_inner_name: 'email_body_sync_command'
+        arguments:
+            - '@email_body_sync_command'
+            - '@oro_featuretoggle.checker.feature_checker'
+            - '@oro_email.email_body_synchronizer'
+            - '@?snc_redis.cache'
+        tags:
+            - { name: console.command }
+
+    Teachers\Bundle\AssignmentBundle\Command\Cron\EmailSyncCommandDecorator:
+        decorates: Oro\Bundle\ImapBundle\Command\Cron\EmailSyncCommand
+        decoration_inner_name: 'email_body_sync_command'
+        arguments:
+            - '@oro_featuretoggle.checker.feature_checker'
+            - '@oro_imap.email_synchronizer'
+            - '@?snc_redis.cache'
         tags:
             - { name: console.command }

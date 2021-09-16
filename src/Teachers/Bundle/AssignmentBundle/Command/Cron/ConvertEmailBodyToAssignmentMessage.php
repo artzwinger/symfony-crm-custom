@@ -13,12 +13,14 @@ use Oro\Bundle\CronBundle\Command\CronCommandInterface;
 use Oro\Bundle\EmailBundle\Entity\Email;
 use Oro\Bundle\FeatureToggleBundle\Checker\FeatureChecker;
 use Oro\Bundle\ImapBundle\Entity\ImapEmail;
+use Predis\ClientInterface;
 use Soundasleep\Html2Text;
 use Soundasleep\Html2TextException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Lock\LockFactory;
+use Symfony\Component\Lock\Store\RedisStore;
 use Symfony\Component\Lock\Store\SemaphoreStore;
 use Teachers\Bundle\AssignmentBundle\Entity\Assignment;
 use Teachers\Bundle\AssignmentBundle\Entity\AssignmentMessage;
@@ -44,19 +46,29 @@ class ConvertEmailBodyToAssignmentMessage extends Command implements CronCommand
      * @var ActivityManager
      */
     private $activityManager;
+    /**
+     * @var ClientInterface
+     */
+    private $redisClient;
 
     /**
      * @param FeatureChecker $featureChecker
      * @param EntityManager $entityManager
      * @param ActivityManager $activityManager
+     * @param ClientInterface $redisClient
      */
-    public function __construct(FeatureChecker $featureChecker, EntityManager $entityManager, ActivityManager $activityManager)
-    {
+    public function __construct(
+        FeatureChecker $featureChecker,
+        EntityManager $entityManager,
+        ActivityManager $activityManager,
+        ClientInterface $redisClient
+    ) {
         parent::__construct();
 
         $this->featureChecker = $featureChecker;
         $this->entityManager = $entityManager;
         $this->activityManager = $activityManager;
+        $this->redisClient = $redisClient;
     }
 
     /**
@@ -64,7 +76,7 @@ class ConvertEmailBodyToAssignmentMessage extends Command implements CronCommand
      */
     public function getDefaultDefinition(): string
     {
-        return '*/46 * * * *'; // we receive email bodies at every 30th minute with 15 minutes execution limit
+        return '*/5 * * * *';
     }
 
     /**
@@ -84,7 +96,12 @@ class ConvertEmailBodyToAssignmentMessage extends Command implements CronCommand
             $output->writeln('The email feature is disabled. The command will not run.');
             return 0;
         }
-        $store = new SemaphoreStore();
+        if ($this->redisClient) {
+            $store = new RedisStore($this->redisClient);
+        } else {
+            $output->writeln('Redis unavailable.');
+            $store = new SemaphoreStore();
+        }
         $lockFactory = new LockFactory($store);
         $lock = $lockFactory->createLock('teachers:cron:convert-email-body-to-assignment-message');
         if (!$lock->acquire()) {
