@@ -449,7 +449,6 @@ datagrids:
                         - { join: assignment.term, alias: assignmentterm }
                         - { join: assignment.teacher, alias: teacher }
                         - { join: assignment.student, alias: student }
-                        - { join: assignment.courseManager, alias: courseManager }
                         - { join: assignment.teacher, alias: asgm_teacher }
                         - { join: assignment.student, alias: asgm_student }
                 where:
@@ -457,7 +456,6 @@ datagrids:
                         - asgm_teacher.id = @oro_security.token_accessor->getUserId
                         - asgm_student.id = @oro_security.token_accessor->getUserId
                         - course_manager.id = @oro_security.token_accessor->getUserId
-                groupBy: assignment.id
         columns:
             firstName:
                 label: teachers.assignment.first_name.label
