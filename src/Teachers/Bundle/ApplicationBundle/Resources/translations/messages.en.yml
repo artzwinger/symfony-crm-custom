@@ -42,7 +42,7 @@ teachers:
             false.label: No
             label: Due Today
 
-        course_managers_queue: Order Queue
+        course_managers_queue: Orders
 
         datagrid:
             update: Update
