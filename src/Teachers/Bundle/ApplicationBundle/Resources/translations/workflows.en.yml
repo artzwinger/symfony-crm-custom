@@ -34,4 +34,4 @@ oro:
                 reopen:
                     label: Reopen
                     warning_message: ''
-            label: Application Flow
+            label: Order Flow
