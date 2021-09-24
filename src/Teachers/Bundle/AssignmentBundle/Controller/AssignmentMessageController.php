@@ -227,6 +227,7 @@ class AssignmentMessageController extends AbstractController
      * @throws ForbiddenTransitionException
      * @throws InvalidTransitionException
      * @throws WorkflowException
+     * @throws ORMException
      */
     public function unapproveAction(AssignmentMessage $message)
     {
@@ -255,6 +256,13 @@ class AssignmentMessageController extends AbstractController
             $this->get('translator')->trans('teachers.assignment.message.controller.assignment.saved.message')
         );
         $response['assignment_message'] = $message;
+        $denialReason = strip_tags($comment->getMessage());
+        if (!empty($denialReason)) {
+            $message->setDenialReason($denialReason);
+            $em = $this->get('doctrine.orm.entity_manager');
+            $em->persist($message);
+            $em->flush($message);
+        }
         return $response;
     }
 

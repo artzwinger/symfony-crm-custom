@@ -67,6 +67,13 @@ class AssignmentMessage extends ExtendAssignmentMessage
     protected $message;
 
     /**
+     * @var string|null
+     *
+     * @ORM\Column(name="denial_reason", type="text", nullable=true)
+     */
+    protected $denialReason;
+
+    /**
      * @var User
      *
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\UserBundle\Entity\User")
@@ -75,7 +82,7 @@ class AssignmentMessage extends ExtendAssignmentMessage
     protected $updatedBy;
 
     /**
-     * @var User
+     * @var Assignment
      *
      * @ORM\ManyToOne(targetEntity="Teachers\Bundle\AssignmentBundle\Entity\Assignment")
      * @ORM\JoinColumn(name="assignment_id", referencedColumnName="id", onDelete="SET NULL")
@@ -199,6 +206,22 @@ class AssignmentMessage extends ExtendAssignmentMessage
     }
 
     /**
+     * @return string|null
+     */
+    public function getDenialReason(): ?string
+    {
+        return $this->denialReason;
+    }
+
+    /**
+     * @param string|null $denialReason
+     */
+    public function setDenialReason(?string $denialReason): void
+    {
+        $this->denialReason = $denialReason;
+    }
+
+    /**
      * Gets user who have updated this comment
      *
      * @return User
@@ -318,6 +341,23 @@ class AssignmentMessage extends ExtendAssignmentMessage
         return $this;
     }
 
+    public function getAssignment(): ?Assignment
+    {
+        if (!$this->assignment) {
+            $targets = $this->getActivityTargets(Assignment::class);
+            $this->assignment = $targets ? $targets[0] : null;
+        }
+        return $this->assignment;
+    }
+
+    /**
+     * @param Assignment|null $assignment
+     */
+    public function setAssignment(?Assignment $assignment): void
+    {
+        $this->assignment = $assignment;
+    }
+
     /**
      * Sets the date on which the comment is created
      *
@@ -349,14 +389,5 @@ class AssignmentMessage extends ExtendAssignmentMessage
     public function isNotApproved(): bool
     {
         return $this->getStatus() && $this->getStatus()->getId() === self::STATUS_NOT_APPROVED;
-    }
-
-    public function getAssignment(): ?Assignment
-    {
-        if (!$this->assignment) {
-            $targets = $this->getActivityTargets(Assignment::class);
-            $this->assignment = $targets ? $targets[0] : null;
-        }
-        return $this->assignment;
     }
 }

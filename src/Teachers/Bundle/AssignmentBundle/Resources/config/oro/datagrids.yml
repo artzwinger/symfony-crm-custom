@@ -613,6 +613,7 @@ datagrids:
                 select:
                     - assignment_message.id
                     - assignment_message.message
+                    - assignment_message.denialReason
                     - assignment_message.createdAt
                     - CONCAT(message_sender.firstName, message_sender.lastName) as senderFullName
                     - message_status.id as status
@@ -629,6 +630,11 @@ datagrids:
                 type: twig
                 frontend_type: html
                 template: TeachersAssignmentBundle:AssignmentMessage/Datagrid:message.html.twig
+            denialReason:
+                label: teachers.assignment.message.denialReason.label
+                type: twig
+                frontend_type: html
+                template: TeachersAssignmentBundle:AssignmentMessage/Datagrid:message.html.twig
             senderFullName:
                 label: teachers.assignment.message.sender_name.label
             createdAt:
@@ -638,6 +644,8 @@ datagrids:
             columns:
                 message:
                     data_name: assignment_message.message
+                denialReason:
+                    data_name: assignment_message.denialReason
                 createdAt:
                     data_name: assignment_message.createdAt
             default:
@@ -647,6 +655,9 @@ datagrids:
                 message:
                     type: string
                     data_name: assignment_message.message
+                denialReason:
+                    type: string
+                    data_name: assignment_message.denialReason
                 createdAt:
                     type: datetime
                     data_name: assignment_message.createdAt
@@ -696,6 +707,91 @@ datagrids:
                             allowMinimize: false
                             modal: true
                             maximizedHeightDecreaseBy: minimize-bar
+        options:
+            entityHint: teachers.assignment.message.entity_plural_label
+            entity_pagination: true
+
+    teachers-assignment-my-messages-grid:
+        extended_entity_name: 'Teachers\Bundle\AssignmentBundle\Entity\AssignmentMessage'
+        acl_resource: teachers_assignment_message_my
+        source:
+            type: orm
+            query:
+                select:
+                    - assignment_message.id
+                    - assignment_message.message
+                    - assignment_message.denialReason
+                    - assignment_message.createdAt
+                    - message_status.id as status
+                    - message_status.name as statusLabel
+                    - assignment.id as assignmentId
+                from:
+                    - { table: 'Teachers\Bundle\AssignmentBundle\Entity\AssignmentMessage', alias: assignment_message }
+                join:
+                    inner:
+                        - { join: assignment_message.owner, alias: message_sender }
+                        - { join: assignment_message.status, alias: message_status }
+                    left:
+                        - { join: assignment_message.assignment, alias: assignment }
+                where:
+                    and:
+                        - message_sender.id = @oro_security.token_accessor->getUserId
+        columns:
+            message:
+                label: teachers.assignment.message.message.label
+                type: twig
+                frontend_type: html
+                template: TeachersAssignmentBundle:AssignmentMessage/Datagrid:message.html.twig
+            denialReason:
+                label: teachers.assignment.message.denialReason.label
+                type: twig
+                frontend_type: html
+                template: TeachersAssignmentBundle:AssignmentMessage/Datagrid:message.html.twig
+            senderFullName:
+                label: teachers.assignment.message.sender_name.label
+            createdAt:
+                frontend_type: datetime
+                label: oro.ui.created_at
+        sorters:
+            columns:
+                message:
+                    data_name: assignment_message.message
+                denialReason:
+                    data_name: assignment_message.denialReason
+                createdAt:
+                    data_name: assignment_message.createdAt
+            default:
+                createdAt: DESC
+        filters:
+            columns:
+                message:
+                    type: string
+                    data_name: assignment_message.message
+                denialReason:
+                    type: string
+                    data_name: assignment_message.denialReason
+                createdAt:
+                    type: datetime
+                    data_name: assignment_message.createdAt
+                statusLabel:
+                    label: teachers.assignment.message.status.label
+                    type: enum
+                    data_name: status
+                    enum_code: assignment_msg_status
+        properties:
+            id: ~
+            view_link:
+                type: url
+                route: teachers_assignment_view
+                params: { id: assignmentId }
+        actions:
+            view:
+                acl_resource: teachers_assignment_view
+                type: navigate
+                label: oro.grid.action.view
+                icon: eye
+                link: view_link
+                rowAction: true
         options:
             entityHint: teachers.assignment.message.entity_plural_label
             entity_pagination: true

@@ -45,6 +45,8 @@ teachers:
                 label: View my courses
             view_messages_approval_queue:
                 label: View Messages Queue
+            view_my_messages:
+                label: View My Messages
         teachers_queue_label: Assignment Queue
         my_courses_label: My Courses
         approval_queue_label: Messages Queue
@@ -102,11 +104,13 @@ teachers:
             add_entity: Send message
             add_entity.title: Send message
             message.label: Message
+            denialReason.label: Denial Reason
             status.label: Status
             sender_name.label: Sender
             entity_label: Message
             sender_name: Sender
             entity_plural_label: Messages
+            my_messages: My Messages
             entity_grid_all_view_label: All %entity_plural_label%
             block:
                 general: General

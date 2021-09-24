@@ -9,3 +9,8 @@ acls:
         class: TeachersAssignmentBundle:Assignment
         permission: VIEW_MY_COURSES
         group_name: ""
+    teachers_assignment_message_my:
+        type: entity
+        class: TeachersAssignmentBundle:AssignmentMessage
+        permission: VIEW_MY_MESSAGES
+        group_name: ""

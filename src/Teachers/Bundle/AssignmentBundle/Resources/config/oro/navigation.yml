@@ -33,6 +33,14 @@ navigation:
                     routes: [ 'teachers_assignment_message_*' ]
                     icon: fa-envelope
                 display: true
+            teachers_assignment_assignment_my_messages:
+                label: 'teachers.assignment.message.my_messages'
+                position: 14
+                route: 'teachers_assignment_message_my'
+                extras:
+                    routes: [ 'teachers_assignment_message_*' ]
+                    icon: fa-envelope
+                display: true
         tree:
             application_menu:
                 children:
@@ -40,6 +48,7 @@ navigation:
                     teachers_assignment_assignment_teacher: ~
                     teachers_assignment_assignment_my: ~
                     teachers_assignment_assignment_messages: ~
+                    teachers_assignment_assignment_my_messages: ~
     titles:
         teachers_assignment_index: ~
         teachers_assignment_view: '%courseName%'
