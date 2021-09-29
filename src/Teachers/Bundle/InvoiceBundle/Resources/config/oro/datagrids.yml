@@ -173,7 +173,6 @@ datagrids:
                         - { join: payment.invoice, alias: invoice }
                         - { join: payment.owner, alias: student }
                         - { join: invoice.assignment, alias: assignment }
-                groupBy: payment.id
         columns:
             studentName:
                 label: teachers.invoice.student.label
