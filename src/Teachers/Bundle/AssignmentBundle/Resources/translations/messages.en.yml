@@ -46,7 +46,7 @@ teachers:
             view_messages_approval_queue:
                 label: View Messages Queue
             view_my_messages:
-                label: View My Messages
+                label: View Messages
         teachers_queue_label: Assignment Queue
         my_courses_label: My Courses
         approval_queue_label: Messages Queue
@@ -110,7 +110,7 @@ teachers:
             entity_label: Message
             sender_name: Sender
             entity_plural_label: Messages
-            my_messages: My Messages
+            my_messages: Messages
             entity_grid_all_view_label: All %entity_plural_label%
             block:
                 general: General
