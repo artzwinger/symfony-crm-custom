@@ -90,7 +90,7 @@ services:
     recaptcha:
         class: ReCaptcha\ReCaptcha
         arguments:
-            - '6Lfr5scaAAAAALkrsvG5XDdv51-bwWAr70YmQ7dD'
+            - '6Lc0GpocAAAAAHIXErMaDdEqrIuLXh93HyCyvQIy'
 
 oro_translation:
     locales:                  [en, fr]
