@@ -51,7 +51,7 @@ class ApplicationsViewList extends AbstractViewsList
             [
                 'name' => 'applications.new',
                 'label' => 'teachers.application.grid.views.new',
-                'is_default' => false,
+                'is_default' => true,
                 'grid_name' => 'teachers-applications-grid',
                 'type' => AbstractGridView::TYPE_PUBLIC,
                 'filters' => [

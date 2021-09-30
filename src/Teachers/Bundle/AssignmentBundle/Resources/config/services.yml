@@ -138,3 +138,11 @@ services:
             - name: kernel.event_listener
               event: oro_datagrid.datagrid.build.before.teachers-assignments-grid
               method: onBuildBefore
+    teachers_assignment.my_messages.hide_denial_reason_column:
+        class: Teachers\Bundle\AssignmentBundle\EventListener\HideDenialReasonColumnForStudent
+        arguments:
+            - '@teachers_users.helper.role'
+        tags:
+            - name: kernel.event_listener
+              event: oro_datagrid.datagrid.build.before.teachers-assignment-my-messages-grid
+              method: onBuildBefore

@@ -21,6 +21,7 @@ class AssignmentGridListener
     }
 
     /**
+     * oro_datagrid.datagrid.build.before.teachers-assignments-grid
      * @param BuildBefore $event
      */
     public function onBuildBefore(BuildBefore $event)
