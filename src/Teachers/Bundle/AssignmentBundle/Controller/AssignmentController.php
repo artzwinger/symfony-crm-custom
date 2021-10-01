@@ -105,9 +105,11 @@ class AssignmentController extends AbstractController
     public function updateAction(Assignment $assignment)
     {
         $result = $this->update($assignment);
-        $result['formAction'] = $this->generateUrl('teachers_assignment_update', [
-            'id' => $assignment->getId()
-        ]);
+        if (is_array($result)) {
+            $result['formAction'] = $this->generateUrl('teachers_assignment_update', [
+                'id' => $assignment->getId()
+            ]);
+        }
 
         return $result;
     }
