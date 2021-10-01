@@ -1,0 +1,15 @@
+{% import 'OroUIBundle::macros.html.twig' as ui %}
+{% import 'OroActivityBundle::macros.html.twig' as AC %}
+{% import 'OroEntityConfigBundle::macros.html.twig' as entityConfig %}
+
+<div class="widget-content">
+    <div class="row-fluid form-horizontal">
+        <div class="responsive-block">
+            {% if entity.denialReason is not empty %}
+                <span><b>DENIED: </b> {{ entity.denialReason | raw }}</span><br>
+            {% endif %}
+            <pre>{{ entity.message }}</pre>
+            {{ entityConfig.renderDynamicFields(entity) }}
+        </div>
+    </div>
+</div>

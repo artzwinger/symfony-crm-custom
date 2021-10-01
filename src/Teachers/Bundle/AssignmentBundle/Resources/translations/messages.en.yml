@@ -26,6 +26,8 @@ teachers:
                 un_viewed_bids: Unviewed Bids
                 pending: Pending Messages
                 declined: Declined Messages
+                inbox: Inbox
+                sent: Sent
         # activity
         teacher_group.label: Tutor Group
         course_manager_name.label: Course Manager
@@ -103,6 +105,9 @@ teachers:
             delete: Delete message
             add_entity: Send message
             add_entity.title: Send message
+            send_to_student: Message Student
+            send_to_teacher: Message Tutor
+            send_to_course_manager: Message Course Manager
             message.label: Message
             denialReason.label: Denial Reason
             status.label: Status

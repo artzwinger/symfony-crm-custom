@@ -3,10 +3,8 @@
 namespace Teachers\Bundle\AssignmentBundle\Controller;
 
 use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\EntityNotFoundException;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
-use Exception;
 use Oro\Bundle\FormBundle\Model\UpdateHandlerFacade;
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
@@ -16,12 +14,9 @@ use Oro\Bundle\UserBundle\Entity\User;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Form\FormFactory;
-use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Teachers\Bundle\ApplicationBundle\Entity\Application;
 use Teachers\Bundle\AssignmentBundle\Entity\Assignment;
@@ -57,7 +52,9 @@ class AssignmentController extends AbstractController
             }
         }
         return [
-            'is_user_teacher' => $this->get('teachers_users.helper.role')->isCurrentUserTeacher(),
+            'is_user_teacher' => $roleHelper->isCurrentUserTeacher(),
+            'is_user_student' => $roleHelper->isCurrentUserStudent(),
+            'is_user_course_manager' => $roleHelper->isCurrentUserCourseManager(),
             'entity' => $assignment
         ];
     }

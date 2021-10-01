@@ -29,11 +29,3 @@ placeholders:
         teachers_assignment_private_note_link:
             template: TeachersAssignmentBundle:AssignmentPrivateNote:activityLink.html.twig
             acl: teachers_assignment_private_note_create
-
-        teachers_assignment_message_button:
-            template: TeachersAssignmentBundle:AssignmentMessage:activityButton.html.twig
-            acl: teachers_assignment_message_create
-
-        teachers_assignment_message_link:
-            template: TeachersAssignmentBundle:AssignmentMessage:activityLink.html.twig
-            acl: teachers_assignment_message_create

@@ -24,7 +24,7 @@ use Teachers\Bundle\AssignmentBundle\Model\ExtendAssignmentMessage;
  *          "ownership"={
  *              "owner_type"="USER",
  *              "owner_field_name"="owner",
- *              "owner_column_name"="user_owner_id",
+ *              "owner_column_name"="owner_id",
  *              "organization_field_name"="organization",
  *              "organization_column_name"="organization_id"
  *          },
@@ -79,6 +79,14 @@ class AssignmentMessage extends ExtendAssignmentMessage
      * @ORM\JoinColumn(name="assignment_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $assignment;
+
+    /**
+     * @var AssignmentMessageThread|null
+     *
+     * @ORM\ManyToOne(targetEntity="Teachers\Bundle\AssignmentBundle\Entity\AssignmentMessageThread")
+     * @ORM\JoinColumn(name="thread_id", referencedColumnName="id", onDelete="SET NULL")
+     */
+    protected $thread;
 
     /**
      * @var User
@@ -388,6 +396,22 @@ class AssignmentMessage extends ExtendAssignmentMessage
     public function setAssignment(?Assignment $assignment): void
     {
         $this->assignment = $assignment;
+    }
+
+    /**
+     * @return AssignmentMessageThread|null
+     */
+    public function getThread(): ?AssignmentMessageThread
+    {
+        return $this->thread;
+    }
+
+    /**
+     * @param AssignmentMessageThread|null $thread
+     */
+    public function setThread(?AssignmentMessageThread $thread): void
+    {
+        $this->thread = $thread;
     }
 
     /**

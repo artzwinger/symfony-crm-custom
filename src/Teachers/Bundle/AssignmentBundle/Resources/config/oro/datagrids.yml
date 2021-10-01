@@ -723,6 +723,7 @@ datagrids:
                     - assignment_message.message
                     - assignment_message.denialReason
                     - assignment_message.createdAt
+                    - assignment_message.viewedByRecipient
                     - message_status.id as status
                     - message_status.name as statusLabel
                     - assignment.id as assignmentId
@@ -734,6 +735,7 @@ datagrids:
                         - { join: assignment_message.status, alias: message_status }
                     left:
                         - { join: assignment_message.assignment, alias: assignment }
+                        - { join: assignment_message.recipient, alias: recipient }
                 where:
                     and:
                         - message_sender.id = @oro_security.token_accessor->getUserId

@@ -11,10 +11,12 @@ use Oro\Bundle\FormBundle\Model\UpdateHandlerFacade;
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use Oro\Bundle\SecurityBundle\Annotation\CsrfProtection;
+use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\WorkflowBundle\Exception\ForbiddenTransitionException;
 use Oro\Bundle\WorkflowBundle\Exception\InvalidTransitionException;
 use Oro\Bundle\WorkflowBundle\Exception\WorkflowException;
 use Oro\Bundle\WorkflowBundle\Model\WorkflowManager;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormFactory;
@@ -23,7 +25,9 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Teachers\Bundle\AssignmentBundle\Entity\Assignment;
 use Teachers\Bundle\AssignmentBundle\Entity\AssignmentMessage;
+use Teachers\Bundle\AssignmentBundle\Entity\AssignmentMessageThread;
 use Teachers\Bundle\UsersBundle\Helper\Role;
 
 class AssignmentMessageController extends AbstractController
@@ -111,7 +115,12 @@ class AssignmentMessageController extends AbstractController
      */
     public function updateAction(AssignmentMessage $assignmentMessage)
     {
-        $result = $this->update($assignmentMessage, 'teachers_assignment_message_update');
+        $result = $this->update($assignmentMessage);
+        if (is_array($result)) {
+            $result['formAction'] = $this->generateUrl('teachers_assignment_message_update', [
+                'id' => $assignmentMessage->getId()
+            ]);
+        }
         $isPost = $this->get('request_stack')->getCurrentRequest()->isMethod('POST');
         if ($isPost && $assignmentMessage->getStatus()->getId() !== AssignmentMessage::STATUS_PENDING) {
             /** @var WorkflowManager $wfm */
@@ -138,20 +147,161 @@ class AssignmentMessageController extends AbstractController
     public function createAction()
     {
         $message = new AssignmentMessage();
-        $result = $this->update($message, 'teachers_assignment_message_create');
-        if ($message->getId()) {
-            /** @var Role $roleHelper */
-            $roleHelper = $this->get('teachers_users.helper.role');
-            $senderStudent = $roleHelper->isCurrentUserStudent();
-            $senderTeacher = $roleHelper->isCurrentUserTeacher();
-            $approve = !$senderStudent && !$senderTeacher; // approve if sender is course manager or admin
-            if ($approve) {
-                /** @var WorkflowManager $wfm */
-                $wfm = $this->get('oro_workflow.manager');
-                $item = $wfm->getWorkflowItem($message, AssignmentMessage::WORKFLOW_NAME);
-                $wfm->transit($item, AssignmentMessage::WORKFLOW_TRANSITION_APPROVE);
-            }
+        $result = $this->update($message);
+        $this->autoApproveIfAllowed($message);
+
+        if (is_array($result)) {
+            $result['formAction'] = $this->generateUrl('teachers_assignment_message_create');
         }
+        return $result;
+    }
+
+    /**
+     * @Route("/send_to_tutor/{assignmentId}/{threadId}",
+     *     name="teachers_assignment_message_send_to_tutor",
+     *     requirements={"assignmentId"="\d+", "threadId"="\d+"},
+     *     options={"expose"=true},
+     *     defaults={"threadId"=0})
+     * @ParamConverter(name="assignment", options={"id": "assignmentId"})
+     * @ParamConverter(name="thread", options={"id": "threadId"}, isOptional=true)
+     * @Template("@TeachersAssignment/AssignmentMessage/update.html.twig")
+     * @Acl(
+     *      id="teachers_assignment_message_create",
+     *      type="entity",
+     *      permission="CREATE",
+     *      class="TeachersAssignmentBundle:AssignmentMessage"
+     * )
+     * @param Assignment $assignment
+     * @param AssignmentMessageThread|null $thread
+     * @return array|mixed|RedirectResponse
+     * @throws ForbiddenTransitionException
+     * @throws InvalidTransitionException
+     * @throws ORMException
+     * @throws OptimisticLockException
+     * @throws WorkflowException
+     */
+    public function sendToTutor(Assignment $assignment, AssignmentMessageThread $thread = null)
+    {
+        $tutor = $assignment->getTeacher();
+        $message = new AssignmentMessage();
+        $message->setRecipient($tutor);
+        $message->setAssignment($assignment);
+        if ($thread) {
+            $message->setThread($thread);
+        }
+        $result = $this->update($message);
+        $this->autoApproveIfAllowed($message);
+        if (!$thread) {
+            $thread = $this->createThread($message, $tutor);
+        } else {
+            $this->updateThreadLatestMessage($message);
+        }
+
+        if (is_array($result)) {
+            $result['formAction'] = $this->generateUrl('teachers_assignment_message_send_to_tutor', [
+                'assignmentId' => $assignment->getId(),
+                'threadId' => $thread ? $thread->getId() : 0
+            ]);
+        }
+        return $result;
+    }
+
+    /**
+     * @Route("/send_to_student/{assignmentId}/{threadId}",
+     *     name="teachers_assignment_message_send_to_student",
+     *     requirements={"assignmentId"="\d+", "threadId"="\d+"},
+     *     options={"expose"=true},
+     *     defaults={"threadId"=0})
+     * @ParamConverter(name="assignment", options={"id": "assignmentId"})
+     * @ParamConverter(name="thread", options={"id": "threadId"}, isOptional=true)
+     * @Template("@TeachersAssignment/AssignmentMessage/update.html.twig")
+     * @Acl(
+     *      id="teachers_assignment_message_create",
+     *      type="entity",
+     *      permission="CREATE",
+     *      class="TeachersAssignmentBundle:AssignmentMessage"
+     * )
+     * @param Assignment $assignment
+     * @param AssignmentMessageThread|null $thread
+     * @return array|mixed|RedirectResponse
+     * @throws ForbiddenTransitionException
+     * @throws InvalidTransitionException
+     * @throws ORMException
+     * @throws OptimisticLockException
+     * @throws WorkflowException
+     */
+    public function sendToStudent(Assignment $assignment, AssignmentMessageThread $thread = null)
+    {
+        $student = $assignment->getStudent();
+        $message = new AssignmentMessage();
+        $message->setRecipient($student);
+        $message->setAssignment($assignment);
+        if ($thread) {
+            $message->setThread($thread);
+        }
+        $result = $this->update($message);
+        $this->autoApproveIfAllowed($message);
+        if (!$thread) {
+            $thread = $this->createThread($message, $student);
+        } else {
+            $this->updateThreadLatestMessage($message);
+        }
+
+        if (is_array($result)) {
+            $result['formAction'] = $this->generateUrl('teachers_assignment_message_send_to_student', [
+                'assignmentId' => $assignment->getId(),
+                'threadId' => $thread ? $thread->getId() : 0
+            ]);
+        }
+        return $result;
+    }
+
+    /**
+     * @Route("/send_to_course_manager/{assignmentId}/{threadId}",
+     *     name="teachers_assignment_message_send_to_coursemanager",
+     *     requirements={"assignmentId"="\d+", "threadId"="\d+"},
+     *     options={"expose"=true},
+     *     defaults={"threadId"=0})
+     * @ParamConverter(name="assignment", options={"id": "assignmentId"})
+     * @ParamConverter(name="thread", options={"id": "threadId"}, isOptional=true)
+     * @Template("@TeachersAssignment/AssignmentMessage/update.html.twig")
+     * @Acl(
+     *      id="teachers_assignment_message_create",
+     *      type="entity",
+     *      permission="CREATE",
+     *      class="TeachersAssignmentBundle:AssignmentMessage"
+     * )
+     * @param Assignment $assignment
+     * @param AssignmentMessageThread|null $thread
+     * @return array|mixed|RedirectResponse
+     * @throws ForbiddenTransitionException
+     * @throws InvalidTransitionException
+     * @throws ORMException
+     * @throws OptimisticLockException
+     * @throws WorkflowException
+     */
+    public function sendToCourseManager(Assignment $assignment, AssignmentMessageThread $thread = null)
+    {
+        $message = new AssignmentMessage();
+        $message->setAssignment($assignment);
+        if ($thread) {
+            $message->setThread($thread);
+        }
+        $result = $this->update($message);
+        $this->autoApproveIfAllowed($message);
+        if (!$thread) {
+            $thread = $this->createThread($message);
+        } else {
+            $this->updateThreadLatestMessage($message);
+        }
+
+        if (is_array($result)) {
+            $result['formAction'] = $this->generateUrl('teachers_assignment_message_send_to_coursemanager', [
+                'assignmentId' => $assignment->getId(),
+                'threadId' => $thread ? $thread->getId() : 0
+            ]);
+        }
+
         return $result;
     }
 
@@ -278,32 +428,20 @@ class AssignmentMessageController extends AbstractController
 
     /**
      * @param AssignmentMessage $entity
-     * @param $action
      * @return RedirectResponse|array
      */
-    private function update(AssignmentMessage $entity, $action)
+    private function update(AssignmentMessage $entity)
     {
+        /** @var FormFactory $factory */
         /** @var UpdateHandlerFacade $handler */
+        $factory = $this->get('form.factory');
         $handler = $this->get('oro_form.update_handler');
-        $form = $this->getForm($action);
+        $form = $factory->create('Teachers\Bundle\AssignmentBundle\Form\Type\AssignmentMessageType');
         return $handler->update(
             $entity,
             $form,
             $this->get('translator')->trans('teachers.assignment.message.controller.assignment.saved.message')
         );
-    }
-
-    private function getForm($action): FormInterface
-    {
-        /** @var FormFactory $factory */
-        $factory = $this->get('form.factory');
-        $builder = $factory->createNamedBuilder(
-            'teachers_assignment_message_form',
-            'Teachers\Bundle\AssignmentBundle\Form\Type\AssignmentMessageType'
-        );
-        $builder->setAction($action);
-
-        return $builder->getForm();
     }
 
     /**
@@ -315,5 +453,71 @@ class AssignmentMessageController extends AbstractController
     {
         $helper = $this->container->get('teachers_users.helper.role');
         return $helper->isCurrentUserCourseManager() || $helper->getCurrentUserId() == $msg->getOwner()->getId();
+    }
+
+    /**
+     * @throws InvalidTransitionException
+     * @throws ForbiddenTransitionException
+     * @throws WorkflowException
+     */
+    protected function autoApproveIfAllowed(AssignmentMessage $message)
+    {
+        if (!$message->getId()) {
+            return;
+        }
+        /** @var Role $roleHelper */
+        $roleHelper = $this->get('teachers_users.helper.role');
+        $senderStudent = $roleHelper->isCurrentUserStudent();
+        $senderTeacher = $roleHelper->isCurrentUserTeacher();
+        $approve = !$senderStudent && !$senderTeacher; // approve if sender is course manager or admin
+        if ($approve) {
+            /** @var WorkflowManager $wfm */
+            $wfm = $this->get('oro_workflow.manager');
+            $item = $wfm->getWorkflowItem($message, AssignmentMessage::WORKFLOW_NAME);
+            $wfm->transit($item, AssignmentMessage::WORKFLOW_TRANSITION_APPROVE);
+        }
+    }
+
+    /**
+     * @throws OptimisticLockException
+     * @throws ORMException
+     */
+    private function createThread(AssignmentMessage $message, User $recipient = null): ?AssignmentMessageThread
+    {
+        if (!$message->getId()) {
+            return null;
+        }
+        $thread = new AssignmentMessageThread();
+        $thread->setFirstMessage($message);
+        $thread->setLatestMessage($message);
+        $thread->setRecipient($recipient);
+        $thread->setAssignment($message->getAssignment());
+        $em = $this->get('doctrine.orm.entity_manager');
+        $em->persist($thread);
+        $em->flush($thread);
+
+        if ($thread->getId()) {
+            $message->setThread($thread);
+            $em->persist($message);
+            $em->flush($message);
+        }
+
+        return $thread;
+    }
+
+    /**
+     * @throws OptimisticLockException
+     * @throws ORMException
+     */
+    private function updateThreadLatestMessage(AssignmentMessage $message)
+    {
+        if (!$message->getId()) {
+            return;
+        }
+        $thread = $message->getThread();
+        $thread->setLatestMessage($message);
+        $em = $this->get('doctrine.orm.entity_manager');
+        $em->persist($thread);
+        $em->flush($thread);
     }
 }
