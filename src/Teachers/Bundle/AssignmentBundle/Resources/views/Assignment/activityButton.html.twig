@@ -1,7 +1,8 @@
 {% import 'OroUIBundle::macros.html.twig' as UI %}
-
+{% set pathParams = oro_action_params(entity, 'activity') %}
+{% set pathParams = pathParams|merge({'applicationId': entity.id}) %}
 {{ UI.clientButton({
-    'dataUrl': path('teachers_assignment_create', oro_action_params(entity, 'activity')),
+    'dataUrl': path('teachers_assignment_create_from_app', pathParams),
     'aCss': 'no-hash',
     'iCss': 'fa-clipboard',
     'dataId': entity.id,

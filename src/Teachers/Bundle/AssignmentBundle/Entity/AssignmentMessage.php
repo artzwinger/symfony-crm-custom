@@ -33,15 +33,6 @@ use Teachers\Bundle\AssignmentBundle\Model\ExtendAssignmentMessage;
  *              "group_name"="assignment",
  *              "category"="assignment"
  *          },
- *          "grouping"={
- *              "groups"={"activity"}
- *          },
- *          "activity"={
- *              "route"="teachers_assignment_message_activity_view",
- *              "acl"="teachers_assignment_message_view",
- *              "action_button_widget"="teachers_assignment_message_button",
- *              "action_link_widget"="teachers_assignment_message_link"
- *          },
  *          "grid"={
  *              "default"="assignment-messages-grid"
  *          }
@@ -96,6 +87,19 @@ class AssignmentMessage extends ExtendAssignmentMessage
      * @ORM\JoinColumn(name="owner_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $owner;
+
+    /**
+     * @var User|null
+     *
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\UserBundle\Entity\User")
+     * @ORM\JoinColumn(name="recipient_id", referencedColumnName="id", onDelete="SET NULL")
+     */
+    protected $recipient;
+
+    /**
+     * @ORM\Column(name="viewed_by_recipient", type="boolean", nullable=false)
+     */
+    protected $viewedByRecipient = false;
 
     /**
      * @var Organization
@@ -270,6 +274,38 @@ class AssignmentMessage extends ExtendAssignmentMessage
     }
 
     /**
+     * @return User|null
+     */
+    public function getRecipient(): ?User
+    {
+        return $this->recipient;
+    }
+
+    /**
+     * @param User|null $recipient
+     */
+    public function setRecipient(?User $recipient): void
+    {
+        $this->recipient = $recipient;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isViewedByRecipient(): bool
+    {
+        return $this->viewedByRecipient;
+    }
+
+    /**
+     * @param bool $viewedByRecipient
+     */
+    public function setViewedByRecipient(bool $viewedByRecipient): void
+    {
+        $this->viewedByRecipient = $viewedByRecipient;
+    }
+
+    /**
      * Gets organization
      *
      * @return Organization
@@ -343,10 +379,6 @@ class AssignmentMessage extends ExtendAssignmentMessage
 
     public function getAssignment(): ?Assignment
     {
-        if (!$this->assignment) {
-            $targets = $this->getActivityTargets(Assignment::class);
-            $this->assignment = $targets ? $targets[0] : null;
-        }
         return $this->assignment;
     }
 

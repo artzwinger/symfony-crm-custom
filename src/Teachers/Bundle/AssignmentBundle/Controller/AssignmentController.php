@@ -13,6 +13,7 @@ use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use Oro\Bundle\SecurityBundle\Annotation\CsrfProtection;
 use Oro\Bundle\UserBundle\Entity\Role;
 use Oro\Bundle\UserBundle\Entity\User;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormFactory;
@@ -103,7 +104,12 @@ class AssignmentController extends AbstractController
      */
     public function updateAction(Assignment $assignment)
     {
-        return $this->update($assignment, 'teachers_assignment_update');
+        $result = $this->update($assignment);
+        $result['formAction'] = $this->generateUrl('teachers_assignment_update', [
+            'id' => $assignment->getId()
+        ]);
+
+        return $result;
     }
 
     /**
@@ -128,6 +134,47 @@ class AssignmentController extends AbstractController
     }
 
     /**
+     * @Route("/create_from_application/{applicationId}",
+     *     name="teachers_assignment_create_from_app",
+     *     requirements={"applicationId"="\d+"},
+     *     options={"expose"=true})
+     * @ParamConverter(name="application", options={"id": "applicationId"})
+     * @Template("@TeachersAssignment/Assignment/update.html.twig")
+     * @Acl(
+     *      id="teachers_assignment_create",
+     *      type="entity",
+     *      permission="CREATE",
+     *      class="TeachersAssignmentBundle:Assignment"
+     * )
+     * @throws ORMException
+     */
+    public function createFromApplication(Application $application)
+    {
+        $assignment = new Assignment();
+        $canCreateAssignment = !$application->getAssignment();
+
+        if ($canCreateAssignment) {
+            $this->setNewAssignmentCourseManager($assignment);
+            $this->populateApplicationDataToAssignment($application, $assignment);
+        }
+
+        $result = $this->update($assignment);
+        $result['cannotCreateAssignment'] = !$canCreateAssignment;
+        $result['formAction'] = $this->generateUrl('teachers_assignment_create_from_app', [
+            'applicationId' => $application->getId()
+        ]);
+
+        if ($assignment->getId()) {
+            $application->setAssignment($assignment);
+            $em = $this->get('doctrine.orm.entity_manager');
+            $em->persist($application);
+            $em->flush($application);
+        }
+
+        return $result;
+    }
+
+    /**
      * @Route("/create", name="teachers_assignment_create", options={"expose"=true})
      * @Template("@TeachersAssignment/Assignment/update.html.twig")
      * @Acl(
@@ -139,66 +186,14 @@ class AssignmentController extends AbstractController
      */
     public function createAction()
     {
-        $em = $this->get('doctrine.orm.entity_manager');
         $assignment = new Assignment();
-        $request = $this->get('request_stack')->getCurrentRequest();
-        $entityClass = $request->get('entityClass');
-        $entityId = $request->get('entityId');
-        $cannotCreateAssignment = false;
-        try {
-            if ($entityClass && $entityId) {
-                $entityClass = str_replace('_', '\\', $entityClass);
-                $repository = $em->getRepository($entityClass);
-                /** @var Application $application */
-                $application = $repository->find($entityId);
-                if (empty($application)) {
-                    throw new EntityNotFoundException();
-                }
-                if ($application->getAssignment()) {
-                    $cannotCreateAssignment = true;
-                }
-                if ($this->get('teachers_users.helper.role')->isCurrentUserCourseManager()) {
-                    $roleRepository = $em->getRepository(Role::class);
-                    $role = $roleRepository->findOneBy([
-                        'role' => User::ROLE_ADMINISTRATOR
-                    ]);
-                    if ($role) {
-                        $adminUser = $roleRepository->getFirstMatchedUser($role);
-                        if ($adminUser) {
-                            $assignment->setCourseManager($adminUser);
-                        }
-                    }
-                }
-                $assignment->setApplication($application);
-                $assignment->setTerm($application->getTerm());
-                $assignment->setRep($application->getRep());
-                $assignment->setFirstName($application->getFirstName());
-                $assignment->setLastName($application->getLastName());
-                $assignment->setCourseName($application->getCourseName());
-                $assignment->setCoursePrefixes($application->getCoursePrefixes());
-                $assignment->setDescription($application->getDescription());
-                $assignment->setWorkToday($application->getWorkToday());
-                $assignment->setDueDate($application->getDueDate());
-                $assignment->setClassStartDate($application->getClassStartDate());
-                $assignment->setUserLogin($application->getUserLogin());
-                $assignment->setUserPassword($application->getUserPassword());
-                $assignment->setCourseUrl($application->getCourseUrl());
-                $assignment->setInstructions($application->getInstructions());
-                $assignment->setAmountDueToday($application->getAmountDueToday());
-                if ($application->getStudent()) {
-                    $assignment->setStudent($application->getStudent());
-                }
-                if ($studentContact = $application->getStudentContact()) {
-                    $assignment->setStudentContact($studentContact);
-                }
-                if ($studentAccount = $application->getStudentAccount()) {
-                    $assignment->setStudentAccount($studentAccount);
-                }
-            }
-        } catch (Exception $e) {
+        $this->setNewAssignmentCourseManager($assignment);
+        $result = $this->update($assignment);
+
+        if (is_array($result)) {
+            $result['cannotCreateAssignment'] = false;
+            $result['formAction'] = $this->generateUrl('teachers_assignment_create');
         }
-        $result = $this->update($assignment, 'teachers_assignment_create');
-        $result['cannotCreateAssignment'] = $cannotCreateAssignment;
 
         return $result;
     }
@@ -236,14 +231,14 @@ class AssignmentController extends AbstractController
 
     /**
      * @param Assignment $entity
-     * @param $action
      * @return RedirectResponse|array
      */
-    private function update(Assignment $entity, $action)
+    private function update(Assignment $entity)
     {
         /** @var UpdateHandlerFacade $handler */
         $handler = $this->get('oro_form.update_handler');
-        $form = $this->getForm($action);
+        $factory = $this->get('form.factory');
+        $form = $factory->create('Teachers\Bundle\AssignmentBundle\Form\Type\AssignmentType');
         return $handler->update(
             $entity,
             $form,
@@ -251,16 +246,49 @@ class AssignmentController extends AbstractController
         );
     }
 
-    private function getForm($action): FormInterface
+    private function setNewAssignmentCourseManager(Assignment $assignment)
     {
-        /** @var FormFactory $factory */
-        $factory = $this->get('form.factory');
-        $builder = $factory->createNamedBuilder(
-            'teachers_assignment_form',
-            'Teachers\Bundle\AssignmentBundle\Form\Type\AssignmentType'
-        );
-        $builder->setAction($action);
+        if ($this->get('teachers_users.helper.role')->isCurrentUserCourseManager()) {
+            $roleRepository = $this->get('doctrine.orm.entity_manager')
+                ->getRepository(Role::class);
+            $role = $roleRepository->findOneBy([
+                'role' => User::ROLE_ADMINISTRATOR
+            ]);
+            if ($role) {
+                $adminUser = $roleRepository->getFirstMatchedUser($role);
+                if ($adminUser) {
+                    $assignment->setCourseManager($adminUser);
+                }
+            }
+        }
+    }
 
-        return $builder->getForm();
+    private function populateApplicationDataToAssignment(Application $application, Assignment $assignment)
+    {
+        $assignment->setApplication($application);
+        $assignment->setTerm($application->getTerm());
+        $assignment->setRep($application->getRep());
+        $assignment->setFirstName($application->getFirstName());
+        $assignment->setLastName($application->getLastName());
+        $assignment->setCourseName($application->getCourseName());
+        $assignment->setCoursePrefixes($application->getCoursePrefixes());
+        $assignment->setDescription($application->getDescription());
+        $assignment->setWorkToday($application->getWorkToday());
+        $assignment->setDueDate($application->getDueDate());
+        $assignment->setClassStartDate($application->getClassStartDate());
+        $assignment->setUserLogin($application->getUserLogin());
+        $assignment->setUserPassword($application->getUserPassword());
+        $assignment->setCourseUrl($application->getCourseUrl());
+        $assignment->setInstructions($application->getInstructions());
+        $assignment->setAmountDueToday($application->getAmountDueToday());
+        if ($application->getStudent()) {
+            $assignment->setStudent($application->getStudent());
+        }
+        if ($studentContact = $application->getStudentContact()) {
+            $assignment->setStudentContact($studentContact);
+        }
+        if ($studentAccount = $application->getStudentAccount()) {
+            $assignment->setStudentAccount($studentAccount);
+        }
     }
 }

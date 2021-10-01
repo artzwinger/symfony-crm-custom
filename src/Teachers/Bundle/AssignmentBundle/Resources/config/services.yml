@@ -89,6 +89,11 @@ services:
         public: true
         arguments:
             - '@translator'
+    teachers_assignment.my_messages.datagrid_view_list:
+        class: Teachers\Bundle\AssignmentBundle\Datagrid\MyMessagesViewList
+        public: true
+        arguments:
+            - '@translator'
     teachers_assignment.assignments.datagrid_view_list:
         class: Teachers\Bundle\AssignmentBundle\Datagrid\AssignmentsViewList
         public: true
@@ -120,12 +125,6 @@ services:
             - { name: doctrine.event_listener, event: postPersist }
     teachers_assignment.event_listener.orm.assignment_message_post_persist:
         class: Teachers\Bundle\AssignmentBundle\EventListener\ORM\AssignmentMessagePostPersist
-        arguments:
-            - '@doctrine.orm.entity_manager'
-        tags:
-            - { name: doctrine.event_listener, event: postPersist }
-    teachers_assignment.event_listener.orm.assignment_set_to_application_post_persist:
-        class: Teachers\Bundle\AssignmentBundle\EventListener\ORM\AssignmentSetToApplicationPostPersist
         arguments:
             - '@doctrine.orm.entity_manager'
         tags:

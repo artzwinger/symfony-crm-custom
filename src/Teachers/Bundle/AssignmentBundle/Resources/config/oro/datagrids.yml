@@ -714,6 +714,7 @@ datagrids:
     teachers-assignment-my-messages-grid:
         extended_entity_name: 'Teachers\Bundle\AssignmentBundle\Entity\AssignmentMessage'
         acl_resource: teachers_assignment_message_my
+        views_list: "@teachers_assignment.my_messages.datagrid_view_list"
         source:
             type: orm
             query:
