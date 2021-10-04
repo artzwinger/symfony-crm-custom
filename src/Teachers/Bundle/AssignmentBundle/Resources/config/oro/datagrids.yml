@@ -624,6 +624,14 @@ datagrids:
                     inner:
                         - { join: assignment_message.owner, alias: message_sender }
                         - { join: assignment_message.status, alias: message_status }
+                    left:
+                        - { join: assignment_message.thread, alias: thread }
+                where:
+                    and:
+                        - thread.id = :thread_id or :thread_id is null
+            bind_parameters:
+                -   name: thread_id
+                    default: null
         columns:
             message:
                 label: teachers.assignment.message.message.label
@@ -712,33 +720,43 @@ datagrids:
             entity_pagination: true
 
     teachers-assignment-my-messages-grid:
-        extended_entity_name: 'Teachers\Bundle\AssignmentBundle\Entity\AssignmentMessage'
+        extended_entity_name: 'Teachers\Bundle\AssignmentBundle\Entity\AssignmentMessageThread'
         acl_resource: teachers_assignment_message_my
         views_list: "@teachers_assignment.my_messages.datagrid_view_list"
         source:
             type: orm
             query:
                 select:
-                    - assignment_message.id
-                    - assignment_message.message
-                    - assignment_message.denialReason
-                    - assignment_message.createdAt
-                    - assignment_message.viewedByRecipient
-                    - message_status.id as status
-                    - message_status.name as statusLabel
+                    - thread.id
+                    - message.message
+                    - message.denialReason
+                    - message.createdAt
+                    - message.viewedByRecipient
+                    - CONCAT(sender.firstName, ' ', sender.lastName) as senderFullName
+                    - CONCAT(recipient.firstName, ' ', recipient.lastName) as recipientFullName
+                    - status.id as statusId
+                    - status.name as statusLabel
                     - assignment.id as assignmentId
+                    - CASE WHEN messageSender.id = @oro_security.token_accessor->getUserId THEN true ELSE false END as isLatestMessageSentByMe
+                    - CASE WHEN messageSender.id = @oro_security.token_accessor->getUserId THEN false ELSE true END as recipientOfLatestMessage
                 from:
-                    - { table: 'Teachers\Bundle\AssignmentBundle\Entity\AssignmentMessage', alias: assignment_message }
+                    - { table: 'Teachers\Bundle\AssignmentBundle\Entity\AssignmentMessageThread', alias: thread }
                 join:
                     inner:
-                        - { join: assignment_message.owner, alias: message_sender }
-                        - { join: assignment_message.status, alias: message_status }
+                        - { join: thread.sender, alias: sender }
+                        - { join: thread.latestMessage, alias: message }
+                        - { join: message.status, alias: status }
                     left:
-                        - { join: assignment_message.assignment, alias: assignment }
-                        - { join: assignment_message.recipient, alias: recipient }
+                        - { join: message.assignment, alias: assignment }
+                        - { join: message.recipient, alias: recipient }
+                        - { join: message.owner, alias: messageSender }
                 where:
                     and:
-                        - message_sender.id = @oro_security.token_accessor->getUserId
+                        - sender.id = @oro_security.token_accessor->getUserId or recipient.id = @oro_security.token_accessor->getUserId
+                        - assignment.id = :assignment_id or :assignment_id is null
+            bind_parameters:
+                -   name: assignment_id
+                    default: null
         columns:
             message:
                 label: teachers.assignment.message.message.label
@@ -752,41 +770,142 @@ datagrids:
                 template: TeachersAssignmentBundle:AssignmentMessage/Datagrid:message.html.twig
             senderFullName:
                 label: teachers.assignment.message.sender_name.label
+            recipientFullName:
+                label: teachers.assignment.message.recipient_name.label
             createdAt:
                 frontend_type: datetime
                 label: oro.ui.created_at
         sorters:
             columns:
                 message:
-                    data_name: assignment_message.message
+                    data_name: message.message
                 denialReason:
-                    data_name: assignment_message.denialReason
+                    data_name: message.denialReason
                 createdAt:
-                    data_name: assignment_message.createdAt
+                    data_name: message.createdAt
             default:
                 createdAt: DESC
         filters:
             columns:
                 message:
                     type: string
-                    data_name: assignment_message.message
+                    data_name: message.message
                 denialReason:
                     type: string
-                    data_name: assignment_message.denialReason
+                    data_name: message.denialReason
                 createdAt:
                     type: datetime
-                    data_name: assignment_message.createdAt
+                    data_name: message.createdAt
+                isLatestMessageSentByMe:
+                    label: teachers.assignment.message.latest_message_sent.label
+                    type: boolean
+                    data_name: isLatestMessageSentByMe
+                recipientOfLatestMessage:
+                    label: teachers.assignment.message.recipient_of_latest_message.label
+                    type: boolean
+                    data_name: recipientOfLatestMessage
                 statusLabel:
                     label: teachers.assignment.message.status.label
                     type: enum
-                    data_name: status
+                    data_name: statusId
                     enum_code: assignment_msg_status
         properties:
             id: ~
             view_link:
                 type: url
-                route: teachers_assignment_view
-                params: { id: assignmentId }
+                route: teachers_assignment_message_thread_view
+                params: [ id ]
+        actions:
+            view:
+                acl_resource: teachers_assignment_view
+                type: navigate
+                label: oro.grid.action.view
+                icon: eye
+                link: view_link
+                rowAction: true
+        options:
+            entityHint: teachers.assignment.message.entity_plural_label
+            entity_pagination: true
+
+    teachers-assignment-cm-my-messages-grid:
+        extended_entity_name: 'Teachers\Bundle\AssignmentBundle\Entity\AssignmentMessageThread'
+        acl_resource: teachers_assignment_message_cm_my
+        source:
+            type: orm
+            query:
+                select:
+                    - thread.id
+                    - message.message
+                    - message.createdAt
+                    - message.viewedByRecipient
+                    - CONCAT(sender.firstName, ' ', sender.lastName) as senderFullName
+                    - CONCAT(recipient.firstName, ' ', recipient.lastName) as recipientFullName
+                    - status.id as statusId
+                    - status.name as statusLabel
+                    - CASE WHEN messageSender.id = @oro_security.token_accessor->getUserId THEN true ELSE false END as isLatestMessageSentByMe
+                    - CASE WHEN messageSender.id = @oro_security.token_accessor->getUserId THEN false ELSE true END as recipientOfLatestMessage
+                from:
+                    - { table: 'Teachers\Bundle\AssignmentBundle\Entity\AssignmentMessageThread', alias: thread }
+                join:
+                    inner:
+                        - { join: thread.sender, alias: sender }
+                        - { join: thread.latestMessage, alias: message }
+                        - { join: message.status, alias: status }
+                    left:
+                        - { join: message.assignment, alias: assignment }
+                        - { join: message.recipient, alias: recipient }
+                        - { join: message.owner, alias: messageSender }
+                where:
+                    and:
+                        - sender.id = @oro_security.token_accessor->getUserId or recipient.id is null
+        columns:
+            message:
+                label: teachers.assignment.message.message.label
+                type: twig
+                frontend_type: html
+                template: TeachersAssignmentBundle:AssignmentMessage/Datagrid:message.html.twig
+            senderFullName:
+                label: teachers.assignment.message.sender_name.label
+            recipientFullName:
+                label: teachers.assignment.message.recipient_name.label
+            createdAt:
+                frontend_type: datetime
+                label: oro.ui.created_at
+        sorters:
+            columns:
+                message:
+                    data_name: message.message
+                createdAt:
+                    data_name: message.createdAt
+            default:
+                createdAt: DESC
+        filters:
+            columns:
+                message:
+                    type: string
+                    data_name: message.message
+                createdAt:
+                    type: datetime
+                    data_name: message.createdAt
+                isLatestMessageSentByMe:
+                    label: teachers.assignment.message.latest_message_sent.label
+                    type: boolean
+                    data_name: isLatestMessageSentByMe
+                recipientOfLatestMessage:
+                    label: teachers.assignment.message.recipient_of_latest_message.label
+                    type: boolean
+                    data_name: recipientOfLatestMessage
+                statusLabel:
+                    label: teachers.assignment.message.status.label
+                    type: enum
+                    data_name: statusId
+                    enum_code: assignment_msg_status
+        properties:
+            id: ~
+            view_link:
+                type: url
+                route: teachers_assignment_message_thread_view
+                params: [ id ]
         actions:
             view:
                 acl_resource: teachers_assignment_view

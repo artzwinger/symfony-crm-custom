@@ -2,12 +2,10 @@
 
 namespace Teachers\Bundle\AssignmentBundle\Entity;
 
-use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Oro\Bundle\EntityBundle\EntityProperty\DatesAwareInterface;
 use Oro\Bundle\EntityBundle\EntityProperty\DatesAwareTrait;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\UserBundle\Entity\User;
 use Teachers\Bundle\AssignmentBundle\Model\ExtendAssignmentMessageThread;
@@ -17,6 +15,7 @@ use Teachers\Bundle\AssignmentBundle\Model\ExtendAssignmentMessageThread;
  * @ORM\Table(name="teachers_message_thread")
  * @ORM\HasLifecycleCallbacks()
  * @Config(
+ *      routeView="teachers_assignment_message_thread_view",
  *      defaultValues={
  *          "entity"={
  *              "icon"="fa-envelope"
@@ -185,6 +184,12 @@ class AssignmentMessageThread extends ExtendAssignmentMessageThread implements D
     public function getRecipient(): ?User
     {
         return $this->recipient;
+    }
+
+    public function getRecipientId(): int
+    {
+        $rec = $this->getRecipient();
+        return $rec ? $rec->getId() : 0;
     }
 
     /**

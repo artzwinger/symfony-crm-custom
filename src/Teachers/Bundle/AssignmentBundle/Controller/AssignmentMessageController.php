@@ -20,7 +20,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormFactory;
-use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -288,7 +287,7 @@ class AssignmentMessageController extends AbstractController
             $message->setThread($thread);
         }
         $result = $this->update($message);
-        $this->autoApproveIfAllowed($message);
+        $this->autoApprove($message);
         if (!$thread) {
             $thread = $this->createThread($message);
         } else {
@@ -299,6 +298,59 @@ class AssignmentMessageController extends AbstractController
             $result['formAction'] = $this->generateUrl('teachers_assignment_message_send_to_coursemanager', [
                 'assignmentId' => $assignment->getId(),
                 'threadId' => $thread ? $thread->getId() : 0
+            ]);
+        }
+
+        return $result;
+    }
+
+    /**
+     * @Route("/respond/{threadId}",
+     *     name="teachers_thread_respond",
+     *     requirements={"threadId"="\d+"},
+     *     options={"expose"=true})
+     * @ParamConverter(name="thread", options={"id": "threadId"}, isOptional=true)
+     * @Template("@TeachersAssignment/AssignmentMessage/update.html.twig")
+     * @Acl(
+     *      id="teachers_assignment_message_create",
+     *      type="entity",
+     *      permission="CREATE",
+     *      class="TeachersAssignmentBundle:AssignmentMessage"
+     * )
+     * @param AssignmentMessageThread $thread
+     * @return array|mixed|RedirectResponse
+     * @throws ForbiddenTransitionException
+     * @throws InvalidTransitionException
+     * @throws ORMException
+     * @throws OptimisticLockException
+     * @throws WorkflowException
+     */
+    public function respondAction(AssignmentMessageThread $thread)
+    {
+        $userId = $this->get('oro_security.token_accessor')->getUserId();
+        $userNotSenderOrRecipient = $thread->getRecipientId() !== $userId && $thread->getSender()->getId() !== $userId;
+        /** @var Role $roleHelper */
+        $roleHelper = $this->get('teachers_users.helper.role');
+        $userIsTutorOrStudent = $roleHelper->isCurrentUserTeacher() || $roleHelper->isCurrentUserStudent();
+        if ($userNotSenderOrRecipient && $userIsTutorOrStudent) {
+            $this->get('oro_ui.session.flash_bag')->add('error', 'You do not have access to this thread');
+            return $this->redirectToRoute('oro_dashboard_index');
+        }
+        $message = new AssignmentMessage();
+        $message->setAssignment($thread->getAssignment());
+        $message->setThread($thread);
+        $recipient = $thread->getRecipient();
+        if ($userId === $thread->getRecipientId()) {
+            $recipient = $thread->getSender();
+        }
+        $message->setRecipient($recipient);
+        $result = $this->update($message);
+        $this->autoApproveIfAllowed($message);
+        $this->updateThreadLatestMessage($message);
+
+        if (is_array($result)) {
+            $result['formAction'] = $this->generateUrl('teachers_thread_respond', [
+                'threadId' => $thread->getId()
             ]);
         }
 
@@ -471,11 +523,24 @@ class AssignmentMessageController extends AbstractController
         $senderTeacher = $roleHelper->isCurrentUserTeacher();
         $approve = !$senderStudent && !$senderTeacher; // approve if sender is course manager or admin
         if ($approve) {
-            /** @var WorkflowManager $wfm */
-            $wfm = $this->get('oro_workflow.manager');
-            $item = $wfm->getWorkflowItem($message, AssignmentMessage::WORKFLOW_NAME);
-            $wfm->transit($item, AssignmentMessage::WORKFLOW_TRANSITION_APPROVE);
+            $this->autoApprove($message);
         }
+    }
+
+    /**
+     * @throws InvalidTransitionException
+     * @throws ForbiddenTransitionException
+     * @throws WorkflowException
+     */
+    protected function autoApprove(AssignmentMessage $message)
+    {
+        if (!$message->getId()) {
+            return;
+        }
+        /** @var WorkflowManager $wfm */
+        $wfm = $this->get('oro_workflow.manager');
+        $item = $wfm->getWorkflowItem($message, AssignmentMessage::WORKFLOW_NAME);
+        $wfm->transit($item, AssignmentMessage::WORKFLOW_TRANSITION_APPROVE);
     }
 
     /**

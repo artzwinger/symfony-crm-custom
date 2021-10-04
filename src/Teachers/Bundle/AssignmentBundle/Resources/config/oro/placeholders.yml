@@ -7,10 +7,20 @@ placeholders:
                 oro_user_tasks:
                     remove: true
                 oro_user_assignment_grid: ~
+                assignment_message_threads: ~
+                thread_messages: ~
     items:
         oro_user_assignment_grid:
             template: TeachersAssignmentBundle:Assignment:userAssignments.html.twig
             applicable: '@oro_ui.placeholder.filter->isInstanceOf($entity$, Oro\Bundle\UserBundle\Entity\User)'
+
+        assignment_message_threads:
+            template: TeachersAssignmentBundle:Assignment:messageThreads.html.twig
+            applicable: '@oro_ui.placeholder.filter->isInstanceOf($entity$, Teachers\Bundle\AssignmentBundle\Entity\Assignment)'
+
+        thread_messages:
+            template: TeachersAssignmentBundle:AssignmentMessageThread:threadMessages.html.twig
+            applicable: '@oro_ui.placeholder.filter->isInstanceOf($entity$, Teachers\Bundle\AssignmentBundle\Entity\AssignmentMessageThread)'
 
         teachers_assignment_button:
             template: TeachersAssignmentBundle:Assignment:activityButton.html.twig

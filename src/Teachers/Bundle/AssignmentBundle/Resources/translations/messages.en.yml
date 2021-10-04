@@ -1,10 +1,10 @@
 teachers:
     assignment:
+        entity_label: Assignment
         controller:
             assignment:
                 saved:
                     message: Assignment Saved
-
 
         has_unviewed_bids:
             label: Unviewed Bids
@@ -108,25 +108,36 @@ teachers:
             send_to_student: Message Student
             send_to_teacher: Message Tutor
             send_to_course_manager: Message Course Manager
+            respond: Respond
+            threads: Message Threads
             message.label: Message
             denialReason.label: Denial Reason
             status.label: Status
+            latest_message_sent:
+                label: Latest Message Sent By Me
+            recipient_of_latest_message:
+                label: Recipient Of Latest Message Is Me
             sender_name.label: Sender
+            recipient_name.label: Recipient
             entity_label: Message
             sender_name: Sender
             entity_plural_label: Messages
             my_messages: Messages
+            cm_my_messages: CM Messages
             entity_grid_all_view_label: All %entity_plural_label%
             block:
                 general: General
                 additional: Additional
                 message_information: Message information
+                message_thread_information: Message Thread Information
             controller:
                 assignment:
                     saved:
                         message: 'Message sent'
-
-        entity_label: Assignment
+        assignmentmessagethread:
+            sender:
+                label: Sender
+            entity_label: Message Thread
         entity_plural_label: Assignments
         entity_grid_all_view_label: All %entity_plural_label%
         id.label: ID

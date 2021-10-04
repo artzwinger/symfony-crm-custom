@@ -139,3 +139,11 @@ services:
             - name: kernel.event_listener
               event: oro_datagrid.datagrid.build.before.teachers-assignment-my-messages-grid
               method: onBuildBefore
+    teachers_assignment.my_messages.hide_appove_actions_for_students_tutors:
+        class: Teachers\Bundle\AssignmentBundle\EventListener\HideAppoveActionsForStudentsTutors
+        arguments:
+            - '@teachers_users.helper.role'
+        tags:
+            - name: kernel.event_listener
+              event: oro_datagrid.datagrid.build.before.teachers-assignment-messages-grid
+              method: onBuildBefore

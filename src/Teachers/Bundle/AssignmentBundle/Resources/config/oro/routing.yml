@@ -23,10 +23,20 @@ teachers_assignment_message:
     type: annotation
     prefix: /assignment_message
 
+teachers_assignment_message_thread:
+    resource: "@TeachersAssignmentBundle/Controller/AssignmentMessageThreadController.php"
+    type: annotation
+    prefix: /assignment_message_thread
+
 teachers_assignment_message_my:
     resource: "@TeachersAssignmentBundle/Controller/MyMessagesController.php"
     type: annotation
     prefix: /assignment_message_my
+
+teachers_assignment_message_cm_my:
+    resource: "@TeachersAssignmentBundle/Controller/CmMyMessagesController.php"
+    type: annotation
+    prefix: /assignment_message_cm_my
 
 teachers_assignment_api:
     resource: "@TeachersAssignmentBundle/Resources/config/oro/routing_api.yml"

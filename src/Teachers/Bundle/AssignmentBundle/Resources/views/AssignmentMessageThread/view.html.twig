@@ -7,31 +7,42 @@
     {% set breadcrumbs = {
         'entity': entity,
         'indexPath': path('teachers_assignment_index'),
-        'indexLabel': 'teachers.assignment.message.entity_plural_label'|trans,
+        'indexLabel': 'teachers.assignment.message.threads'|trans,
         'entityTitle': subject
     } %}
     {{ parent() }}
 {% endblock pageHeader %}
-
 {% block navButtons %}
     {% import 'OroUIBundle::macros.html.twig' as UI %}
 
-    {% if is_granted('teachers_assignment_message_delete') %}
-        {{ UI.deleteButton({
-            'dataUrl': path('teachers_assignment_message_delete', {'id': entity.id}),
-            'dataRedirect': path('teachers_assignment_index'),
-            'aCss': 'no-hash remove-button',
-            'id': 'btn-remove-assignment-form',
+    {% if is_granted('teachers_assignment_message_create') %}
+        {% set label = 'teachers.assignment.message.respond'|trans %}
+        {{ UI.clientButton({
+            'dataUrl': path('teachers_thread_respond', {
+                'threadId': entity.id
+            }),
+            'aCss': 'no-hash',
+            'iCss': 'fa-envelope',
             'dataId': entity.id,
-            'entity_label': 'teachers.assignment.message.entity_label'|trans,
-        }) }}
-        {{ UI.buttonSeparator() }}
-    {% endif %}
-
-    {% if is_granted('teachers_assignment_message_edit') %}
-        {{ UI.editButton({
-            'path': path('teachers_assignment_message_update', {'id': entity.id}),
-            'entity_label': 'teachers.assignment.message.entity_label'|trans,
+            'label': label,
+            'title': label,
+            'widget' : {
+                'type' : 'dialog',
+                'multiple' : true,
+                'reload-grid-name': 'teachers-assignment-messages-grid',
+                'refresh-widget-alias': 'additional-information-widget',
+                'options' : {
+                    'alias': 'assignment-message-dialog',
+                    'dialogOptions' : {
+                        'title' : 'teachers.assignment.message.add_entity'|trans,
+                        'allowMaximize': true,
+                        'allowMinimize': true,
+                        'dblclick': 'maximize',
+                        'maximizedHeightDecreaseBy': 'minimize-bar',
+                        'width': 1000
+                    }
+                }
+            }
         }) }}
     {% endif %}
 {% endblock %}
@@ -40,8 +51,8 @@
     {% set assignmentInformationWidget %}
         {{ oro_widget_render({
             'widgetType': 'block',
-            'url': path('teachers_assignment_info', {id: entity.id}),
-            'title': 'teachers.assignment.message.block.message_information'|trans
+            'url': path('teachers_assignment_message_thread_info', {id: entity.id}),
+            'title': 'teachers.assignment.message.block.message_thread_information'|trans
         }) }}
     {% endset %}
 
@@ -49,12 +60,12 @@
         {
             'title': 'General'|trans,
             'subblocks': [
-                {'data': [assignmentInformationWidget]}
-            ]
+            {'data': [assignmentInformationWidget]}
+        ]
         }
     ] %}
 
-    {% set id = 'assignmentView' %}
+    {% set id = 'threadView' %}
     {% set data = {'dataBlocks': dataBlocks} %}
     {{ parent() }}
 {% endblock %}

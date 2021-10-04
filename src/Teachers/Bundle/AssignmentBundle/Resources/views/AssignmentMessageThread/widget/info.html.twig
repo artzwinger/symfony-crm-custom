@@ -5,10 +5,15 @@
 <div class="widget-content">
     <div class="row-fluid form-horizontal">
         <div class="responsive-block">
-            {% if entity.denialReason is not empty %}
-                <span><b>DENIED: </b> {{ entity.denialReason | raw }}</span><br>
+            {% if entity.assignment %}
+                {{ ui.renderAttribute('teachers.assignment.entity_label'|trans, ui.link({
+                    'path': path('teachers_assignment_view', { entityClass: oro_class_name(entity.assignment, true), id: entity.assignment.id }),
+                    'iCss': 'fa-clipboard',
+                    'aCss': 'link-icon-need-space',
+                    'title': entity.assignment.courseName,
+                    'label': entity.assignment.courseName
+                })) }}
             {% endif %}
-            <pre>{{ entity.message }}</pre>
             {{ entityConfig.renderDynamicFields(entity) }}
         </div>
     </div>

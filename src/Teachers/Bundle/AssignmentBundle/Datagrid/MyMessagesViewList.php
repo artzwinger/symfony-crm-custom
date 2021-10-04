@@ -4,7 +4,6 @@ namespace Teachers\Bundle\AssignmentBundle\Datagrid;
 
 use Oro\Bundle\DataGridBundle\Entity\AbstractGridView;
 use Oro\Bundle\DataGridBundle\Extension\GridViews\AbstractViewsList;
-use Oro\Bundle\FilterBundle\Form\Type\Filter\EnumFilterType;
 
 class MyMessagesViewList extends AbstractViewsList
 {
@@ -16,9 +15,8 @@ class MyMessagesViewList extends AbstractViewsList
             'grid_name' => 'teachers-assignment-my-messages-grid',
             'type' => AbstractGridView::TYPE_PUBLIC,
             'filters' => [
-                'statusLabel' => [
-                    'type' => EnumFilterType::TYPE_IN,
-                    'value' => ['pending']
+                'recipientOfLatestMessage' => [
+                    'value' => '1'
                 ]
             ],
             'sorters' => [],
@@ -31,9 +29,8 @@ class MyMessagesViewList extends AbstractViewsList
             'grid_name' => 'teachers-assignment-my-messages-grid',
             'type' => AbstractGridView::TYPE_PUBLIC,
             'filters' => [
-                'statusLabel' => [
-                    'type' => EnumFilterType::TYPE_IN,
-                    'value' => ['not_approved']
+                'isLatestMessageSentByMe' => [
+                    'value' => '1'
                 ]
             ],
             'sorters' => [],

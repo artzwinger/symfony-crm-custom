@@ -1,0 +1,15 @@
+{% if is_granted('teachers_assignment_message_thread_view') %}
+    {% import 'OroDataGridBundle::macros.html.twig' as dataGrid %}
+
+    <div class="responsive-cell">
+        <div class="box-type1">
+            <div class="title">
+                <span class="widget-title">{{ "teachers.assignment.message.threads"|trans }}</span>
+            </div>
+
+            <div class="row-fluid">
+                {{ dataGrid.renderGrid('teachers-assignment-my-messages-grid', {'assignment_id': entity.id}, {cssClass: 'inner-grid'}) }}
+            </div>
+        </div>
+    </div>
+{% endif %}
