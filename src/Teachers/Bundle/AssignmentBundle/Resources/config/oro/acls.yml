@@ -14,8 +14,8 @@ acls:
         class: TeachersAssignmentBundle:AssignmentMessage
         permission: VIEW_MY_MESSAGES
         group_name: ""
-    teachers_assignment_message_cm_my:
+    teachers_assignment_message_cm_general:
         type: entity
         class: TeachersAssignmentBundle:AssignmentMessage
-        permission: VIEW_CM_MY_MESSAGES
+        permission: VIEW_CM_GENERAL_MESSAGES
         group_name: ""

@@ -33,10 +33,10 @@ teachers_assignment_message_my:
     type: annotation
     prefix: /assignment_message_my
 
-teachers_assignment_message_cm_my:
-    resource: "@TeachersAssignmentBundle/Controller/CmMyMessagesController.php"
+teachers_assignment_message_cm_general:
+    resource: "@TeachersAssignmentBundle/Controller/CmGeneralMessagesController.php"
     type: annotation
-    prefix: /assignment_message_cm_my
+    prefix: /assignment_message_cm_general
 
 teachers_assignment_api:
     resource: "@TeachersAssignmentBundle/Resources/config/oro/routing_api.yml"

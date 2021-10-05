@@ -94,6 +94,11 @@ services:
         public: true
         arguments:
             - '@translator'
+    teachers_assignment.my_messages.cm_general_messages_view_list:
+        class: Teachers\Bundle\AssignmentBundle\Datagrid\CmGeneralMessagesViewList
+        public: true
+        arguments:
+            - '@translator'
     teachers_assignment.assignments.datagrid_view_list:
         class: Teachers\Bundle\AssignmentBundle\Datagrid\AssignmentsViewList
         public: true

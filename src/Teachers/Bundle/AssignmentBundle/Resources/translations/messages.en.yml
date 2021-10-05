@@ -123,7 +123,7 @@ teachers:
             sender_name: Sender
             entity_plural_label: Messages
             my_messages: Messages
-            cm_my_messages: CM Messages
+            cm_general_messages: CM General Messages
             entity_grid_all_view_label: All %entity_plural_label%
             block:
                 general: General

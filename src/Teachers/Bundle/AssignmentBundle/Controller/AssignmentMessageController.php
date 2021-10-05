@@ -328,7 +328,11 @@ class AssignmentMessageController extends AbstractController
     public function respondAction(AssignmentMessageThread $thread)
     {
         $userId = $this->get('oro_security.token_accessor')->getUserId();
-        $userNotSenderOrRecipient = $thread->getRecipientId() !== $userId && $thread->getSender()->getId() !== $userId;
+
+        $userIsSender = $thread->getSender()->getId() === $userId;
+        $userIsRecipient = $thread->getRecipientId() === $userId;
+        $userNotSenderOrRecipient = !$userIsRecipient && !$userIsSender;
+
         /** @var Role $roleHelper */
         $roleHelper = $this->get('teachers_users.helper.role');
         $userIsTutorOrStudent = $roleHelper->isCurrentUserTeacher() || $roleHelper->isCurrentUserStudent();
@@ -340,7 +344,7 @@ class AssignmentMessageController extends AbstractController
         $message->setAssignment($thread->getAssignment());
         $message->setThread($thread);
         $recipient = $thread->getRecipient();
-        if ($userId === $thread->getRecipientId()) {
+        if ($userIsRecipient || ($recipient === null && !$userIsSender)) {
             $recipient = $thread->getSender();
         }
         $message->setRecipient($recipient);

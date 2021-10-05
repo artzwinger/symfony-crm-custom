@@ -827,8 +827,9 @@ datagrids:
             entityHint: teachers.assignment.message.entity_plural_label
             entity_pagination: true
 
-    teachers-assignment-cm-my-messages-grid:
+    teachers-assignment-cm-general-messages-grid:
         extended_entity_name: 'Teachers\Bundle\AssignmentBundle\Entity\AssignmentMessageThread'
+        views_list: "@teachers_assignment.my_messages.cm_general_messages_view_list"
         acl_resource: teachers_assignment_message_cm_my
         source:
             type: orm

@@ -6,6 +6,8 @@ use DateTime;
 use DateTimeZone;
 use Doctrine\ORM\Mapping as ORM;
 use Exception;
+use Oro\Bundle\EntityBundle\EntityProperty\DatesAwareInterface;
+use Oro\Bundle\EntityBundle\EntityProperty\DatesAwareTrait;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
@@ -39,8 +41,10 @@ use Teachers\Bundle\AssignmentBundle\Model\ExtendAssignmentMessage;
  *      }
  * )
  */
-class AssignmentMessage extends ExtendAssignmentMessage
+class AssignmentMessage extends ExtendAssignmentMessage implements DatesAwareInterface
 {
+    use DatesAwareTrait;
+
     /**
      * @var integer
      *
@@ -116,34 +120,6 @@ class AssignmentMessage extends ExtendAssignmentMessage
      * @ORM\JoinColumn(name="organization_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $organization;
-
-    /**
-     * @var DateTime
-     *
-     * @ORM\Column(type="datetime")
-     * @ConfigField(
-     *      defaultValues={
-     *          "entity"={
-     *              "label"="oro.ui.created_at"
-     *          }
-     *      }
-     * )
-     */
-    protected $createdAt;
-
-    /**
-     * @var DateTime
-     *
-     * @ORM\Column(type="datetime")
-     * @ConfigField(
-     *      defaultValues={
-     *          "entity"={
-     *              "label"="oro.ui.updated_at"
-     *          }
-     *      }
-     * )
-     */
-    protected $updatedAt;
 
     const ENUM_NAME_STATUS = 'assignment_msg_status';
     const STATUS_PENDING = 'pending';
@@ -337,54 +313,6 @@ class AssignmentMessage extends ExtendAssignmentMessage
         return $this;
     }
 
-    /**
-     * Gets creation date
-     *
-     * @return DateTime
-     */
-    public function getCreatedAt(): DateTime
-    {
-        return $this->createdAt;
-    }
-
-    /**
-     * Sets creation date
-     *
-     * @param DateTime|null $createdAt
-     *
-     * @return self
-     */
-    public function setCreatedAt(DateTime $createdAt = null): AssignmentMessage
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
-    /**
-     * Gets modification date
-     *
-     * @return DateTime
-     */
-    public function getUpdatedAt(): DateTime
-    {
-        return $this->updatedAt;
-    }
-
-    /**
-     * Sets a date update
-     *
-     * @param DateTime|null $updatedAt
-     *
-     * @return self
-     */
-    public function setUpdatedAt(DateTime $updatedAt = null): AssignmentMessage
-    {
-        $this->updatedAt = $updatedAt;
-
-        return $this;
-    }
-
     public function getAssignment(): ?Assignment
     {
         return $this->assignment;
@@ -412,29 +340,6 @@ class AssignmentMessage extends ExtendAssignmentMessage
     public function setThread(?AssignmentMessageThread $thread): void
     {
         $this->thread = $thread;
-    }
-
-    /**
-     * Sets the date on which the comment is created
-     *
-     * @ORM\PrePersist
-     * @throws Exception
-     */
-    public function prePersist()
-    {
-        $this->createdAt = $this->createdAt ?: new DateTime('now', new DateTimeZone('UTC'));
-        $this->updatedAt = clone $this->createdAt;
-    }
-
-    /**
-     * Update the updatedAt when the updated comment
-     *
-     * @ORM\PreUpdate
-     * @throws Exception
-     */
-    public function preUpdate()
-    {
-        $this->updatedAt = new DateTime('now', new DateTimeZone('UTC'));
     }
 
     public function isApproved(): bool

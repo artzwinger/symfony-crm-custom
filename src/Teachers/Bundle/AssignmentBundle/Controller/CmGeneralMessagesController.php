@@ -8,15 +8,15 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Teachers\Bundle\AssignmentBundle\Entity\AssignmentMessage;
 
-class CmMyMessagesController extends AbstractController
+class CmGeneralMessagesController extends AbstractController
 {
     /**
-     * @Route(name="teachers_assignment_message_cm_my")
-     * @Template("@TeachersAssignment/AssignmentMessage/cm_my_messages.html.twig")
+     * @Route(name="teachers_assignment_message_cm_general")
+     * @Template("@TeachersAssignment/AssignmentMessage/cm_general_messages.html.twig")
      * @Acl(
-     *      id="teachers_assignment_message_cm_my",
+     *      id="teachers_assignment_message_cm_general",
      *      type="entity",
-     *      permission="VIEW_CM_MY_MESSAGES",
+     *      permission="VIEW_CM_GENERAL_MESSAGES",
      *      class="TeachersAssignmentBundle:AssignmentMessage"
      * )
      */
