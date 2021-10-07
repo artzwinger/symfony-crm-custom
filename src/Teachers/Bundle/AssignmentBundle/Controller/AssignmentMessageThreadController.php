@@ -2,6 +2,8 @@
 
 namespace Teachers\Bundle\AssignmentBundle\Controller;
 
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -19,6 +21,8 @@ class AssignmentMessageThreadController extends AbstractController
      *
      * @return Response
      *
+     * @throws ORMException
+     * @throws OptimisticLockException
      * @Route("/view/{id}", name="teachers_assignment_message_thread_view", requirements={"id"="\d+"}, options={"expose"=true})
      * @Template("@TeachersAssignment/AssignmentMessageThread/view.html.twig")
      * @Acl(
@@ -39,6 +43,7 @@ class AssignmentMessageThreadController extends AbstractController
             $this->get('oro_ui.session.flash_bag')->add('error', 'You do not have access to this thread');
             return $this->redirectToRoute('oro_dashboard_index');
         }
+        $this->markAllThreadMessagesAsViewed($thread);
         return $this->render('@TeachersAssignment/AssignmentMessageThread/view.html.twig', [
             'entity' => $thread
         ]);
@@ -50,6 +55,8 @@ class AssignmentMessageThreadController extends AbstractController
      * @AclAncestor("teachers_assignment_message_thread_view")
      * @param AssignmentMessageThread $thread
      * @return array|RedirectResponse
+     * @throws ORMException
+     * @throws OptimisticLockException
      */
     public function infoAction(AssignmentMessageThread $thread)
     {
@@ -62,8 +69,24 @@ class AssignmentMessageThreadController extends AbstractController
             $this->get('oro_ui.session.flash_bag')->add('error', 'You do not have access to this thread');
             return $this->redirectToRoute('oro_dashboard_index');
         }
+        $this->markAllThreadMessagesAsViewed($thread);
         return [
             'entity' => $thread
         ];
+    }
+
+    /**
+     * @throws OptimisticLockException
+     * @throws ORMException
+     */
+    protected function markAllThreadMessagesAsViewed(AssignmentMessageThread $thread)
+    {
+        $em = $this->get('doctrine.orm.entity_manager');
+        $messages = $thread->getMessages();
+        foreach ($messages as $message) {
+            $message->setViewedByRecipient(true);
+            $em->persist($message);
+            $em->flush($message);
+        }
     }
 }

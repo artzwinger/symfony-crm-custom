@@ -731,7 +731,6 @@ datagrids:
                     - message.message
                     - message.denialReason
                     - message.createdAt
-                    - message.viewedByRecipient
                     - CONCAT(sender.firstName, ' ', sender.lastName) as senderFullName
                     - CONCAT(recipient.firstName, ' ', recipient.lastName) as recipientFullName
                     - status.id as statusId
@@ -838,7 +837,6 @@ datagrids:
                     - thread.id
                     - message.message
                     - message.createdAt
-                    - message.viewedByRecipient
                     - CONCAT(sender.firstName, ' ', sender.lastName) as senderFullName
                     - CONCAT(recipient.firstName, ' ', recipient.lastName) as recipientFullName
                     - status.id as statusId

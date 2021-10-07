@@ -7,6 +7,7 @@ use Oro\Bundle\EntityBundle\EntityProperty\DatesAwareInterface;
 use Oro\Bundle\EntityBundle\EntityProperty\DatesAwareTrait;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
+use Doctrine\Common\Collections\Collection;
 use Oro\Bundle\UserBundle\Entity\User;
 use Teachers\Bundle\AssignmentBundle\Model\ExtendAssignmentMessageThread;
 
@@ -74,6 +75,12 @@ class AssignmentMessageThread extends ExtendAssignmentMessageThread implements D
      * @ORM\JoinColumn(name="latest_message_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $latestMessage;
+
+    /**
+     * @var AssignmentMessage[]|Collection|null
+     * @ORM\OneToMany(targetEntity="Teachers\Bundle\AssignmentBundle\Entity\AssignmentMessage", mappedBy="thread")
+     */
+    protected $messages;
 
     /**
      * @var User|null
@@ -160,6 +167,22 @@ class AssignmentMessageThread extends ExtendAssignmentMessageThread implements D
     public function setLatestMessage(?AssignmentMessage $latestMessage): void
     {
         $this->latestMessage = $latestMessage;
+    }
+
+    /**
+     * @return Collection|AssignmentMessage[]|null
+     */
+    public function getMessages()
+    {
+        return $this->messages;
+    }
+
+    /**
+     * @param Collection|AssignmentMessage[]|null $messages
+     */
+    public function setMessages($messages): void
+    {
+        $this->messages = $messages;
     }
 
     /**

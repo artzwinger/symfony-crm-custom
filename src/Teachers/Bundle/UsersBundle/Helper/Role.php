@@ -126,11 +126,10 @@ class Role
         ]);
     }
 
-    public function getCurrentUser(): User
+    public function getCurrentUser()
     {
         /** @var User $user */
-        $user = $this->tokenStorage->getToken()->getUser();
-        return $user;
+        return $this->tokenStorage->getToken()->getUser();
     }
 
     public function getCurrentUserId()

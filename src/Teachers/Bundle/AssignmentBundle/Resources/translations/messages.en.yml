@@ -49,6 +49,8 @@ teachers:
                 label: View Messages Queue
             view_my_messages:
                 label: View Messages
+            view_cm_general:
+                label: View CM General
         teachers_queue_label: Assignment Queue
         my_courses_label: My Courses
         approval_queue_label: Messages Queue
@@ -96,6 +98,7 @@ teachers:
         #message activity
         assignmentmessage.entity_label: Message
         message:
+            has_unread_message_notice: You have unread messages, please check your Messages
             not_approved_message: The message violates our rules and was blocked by the course manager
             approval_pending_message: This message will be reviewed by the course manager. Once it is approved it will be visible here.
             activity_item:
