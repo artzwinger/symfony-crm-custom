@@ -1,0 +1,49 @@
+services:
+    aligent_s3.cache:
+        parent: oro.cache.abstract
+        public: false
+        calls:
+            - [ setNamespace, [ 'aligent_s3' ] ]
+
+    aligent_s3.cache_adapter:
+        class: Aws\DoctrineCacheAdapter
+        arguments:
+            - '@aligent_s3.cache'
+
+    aligent_s3.credentials_provider.chain:
+        class: Teachers\Bundle\MediaBundle\Provider\ChainCredentialsProvider
+        arguments:
+            - '@aligent_s3.cache_adapter'
+
+    aligent_s3.credentials:
+        class: GuzzleHttp\Promise\PromiseInterface
+        factory: ['@aligent_s3.credentials_provider.chain', 'getCredentialChain']
+
+    aligent_s3.credentials_provider.ecs:
+        class: Aws\Credentials\EcsCredentialProvider
+        factory: ['Aws\Credentials\CredentialProvider', 'ecsCredentials']
+        tags:
+            - { name: aligent_s3.crendential_provider }
+
+    aligent_s3.credentials_provider.key:
+        class: 'Teachers\Bundle\MediaBundle\Provider\SecretKeyCredentialProvider'
+        arguments:
+            - "@=container.hasParameter('amazon_s3.key') ? parameter('amazon_s3.key') : ''"
+            - "@=container.hasParameter('amazon_s3.secret') ? parameter('amazon_s3.secret') : ''"
+        tags:
+            - { name: aligent_s3.crendential_provider }
+
+    aligent_s3.client:
+        class: Aws\S3\S3Client
+        arguments:
+            -
+                version: latest
+                region: '%amazon_s3.region%'
+                credentials: "@aligent_s3.credentials"
+
+    # Migration Command Services:
+    aligent_s3.attachment_migration_service:
+        class: Teachers\Bundle\MediaBundle\Service\FilteredAttachmentMigrationService
+        arguments:
+            - '@liip_imagine.filter.configuration'
+            - '@oro_layout.loader.image_filter'

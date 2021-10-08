@@ -1,0 +1,2 @@
+bundles:
+    - { name: Teachers\Bundle\MediaBundle\TeachersMediaBundle, priority: 50 }
