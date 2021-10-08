@@ -2,23 +2,12 @@
 
 namespace Teachers\Bundle\UsersBundle\Form\Type;
 
-use Oro\Bundle\FormBundle\Form\Type\OroEntitySelectOrCreateInlineType;
+use Oro\Bundle\FormBundle\Form\Type\OroJquerySelect2HiddenType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Teachers\Bundle\UsersBundle\Helper\Role;
 
 class StudentSelectType extends AbstractType
 {
-    /**
-     * @var \Teachers\Bundle\UsersBundle\Helper\Role
-     */
-    private $roleHelper;
-
-    public function __construct(Role $roleHelper)
-    {
-
-        $this->roleHelper = $roleHelper;
-    }
     /**
      * {@inheritdoc}
      */
@@ -31,11 +20,6 @@ class StudentSelectType extends AbstractType
                     'placeholder' => 'teachers.users.form.choose_student',
                     'result_template_twig' => 'OroUserBundle:User:Autocomplete/result.html.twig',
                     'selection_template_twig' => 'OroUserBundle:User:Autocomplete/selection.html.twig'
-                ],
-                'create_form_route' => 'teachers_student_create',
-                'grid_name' => 'users-by-role-select-grid',
-                'grid_parameters' => [
-                    'role_id' => $this->roleHelper->getStudentRoleId()
                 ]
             ]
         );
@@ -46,7 +30,7 @@ class StudentSelectType extends AbstractType
      */
     public function getParent(): ?string
     {
-        return OroEntitySelectOrCreateInlineType::class;
+        return OroJquerySelect2HiddenType::class;
     }
 
     public function getName(): string

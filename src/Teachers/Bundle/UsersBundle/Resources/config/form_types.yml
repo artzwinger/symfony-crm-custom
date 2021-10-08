@@ -7,8 +7,6 @@ services:
             - { name: form.type, alias: teacher_group_multi_select }
     teachers_users.form.type.student_select:
         class: Teachers\Bundle\UsersBundle\Form\Type\StudentSelectType
-        arguments:
-            - '@teachers_users.helper.role'
         tags:
             - { name: form.type, alias: student_select }
     teachers_users.form.type.course_manager_select:

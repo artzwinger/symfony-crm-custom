@@ -1,0 +1,3 @@
+map:
+    "*":
+        oroui/templates/select2/multiple-choice.html: teachersassignment/templates/select2/multiple-choice.html
