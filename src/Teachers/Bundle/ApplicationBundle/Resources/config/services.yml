@@ -36,7 +36,6 @@ services:
         arguments:
             - '@translator'
             - '@teachers_users.helper.role'
-            - '@oro_workflow.manager'
 
     teachers_application.event_listener.orm.application_postupdate:
         class: Teachers\Bundle\ApplicationBundle\EventListener\ORM\ApplicationPostupdate

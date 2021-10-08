@@ -4,9 +4,9 @@ namespace Teachers\Bundle\ApplicationBundle\Datagrid;
 
 use Oro\Bundle\DataGridBundle\Entity\AbstractGridView;
 use Oro\Bundle\DataGridBundle\Extension\GridViews\AbstractViewsList;
-use Oro\Bundle\WorkflowBundle\Exception\WorkflowException;
-use Oro\Bundle\WorkflowBundle\Model\WorkflowManager;
+use Oro\Bundle\FilterBundle\Form\Type\Filter\EnumFilterType;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Teachers\Bundle\ApplicationBundle\Entity\Application;
 use Teachers\Bundle\UsersBundle\Helper\Role;
 
 class ApplicationsViewList extends AbstractViewsList
@@ -15,21 +15,16 @@ class ApplicationsViewList extends AbstractViewsList
      * @var Role
      */
     private $roleHelper;
-    /**
-     * @var WorkflowManager
-     */
-    private $workflowManager;
 
-    public function __construct(TranslatorInterface $translator, Role $roleHelper, WorkflowManager $workflowManager)
+    public function __construct(TranslatorInterface $translator, Role $roleHelper)
     {
         $this->roleHelper = $roleHelper;
-        $this->workflowManager = $workflowManager;
         parent::__construct($translator);
     }
 
     /**
      * {@inheritDoc}
-     * @throws WorkflowException
+     * @return array
      */
     protected function getViewsList(): array
     {
@@ -40,13 +35,10 @@ class ApplicationsViewList extends AbstractViewsList
     }
 
     /**
-     * @throws WorkflowException
+     * @return array
      */
     protected function getAdminViews(): array
     {
-        $wf = $this->workflowManager->getWorkflow('application_flow');
-        $def = $wf->getDefinition();
-
         return [
             [
                 'name' => 'applications.new',
@@ -55,8 +47,9 @@ class ApplicationsViewList extends AbstractViewsList
                 'grid_name' => 'teachers-applications-grid',
                 'type' => AbstractGridView::TYPE_PUBLIC,
                 'filters' => [
-                    'workflowStepLabelByWorkflowStep' => [
-                        'value' => [$def->getStepByName('new')->getId()]
+                    'statusLabel' => [
+                        'type' => EnumFilterType::TYPE_IN,
+                        'value' => [Application::STATUS_NEW]
                     ]
                 ],
                 'sorters' => [],

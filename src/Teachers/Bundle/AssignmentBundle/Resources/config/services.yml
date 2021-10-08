@@ -105,7 +105,6 @@ services:
         arguments:
             - '@translator'
             - '@teachers_users.helper.role'
-            - '@oro_workflow.manager'
     teachers_assignment.event_listener.orm.assignment_postupdate:
         class: Teachers\Bundle\AssignmentBundle\EventListener\ORM\AssignmentPostupdate
         arguments:

@@ -4,9 +4,9 @@ namespace Teachers\Bundle\AssignmentBundle\Datagrid;
 
 use Oro\Bundle\DataGridBundle\Entity\AbstractGridView;
 use Oro\Bundle\DataGridBundle\Extension\GridViews\AbstractViewsList;
-use Oro\Bundle\WorkflowBundle\Exception\WorkflowException;
-use Oro\Bundle\WorkflowBundle\Model\WorkflowManager;
+use Oro\Bundle\FilterBundle\Form\Type\Filter\EnumFilterType;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Teachers\Bundle\AssignmentBundle\Entity\Assignment;
 use Teachers\Bundle\UsersBundle\Helper\Role;
 
 class AssignmentsViewList extends AbstractViewsList
@@ -15,21 +15,16 @@ class AssignmentsViewList extends AbstractViewsList
      * @var Role
      */
     private $roleHelper;
-    /**
-     * @var WorkflowManager
-     */
-    private $workflowManager;
 
-    public function __construct(TranslatorInterface $translator, Role $roleHelper, WorkflowManager $workflowManager)
+    public function __construct(TranslatorInterface $translator, Role $roleHelper)
     {
         $this->roleHelper = $roleHelper;
-        $this->workflowManager = $workflowManager;
         parent::__construct($translator);
     }
 
     /**
      * {@inheritDoc}
-     * @throws WorkflowException
+     * @return array
      */
     protected function getViewsList(): array
     {
@@ -40,13 +35,10 @@ class AssignmentsViewList extends AbstractViewsList
     }
 
     /**
-     * @throws WorkflowException
+     * @return array
      */
     protected function getAdminCourseManagerViews(): array
     {
-        $wf = $this->workflowManager->getWorkflow('assignment_flow');
-        $def = $wf->getDefinition();
-
         return [
             [
                 'name' => 'assignments.un_viewed_bids',
@@ -69,8 +61,9 @@ class AssignmentsViewList extends AbstractViewsList
                 'grid_name' => 'teachers-assignments-grid',
                 'type' => AbstractGridView::TYPE_PUBLIC,
                 'filters' => [
-                    'workflowStepLabelByWorkflowStep' => [
-                        'value' => [$def->getStepByName('new')->getId()]
+                    'statusLabel' => [
+                        'type' => EnumFilterType::TYPE_IN,
+                        'value' => [Assignment::STATUS_NEW]
                     ]
                 ],
                 'sorters' => [],
@@ -79,12 +72,13 @@ class AssignmentsViewList extends AbstractViewsList
             [
                 'name' => 'assignments.up_for_bid',
                 'label' => 'teachers.assignment.grid.views.up_for_bid',
-                'is_default' => false,
+                'is_default' => true,
                 'grid_name' => 'teachers-assignments-grid',
                 'type' => AbstractGridView::TYPE_PUBLIC,
                 'filters' => [
-                    'workflowStepLabelByWorkflowStep' => [
-                        'value' => [$def->getStepByName('up_for_bid')->getId()]
+                    'statusLabel' => [
+                        'type' => EnumFilterType::TYPE_IN,
+                        'value' => [Assignment::STATUS_UP_FOR_BID]
                     ]
                 ],
                 'sorters' => [],
@@ -97,8 +91,9 @@ class AssignmentsViewList extends AbstractViewsList
                 'grid_name' => 'teachers-assignments-grid',
                 'type' => AbstractGridView::TYPE_PUBLIC,
                 'filters' => [
-                    'workflowStepLabelByWorkflowStep' => [
-                        'value' => [$def->getStepByName('assigned')->getId()]
+                    'statusLabel' => [
+                        'type' => EnumFilterType::TYPE_IN,
+                        'value' => [Assignment::STATUS_ASSIGNED]
                     ]
                 ],
                 'sorters' => [],
@@ -111,8 +106,9 @@ class AssignmentsViewList extends AbstractViewsList
                 'grid_name' => 'teachers-assignments-grid',
                 'type' => AbstractGridView::TYPE_PUBLIC,
                 'filters' => [
-                    'workflowStepLabelByWorkflowStep' => [
-                        'value' => [$def->getStepByName('complete')->getId()]
+                    'statusLabel' => [
+                        'type' => EnumFilterType::TYPE_IN,
+                        'value' => [Assignment::STATUS_COMPLETE]
                     ]
                 ],
                 'sorters' => [],
@@ -125,8 +121,9 @@ class AssignmentsViewList extends AbstractViewsList
                 'grid_name' => 'teachers-assignments-grid',
                 'type' => AbstractGridView::TYPE_PUBLIC,
                 'filters' => [
-                    'workflowStepLabelByWorkflowStep' => [
-                        'value' => [$def->getStepByName('paused_due_nonpayment')->getId()]
+                    'statusLabel' => [
+                        'type' => EnumFilterType::TYPE_IN,
+                        'value' => [Assignment::STATUS_PAUSED_DUE_NONPAYMENT]
                     ]
                 ],
                 'sorters' => [],

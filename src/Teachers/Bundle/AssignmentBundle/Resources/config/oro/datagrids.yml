@@ -21,6 +21,8 @@ datagrids:
                     - assignmentterm.name as termName
                     - assignmentterm.id as termId
                     - assignment.createdAt
+                    - status.id as statusId
+                    - status.name as statusLabel
                     - CONCAT_WS(' ', course_manager.firstName, course_manager.lastName) as courseManagerFullName
                     - CONCAT_WS(' ', teacher.firstName, teacher.lastName) as teacherName
                     - CONCAT_WS(' ', student.firstName, student.lastName) as studentName
@@ -33,6 +35,7 @@ datagrids:
                         - { join: assignment.teacher, alias: teacher }
                         - { join: assignment.student, alias: student }
                         - { join: assignment.courseManager, alias: courseManager }
+                        - { join: assignment.status, alias: status }
                 groupBy: assignment.id
         columns:
             firstName:
@@ -174,6 +177,11 @@ datagrids:
                     autocomplete_alias: users_only_teachers
                     renderedPropertyName: 'fullName'
                     className: 'Oro\Bundle\UserBundle\Entity\User'
+                statusLabel:
+                    label: teachers.assignment.message.status.label
+                    type: enum
+                    data_name: statusId
+                    enum_code: assignment_status
         properties:
             id: ~
             view_link:

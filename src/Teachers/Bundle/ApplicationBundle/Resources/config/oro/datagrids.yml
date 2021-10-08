@@ -24,11 +24,14 @@ datagrids:
                     - applicationterm.name as termName
                     - applicationterm.id as termId
                     - application.createdAt
+                    - status.id as statusId
+                    - status.name as statusLabel
                 from:
                     - { table: 'Teachers\Bundle\ApplicationBundle\Entity\Application', alias: application }
                 join:
                     left:
                         - { join: application.term, alias: applicationterm }
+                        - { join: application.status, alias: status }
         columns:
             firstName:
                 label: teachers.application.first_name.label
@@ -158,6 +161,11 @@ datagrids:
                     type: enum
                     enum_code: application_term
                     data_name: termId
+                statusLabel:
+                    label: teachers.assignment.message.status.label
+                    type: enum
+                    data_name: statusId
+                    enum_code: application_status
         properties:
             id: ~
             view_link:
