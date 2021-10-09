@@ -35,7 +35,8 @@
     "ext-dom": "*",
     "ext-simplexml": "*",
     "ext-curl": "*",
-    "gaufrette/aws-s3-adapter": "^0.4.0"
+    "gaufrette/aws-s3-adapter": "^0.4.0",
+    "knplabs/gaufrette": "0.9.0"
   },
   "require-dev": {
     "behat/behat": "3.4.*",
