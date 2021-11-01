@@ -35,9 +35,11 @@ class UpdatePaymentStatusesData extends AbstractFixture
         $status = $enumRepo->findOneBy([
             'id' => Payment::STATUS_CREATED
         ]);
-        $status->setDefault(false);
-        $manager->persist($status);
-        $manager->flush();
+        if ($status) {
+            $status->setDefault(false);
+            $manager->persist($status);
+            $manager->flush();
+        }
     }
 
     public function getDependencies(): array

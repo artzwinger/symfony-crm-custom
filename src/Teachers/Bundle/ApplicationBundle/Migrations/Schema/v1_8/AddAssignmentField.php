@@ -21,12 +21,6 @@ class AddAssignmentField implements Migration
             if (!$table->hasColumn('assignment_id')) {
                 $table->addColumn('assignment_id', Types::INTEGER, ['notnull' => false]);
                 $table->addIndex(['assignment_id'], 'teachers_application_asmg_id', []);
-                $table->addForeignKeyConstraint(
-                    $schema->getTable('teachers_assignment'),
-                    ['assignment_id'],
-                    ['id'],
-                    ['onDelete' => 'SET NULL', 'onUpdate' => null]
-                );
             }
         }
     }

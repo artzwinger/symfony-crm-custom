@@ -7,6 +7,10 @@ use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Oro\Bundle\CommentBundle\Entity\Comment;
 use Oro\Bundle\CommentBundle\Entity\Manager\CommentApiManager;
+use Oro\Bundle\EntityExtendBundle\Entity\AbstractEnumValue;
+use Oro\Bundle\EntityExtendBundle\Entity\Repository\EnumValueRepository;
+use Oro\Bundle\EntityExtendBundle\Model\EnumValue;
+use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\FormBundle\Model\UpdateHandlerFacade;
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
@@ -185,6 +189,7 @@ class AssignmentMessageController extends AbstractController
         $message = new AssignmentMessage();
         $message->setRecipient($tutor);
         $message->setAssignment($assignment);
+        $message->setStatus($this->getMessageStatusPending());
         if ($thread) {
             $message->setThread($thread);
         }
@@ -235,6 +240,7 @@ class AssignmentMessageController extends AbstractController
         $message = new AssignmentMessage();
         $message->setRecipient($student);
         $message->setAssignment($assignment);
+        $message->setStatus($this->getMessageStatusPending());
         if ($thread) {
             $message->setThread($thread);
         }
@@ -283,6 +289,7 @@ class AssignmentMessageController extends AbstractController
     {
         $message = new AssignmentMessage();
         $message->setAssignment($assignment);
+        $message->setStatus($this->getMessageStatusPending());
         if ($thread) {
             $message->setThread($thread);
         }
@@ -413,6 +420,9 @@ class AssignmentMessageController extends AbstractController
         /** @var WorkflowManager $wfm */
         $wfm = $this->get('oro_workflow.manager');
         $item = $wfm->getWorkflowItem($assignmentMessage, AssignmentMessage::WORKFLOW_NAME);
+        if (!$item) {
+            $item = $wfm->startWorkflow(AssignmentMessage::WORKFLOW_NAME, $assignmentMessage);
+        }
         $wfm->transit($item, AssignmentMessage::WORKFLOW_TRANSITION_APPROVE);
         return new JsonResponse(['successful' => true]);
     }
@@ -480,6 +490,20 @@ class AssignmentMessageController extends AbstractController
     public function getCommentManager()
     {
         return $this->get('oro_comment.comment.api_manager');
+    }
+
+    /**
+     * @return object|AbstractEnumValue|null
+     */
+    private function getMessageStatusPending()
+    {
+        /** @var EnumValueRepository $enumRepo */
+        $className = ExtendHelper::buildEnumValueClassName(AssignmentMessage::ENUM_NAME_STATUS);
+        $manager = $this->get('doctrine.orm.entity_manager');
+        $enumRepo = $manager->getRepository($className);
+        return $enumRepo->findOneBy([
+            'id' => AssignmentMessage::STATUS_PENDING
+        ]);
     }
 
     /**
