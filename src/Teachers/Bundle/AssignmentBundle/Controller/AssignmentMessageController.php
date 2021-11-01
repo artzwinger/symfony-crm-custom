@@ -294,7 +294,7 @@ class AssignmentMessageController extends AbstractController
             $message->setThread($thread);
         }
         $result = $this->update($message);
-        $this->autoApprove($message);
+        $this->autoApproveIfAllowed($message);
         if (!$thread) {
             $thread = $this->createThread($message);
         } else {
