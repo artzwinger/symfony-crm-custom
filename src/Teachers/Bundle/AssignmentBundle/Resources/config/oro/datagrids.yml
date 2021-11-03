@@ -727,6 +727,11 @@ datagrids:
             entityHint: teachers.assignment.message.entity_plural_label
             entity_pagination: true
 
+
+    teachers-thread-messages-grid:
+        extends: teachers-assignment-messages-grid
+        views_list: null
+
     teachers-assignment-my-messages-grid:
         extended_entity_name: 'Teachers\Bundle\AssignmentBundle\Entity\AssignmentMessageThread'
         acl_resource: teachers_assignment_message_my
