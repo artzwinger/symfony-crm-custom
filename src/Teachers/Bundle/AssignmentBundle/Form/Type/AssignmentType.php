@@ -74,7 +74,7 @@ class AssignmentType extends AbstractType
                 'required' => false,
                 'label' => 'teachers.assignment.class_start_date.label',
                 'constraints' => [
-                    $this->getDueDateValidationConstraint(new DateTime('now', new DateTimeZone('UTC')))
+                    $this->getDueDateValidationConstraint(new DateTime('-1 day', new DateTimeZone('UTC')))
                 ]
             ])
             ->add('courseUrl', TextType::class, [
