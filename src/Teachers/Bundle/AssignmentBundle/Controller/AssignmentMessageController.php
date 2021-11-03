@@ -452,6 +452,9 @@ class AssignmentMessageController extends AbstractController
             /** @var WorkflowManager $wfm */
             $wfm = $this->get('oro_workflow.manager');
             $item = $wfm->getWorkflowItem($message, AssignmentMessage::WORKFLOW_NAME);
+            if (!$item) {
+                $item = $wfm->startWorkflow(AssignmentMessage::WORKFLOW_NAME, $message);
+            }
             $wfm->transit($item, AssignmentMessage::WORKFLOW_TRANSITION_UNAPPROVE);
         }
         $comment = new Comment();
@@ -568,6 +571,9 @@ class AssignmentMessageController extends AbstractController
         /** @var WorkflowManager $wfm */
         $wfm = $this->get('oro_workflow.manager');
         $item = $wfm->getWorkflowItem($message, AssignmentMessage::WORKFLOW_NAME);
+        if (!$item) {
+            $item = $wfm->startWorkflow(AssignmentMessage::WORKFLOW_NAME, $message);
+        }
         $wfm->transit($item, AssignmentMessage::WORKFLOW_TRANSITION_APPROVE);
     }
 
