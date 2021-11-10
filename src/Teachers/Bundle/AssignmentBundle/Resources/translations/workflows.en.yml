@@ -57,6 +57,6 @@ oro:
                     label: Approve
                     warning_message: ''
                 unapprove:
-                    label: Mark as dangerous
+                    label: Deny
                     warning_message: ''
             label: Assignment message flow

@@ -717,7 +717,7 @@ datagrids:
                     reload-grid-name: teachers-assignment-messages-grid
                     options:
                         dialogOptions:
-                            title: Mark Message as dangerous and left a comment
+                            title: Deny Message and leave a comment
                             width: 550
                             allowMaximize: false
                             allowMinimize: false
@@ -764,7 +764,7 @@ datagrids:
                         - { join: message.owner, alias: messageSender }
                 where:
                     and:
-                        - sender.id = @oro_security.token_accessor->getUserId or recipient.id = @oro_security.token_accessor->getUserId
+                        - sender.id = @oro_security.token_accessor->getUserId or (recipient.id = @oro_security.token_accessor->getUserId and status.id = 'approved')
                         - assignment.id = :assignment_id or :assignment_id is null
             bind_parameters:
                 -   name: assignment_id

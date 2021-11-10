@@ -33,10 +33,10 @@
             'path': path('teachers_assignment_update', {'id': entity.id}),
             'entity_label': 'teachers.assignment.entity_label'|trans,
         }) }}
+        {{ UI.buttonSeparator() }}
     {% endif %}
 
     {% if is_granted('teachers_assignment_message_create') %}
-        {{ UI.buttonSeparator() }}
         {% set label = 'teachers.assignment.message.send_to_student'|trans %}
         {% if not is_user_teacher and entity.teacher is not empty %}
             {% set label = 'teachers.assignment.message.send_to_teacher'|trans %}
@@ -70,7 +70,6 @@
             }) }}
         {% endif %}
         {% if not is_user_student and entity.student is not empty %}
-            {{ UI.buttonSeparator() }}
             {% set label = 'teachers.assignment.message.send_to_student'|trans %}
             {{ UI.clientButton({
                 'dataUrl': path('teachers_assignment_message_send_to_student', {
@@ -102,7 +101,6 @@
             }) }}
         {% endif %}
         {% if not is_user_course_manager %}
-            {{ UI.buttonSeparator() }}
             {% set label = 'teachers.assignment.message.send_to_course_manager'|trans %}
             {{ UI.clientButton({
                 'dataUrl': path('teachers_assignment_message_send_to_coursemanager', {

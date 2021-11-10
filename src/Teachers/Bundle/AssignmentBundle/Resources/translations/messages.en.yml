@@ -16,7 +16,7 @@ teachers:
         grid:
             action:
                 approve: Approve
-                unapprove: Mark as dangerous
+                unapprove: Deny
             views:
                 paused_due_nonpayment: Paused / Nonpayment
                 complete: Completed
