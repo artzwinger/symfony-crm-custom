@@ -350,6 +350,7 @@ class AssignmentMessageController extends AbstractController
         $message = new AssignmentMessage();
         $message->setAssignment($thread->getAssignment());
         $message->setThread($thread);
+        $message->setStatus($this->getMessageStatusPending());
         $recipient = $thread->getRecipient();
         if ($userIsRecipient || ($recipient === null && !$userIsSender)) {
             $recipient = $thread->getSender();

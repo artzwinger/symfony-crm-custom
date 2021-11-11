@@ -623,15 +623,16 @@ datagrids:
                     - assignment_message.message
                     - assignment_message.denialReason
                     - assignment_message.createdAt
-                    - CONCAT(message_sender.firstName, message_sender.lastName) as senderFullName
-                    - message_status.id as status
-                    - message_status.name as statusLabel
+                    - CONCAT(sender.firstName, sender.lastName) as senderFullName
+                    - status.id as statusId
+                    - status.name as statusLabel
                 from:
                     - { table: 'Teachers\Bundle\AssignmentBundle\Entity\AssignmentMessage', alias: assignment_message }
                 join:
                     inner:
-                        - { join: assignment_message.owner, alias: message_sender }
-                        - { join: assignment_message.status, alias: message_status }
+                        - { join: assignment_message.owner, alias: sender }
+                        - { join: assignment_message.recipient, alias: recipient }
+                        - { join: assignment_message.status, alias: status }
                     left:
                         - { join: assignment_message.thread, alias: thread }
                 where:
@@ -680,7 +681,7 @@ datagrids:
                 statusLabel:
                     label: teachers.assignment.message.status.label
                     type: enum
-                    data_name: status
+                    data_name: statusId
                     enum_code: assignment_msg_status
         properties:
             id: ~
@@ -731,6 +732,16 @@ datagrids:
     teachers-thread-messages-grid:
         extends: teachers-assignment-messages-grid
         views_list: null
+        source:
+            query:
+                where:
+                    and:
+                        - :is_user_cm = 'true' or :is_user_admin = 'true' or sender.id = @oro_security.token_accessor->getUserId or (recipient.id = @oro_security.token_accessor->getUserId and status.id = 'approved')
+            bind_parameters:
+                -   name: is_user_cm
+                    default: "false"
+                -   name: is_user_admin
+                    default: "false"
 
     teachers-assignment-my-messages-grid:
         extended_entity_name: 'Teachers\Bundle\AssignmentBundle\Entity\AssignmentMessageThread'
@@ -764,11 +775,15 @@ datagrids:
                         - { join: message.owner, alias: messageSender }
                 where:
                     and:
-                        - sender.id = @oro_security.token_accessor->getUserId or (recipient.id = @oro_security.token_accessor->getUserId and status.id = 'approved')
+                        - :is_user_cm = 'true' or :is_user_admin = 'true' or sender.id = @oro_security.token_accessor->getUserId or (recipient.id = @oro_security.token_accessor->getUserId and status.id = 'approved')
                         - assignment.id = :assignment_id or :assignment_id is null
             bind_parameters:
                 -   name: assignment_id
                     default: null
+                -   name: is_user_cm
+                    default: "false"
+                -   name: is_user_admin
+                    default: "false"
         columns:
             message:
                 label: teachers.assignment.message.message.label

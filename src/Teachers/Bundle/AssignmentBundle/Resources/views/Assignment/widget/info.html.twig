@@ -5,9 +5,6 @@
 <div class="widget-content">
     <div class="row-fluid form-horizontal">
         <div class="responsive-block">
-            <div class="activity-context-activity-list">
-                {{ AC.activity_contexts(entity, target, true, 'oronote/js/app/components/note-context-component') }}
-            </div>
             {{ ui.renderProperty('teachers.assignment.order_number.label'|trans, '#' ~ entity.id) }}
             {% if entity.application %}
                 {{ ui.renderAttribute('teachers.application.entity_label'|trans, ui.link({
@@ -29,9 +26,9 @@
                         'label': teacherGroup.title
                     }) %}
                 {% endfor %}
-            {% endif %}
-            {% if teacherGroupsHtml != '' %}
-                {{ ui.renderAttribute('teachers.assignment.teacherGroups.label'|trans, teacherGroupsHtml) }}
+                {% if teacherGroupsHtml != '' %}
+                    {{ ui.renderAttribute('teachers.assignment.teacherGroups.label'|trans, teacherGroupsHtml) }}
+                {% endif %}
             {% endif %}
             {% if not roleHelper.currentUserStudent %}
                 {% if entity.teacher %}

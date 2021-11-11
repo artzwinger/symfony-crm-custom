@@ -40,6 +40,7 @@ twig:
     strict_variables:         "%kernel.debug%"
     exception_controller:     "Oro\\Bundle\\UIBundle\\Controller\\ExceptionController::showAction"
     globals:
+        teachers_role_helper: "@teachers_users.helper.role"
         bap:
             layout:           base.html.twig  # default layout across all Oro bundles
 

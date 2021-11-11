@@ -5,6 +5,9 @@ services:
         arguments:
             - "@doctrine.orm.entity_manager"
             - '@security.token_storage'
+    Teachers\Bundle\UsersBundle\Helper\Role:
+        alias: teachers_users.helper.role
+
     teachers_users.teacher_group.manager.api:
         class: Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
         public: true
