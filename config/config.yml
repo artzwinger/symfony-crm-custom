@@ -2,6 +2,12 @@ imports:
     - { resource: parameters.yml }
     - { resource: security.yml }
 
+doctrine:
+    dbal:
+        connections:
+            default:
+                server_version: 9.6.22
+
 framework:
     #esi:             ~
     translator:
