@@ -619,22 +619,20 @@ datagrids:
             type: orm
             query:
                 select:
-                    - assignment_message.id
-                    - assignment_message.message
-                    - assignment_message.denialReason
-                    - assignment_message.createdAt
+                    - message.id
+                    - message.message
+                    - message.denialReason
+                    - message.createdAt
                     - CONCAT(sender.firstName, sender.lastName) as senderFullName
                     - status.id as statusId
                     - status.name as statusLabel
                 from:
-                    - { table: 'Teachers\Bundle\AssignmentBundle\Entity\AssignmentMessage', alias: assignment_message }
+                    - { table: 'Teachers\Bundle\AssignmentBundle\Entity\AssignmentMessage', alias: message }
                 join:
-                    inner:
-                        - { join: assignment_message.owner, alias: sender }
-                        - { join: assignment_message.recipient, alias: recipient }
-                        - { join: assignment_message.status, alias: status }
                     left:
-                        - { join: assignment_message.thread, alias: thread }
+                        - { join: message.owner, alias: sender }
+                        - { join: message.status, alias: status }
+                        - { join: message.thread, alias: thread }
                 where:
                     and:
                         - thread.id = :thread_id or :thread_id is null
@@ -660,24 +658,24 @@ datagrids:
         sorters:
             columns:
                 message:
-                    data_name: assignment_message.message
+                    data_name: message.message
                 denialReason:
-                    data_name: assignment_message.denialReason
+                    data_name: message.denialReason
                 createdAt:
-                    data_name: assignment_message.createdAt
+                    data_name: message.createdAt
             default:
                 createdAt: DESC
         filters:
             columns:
                 message:
                     type: string
-                    data_name: assignment_message.message
+                    data_name: message.message
                 denialReason:
                     type: string
-                    data_name: assignment_message.denialReason
+                    data_name: message.denialReason
                 createdAt:
                     type: datetime
-                    data_name: assignment_message.createdAt
+                    data_name: message.createdAt
                 statusLabel:
                     label: teachers.assignment.message.status.label
                     type: enum
@@ -734,6 +732,9 @@ datagrids:
         views_list: null
         source:
             query:
+                join:
+                    left:
+                        - { join: message.recipient, alias: recipient }
                 where:
                     and:
                         - :is_user_cm = 'true' or :is_user_admin = 'true' or sender.id = @oro_security.token_accessor->getUserId or (recipient.id = @oro_security.token_accessor->getUserId and status.id = 'approved')
@@ -742,6 +743,10 @@ datagrids:
                     default: "false"
                 -   name: is_user_admin
                     default: "false"
+
+    teachers-assignment-my-messages-grid-assignment-page:
+        extends: teachers-assignment-my-messages-grid
+        views_list: null
 
     teachers-assignment-my-messages-grid:
         extended_entity_name: 'Teachers\Bundle\AssignmentBundle\Entity\AssignmentMessageThread'
@@ -765,11 +770,10 @@ datagrids:
                 from:
                     - { table: 'Teachers\Bundle\AssignmentBundle\Entity\AssignmentMessageThread', alias: thread }
                 join:
-                    inner:
+                    left:
                         - { join: thread.sender, alias: sender }
                         - { join: thread.latestMessage, alias: message }
                         - { join: message.status, alias: status }
-                    left:
                         - { join: message.assignment, alias: assignment }
                         - { join: message.recipient, alias: recipient }
                         - { join: message.owner, alias: messageSender }
