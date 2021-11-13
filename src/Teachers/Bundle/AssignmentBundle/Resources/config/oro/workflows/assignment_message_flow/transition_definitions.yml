@@ -20,7 +20,7 @@ workflows:
                             identifier: approved
                             attribute: $assignment_message.status
                     -   '@send_assignment_message_email_template':
-                            from: 'orotutorsoft@outlook.com'
+                            from: 'ochtestingnew@gmail.com'
                             to: 'will_be_redefined'
                             template: 'teachers_assignment_message_approved'
                             entity: $assignment_message
