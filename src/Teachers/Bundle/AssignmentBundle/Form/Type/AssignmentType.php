@@ -82,11 +82,11 @@ class AssignmentType extends AbstractType
                 'label' => 'teachers.assignment.course_url.label'
             ])
             ->add('userLogin', TextType::class, [
-                'required' => true,
+                'required' => false,
                 'label' => 'teachers.assignment.user_login.label'
             ])
             ->add('userPassword', TextType::class, [
-                'required' => true,
+                'required' => false,
                 'label' => 'teachers.assignment.user_password.label'
             ])
             ->add('instructions', TextareaType::class, [

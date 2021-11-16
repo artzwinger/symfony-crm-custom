@@ -5,23 +5,24 @@ namespace Teachers\Bundle\AssignmentBundle\Controller;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
-use Symfony\Component\Form\FormInterface;
-use Teachers\Bundle\AssignmentBundle\Entity\Assignment;
+use Oro\Bundle\FormBundle\Model\UpdateHandlerFacade;
+use Oro\Bundle\SecurityBundle\Annotation\Acl;
+use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use Oro\Bundle\SecurityBundle\Annotation\CsrfProtection;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\FormFactory;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
-use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
-use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Symfony\Component\Routing\Annotation\Route;
 use Teachers\Bundle\AssignmentBundle\Entity\AssignmentPrivateNote;
 
 class AssignmentPrivateNoteController extends AbstractController
 {
     /**
-     * @param \Teachers\Bundle\AssignmentBundle\Entity\AssignmentPrivateNote $assignmentPrivateNote
+     * @param AssignmentPrivateNote $assignmentPrivateNote
      *
      * @return array
      *
@@ -57,7 +58,7 @@ class AssignmentPrivateNoteController extends AbstractController
      * @Route("/info/{id}", name="teachers_assignment_private_note_info", requirements={"id"="\d+"}, options={"expose"=true})
      * @Template("@TeachersAssignment/AssignmentPrivateNote/widget/info.html.twig")
      * @AclAncestor("teachers_assignment_private_note_view")
-     * @param \Teachers\Bundle\AssignmentBundle\Entity\AssignmentPrivateNote $assignmentPrivateNote
+     * @param AssignmentPrivateNote $assignmentPrivateNote
      * @return array
      */
     public function infoAction(AssignmentPrivateNote $assignmentPrivateNote): array
@@ -76,7 +77,7 @@ class AssignmentPrivateNoteController extends AbstractController
      *      permission="EDIT",
      *      class="TeachersAssignmentBundle:AssignmentPrivateNote"
      * )
-     * @param \Teachers\Bundle\AssignmentBundle\Entity\AssignmentPrivateNote $assignmentPrivateNote
+     * @param AssignmentPrivateNote $assignmentPrivateNote
      * @return array|RedirectResponse
      */
     public function updateAction(AssignmentPrivateNote $assignmentPrivateNote)
@@ -114,10 +115,10 @@ class AssignmentPrivateNoteController extends AbstractController
      *      class="TeachersAssignmentBundle:AssignmentPrivateNote"
      * )
      * @CsrfProtection()
-     * @param \Teachers\Bundle\AssignmentBundle\Entity\AssignmentPrivateNote $assignment
+     * @param AssignmentPrivateNote $assignment
      * @return JsonResponse
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws ORMException
+     * @throws OptimisticLockException
      */
     public function deleteAction(AssignmentPrivateNote $assignment): JsonResponse
     {
@@ -131,13 +132,13 @@ class AssignmentPrivateNoteController extends AbstractController
     }
 
     /**
-     * @param \Teachers\Bundle\AssignmentBundle\Entity\AssignmentPrivateNote $entity
+     * @param AssignmentPrivateNote $entity
      * @param $action
      * @return RedirectResponse|array
      */
     private function update(AssignmentPrivateNote $entity, $action)
     {
-        /** @var \Oro\Bundle\FormBundle\Model\UpdateHandlerFacade $handler */
+        /** @var UpdateHandlerFacade $handler */
         $handler = $this->get('oro_form.update_handler');
         $form = $this->getForm($action);
         return $handler->update(
@@ -149,7 +150,7 @@ class AssignmentPrivateNoteController extends AbstractController
 
     private function getForm($action): FormInterface
     {
-        /** @var \Symfony\Component\Form\FormFactory $factory */
+        /** @var FormFactory $factory */
         $factory = $this->get('form.factory');
         $builder = $factory->createNamedBuilder(
             'teachers_assignment_private_note_form',

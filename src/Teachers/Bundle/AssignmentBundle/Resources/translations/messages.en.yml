@@ -80,6 +80,10 @@ teachers:
         #Personal Note activity
         assignmentprivatenote.entity_label: Personal Note
         private_note:
+            controller:
+                assignment:
+                    saved:
+                        message: Personal Note Saved
             activity_item:
                 created_by: created by {{ user }}
                 updated_by: updated by {{ user }}

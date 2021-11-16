@@ -101,11 +101,11 @@ class ApplicationType extends AbstractType
                 'label' => 'teachers.application.course_url.label'
             ])
             ->add('userLogin', TextType::class, [
-                'required' => true,
+                'required' => false,
                 'label' => 'teachers.application.user_login.label'
             ])
             ->add('userPassword', TextType::class, [
-                'required' => true,
+                'required' => false,
                 'label' => 'teachers.application.user_password.label'
             ])
             ->add('instructions', TextareaType::class, [
