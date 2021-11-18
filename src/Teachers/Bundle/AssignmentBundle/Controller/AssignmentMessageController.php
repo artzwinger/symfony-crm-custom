@@ -553,7 +553,12 @@ class AssignmentMessageController extends AbstractController
         $roleHelper = $this->get('teachers_users.helper.role');
         $senderStudent = $roleHelper->isCurrentUserStudent();
         $senderTeacher = $roleHelper->isCurrentUserTeacher();
-        $approve = !$senderStudent && !$senderTeacher; // approve if sender is course manager or admin
+        $approve = !$senderStudent && !$senderTeacher; // approve if sender is not student or tutor
+        // or approve if recipient is admin or course manager
+        if ($recipient = $message->getRecipient()) {
+            $approve = $approve
+                || $roleHelper->hasUserOneOfRoleNames($recipient, [Role::ROLE_ADMINISTRATOR, Role::ROLE_COURSE_MANAGER]);
+        }
         if ($approve) {
             $this->autoApprove($message);
         }

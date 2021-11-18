@@ -39,19 +39,11 @@ class Role
         $this->tokenStorage = $tokenStorage;
     }
 
-    public function hasThisUserIdThisRole(int $userId, string $role): bool
+    public function hasUserOneOfRoleNames(User $user, array $roleNames): bool
     {
-        $user = $this->getUserRepository()->find($userId);
-        $role = $this->getRoleRepository()->findOneBy([
-            'role' => $role
-        ]);
-        if (!$user || !$role) {
-            return false;
-        }
-        $roleId = $role->getId();
         foreach ($user->getRoles() as $role) {
             /** @var EntityRole $role */
-            if ($role->getId() == $roleId) {
+            if (in_array($role->getRole(), $roleNames)) {
                 return true;
             }
         }
@@ -60,22 +52,22 @@ class Role
 
     public function isCurrentUserCourseManager(): bool
     {
-        return $this->hasCurrentUserRole($this->getCourseManagerRoleId());
+        return $this->hasCurrentUserRoleName(self::ROLE_COURSE_MANAGER);
     }
 
     public function isCurrentUserAdmin(): bool
     {
-        return $this->hasCurrentUserRole($this->getAdminRoleId());
+        return $this->hasCurrentUserRoleName(self::ROLE_ADMINISTRATOR);
     }
 
     public function isCurrentUserTeacher(): bool
     {
-        return $this->hasCurrentUserRole($this->getTeacherRoleId());
+        return $this->hasCurrentUserRoleName(self::ROLE_TEACHER);
     }
 
     public function isCurrentUserStudent(): bool
     {
-        return $this->hasCurrentUserRole($this->getStudentRoleId());
+        return $this->hasCurrentUserRoleName(self::ROLE_STUDENT);
     }
 
     public function getCourseManagerRoleId(): int
@@ -132,7 +124,7 @@ class Role
         return $this->tokenStorage->getToken()->getUser();
     }
 
-    public function getCurrentUserId()
+    public function getCurrentUserId(): int
     {
         /** @var User $user */
         $user = $this->tokenStorage->getToken()->getUser();
@@ -149,7 +141,7 @@ class Role
         return $this->em->getRepository('OroUserBundle:User');
     }
 
-    protected function hasCurrentUserRole(int $roleId): bool
+    protected function hasCurrentUserRoleName(string $roleName): bool
     {
         $user = $this->tokenStorage->getToken()->getUser();
         if (!is_object($user)) {
@@ -157,7 +149,7 @@ class Role
         }
         foreach ($user->getRoles() as $role) {
             /** @var EntityRole $role */
-            if ($role->getId() == $roleId) {
+            if ($role->getRole() == $roleName) {
                 return true;
             }
         }
