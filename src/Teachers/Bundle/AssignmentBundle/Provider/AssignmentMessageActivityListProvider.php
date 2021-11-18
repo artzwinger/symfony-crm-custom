@@ -218,7 +218,8 @@ class AssignmentMessageActivityListProvider implements
     public function getTargetEntities($entity): ?array
     {
         /** @var $entity AssignmentMessage */
-        return $entity->getActivityTargets();
+//        return $entity->getActivityTargets();
+        return [];
     }
 
     /**
