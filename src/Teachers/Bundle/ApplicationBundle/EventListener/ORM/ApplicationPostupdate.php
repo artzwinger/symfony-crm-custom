@@ -126,6 +126,7 @@ class ApplicationPostupdate
         $student->setOrganization($this->getDefaultOrganization());
         $student->addOrganization($this->getDefaultOrganization());
         $student->addBusinessUnit($this->getDefaultBusinessUnit());
+        $student->setOwner($this->getDefaultBusinessUnit());
 
         $this->userManager->updateUser($student, true);
         $this->sendInviteMail($student, $password);
