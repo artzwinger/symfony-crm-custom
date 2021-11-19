@@ -46,14 +46,14 @@ teachers:
             view_my_courses:
                 label: View my courses
             view_messages_approval_queue:
-                label: View Messages Queue
+                label: View Approval Queue
             view_my_messages:
-                label: View Messages
+                label: View My Messages
             view_cm_general:
-                label: View CM General
+                label: View CM Queue
         teachers_queue_label: Assignment Queue
         my_courses_label: My Courses
-        approval_queue_label: Messages Queue
+        approval_queue_label: Approval Queue
 
         rep.label: Rep
         first_name.label: First Name
@@ -129,8 +129,8 @@ teachers:
             entity_label: Message
             sender_name: Sender
             entity_plural_label: Messages
-            my_messages: Messages
-            cm_general_messages: CM General Messages
+            my_messages: My Messages
+            cm_general_messages: CM Queue
             entity_grid_all_view_label: All %entity_plural_label%
             block:
                 general: General

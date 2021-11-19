@@ -51,7 +51,7 @@ oro:
             attribute: ~
             transition:
                 refresh:
-                    label: Move to Messages Queue
+                    label: Move to Approval Queue
                     warning_message: ''
                 approve:
                     label: Approve
