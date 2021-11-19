@@ -4,7 +4,7 @@ navigation:
             teachers_group:
                 label: 'teachers.users.teacher_group.entity_plural_label'
                 route: 'teachers_group_index'
-                position: 14
+                position: 15
                 extras:
                     routes: [ 'teachers_group_*' ]
                     icon: fa-users

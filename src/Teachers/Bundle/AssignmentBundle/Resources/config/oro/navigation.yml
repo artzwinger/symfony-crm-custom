@@ -4,31 +4,23 @@ navigation:
             teachers_assignment_assignment:
                 label: 'teachers.assignment.entity_plural_label'
                 route: 'teachers_assignment_index'
-                position: 12
-                extras:
-                    routes: [ 'teachers_assignment_*' ]
-                    icon: fa-paperclip
-                display: true
-            teachers_assignment_assignment_teacher:
-                label: 'teachers.assignment.teachers_queue_label'
-                route: 'teachers_assignment_teacher_index'
-                position: 12
-                extras:
-                    routes: [ 'teachers_assignment_*' ]
-                    icon: fa-paperclip
-                display: true
-            teachers_assignment_assignment_my:
-                label: 'teachers.assignment.my_courses_label'
-                route: 'teachers_assignment_my_courses'
-                position: 12
+                position: 11
                 extras:
                     routes: [ 'teachers_assignment_*' ]
                     icon: fa-paperclip
                 display: true
             teachers_assignment_assignment_messages:
                 label: 'teachers.assignment.approval_queue_label'
-                position: 13
+                position: 12
                 route: 'teachers_assignment_message_index'
+                extras:
+                    routes: [ 'teachers_assignment_message_*' ]
+                    icon: fa-envelope
+                display: true
+            teachers_assignment_assignment_cm_general:
+                label: 'teachers.assignment.message.cm_general_messages'
+                position: 13
+                route: 'teachers_assignment_message_cm_general'
                 extras:
                     routes: [ 'teachers_assignment_message_*' ]
                     icon: fa-envelope
@@ -41,13 +33,21 @@ navigation:
                     routes: [ 'teachers_assignment_message_*' ]
                     icon: fa-envelope
                 display: true
-            teachers_assignment_assignment_cm_general:
-                label: 'teachers.assignment.message.cm_general_messages'
-                position: 15
-                route: 'teachers_assignment_message_cm_general'
+            teachers_assignment_assignment_teacher:
+                label: 'teachers.assignment.teachers_queue_label'
+                route: 'teachers_assignment_teacher_index'
+                position: 16
                 extras:
-                    routes: [ 'teachers_assignment_message_*' ]
-                    icon: fa-envelope
+                    routes: [ 'teachers_assignment_*' ]
+                    icon: fa-paperclip
+                display: true
+            teachers_assignment_assignment_my:
+                label: 'teachers.assignment.my_courses_label'
+                route: 'teachers_assignment_my_courses'
+                position: 17
+                extras:
+                    routes: [ 'teachers_assignment_*' ]
+                    icon: fa-paperclip
                 display: true
         tree:
             application_menu:
