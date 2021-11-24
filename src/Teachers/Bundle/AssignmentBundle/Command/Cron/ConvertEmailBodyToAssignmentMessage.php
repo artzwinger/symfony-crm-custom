@@ -79,7 +79,7 @@ class ConvertEmailBodyToAssignmentMessage extends Command implements CronCommand
      */
     public function getDefaultDefinition(): string
     {
-        return '*/5 * * * *';
+        return '*/3 * * * *';
     }
 
     /**

@@ -67,7 +67,7 @@ class EmailBodySyncCommandDecorator extends EmailBodySyncCommand
      */
     public function getDefaultDefinition(): string
     {
-        return '*/3 * * * *';
+        return '*/2 * * * *';
     }
 
     /**
