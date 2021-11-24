@@ -35,7 +35,7 @@ class ConvertEmailBodyToAssignmentMessage extends Command implements CronCommand
     /**
      * @var string
      */
-    protected static $defaultName = 'teachers:cron:convert-email-body-to-assignment-message';
+    protected static $defaultName = 'oro:cron:convert-email-body-to-assignment-message';
     /**
      * @var FeatureChecker
      */
@@ -106,7 +106,7 @@ class ConvertEmailBodyToAssignmentMessage extends Command implements CronCommand
             $store = new SemaphoreStore();
         }
         $lockFactory = new LockFactory($store);
-        $lock = $lockFactory->createLock('teachers:cron:convert-email-body-to-assignment-message');
+        $lock = $lockFactory->createLock('oro:cron:convert-email-body-to-assignment-message');
         if (!$lock->acquire()) {
             $output->writeln('The command is already running in another process.');
             return 0;
