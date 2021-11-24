@@ -106,9 +106,9 @@ class AssignmentMessageThread extends ExtendAssignmentMessageThread implements D
      */
     protected $organization;
     /**
-     * @return int
+     * @return int|null
      */
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -209,7 +209,7 @@ class AssignmentMessageThread extends ExtendAssignmentMessageThread implements D
         return $this->recipient;
     }
 
-    public function getRecipientId(): int
+    public function getRecipientId(): ?int
     {
         $rec = $this->getRecipient();
         return $rec ? $rec->getId() : 0;
