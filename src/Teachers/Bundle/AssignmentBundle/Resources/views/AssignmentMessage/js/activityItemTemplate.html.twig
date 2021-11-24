@@ -46,14 +46,6 @@
     {% import 'OroActivityBundle::macros.html.twig' as AC %}
 
     {% set action %}
-        {# Add button for add context in the activity list item #}
-        <% if (editable) { %>
-        {{ AC.activity_context_link() }}
-        <% } %>
-    {% endset %}
-    {% set actions = [action] %}
-
-    {% set action %}
         <% if (editable) { %>
         <a href="#" class="dropdown-item action item-edit-button"
            title="{{ 'teachers.assignment.message.update'|trans({'{{ entity }}': entityName}) }}"
@@ -64,7 +56,7 @@
         </a>
         <% } %>
     {% endset %}
-    {% set actions = actions|merge([action]) %}
+    {% set actions = [action] %}
 
     {% set action %}
         <% if (removable) { %>

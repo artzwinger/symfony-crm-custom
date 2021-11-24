@@ -46,12 +46,6 @@
     {% import 'OroActivityBundle::macros.html.twig' as AC %}
 
     {% set action %}
-        {# Add button for add context in the activity list item #}
-        {{ AC.activity_context_link() }}
-    {% endset %}
-    {% set actions = [action] %}
-
-    {% set action %}
         <a href="<%= routing.generate('teachers_invoice_view', {'id': relatedActivityId}) %>"
            class="dropdown-item"
            title="{{ 'teachers.invoice.view_invoice'|trans({'{{ entity }}': entityName}) }}"><span
@@ -60,7 +54,7 @@
             {{ 'teachers.invoice.view_invoice'|trans({'{{ entity }}': entityName}) }}
         </a>
     {% endset %}
-    {% set actions = actions|merge([action]) %}
+    {% set actions = [action] %}
 
     {% set action %}
         <% if (editable) { %>
