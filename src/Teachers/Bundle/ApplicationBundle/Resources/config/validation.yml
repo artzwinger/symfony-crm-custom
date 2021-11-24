@@ -41,15 +41,5 @@ Teachers\Bundle\ApplicationBundle\Entity\Application:
             -   Length:
                     min: 1
                     max: 255
-        userLogin:
-            -   NotBlank: ~
-            -   Length:
-                    min: 1
-                    max: 255
-        userPassword:
-            -   NotBlank: ~
-            -   Length:
-                    min: 1
-                    max: 255
         instructions:
             -   NotBlank: ~
