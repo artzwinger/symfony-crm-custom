@@ -4,6 +4,7 @@ namespace Teachers\Bundle\AssignmentBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
+use Oro\Bundle\UserBundle\Entity\User;
 use Teachers\Bundle\AssignmentBundle\Model\ExtendAssignmentMessageMailboxProcessSettings;
 
 /**
@@ -15,6 +16,30 @@ use Teachers\Bundle\AssignmentBundle\Model\ExtendAssignmentMessageMailboxProcess
  */
 class AsmgMsgMailboxProcessSettings extends ExtendAssignmentMessageMailboxProcessSettings
 {
+    /**
+     * @var User
+     *
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\UserBundle\Entity\User")
+     * @ORM\JoinColumn(name="case_owner_id", referencedColumnName="id", onDelete="SET NULL")
+     */
+    protected $owner;
+
+    /**
+     * @return User|null
+     */
+    public function getOwner(): ?User
+    {
+        return $this->owner;
+    }
+
+    /**
+     * @param User $owner
+     */
+    public function setOwner(User $owner): void
+    {
+        $this->owner = $owner;
+    }
+
     /**
      * {@inheritdoc}
      */
