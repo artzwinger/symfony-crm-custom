@@ -4,9 +4,6 @@ namespace Teachers\Bundle\AssignmentBundle\EventListener\ORM;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Event\LifecycleEventArgs;
-use Doctrine\ORM\OptimisticLockException;
-use Doctrine\ORM\ORMException;
-use Exception;
 use Oro\Bundle\SyncBundle\Client\WebsocketClientInterface;
 use Oro\Bundle\UserBundle\Entity\User;
 use Teachers\Bundle\AssignmentBundle\Entity\AssignmentMessage;

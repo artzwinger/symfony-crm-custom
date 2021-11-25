@@ -190,16 +190,13 @@ class AssignmentMessageController extends AbstractController
         $message->setRecipient($tutor);
         $message->setAssignment($assignment);
         $message->setStatus($this->getMessageStatusPending());
-        if ($thread) {
-            $message->setThread($thread);
+        if (!$thread) {
+            $thread = $this->createThread($assignment, $tutor);
         }
+        $message->setThread($thread);
         $result = $this->update($message);
         $this->autoApproveIfAllowed($message);
-        if (!$thread) {
-            $thread = $this->createThread($message, $tutor);
-        } else {
-            $this->updateThreadLatestMessage($message);
-        }
+        $this->updateThreadLatestMessage($message);
 
         if (is_array($result)) {
             $result['formAction'] = $this->generateUrl('teachers_assignment_message_send_to_tutor', [
@@ -241,16 +238,13 @@ class AssignmentMessageController extends AbstractController
         $message->setRecipient($student);
         $message->setAssignment($assignment);
         $message->setStatus($this->getMessageStatusPending());
-        if ($thread) {
-            $message->setThread($thread);
+        if (!$thread) {
+            $thread = $this->createThread($assignment, $student);
         }
+        $message->setThread($thread);
         $result = $this->update($message);
         $this->autoApproveIfAllowed($message);
-        if (!$thread) {
-            $thread = $this->createThread($message, $student);
-        } else {
-            $this->updateThreadLatestMessage($message);
-        }
+        $this->updateThreadLatestMessage($message);
 
         if (is_array($result)) {
             $result['formAction'] = $this->generateUrl('teachers_assignment_message_send_to_student', [
@@ -290,16 +284,13 @@ class AssignmentMessageController extends AbstractController
         $message = new AssignmentMessage();
         $message->setAssignment($assignment);
         $message->setStatus($this->getMessageStatusPending());
-        if ($thread) {
-            $message->setThread($thread);
+        if (!$thread) {
+            $thread = $this->createThread($assignment);
         }
+        $message->setThread($thread);
         $result = $this->update($message);
         $this->autoApprove($message);
-        if (!$thread) {
-            $thread = $this->createThread($message);
-        } else {
-            $this->updateThreadLatestMessage($message);
-        }
+        $this->updateThreadLatestMessage($message);
 
         if (is_array($result)) {
             $result['formAction'] = $this->generateUrl('teachers_assignment_message_send_to_coursemanager', [
@@ -587,26 +578,14 @@ class AssignmentMessageController extends AbstractController
      * @throws OptimisticLockException
      * @throws ORMException
      */
-    private function createThread(AssignmentMessage $message, User $recipient = null): ?AssignmentMessageThread
+    private function createThread(Assignment $assignment, User $recipient = null): ?AssignmentMessageThread
     {
-        if (!$message->getId()) {
-            return null;
-        }
         $thread = new AssignmentMessageThread();
-        $thread->setFirstMessage($message);
-        $thread->setLatestMessage($message);
         $thread->setRecipient($recipient);
-        $thread->setAssignment($message->getAssignment());
+        $thread->setAssignment($assignment);
         $em = $this->get('doctrine.orm.entity_manager');
         $em->persist($thread);
         $em->flush($thread);
-
-        if ($thread->getId()) {
-            $message->setThread($thread);
-            $em->persist($message);
-            $em->flush($message);
-        }
-
         return $thread;
     }
 
@@ -621,6 +600,9 @@ class AssignmentMessageController extends AbstractController
         }
         $thread = $message->getThread();
         $thread->setLatestMessage($message);
+        if (!$thread->getFirstMessage()) {
+            $thread->setFirstMessage($message);
+        }
         $em = $this->get('doctrine.orm.entity_manager');
         $em->persist($thread);
         $em->flush($thread);
