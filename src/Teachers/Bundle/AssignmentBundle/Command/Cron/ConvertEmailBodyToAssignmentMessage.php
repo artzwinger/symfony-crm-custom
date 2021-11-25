@@ -232,10 +232,16 @@ class ConvertEmailBodyToAssignmentMessage extends Command implements CronCommand
         throw new Exception('Cannot put message from email #' . $email->getId() . ' to assignment #' . $assignment->getId() . ': not possible to guess a recipient');
     }
 
+    /**
+     * @throws Exception
+     */
     private function extractMessageTextFromEmail(Email $email): string
     {
+        $body = $email->getEmailBody();
+        if (!$body) {
+            throw new Exception('Body does not exist for email ' . $email->getId());
+        }
         try {
-            $body = $email->getEmailBody()->getBodyContent();
             $doc = new DOMDocument();
             $doc->loadHTML($body);
             $this->removeElementsByClassNames($doc, ['quote', 'attr', 'moz-cite-prefix']);
@@ -243,7 +249,7 @@ class ConvertEmailBodyToAssignmentMessage extends Command implements CronCommand
             $body = $doc->saveHTML();
             return trim(Html2Text::convert($body));
         } catch (Html2TextException $e) {
-            return $email->getEmailBody()->getTextBody();
+            return $body->getTextBody();
         }
     }
 
