@@ -236,7 +236,11 @@ class ConvertEmailBodyToAssignmentMessage extends Command implements CronCommand
     {
         try {
             $body = $email->getEmailBody()->getBodyContent();
-            $body = $this->removeBlockQuote($body);
+            $doc = new DOMDocument();
+            $doc->loadHTML($body);
+            $this->removeElementsByClassNames($doc, ['quote', 'attr', 'moz-cite-prefix']);
+            $this->removeElementsByTagName($doc, 'blockquote');
+            $body = $doc->saveHTML();
             return trim(Html2Text::convert($body));
         } catch (Html2TextException $e) {
             return $email->getEmailBody()->getTextBody();
@@ -281,31 +285,30 @@ class ConvertEmailBodyToAssignmentMessage extends Command implements CronCommand
         return $thread;
     }
 
-    private function removeBlockQuote(string $body)
+    /** @noinspection PhpSameParameterValueInspection */
+    private function removeElementsByClassNames(DOMDocument $doc, array $classNames)
     {
-        $doc = new DOMDocument();
-        $doc->loadHTML($body);
-
         $finder = new DomXPath($doc);
-        $attrClassName = 'attr';
-        $quoteClassName = 'quote';
-        $attrs = $finder->query("//*[contains(@class, '$attrClassName')]");
-        $quotes = $finder->query("//*[contains(@class, '$quoteClassName')]");
-        $blockquotes = $doc->getElementsByTagName('blockquote');
-        while ($blockquotes->length > 0) {
-            $p = $blockquotes->item(0);
+        $firstClassName = array_unshift($classNames);
+        $expression = "contains(@class, '$firstClassName')";
+        foreach ($classNames as $className) {
+            $expression .= "or contains(@class, '$className')";
+        }
+        $elements = $finder->query("//*[$expression]");
+        foreach ($elements as $element) {
+            if ($element->parentNode) {
+                $element->parentNode->removeChild($element);
+            }
+        }
+    }
+
+    /** @noinspection PhpSameParameterValueInspection */
+    private function removeElementsByTagName(DOMDocument $doc, string $tagName)
+    {
+        $tags = $doc->getElementsByTagName($tagName);
+        while ($tags->length > 0) {
+            $p = $tags->item(0);
             $p->parentNode->removeChild($p);
         }
-        foreach ($attrs as $attr) {
-            if ($attr->parentNode) {
-                $attr->parentNode->removeChild($attr);
-            }
-        }
-        foreach ($quotes as $quote) {
-            if ($quote->parentNode) {
-                $quote->parentNode->removeChild($quote);
-            }
-        }
-        return $doc->saveHTML();
     }
 }
