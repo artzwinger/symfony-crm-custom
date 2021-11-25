@@ -8,7 +8,6 @@ use Doctrine\ORM\ORMException;
 use DOMDocument;
 use DOMXPath;
 use Exception;
-use Oro\Bundle\ActivityBundle\Manager\ActivityManager;
 use Oro\Bundle\CronBundle\Command\CronCommandInterface;
 use Oro\Bundle\EmailBundle\Entity\Email;
 use Oro\Bundle\FeatureToggleBundle\Checker\FeatureChecker;
@@ -45,10 +44,6 @@ class ConvertEmailBodyToAssignmentMessage extends Command implements CronCommand
      */
     private $entityManager;
     /**
-     * @var ActivityManager
-     */
-    private $activityManager;
-    /**
      * @var ClientInterface
      */
     private $redisClient;
@@ -56,13 +51,11 @@ class ConvertEmailBodyToAssignmentMessage extends Command implements CronCommand
     /**
      * @param FeatureChecker $featureChecker
      * @param EntityManager $entityManager
-     * @param ActivityManager $activityManager
      * @param ClientInterface $redisClient
      */
     public function __construct(
         FeatureChecker  $featureChecker,
         EntityManager   $entityManager,
-        ActivityManager $activityManager,
         ClientInterface $redisClient
     )
     {
@@ -70,7 +63,6 @@ class ConvertEmailBodyToAssignmentMessage extends Command implements CronCommand
 
         $this->featureChecker = $featureChecker;
         $this->entityManager = $entityManager;
-        $this->activityManager = $activityManager;
         $this->redisClient = $redisClient;
     }
 
@@ -156,7 +148,7 @@ class ConvertEmailBodyToAssignmentMessage extends Command implements CronCommand
         $assignmentMessage->setOrganization($assignment->getOrganization());
 
         $sender = $this->getMessageSenderUser($email, $assignment);
-        $recipient = $this->getMessageRecipientUser($email, $assignment);
+        $recipient = $this->getMessageRecipientUser($email, $assignment, $thread);
 
         if (!$thread->getId()) {
             $thread->setSender($sender);
@@ -218,15 +210,20 @@ class ConvertEmailBodyToAssignmentMessage extends Command implements CronCommand
      * Otherwise throws an exception
      * @throws Exception
      */
-    private function getMessageRecipientUser(Email $email, Assignment $assignment): User
+    private function getMessageRecipientUser(Email $email, Assignment $assignment, AssignmentMessageThread $thread): ?User
     {
-        $sender = $email->getFromEmailAddress()->getEmail();
+        $senderEmail = $email->getFromEmailAddress()->getEmail();
+        if ($thread->getId() && $thread->isThreadRecipientCourseManager()) {
+            return $senderEmail === $thread->getSender()->getEmail() ? null : $thread->getSender();
+        }
+        // in other cases (if a thread doesn't exist or exists between student and tutor)
+        // the default logic is applicable
         $teacher = $assignment->getTeacher();
         $student = $assignment->getStudent();
-        if ($teacher->getEmail() === $sender) {
+        if ($teacher->getEmail() === $senderEmail) {
             return $student;
         }
-        if ($student->getEmail() === $sender) {
+        if ($student->getEmail() === $senderEmail) {
             return $teacher;
         }
         throw new Exception('Cannot put message from email #' . $email->getId() . ' to assignment #' . $assignment->getId() . ': not possible to guess a recipient');

@@ -215,6 +215,11 @@ class AssignmentMessageThread extends ExtendAssignmentMessageThread implements D
         return $rec ? $rec->getId() : 0;
     }
 
+    public function isThreadRecipientCourseManager(): bool
+    {
+        return $this->getRecipientId() === 0;
+    }
+
     /**
      * @param User|null $recipient
      */

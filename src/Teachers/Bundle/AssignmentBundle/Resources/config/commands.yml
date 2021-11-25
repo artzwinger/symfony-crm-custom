@@ -6,7 +6,6 @@ services:
         arguments:
             - '@oro_featuretoggle.checker.feature_checker'
             - '@doctrine.orm.entity_manager'
-            - '@oro_activity.manager'
             - '@?snc_redis.cache'
         tags:
             - { name: console.command }
