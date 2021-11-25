@@ -1,0 +1,7 @@
+teachers_assignment.new_message:
+    channel: teachers/new_message/{user_id}
+    handler:
+        callback: 'teachers_assignment.new_message'
+    requirements:
+        user_id:
+            pattern: '\d+'

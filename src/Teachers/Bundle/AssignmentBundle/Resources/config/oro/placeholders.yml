@@ -9,6 +9,10 @@ placeholders:
                 oro_user_assignment_grid: ~
                 assignment_message_threads: ~
                 thread_messages: ~
+        scripts_after:
+            items:
+                teachers_assignment_new_message:
+                    order: 100
     items:
         oro_user_assignment_grid:
             template: TeachersAssignmentBundle:Assignment:userAssignments.html.twig
@@ -39,3 +43,7 @@ placeholders:
         teachers_assignment_private_note_link:
             template: TeachersAssignmentBundle:AssignmentPrivateNote:activityLink.html.twig
             acl: teachers_assignment_private_note_create
+
+        teachers_assignment_new_message:
+            template: TeachersAssignmentBundle:Sync:new_message_js.html.twig
+            applicable: "@oro_security.token_accessor->hasUser()"

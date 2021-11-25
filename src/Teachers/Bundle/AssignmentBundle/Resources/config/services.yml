@@ -159,13 +159,21 @@ services:
             - name: kernel.event_listener
               event: oro_datagrid.datagrid.build.before.teachers-assignment-messages-grid
               method: onBuildBefore
-    teachers_assignment.event.unread_messages_flash:
-        class: Teachers\Bundle\AssignmentBundle\EventListener\UnreadMessagesFlash
+    teachers_assignment.topic.new_message:
+        class: Oro\Bundle\SyncBundle\Topic\BroadcastTopic
+        arguments:
+            - 'teachers_assignment.new_message'
+        tags:
+            - { name: gos_web_socket.topic }
+    teachers_assignment.event_listener.orm.notify_user_new_message:
+        class: Teachers\Bundle\AssignmentBundle\EventListener\ORM\NotifyUserNewMessage
         arguments:
             - '@doctrine.orm.entity_manager'
             - '@teachers_users.helper.role'
-            - '@session'
-            - '@session.flash_bag'
-            - '@translator'
+            - '@oro_sync.websocket_client.basic'
         tags:
-            - { name: kernel.event_listener, event: kernel.view, method: onKernelView }
+            - {
+                name: doctrine.event_listener,
+                event: postPersist,
+                entity: 'Teachers\Bundle\AssignmentBundle\Entity\AssignmentMessage'
+            }
