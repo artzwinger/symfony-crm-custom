@@ -151,6 +151,7 @@ class ConvertEmailBodyToAssignmentMessage extends Command implements CronCommand
         $thread = $this->getThreadFromEmail($email, $output);
 
         $assignmentMessage = new AssignmentMessage();
+        $assignmentMessage->setAssignment($assignment);
         $assignmentMessage->setMessage($this->extractMessageTextFromEmail($email));
         $assignmentMessage->setOrganization($assignment->getOrganization());
 
@@ -169,7 +170,6 @@ class ConvertEmailBodyToAssignmentMessage extends Command implements CronCommand
         $assignmentMessage->setRecipient($recipient);
         $assignmentMessage->setEmailImap($emailImap);
 
-        $this->activityManager->addActivityTarget($assignmentMessage, $assignment);
         $this->entityManager->persist($assignmentMessage);
         $this->entityManager->flush($assignmentMessage);
     }
