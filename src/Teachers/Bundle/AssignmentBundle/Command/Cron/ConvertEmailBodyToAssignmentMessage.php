@@ -120,12 +120,15 @@ class ConvertEmailBodyToAssignmentMessage extends Command implements CronCommand
      */
     protected function processEmails(OutputInterface $output)
     {
-        $imapEmails = $this->entityManager->getRepository(ImapEmail::class)->findAll();
-        foreach ($imapEmails as $imapEmail) {
-            /** @var Email $email */
-            $email = $imapEmail->getEmail();
+        $emailsImap = $this->entityManager->getRepository(ImapEmail::class)->findAll();
+        $emailImapIdsToIgnore = $this->getEmailImapIdsToIgnore($emailsImap);
+        foreach ($emailsImap as $emailImap) {
+            if (array_key_exists($emailImap->getId(), $emailImapIdsToIgnore)) {
+                $output->writeln('Ignore email ' . $emailImap->getId() . ': already processed');
+                continue;
+            }
             try {
-                $this->processEmail($email, $output);
+                $this->processImapEmail($emailImap, $output);
             } catch (Exception $e) {
                 $output->writeln($e->getMessage());
             }
@@ -133,14 +136,16 @@ class ConvertEmailBodyToAssignmentMessage extends Command implements CronCommand
     }
 
     /**
-     * @param Email $email
+     * @param ImapEmail $emailImap
      * @param OutputInterface $output
      * @throws ORMException
      * @throws OptimisticLockException
      * @throws Exception
      */
-    protected function processEmail(Email $email, OutputInterface $output)
+    protected function processImapEmail(ImapEmail $emailImap, OutputInterface $output)
     {
+        /** @var Email $email */
+        $email = $emailImap->getEmail();
         $this->validateEmailIsConvertible($email);
         $assignment = $this->getAssignmentFromEmail($email);
         $thread = $this->getThreadFromEmail($email, $output);
@@ -162,10 +167,21 @@ class ConvertEmailBodyToAssignmentMessage extends Command implements CronCommand
         $assignmentMessage->setOwner($sender);
         $assignmentMessage->setThread($thread);
         $assignmentMessage->setRecipient($recipient);
+        $assignmentMessage->setEmailImap($emailImap);
 
         $this->activityManager->addActivityTarget($assignmentMessage, $assignment);
         $this->entityManager->persist($assignmentMessage);
         $this->entityManager->flush($assignmentMessage);
+    }
+
+    private function getEmailImapIdsToIgnore(array $emailsImap): array
+    {
+        $emailImapIds = array_map(function (ImapEmail $emailImap) {
+            return $emailImap->getId();
+        }, $emailsImap);
+        $ids = $this->entityManager->getRepository(AssignmentMessage::class)
+            ->filterEmailImapIds($emailImapIds);
+        return array_flip($ids);
     }
 
     /**

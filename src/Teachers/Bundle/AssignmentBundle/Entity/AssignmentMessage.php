@@ -2,20 +2,18 @@
 
 namespace Teachers\Bundle\AssignmentBundle\Entity;
 
-use DateTime;
-use DateTimeZone;
 use Doctrine\ORM\Mapping as ORM;
-use Exception;
+use Oro\Bundle\EmailBundle\Entity\Email;
 use Oro\Bundle\EntityBundle\EntityProperty\DatesAwareInterface;
 use Oro\Bundle\EntityBundle\EntityProperty\DatesAwareTrait;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
+use Oro\Bundle\ImapBundle\Entity\ImapEmail;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\UserBundle\Entity\User;
 use Teachers\Bundle\AssignmentBundle\Model\ExtendAssignmentMessage;
 
 /**
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="Teachers\Bundle\AssignmentBundle\Entity\Repository\AssignmentMessageRepository")
  * @ORM\Table(name="teachers_assignment_message")
  * @ORM\HasLifecycleCallbacks()
  * @Config(
@@ -107,6 +105,14 @@ class AssignmentMessage extends ExtendAssignmentMessage implements DatesAwareInt
      * @ORM\JoinColumn(name="recipient_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $recipient;
+
+    /**
+     * @var ImapEmail|null
+     *
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\ImapBundle\Entity\ImapEmail")
+     * @ORM\JoinColumn(name="email_imap_id", referencedColumnName="id", onDelete="SET NULL")
+     */
+    protected $emailImap;
 
     /**
      * @ORM\Column(name="viewed_by_recipient", type="boolean", nullable=false)
@@ -271,6 +277,22 @@ class AssignmentMessage extends ExtendAssignmentMessage implements DatesAwareInt
     public function setRecipient(?User $recipient): void
     {
         $this->recipient = $recipient;
+    }
+
+    /**
+     * @return ImapEmail|null
+     */
+    public function getEmailImap(): ?ImapEmail
+    {
+        return $this->emailImap;
+    }
+
+    /**
+     * @param ImapEmail|null $emailImap
+     */
+    public function setEmailImap(?ImapEmail $emailImap): void
+    {
+        $this->emailImap = $emailImap;
     }
 
     /**
