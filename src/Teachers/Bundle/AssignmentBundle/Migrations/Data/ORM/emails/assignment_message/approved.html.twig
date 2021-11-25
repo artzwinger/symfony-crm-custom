@@ -1,6 +1,6 @@
 @name = teachers_assignment_message_approved
 @entityName = Teachers\Bundle\AssignmentBundle\Entity\AssignmentMessage
-@subject = OCH New Message In The Assignment #{{ entity.assignment.id }}
+@subject = OCH New Message In The Assignment #{{ entity.assignment.id }} Thread #{{ entity.thread.id }}
 @isSystem = 1
 @isEditable = 1
 
@@ -36,7 +36,7 @@
                 <tr>
                     <td style="padding: 5pt 0; background: #f85945; border-radius: 5px; width: 140pt; text-align: center">
                         <a style="color: #ffffff; font-size: 11pt; text-transform: uppercase; text-decoration: none; line-height: 1em; font-weight: bold; font-family: Arial, Helvetica, sans-serif;"
-                           href="{{ oro_get_absolute_url('teachers_assignment_view', { id: entity.assignment.id }) }}"
+                           href="{{ oro_get_absolute_url('teachers_assignment_message_thread_view', { id: entity.thread.id }) }}"
                            target="_blank">
                             LOGIN TO VIEW MESSAGE
                         </a>
