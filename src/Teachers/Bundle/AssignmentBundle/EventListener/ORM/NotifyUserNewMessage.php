@@ -46,11 +46,14 @@ class NotifyUserNewMessage
     /**
      * @param LifecycleEventArgs $args
      */
-    public function postPersist(LifecycleEventArgs $args): void
+    public function postUpdate(LifecycleEventArgs $args): void
     {
         /** @var AssignmentMessage $message */
         $message = $args->getObject();
         if (!$message instanceof AssignmentMessage) {
+            return;
+        }
+        if ($message->getStatus()->getId() !== AssignmentMessage::STATUS_APPROVED) {
             return;
         }
         $recipient = $message->getRecipient();
