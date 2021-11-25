@@ -242,12 +242,13 @@ class ConvertEmailBodyToAssignmentMessage extends Command implements CronCommand
             throw new Exception('Body does not exist for email ' . $email->getId());
         }
         try {
+            $content = $body->getBodyContent();
             $doc = new DOMDocument();
-            $doc->loadHTML($body);
+            $doc->loadHTML($content);
             $this->removeElementsByClassNames($doc, ['quote', 'attr', 'moz-cite-prefix']);
             $this->removeElementsByTagName($doc, 'blockquote');
-            $body = $doc->saveHTML();
-            return trim(Html2Text::convert($body));
+            $content = $doc->saveHTML();
+            return trim(Html2Text::convert($content));
         } catch (Html2TextException $e) {
             return $body->getTextBody();
         }
