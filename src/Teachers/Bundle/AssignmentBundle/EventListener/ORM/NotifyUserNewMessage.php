@@ -54,21 +54,23 @@ class NotifyUserNewMessage
             return;
         }
         $recipient = $message->getRecipient();
-        $recipientIds = $recipient ? $recipient->getId() : $this->getCourseManagerOrAdminUserIds();
+        $recipientIds = $recipient ? [$recipient->getId()] : $this->getCourseManagersAndAdminsIds();
         $this->notifyRecipients($recipientIds);
     }
 
-    private function getCourseManagerOrAdminUserIds(): array
+    private function getCourseManagersAndAdminsIds(): array
     {
-        $roles = [
-            $this->roleHelper->getAdminRole(),
-            $this->roleHelper->getCourseManagerRole()
-        ];
-        $users = $this->entityManager->getRepository(User::class)
-            ->findBy(['roles' => $roles]);
-        return array_map(function (User $user) {
-            return $user->getId();
-        }, $users);
+        $admins = $this->roleHelper->getAdmins();
+        $managers = $this->roleHelper->getCourseManagers();
+        $ids = [];
+        /** @var User $u */
+        foreach ($admins as $u) {
+            $ids[] = $u->getId();
+        }
+        foreach ($managers as $u) {
+            $ids[] = $u->getId();
+        }
+        return array_unique($ids);
     }
 
     private function notifyRecipients(array $ids)

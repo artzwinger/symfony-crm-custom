@@ -5,7 +5,7 @@ namespace Teachers\Bundle\UsersBundle\Helper;
 use Doctrine\ORM\EntityManager;
 use Oro\Bundle\UserBundle\Entity\Repository\RoleRepository;
 use Oro\Bundle\UserBundle\Entity\Repository\UserRepository;
-use Oro\Bundle\UserBundle\Entity\Role as EntityRole;
+use Oro\Bundle\UserBundle\Entity\Role as RoleEntity;
 use Oro\Bundle\UserBundle\Entity\User;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
@@ -39,10 +39,25 @@ class Role
         $this->tokenStorage = $tokenStorage;
     }
 
+    public function getUsersByRole(RoleEntity $role)
+    {
+        return $this->getRoleRepository()->getUserQueryBuilder($role)->getQuery()->getResult();
+    }
+
+    public function getAdmins()
+    {
+        return $this->getUsersByRole($this->getAdminRole());
+    }
+
+    public function getCourseManagers()
+    {
+        return $this->getUsersByRole($this->getCourseManagerRole());
+    }
+
     public function hasUserOneOfRoleNames(User $user, array $roleNames): bool
     {
         foreach ($user->getRoles() as $role) {
-            /** @var EntityRole $role */
+            /** @var RoleEntity $role */
             if (in_array($role->getRole(), $roleNames)) {
                 return true;
             }
@@ -80,14 +95,14 @@ class Role
         return $this->getAdminRole()->getId();
     }
 
-    public function getCourseManagerRole(): ?EntityRole
+    public function getCourseManagerRole(): ?RoleEntity
     {
         return $this->getRoleRepository()->findOneBy([
             'role' => self::ROLE_COURSE_MANAGER
         ]);
     }
 
-    public function getAdminRole(): ?EntityRole
+    public function getAdminRole(): ?RoleEntity
     {
         return $this->getRoleRepository()->findOneBy([
             'role' => self::ROLE_ADMINISTRATOR
@@ -99,7 +114,7 @@ class Role
         return $this->getTeacherRole()->getId();
     }
 
-    public function getTeacherRole(): ?EntityRole
+    public function getTeacherRole(): ?RoleEntity
     {
         return $this->getRoleRepository()->findOneBy([
             'role' => self::ROLE_TEACHER
@@ -111,7 +126,7 @@ class Role
         return $this->getStudentRole()->getId();
     }
 
-    public function getStudentRole(): ?EntityRole
+    public function getStudentRole(): ?RoleEntity
     {
         return $this->getRoleRepository()->findOneBy([
             'role' => self::ROLE_STUDENT
@@ -148,7 +163,7 @@ class Role
             return false;
         }
         foreach ($user->getRoles() as $role) {
-            /** @var EntityRole $role */
+            /** @var RoleEntity $role */
             if ($role->getRole() == $roleName) {
                 return true;
             }
