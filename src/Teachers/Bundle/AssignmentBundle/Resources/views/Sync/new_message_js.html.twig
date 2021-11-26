@@ -4,26 +4,16 @@
     loadModules(['orosync/js/sync', 'oroui/js/modal', 'oroui/js/mediator', 'oroui/js/messenger', 'orotranslation/js/translator'],
         function (sync, Modal, mediator, messenger, __) {
             var notifier = null;
-            var sendNotification = true;
-
-            mediator.on('page:beforeChange', function () {
-                if (notifier) {
-                    notifier.close();
-                }
-                sendNotification = false;
-            });
 
             sync.subscribe('teachers/new_message/' + {{ userId }}, function (response) {
                 if (notifier) {
                     notifier.close();
                 }
 
-                if (sendNotification) {
-                    notifier = messenger.notificationMessage(
-                        'warning',
-                        __('teachers.assignment.message.has_unread_message_notice')
-                    );
-                }
+                notifier = messenger.notificationMessage(
+                    'warning',
+                    __('teachers.assignment.message.has_unread_message_notice')
+                );
             });
         });
 </script>
