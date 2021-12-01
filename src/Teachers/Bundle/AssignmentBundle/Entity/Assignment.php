@@ -823,4 +823,9 @@ class Assignment extends ExtendAssignment implements DatesAwareInterface
     {
         $this->organization = $organization;
     }
+
+    public function isPausedDueNonPayment(): bool
+    {
+        return $this->getStatus()->getId() === self::STATUS_PAUSED_DUE_NONPAYMENT;
+    }
 }

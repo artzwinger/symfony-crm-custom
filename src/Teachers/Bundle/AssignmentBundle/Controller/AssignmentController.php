@@ -55,7 +55,8 @@ class AssignmentController extends AbstractController
             'is_user_teacher' => $roleHelper->isCurrentUserTeacher(),
             'is_user_student' => $roleHelper->isCurrentUserStudent(),
             'is_user_course_manager' => $roleHelper->isCurrentUserCourseManager(),
-            'entity' => $assignment
+            'entity' => $assignment,
+            'is_assignment_paused_due_nonpayment' => $assignment->isPausedDueNonPayment()
         ];
     }
 

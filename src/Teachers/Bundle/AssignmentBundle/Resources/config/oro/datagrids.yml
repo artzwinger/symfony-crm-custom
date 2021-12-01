@@ -8,6 +8,7 @@ datagrids:
             query:
                 select:
                     - assignment.id
+                    - application.id as orderId
                     - assignment.firstName
                     - assignment.lastName
                     - assignment.courseName
@@ -30,6 +31,7 @@ datagrids:
                     - { table: 'Teachers\Bundle\AssignmentBundle\Entity\Assignment', alias: assignment }
                 join:
                     left:
+                        - { join: assignment.application, alias: application }
                         - { join: assignment.courseManager, alias: course_manager }
                         - { join: assignment.term, alias: assignmentterm }
                         - { join: assignment.teacher, alias: teacher }
@@ -38,6 +40,9 @@ datagrids:
                         - { join: assignment.status, alias: status }
                 groupBy: assignment.id
         columns:
+            orderId:
+                label: teachers.assignment.order_number.label
+                order: 5
             firstName:
                 label: teachers.assignment.first_name.label
                 order: 10
@@ -100,6 +105,8 @@ datagrids:
                 order: 120
         sorters:
             columns:
+                orderId:
+                    data_name: application.id
                 firstName:
                     data_name: assignment.firstName
                 lastName:
@@ -128,6 +135,9 @@ datagrids:
                 createdAt: DESC
         filters:
             columns:
+                orderId:
+                    type: number
+                    data_name: application.id
                 firstName:
                     type: string
                     data_name: assignment.firstName
