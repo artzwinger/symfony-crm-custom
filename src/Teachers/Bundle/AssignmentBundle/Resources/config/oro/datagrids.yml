@@ -624,7 +624,9 @@ datagrids:
                     - message.denialReason
                     - message.createdAt
                     - thread.id as threadId
-                    - CONCAT(sender.firstName, sender.lastName) as senderFullName
+                    - CONCAT(sender.firstName, ' ', sender.lastName) as senderFullName
+                    - CONCAT(recipient.firstName, ' ', recipient.lastName) as recipientFullName
+                    - role.label as recipientRoleLabel
                     - status.id as statusId
                     - status.name as statusLabel
                 from:
@@ -632,8 +634,10 @@ datagrids:
                 join:
                     left:
                         - { join: message.owner, alias: sender }
+                        - { join: message.recipient, alias: recipient }
                         - { join: message.status, alias: status }
                         - { join: message.thread, alias: thread }
+                        - { join: recipient.roles, alias: role }
                 where:
                     and:
                         - thread.id = :thread_id or :thread_id is null
@@ -653,6 +657,10 @@ datagrids:
                 template: TeachersAssignmentBundle:AssignmentMessage/Datagrid:message.html.twig
             senderFullName:
                 label: teachers.assignment.message.sender_name.label
+            recipientFullName:
+                label: teachers.assignment.message.recipient_name.label
+            recipientRoleLabel:
+                label: teachers.assignment.message.recipient_role.label
             createdAt:
                 frontend_type: datetime
                 label: oro.ui.created_at
@@ -682,6 +690,17 @@ datagrids:
                     type: enum
                     data_name: statusId
                     enum_code: assignment_msg_status
+                recipientRoleLabel:
+                    type: choice
+                    data_name: role.role
+                    label: teachers.assignment.message.recipient_role.label
+                    frontend_type: select
+                    options:
+                        field_options:
+                            choices:
+                                teachers.users.users.roleLabel.courseManager.label: ROLE_COURSE_MANAGER
+                                teachers.users.users.roleLabel.student.label: ROLE_STUDENT
+                                teachers.users.users.roleLabel.teacher.label: ROLE_TEACHER
         properties:
             id: ~
             approve_link:

@@ -126,6 +126,7 @@ teachers:
                 label: Recipient Of Latest Message Is Me
             sender_name.label: Sender
             recipient_name.label: Recipient
+            recipient_role.label: Recipient Type
             entity_label: Message
             sender_name: Sender
             entity_plural_label: Messages
