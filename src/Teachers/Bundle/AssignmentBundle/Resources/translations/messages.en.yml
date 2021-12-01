@@ -44,7 +44,7 @@ teachers:
             view_teachers_queue:
                 label: View tutors queue
             view_my_courses:
-                label: View my courses
+                label: View My Assignments
             view_messages_approval_queue:
                 label: View Approval Queue
             view_my_messages:
@@ -52,7 +52,7 @@ teachers:
             view_cm_general:
                 label: View CM Queue
         teachers_queue_label: Assignment Queue
-        my_courses_label: My Courses
+        my_courses_label: My Assignments
         approval_queue_label: Approval Queue
 
         rep.label: Rep
