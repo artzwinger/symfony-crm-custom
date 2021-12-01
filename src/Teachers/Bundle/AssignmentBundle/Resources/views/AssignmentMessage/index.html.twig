@@ -2,3 +2,8 @@
 {% import 'OroUIBundle::macros.html.twig' as UI %}
 {% set gridName  = 'teachers-assignment-messages-grid' %}
 {% set pageTitle = 'teachers.assignment.message.entity_plural_label'|trans %}
+{% set renderParams = {
+    themeOptions: {
+        cellActionsHideCount: 5
+    }
+} %}

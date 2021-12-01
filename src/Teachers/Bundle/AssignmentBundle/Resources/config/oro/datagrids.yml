@@ -623,6 +623,7 @@ datagrids:
                     - message.message
                     - message.denialReason
                     - message.createdAt
+                    - thread.id as threadId
                     - CONCAT(sender.firstName, sender.lastName) as senderFullName
                     - status.id as statusId
                     - status.name as statusLabel
@@ -687,11 +688,43 @@ datagrids:
                 type: url
                 route: teachers_assignment_message_approve
                 params: [ id ]
+            edit_approve_link:
+                type: url
+                route: teachers_assignment_message_edit_approve
+                params: [ id ]
             unapprove_link:
                 type: url
                 route: teachers_assignment_message_unapprove
                 params: [ id ]
+            view_link:
+                type: url
+                route: teachers_assignment_message_thread_view
+                params:
+                    id: threadId
         actions:
+            view:
+                acl_resource: teachers_assignment_message_thread_view
+                type: navigate
+                label: oro.grid.action.view
+                icon: eye
+                link: view_link
+                rowAction: true
+            edit_approve:
+                acl_resource: teachers_assignment_message_edit
+                type: dialog
+                label: teachers.assignment.grid.action.edit_approve
+                icon: pencil
+                link: edit_approve_link
+                widgetOptions:
+                    reload-grid-name: teachers-assignment-messages-grid
+                    options:
+                        dialogOptions:
+                            title: Edit Message Then Approve
+                            width: 550
+                            allowMaximize: false
+                            allowMinimize: false
+                            modal: true
+                            maximizedHeightDecreaseBy: minimize-bar
             approve:
                 acl_resource: teachers_assignment_message_edit
                 type: ajaxdelete

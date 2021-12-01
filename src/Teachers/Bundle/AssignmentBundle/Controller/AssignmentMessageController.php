@@ -478,6 +478,39 @@ class AssignmentMessageController extends AbstractController
     }
 
     /**
+     * @Route(
+     *     "/edit_approve/{id}",
+     *     name="teachers_assignment_message_edit_approve",
+     *     requirements={"id"="\d+"},
+     *     methods={"POST", "GET"},
+     *     options={"expose"=true}
+     * )
+     * @AclAncestor("teachers_assignment_message_edit")
+     * @Template("@TeachersAssignment/AssignmentMessage/edit_approve.html.twig")
+     * @CsrfProtection()
+     * @param AssignmentMessage $message
+     * @return array|RedirectResponse
+     * @throws ForbiddenTransitionException
+     * @throws InvalidTransitionException
+     * @throws WorkflowException
+     */
+    public function editApproveAction(AssignmentMessage $message)
+    {
+        if ($this->get('request_stack')->getCurrentRequest()->isMethod('POST')) {
+            /** @var WorkflowManager $wfm */
+            $wfm = $this->get('oro_workflow.manager');
+            $item = $wfm->getWorkflowItem($message, AssignmentMessage::WORKFLOW_NAME);
+            if (!$item) {
+                $item = $wfm->startWorkflow(AssignmentMessage::WORKFLOW_NAME, $message);
+            }
+            $wfm->transit($item, AssignmentMessage::WORKFLOW_TRANSITION_APPROVE);
+        }
+        $response = $this->update($message);
+        $response['assignment_message'] = $message;
+        return $response;
+    }
+
+    /**
      * Get entity Manager
      *
      * @return CommentApiManager
