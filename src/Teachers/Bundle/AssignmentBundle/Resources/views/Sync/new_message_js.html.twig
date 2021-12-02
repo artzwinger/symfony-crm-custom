@@ -11,14 +11,15 @@
                 if (notifier) {
                     notifier.close();
                 }
-                console.log(response)
+                var decoded = JSON.parse(response)
                 var msg = message
-                if (response.type === '1') {
+                if (decoded.type === '1') {
                     msg = cmMessage
                 }
-                if (response.type === '2') {
+                if (decoded.type === '2') {
                     msg = approvalQueueMessage
                 }
+                console.log(msg)
                 notifier = messenger.notificationMessage(
                     'warning',
                     msg

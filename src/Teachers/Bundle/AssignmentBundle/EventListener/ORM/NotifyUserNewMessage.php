@@ -54,9 +54,12 @@ class NotifyUserNewMessage
         if (!$message instanceof AssignmentMessage) {
             return;
         }
-        if ($message->getStatus()->getId() !== AssignmentMessage::STATUS_APPROVED) {
+        if ($message->getStatus()->getId() === AssignmentMessage::STATUS_PENDING) {
             $recipientIds = $this->getCourseManagersAndAdminsIds();
             $this->notifyRecipients($recipientIds, self::TYPE_APPROVAL_QUEUE);
+            return;
+        }
+        if ($message->getStatus()->getId() !== AssignmentMessage::STATUS_APPROVED) {
             return;
         }
         $type = self::TYPE_PERSONAL;
