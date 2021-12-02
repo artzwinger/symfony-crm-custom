@@ -18,6 +18,8 @@ teachers:
             send_to_teacher: Send To Tutor
             send_to_student: Send To Student
             has_unread_message_notice: You have unread messages. Please navigate to Messages in the left menu
+            has_unread_message_cm: New Message Received in CM Queue
+            has_unread_message_approval_queue: New Message Awaiting Approval
 
 oro.note.add_note_title: Add Internal Note
 oro.note.edit_note_title: Update Internal Note

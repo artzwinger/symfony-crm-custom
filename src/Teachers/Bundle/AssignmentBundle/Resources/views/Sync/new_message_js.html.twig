@@ -4,15 +4,23 @@
     loadModules(['orosync/js/sync', 'oroui/js/modal', 'oroui/js/mediator', 'oroui/js/messenger', 'orotranslation/js/translator'],
         function (sync, Modal, mediator, messenger, __) {
             var notifier = null;
-
+            var message = __('teachers.assignment.message.has_unread_message_notice');
+            var cmMessage = __('teachers.assignment.message.has_unread_message_cm');
+            var approvalQueueMessage = __('teachers.assignment.message.has_unread_message_approval_queue');
             sync.subscribe('teachers/new_message/' + {{ userId }}, function (response) {
                 if (notifier) {
                     notifier.close();
                 }
-
+                var msg = message
+                if (response.type === '1') {
+                    msg = cmMessage
+                }
+                if (response.type === '2') {
+                    msg = approvalQueueMessage
+                }
                 notifier = messenger.notificationMessage(
                     'warning',
-                    __('teachers.assignment.message.has_unread_message_notice')
+                    msg
                 );
             });
         });

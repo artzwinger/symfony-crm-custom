@@ -11,6 +11,10 @@ use Teachers\Bundle\UsersBundle\Helper\Role;
 
 class NotifyUserNewMessage
 {
+    const TYPE_PERSONAL = '0';
+    const TYPE_CM_QUEUE = '1';
+    const TYPE_APPROVAL_QUEUE = '2';
+
     /**
      * @var WebsocketClientInterface
      */
@@ -51,11 +55,17 @@ class NotifyUserNewMessage
             return;
         }
         if ($message->getStatus()->getId() !== AssignmentMessage::STATUS_APPROVED) {
+            $recipientIds = $this->getCourseManagersAndAdminsIds();
+            $this->notifyRecipients($recipientIds, self::TYPE_APPROVAL_QUEUE);
             return;
         }
+        $type = self::TYPE_PERSONAL;
         $recipient = $message->getRecipient();
+        if (!$recipient) {
+            $type = self::TYPE_CM_QUEUE;
+        }
         $recipientIds = $recipient ? [$recipient->getId()] : $this->getCourseManagersAndAdminsIds();
-        $this->notifyRecipients($recipientIds);
+        $this->notifyRecipients($recipientIds, $type);
     }
 
     private function getCourseManagersAndAdminsIds(): array
@@ -73,10 +83,13 @@ class NotifyUserNewMessage
         return array_unique($ids);
     }
 
-    private function notifyRecipients(array $ids)
+    private function notifyRecipients(array $ids, string $type = self::TYPE_PERSONAL)
     {
+        $payload = json_encode([
+            'type' => $type
+        ]);
         foreach ($ids as $id) {
-            $this->websocketClient->publish('teachers/new_message/' . $id, '');
+            $this->websocketClient->publish('teachers/new_message/' . $id, $payload);
         }
     }
 }
