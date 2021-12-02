@@ -58,8 +58,7 @@ class NotifyUserNewMessage
             $recipientIds = $this->getCourseManagersAndAdminsIds();
             $this->notifyRecipients($recipientIds, self::TYPE_APPROVAL_QUEUE);
             return;
-        }
-        if ($message->getStatus()->getId() !== AssignmentMessage::STATUS_APPROVED) {
+        } else if ($message->getStatus()->getId() !== AssignmentMessage::STATUS_APPROVED) {
             return;
         }
         $type = self::TYPE_PERSONAL;
