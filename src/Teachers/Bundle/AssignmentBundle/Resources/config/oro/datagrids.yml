@@ -640,7 +640,6 @@ datagrids:
                         ELSE CONCAT(recipient.firstName, ' ', recipient.lastName)
                         END as recipientFullName
                     - CASE WHEN recipient.id IS NULL THEN 'Course Manager' ELSE role.label END as recipientRoleLabel
-                    - CASE WHEN messageSender.id = @oro_security.token_accessor->getUserId THEN false ELSE true END as recipientOfLatestMessage
                     - status.id as statusId
                     - status.name as statusLabel
                 from:
