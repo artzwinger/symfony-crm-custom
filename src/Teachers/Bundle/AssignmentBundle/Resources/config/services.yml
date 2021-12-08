@@ -168,10 +168,16 @@ services:
     teachers_assignment.event_listener.orm.notify_user_new_message:
         class: Teachers\Bundle\AssignmentBundle\EventListener\ORM\NotifyUserNewMessage
         arguments:
-            - '@doctrine.orm.entity_manager'
             - '@teachers_users.helper.role'
             - '@oro_sync.websocket_client.basic'
         tags:
+            - {
+                name: doctrine.event_listener,
+                priority: 900,
+                event: postPersist,
+                connection: default,
+                entity: 'Teachers\Bundle\AssignmentBundle\Entity\AssignmentMessage'
+            }
             - {
                 name: doctrine.event_listener,
                 event: postUpdate,

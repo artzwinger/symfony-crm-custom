@@ -369,6 +369,11 @@ class AssignmentMessage extends ExtendAssignmentMessage implements DatesAwareInt
         return $this->getStatus() && $this->getStatus()->getId() === self::STATUS_APPROVED;
     }
 
+    public function isPending(): bool
+    {
+        return $this->getStatus() && $this->getStatus()->getId() === self::STATUS_PENDING;
+    }
+
     public function isNotApproved(): bool
     {
         return $this->getStatus() && $this->getStatus()->getId() === self::STATUS_NOT_APPROVED;
