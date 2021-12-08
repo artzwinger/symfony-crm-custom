@@ -1,0 +1,4 @@
+features:
+    email:
+        cron_jobs:
+            - 'teachers:cron:convert-email-body-to-assignment-message'
