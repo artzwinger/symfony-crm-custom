@@ -435,12 +435,10 @@ class AssignmentMessageController extends AbstractController
      * @throws ForbiddenTransitionException
      * @throws InvalidTransitionException
      * @throws WorkflowException
-     * @throws ORMException
      */
     public function unapproveAction(AssignmentMessage $message)
     {
-        $relationClass = 'Teachers_Bundle_AssignmentBundle_Entity_AssignmentMessage';
-        if ($this->get('request_stack')->getCurrentRequest()->isMethod('POST')) {
+        if ($this->isPostRequest() && !$message->isNotApproved()) {
             /** @var WorkflowManager $wfm */
             $wfm = $this->get('oro_workflow.manager');
             $item = $wfm->getWorkflowItem($message, AssignmentMessage::WORKFLOW_NAME);
@@ -449,31 +447,8 @@ class AssignmentMessageController extends AbstractController
             }
             $wfm->transit($item, AssignmentMessage::WORKFLOW_TRANSITION_UNAPPROVE);
         }
-        $comment = new Comment();
-        $this->getCommentManager()->setRelationField($comment, $relationClass, $message->getId());
-        /** @var UpdateHandlerFacade $handler */
-        $handler = $this->get('oro_form.update_handler');
-        /** @var FormFactory $factory */
-        $factory = $this->get('form.factory');
-        $builder = $factory->createNamedBuilder(
-            'oro_comment_api',
-            'Oro\Bundle\CommentBundle\Form\Type\CommentTypeApi'
-        );
-        $builder->setAction('teachers_assignment_message_unapprove');
-        $form = $builder->getForm();
-        $response = $handler->update(
-            $comment,
-            $form,
-            $this->get('translator')->trans('teachers.assignment.message.controller.assignment.saved.message')
-        );
+        $response = $this->update($message);
         $response['assignment_message'] = $message;
-        $denialReason = strip_tags($comment->getMessage());
-        if (!empty($denialReason)) {
-            $message->setDenialReason($denialReason);
-            $em = $this->get('doctrine.orm.entity_manager');
-            $em->persist($message);
-            $em->flush($message);
-        }
         return $response;
     }
 
@@ -642,5 +617,10 @@ class AssignmentMessageController extends AbstractController
         $em = $this->get('doctrine.orm.entity_manager');
         $em->persist($thread);
         $em->flush($thread);
+    }
+
+    private function isPostRequest(): bool
+    {
+        return $this->get('request_stack')->getCurrentRequest()->isMethod('POST');
     }
 }

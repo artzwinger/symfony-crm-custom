@@ -20,6 +20,13 @@ class AssignmentMessageType extends AbstractType
             [
                 'label' => 'teachers.assignment.message.message.label'
             ]
+        )->add(
+            'denialReason',
+            TextareaType::class,
+            [
+                'label' => 'teachers.assignment.message.denialReason.label',
+                'required' => false
+            ]
         );
     }
 

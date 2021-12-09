@@ -3,16 +3,14 @@
 {% set formAction = path('teachers_assignment_message_unapprove', { id: assignment_message.id }) %}
 
 {% block content_data %}
-    {% set id = 'comment-form' %}
+    {% set id = 'assignment-form' %}
 
     {% set dataBlocks = [{
         'title': 'teachers.assignment.message.block.general'|trans,
         'subblocks': [
             {
-                'title': 'teachers.assignment.message.block.message_information'|trans,
                 'data': [
-                    form_row(form.message),
-                    form_row(form.attachment)
+                    form_row(form.denialReason)
                 ]
             }
         ]
