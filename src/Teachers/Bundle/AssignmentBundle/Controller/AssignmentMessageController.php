@@ -188,7 +188,7 @@ class AssignmentMessageController extends AbstractController
         $message = new AssignmentMessage();
         $message->setRecipient($tutor);
         $message->setAssignment($assignment);
-        $message->setStatus($this->getMessageStatusPending());
+        $message->setStatus($this->getMessagesHelper()->getMessageStatusPending());
         if (!$thread) {
             $thread = $this->createThread($assignment, $tutor);
         }
@@ -236,7 +236,7 @@ class AssignmentMessageController extends AbstractController
         $message = new AssignmentMessage();
         $message->setRecipient($student);
         $message->setAssignment($assignment);
-        $message->setStatus($this->getMessageStatusPending());
+        $message->setStatus($this->getMessagesHelper()->getMessageStatusPending());
         if (!$thread) {
             $thread = $this->createThread($assignment, $student);
         }
@@ -282,7 +282,7 @@ class AssignmentMessageController extends AbstractController
     {
         $message = new AssignmentMessage();
         $message->setAssignment($assignment);
-        $message->setStatus($this->getMessageStatusPending());
+        $message->setStatus($this->getMessagesHelper()->getMessageStatusPending());
         if (!$thread) {
             $thread = $this->createThread($assignment);
         }
@@ -340,7 +340,7 @@ class AssignmentMessageController extends AbstractController
         $message = new AssignmentMessage();
         $message->setAssignment($thread->getAssignment());
         $message->setThread($thread);
-        $message->setStatus($this->getMessageStatusPending());
+        $message->setStatus($this->getMessagesHelper()->getMessageStatusPending());
         $recipient = $thread->getRecipient();
         if ($userIsRecipient || ($recipient === null && !$userIsSender)) {
             $recipient = $thread->getSender();
