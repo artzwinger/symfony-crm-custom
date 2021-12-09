@@ -58,7 +58,7 @@ class Messages
         }
         $sender = $message->getOwner();
         if ($sender) {
-            $approve = !$this->roleHelper->hasUserOneOfRoleNames($sender, [Role::ROLE_STUDENT, Role::ROLE_TEACHER]);
+            $approve = $this->roleHelper->hasUserOneOfRoleNames($sender, [Role::ROLE_ADMINISTRATOR, Role::ROLE_COURSE_MANAGER]);
         } else {
             $senderStudent = $this->roleHelper->isCurrentUserStudent();
             $senderTeacher = $this->roleHelper->isCurrentUserTeacher();

@@ -149,6 +149,7 @@ class AssignmentMessageController extends AbstractController
     public function createAction()
     {
         $message = new AssignmentMessage();
+        $message->setOwner($this->get('teachers_users.helper.role')->getCurrentUser());
         $result = $this->update($message);
         $this->getMessagesHelper()->autoApproveIfAllowed($message);
 
@@ -189,6 +190,7 @@ class AssignmentMessageController extends AbstractController
         $message->setRecipient($tutor);
         $message->setAssignment($assignment);
         $message->setStatus($this->getMessagesHelper()->getMessageStatusPending());
+        $message->setOwner($this->get('teachers_users.helper.role')->getCurrentUser());
         if (!$thread) {
             $thread = $this->createThread($assignment, $tutor);
         }
@@ -237,6 +239,7 @@ class AssignmentMessageController extends AbstractController
         $message->setRecipient($student);
         $message->setAssignment($assignment);
         $message->setStatus($this->getMessagesHelper()->getMessageStatusPending());
+        $message->setOwner($this->get('teachers_users.helper.role')->getCurrentUser());
         if (!$thread) {
             $thread = $this->createThread($assignment, $student);
         }
@@ -341,6 +344,7 @@ class AssignmentMessageController extends AbstractController
         $message->setAssignment($thread->getAssignment());
         $message->setThread($thread);
         $message->setStatus($this->getMessagesHelper()->getMessageStatusPending());
+        $message->setOwner($this->get('teachers_users.helper.role')->getCurrentUser());
         $recipient = $thread->getRecipient();
         if ($userIsRecipient || ($recipient === null && !$userIsSender)) {
             $recipient = $thread->getSender();
