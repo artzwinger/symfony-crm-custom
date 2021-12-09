@@ -175,6 +175,7 @@ class ConvertEmailBodyToAssignmentMessage extends Command implements CronCommand
         $this->entityManager->flush($assignmentMessage);
 
         $this->messagesHelper->autoApproveIfAllowed($assignmentMessage);
+        $this->messagesHelper->updateThreadLatestMessage($assignmentMessage);
     }
 
     private function getEmailImapIdsToIgnore(array $emailsImap): array

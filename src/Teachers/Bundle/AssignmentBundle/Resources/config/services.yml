@@ -169,6 +169,7 @@ services:
         class: Teachers\Bundle\AssignmentBundle\EventListener\ORM\NotifyUserNewMessage
         arguments:
             - '@teachers_users.helper.role'
+            - '@teachers_assignment.helper.messages'
             - '@oro_sync.websocket_client.basic'
         tags:
             - {

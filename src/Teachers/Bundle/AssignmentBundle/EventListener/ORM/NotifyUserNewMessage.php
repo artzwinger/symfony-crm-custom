@@ -2,12 +2,12 @@
 
 namespace Teachers\Bundle\AssignmentBundle\EventListener\ORM;
 
-use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Exception;
 use Oro\Bundle\SyncBundle\Client\WebsocketClientInterface;
 use Oro\Bundle\UserBundle\Entity\User;
 use Teachers\Bundle\AssignmentBundle\Entity\AssignmentMessage;
+use Teachers\Bundle\AssignmentBundle\Helper\Messages;
 use Teachers\Bundle\UsersBundle\Helper\Role;
 
 class NotifyUserNewMessage
@@ -24,18 +24,25 @@ class NotifyUserNewMessage
      * @var Role
      */
     private $roleHelper;
+    /**
+     * @var Messages
+     */
+    private $messagesHelper;
 
     /**
      * @param Role $roleHelper
+     * @param Messages $messagesHelper
      * @param WebsocketClientInterface $websocketClient
      */
     public function __construct(
         Role $roleHelper,
+        Messages $messagesHelper,
         WebsocketClientInterface $websocketClient
     )
     {
         $this->websocketClient = $websocketClient;
         $this->roleHelper = $roleHelper;
+        $this->messagesHelper = $messagesHelper;
     }
 
     /**
@@ -48,7 +55,9 @@ class NotifyUserNewMessage
         /** @var AssignmentMessage $message */
         $message = $args->getObject();
         if ($message instanceof AssignmentMessage && $message->isPending()) {
-            $this->notifyRecipients($this->getCourseManagersAndAdminsIds(), self::TYPE_APPROVAL_QUEUE);
+            if (!$this->messagesHelper->availableForAutoApprove($message)) {
+                $this->notifyRecipients($this->getCourseManagersAndAdminsIds(), self::TYPE_APPROVAL_QUEUE);
+            }
         }
     }
 

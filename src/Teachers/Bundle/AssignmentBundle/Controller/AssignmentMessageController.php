@@ -197,7 +197,7 @@ class AssignmentMessageController extends AbstractController
         $message->setThread($thread);
         $result = $this->update($message);
         $this->getMessagesHelper()->autoApproveIfAllowed($message);
-        $this->updateThreadLatestMessage($message);
+        $this->getMessagesHelper()->updateThreadLatestMessage($message);
 
         if (is_array($result)) {
             $result['formAction'] = $this->generateUrl('teachers_assignment_message_send_to_tutor', [
@@ -246,7 +246,7 @@ class AssignmentMessageController extends AbstractController
         $message->setThread($thread);
         $result = $this->update($message);
         $this->getMessagesHelper()->autoApproveIfAllowed($message);
-        $this->updateThreadLatestMessage($message);
+        $this->getMessagesHelper()->updateThreadLatestMessage($message);
 
         if (is_array($result)) {
             $result['formAction'] = $this->generateUrl('teachers_assignment_message_send_to_student', [
@@ -292,7 +292,7 @@ class AssignmentMessageController extends AbstractController
         $message->setThread($thread);
         $result = $this->update($message);
         $this->getMessagesHelper()->autoApprove($message);
-        $this->updateThreadLatestMessage($message);
+        $this->getMessagesHelper()->updateThreadLatestMessage($message);
 
         if (is_array($result)) {
             $result['formAction'] = $this->generateUrl('teachers_assignment_message_send_to_coursemanager', [
@@ -352,7 +352,7 @@ class AssignmentMessageController extends AbstractController
         $message->setRecipient($recipient);
         $result = $this->update($message);
         $this->getMessagesHelper()->autoApproveIfAllowed($message);
-        $this->updateThreadLatestMessage($message);
+        $this->getMessagesHelper()->updateThreadLatestMessage($message);
 
         if (is_array($result)) {
             $result['formAction'] = $this->generateUrl('teachers_thread_respond', [
@@ -545,25 +545,6 @@ class AssignmentMessageController extends AbstractController
         $em->persist($thread);
         $em->flush($thread);
         return $thread;
-    }
-
-    /**
-     * @throws OptimisticLockException
-     * @throws ORMException
-     */
-    private function updateThreadLatestMessage(AssignmentMessage $message)
-    {
-        if (!$message->getId()) {
-            return;
-        }
-        $thread = $message->getThread();
-        $thread->setLatestMessage($message);
-        if (!$thread->getFirstMessage()) {
-            $thread->setFirstMessage($message);
-        }
-        $em = $this->get('doctrine.orm.entity_manager');
-        $em->persist($thread);
-        $em->flush($thread);
     }
 
     private function isPostRequest(): bool
