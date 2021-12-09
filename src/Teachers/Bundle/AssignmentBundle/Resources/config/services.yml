@@ -183,3 +183,10 @@ services:
                 event: postUpdate,
                 entity: 'Teachers\Bundle\AssignmentBundle\Entity\AssignmentMessage'
             }
+    teachers_assignment.helper.messages:
+        class: Teachers\Bundle\AssignmentBundle\Helper\Messages
+        public: true
+        arguments:
+            - "@teachers_users.helper.role"
+            - '@oro_workflow.manager'
+            - '@doctrine.orm.entity_manager'

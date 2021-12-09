@@ -25,6 +25,7 @@ use Symfony\Component\Lock\Store\SemaphoreStore;
 use Teachers\Bundle\AssignmentBundle\Entity\Assignment;
 use Teachers\Bundle\AssignmentBundle\Entity\AssignmentMessage;
 use Teachers\Bundle\AssignmentBundle\Entity\AssignmentMessageThread;
+use Teachers\Bundle\AssignmentBundle\Helper\Messages;
 
 /**
  * The CLI command to convert emails to assignment messages
@@ -47,15 +48,21 @@ class ConvertEmailBodyToAssignmentMessage extends Command implements CronCommand
      * @var ClientInterface
      */
     private $redisClient;
+    /**
+     * @var Messages
+     */
+    private $messagesHelper;
 
     /**
      * @param FeatureChecker $featureChecker
      * @param EntityManager $entityManager
+     * @param Messages $messagesHelper
      * @param ClientInterface $redisClient
      */
     public function __construct(
         FeatureChecker  $featureChecker,
         EntityManager   $entityManager,
+        Messages $messagesHelper,
         ClientInterface $redisClient
     )
     {
@@ -63,6 +70,7 @@ class ConvertEmailBodyToAssignmentMessage extends Command implements CronCommand
 
         $this->featureChecker = $featureChecker;
         $this->entityManager = $entityManager;
+        $this->messagesHelper = $messagesHelper;
         $this->redisClient = $redisClient;
     }
 
@@ -161,9 +169,12 @@ class ConvertEmailBodyToAssignmentMessage extends Command implements CronCommand
         $assignmentMessage->setThread($thread);
         $assignmentMessage->setRecipient($recipient);
         $assignmentMessage->setEmailImap($emailImap);
+        $assignmentMessage->setStatus($this->messagesHelper->getMessageStatusPending());
 
         $this->entityManager->persist($assignmentMessage);
         $this->entityManager->flush($assignmentMessage);
+
+        $this->messagesHelper->autoApproveIfAllowed($assignmentMessage);
     }
 
     private function getEmailImapIdsToIgnore(array $emailsImap): array

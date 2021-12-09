@@ -5,11 +5,9 @@ namespace Teachers\Bundle\AssignmentBundle\Controller;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
-use Oro\Bundle\CommentBundle\Entity\Comment;
 use Oro\Bundle\CommentBundle\Entity\Manager\CommentApiManager;
 use Oro\Bundle\EntityExtendBundle\Entity\AbstractEnumValue;
 use Oro\Bundle\EntityExtendBundle\Entity\Repository\EnumValueRepository;
-use Oro\Bundle\EntityExtendBundle\Model\EnumValue;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\FormBundle\Model\UpdateHandlerFacade;
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
@@ -31,6 +29,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Teachers\Bundle\AssignmentBundle\Entity\Assignment;
 use Teachers\Bundle\AssignmentBundle\Entity\AssignmentMessage;
 use Teachers\Bundle\AssignmentBundle\Entity\AssignmentMessageThread;
+use Teachers\Bundle\AssignmentBundle\Helper\Messages;
 use Teachers\Bundle\UsersBundle\Helper\Role;
 
 class AssignmentMessageController extends AbstractController
@@ -151,7 +150,7 @@ class AssignmentMessageController extends AbstractController
     {
         $message = new AssignmentMessage();
         $result = $this->update($message);
-        $this->autoApproveIfAllowed($message);
+        $this->getMessagesHelper()->autoApproveIfAllowed($message);
 
         if (is_array($result)) {
             $result['formAction'] = $this->generateUrl('teachers_assignment_message_create');
@@ -195,7 +194,7 @@ class AssignmentMessageController extends AbstractController
         }
         $message->setThread($thread);
         $result = $this->update($message);
-        $this->autoApproveIfAllowed($message);
+        $this->getMessagesHelper()->autoApproveIfAllowed($message);
         $this->updateThreadLatestMessage($message);
 
         if (is_array($result)) {
@@ -243,7 +242,7 @@ class AssignmentMessageController extends AbstractController
         }
         $message->setThread($thread);
         $result = $this->update($message);
-        $this->autoApproveIfAllowed($message);
+        $this->getMessagesHelper()->autoApproveIfAllowed($message);
         $this->updateThreadLatestMessage($message);
 
         if (is_array($result)) {
@@ -289,7 +288,7 @@ class AssignmentMessageController extends AbstractController
         }
         $message->setThread($thread);
         $result = $this->update($message);
-        $this->autoApprove($message);
+        $this->getMessagesHelper()->autoApprove($message);
         $this->updateThreadLatestMessage($message);
 
         if (is_array($result)) {
@@ -348,7 +347,7 @@ class AssignmentMessageController extends AbstractController
         }
         $message->setRecipient($recipient);
         $result = $this->update($message);
-        $this->autoApproveIfAllowed($message);
+        $this->getMessagesHelper()->autoApproveIfAllowed($message);
         $this->updateThreadLatestMessage($message);
 
         if (is_array($result)) {
@@ -495,18 +494,9 @@ class AssignmentMessageController extends AbstractController
         return $this->get('oro_comment.comment.api_manager');
     }
 
-    /**
-     * @return object|AbstractEnumValue|null
-     */
-    private function getMessageStatusPending()
+    private function getMessagesHelper(): Messages
     {
-        /** @var EnumValueRepository $enumRepo */
-        $className = ExtendHelper::buildEnumValueClassName(AssignmentMessage::ENUM_NAME_STATUS);
-        $manager = $this->get('doctrine.orm.entity_manager');
-        $enumRepo = $manager->getRepository($className);
-        return $enumRepo->findOneBy([
-            'id' => AssignmentMessage::STATUS_PENDING
-        ]);
+        return $this->get('teachers_assignment.helper.messages');
     }
 
     /**
@@ -536,53 +526,6 @@ class AssignmentMessageController extends AbstractController
     {
         $helper = $this->container->get('teachers_users.helper.role');
         return $helper->isCurrentUserCourseManager() || $helper->getCurrentUserId() == $msg->getOwner()->getId();
-    }
-
-    /**
-     * @throws InvalidTransitionException
-     * @throws ForbiddenTransitionException
-     * @throws WorkflowException
-     */
-    protected function autoApproveIfAllowed(AssignmentMessage $message)
-    {
-        if (!$message->getId()) {
-            return;
-        }
-        /** @var Role $roleHelper */
-        $roleHelper = $this->get('teachers_users.helper.role');
-        $senderStudent = $roleHelper->isCurrentUserStudent();
-        $senderTeacher = $roleHelper->isCurrentUserTeacher();
-        $approve = !$senderStudent && !$senderTeacher; // approve if sender is not student or tutor
-        // or approve if recipient is admin or course manager
-        if (!$message->getRecipient()) {
-            $this->autoApprove($message);
-            return;
-        }
-        $recipient = $message->getRecipient();
-        $approve = $approve
-            || $roleHelper->hasUserOneOfRoleNames($recipient, [Role::ROLE_ADMINISTRATOR, Role::ROLE_COURSE_MANAGER]);
-        if ($approve) {
-            $this->autoApprove($message);
-        }
-    }
-
-    /**
-     * @throws InvalidTransitionException
-     * @throws ForbiddenTransitionException
-     * @throws WorkflowException
-     */
-    protected function autoApprove(AssignmentMessage $message)
-    {
-        if (!$message->getId()) {
-            return;
-        }
-        /** @var WorkflowManager $wfm */
-        $wfm = $this->get('oro_workflow.manager');
-        $item = $wfm->getWorkflowItem($message, AssignmentMessage::WORKFLOW_NAME);
-        if (!$item) {
-            $item = $wfm->startWorkflow(AssignmentMessage::WORKFLOW_NAME, $message);
-        }
-        $wfm->transit($item, AssignmentMessage::WORKFLOW_TRANSITION_APPROVE);
     }
 
     /**
