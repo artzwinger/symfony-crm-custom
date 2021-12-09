@@ -26,6 +26,7 @@ use Teachers\Bundle\AssignmentBundle\Entity\Assignment;
 use Teachers\Bundle\AssignmentBundle\Entity\AssignmentMessage;
 use Teachers\Bundle\AssignmentBundle\Entity\AssignmentMessageThread;
 use Teachers\Bundle\AssignmentBundle\Helper\Messages;
+use Teachers\Bundle\UsersBundle\Helper\Role;
 
 /**
  * The CLI command to convert emails to assignment messages
@@ -52,16 +53,22 @@ class ConvertEmailBodyToAssignmentMessage extends Command implements CronCommand
      * @var Messages
      */
     private $messagesHelper;
+    /**
+     * @var Role
+     */
+    private $roleHelper;
 
     /**
      * @param FeatureChecker $featureChecker
      * @param EntityManager $entityManager
+     * @param Role $roleHelper
      * @param Messages $messagesHelper
      * @param ClientInterface $redisClient
      */
     public function __construct(
         FeatureChecker  $featureChecker,
         EntityManager   $entityManager,
+        Role $roleHelper,
         Messages $messagesHelper,
         ClientInterface $redisClient
     )
@@ -72,6 +79,7 @@ class ConvertEmailBodyToAssignmentMessage extends Command implements CronCommand
         $this->entityManager = $entityManager;
         $this->messagesHelper = $messagesHelper;
         $this->redisClient = $redisClient;
+        $this->roleHelper = $roleHelper;
     }
 
     /**
@@ -225,8 +233,15 @@ class ConvertEmailBodyToAssignmentMessage extends Command implements CronCommand
     private function getMessageRecipientUser(Email $email, Assignment $assignment, AssignmentMessageThread $thread): ?User
     {
         $senderEmail = $email->getFromEmailAddress()->getEmail();
-        if ($thread->getId() && $thread->isThreadRecipientCourseManager()) {
-            return $senderEmail === $thread->getSender()->getEmail() ? null : $thread->getSender();
+        if ($thread->getId()) {
+            if ($thread->isThreadRecipientCourseManager()) {
+                return $senderEmail === $thread->getSender()->getEmail() ? null : $thread->getSender();
+            }
+            $threadSenderCourseManager =
+                $this->roleHelper->hasUserOneOfRoleNames($thread->getSender(), [Role::ROLE_COURSE_MANAGER, Role::ROLE_ADMINISTRATOR]);
+            if ($threadSenderCourseManager) {
+                return $senderEmail === $thread->getRecipient()->getEmail() ? null : $thread->getRecipient();
+            }
         }
         // in other cases (if a thread doesn't exist or exists between student and tutor)
         // the default logic is applicable

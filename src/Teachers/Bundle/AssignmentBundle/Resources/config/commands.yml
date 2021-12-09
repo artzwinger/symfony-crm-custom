@@ -6,6 +6,7 @@ services:
         arguments:
             - '@oro_featuretoggle.checker.feature_checker'
             - '@doctrine.orm.entity_manager'
+            - '@teachers_users.helper.role'
             - '@teachers_assignment.helper.messages'
             - '@?snc_redis.cache'
         tags:
